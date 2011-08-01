@@ -27,4 +27,14 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 group :development, :test do
   gem 'rspec'
   gem 'rspec-rails'
+  
+  # autotest config
+  gem 'autotest'
+  gem 'ZenTest'
+  gem 'autotest-rails'
+  gem 'autotest-growl'
+  gem 'autotest-fsevent'
+
+  # spork performance improvement to tests
+  gem 'spork'
 end
