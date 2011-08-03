@@ -1,0 +1,142 @@
+/* normalizations */
+  html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td
+    {margin: 0;padding: 0;} 
+  fieldset, img {border: none;}
+  
+/* top level layouts
+  A grail two or three column layout using CSS.
+  Widths of columns can be easily adjusted by modifying #middle_content, #left_content, and #right_content.
+  Left, Center and Right columns can be of any length, and still have the footer at the bottom.
+  Some limitations on background-colors because middle_content (and center_content) background is not behind the left_content.
+*/
+  body {font-family: Georgia, "Times New Roman", Times, serif;}
+  #header {width:100%;min-height:100px;}
+  #middle_content {margin-left:200px;} /* margin-right:200px;} - for right hand column */
+  #left_content {width:190px;padding:5px;float:left;margin-left:-200px;}
+  #center_content {width:100%;overflow:hidden;}
+  #content_header {display:block;width:100%;}
+  #content_body {display:block;width:100%;overflow:hidden;}
+  #content_footer {display:block;width:100%;}
+  #content {/* width:100%; */}
+  #right_content {width:190px;padding:5px;float:right;margin-right:-200px;}
+  #footer {clear:both;}
+  #footer_content {}
+      
+/* top level layout styles */
+  html {background-color:#666;}
+  body {min-width:600px;background-color:#fff;border-width:10px 20px 10px 20px;border-color:#666;border-style:solid;
+    background-image:url(../images/header/corner_top_right.gif);background-position:top right;background-repeat:no-repeat;}
+  #body_content {font-size:.8em;background-image:url(../images/header/corner_top_left.gif);background-position:top left;background-repeat:no-repeat;}
+  #header {border-bottom:1px solid black;}
+  #header_logo {padding:5px;}
+  #middle_content {}
+  #left_content {border-right:1px solid black;}
+  #center_content {position:relative;left:-1px;border-left:1px solid black;}
+  #content_header {padding:0 5px;border-bottom:1px solid black;}
+  #content_body {padding:0 10px;}
+  #content_footer {padding:5px;} /* border-top:1px solid black; } */
+  #right_content {}
+  #footer {border-top:1px solid black;background-color:#fff;
+    background-image:url(../images/header/corner_bottom_left.gif);background-position:bottom left;background-repeat:no-repeat;}
+  #footer_content {padding:10px 20px;
+    background-image:url(../images/header/corner_bottom_right.gif);background-position:bottom right;background-repeat:no-repeat;}
+      
+/* mid level layouts */
+  #header_logo_bar {overflow:hidden;display:block;}
+  #header_logo_left {overflow:hidden;display:inline;float:left;}
+  #header_logo {float:left;display:inline;}
+  #header_tagline {float:left;display:inline;}
+  #header_logo_right {display:inline;float:right;}
+  #header_bottom_bar {display:block;}
+  #header_nav_bar {overflow:hidden;}
+  #header_nav_bar ol, #header_nav_bar ul {list-style: none;}
+  #header_nav_bar li {display:inline;float:left;text-align:center;}
+  
+/* mid level layout styles */
+  #header_logo_bar {padding:10px;}
+  #header_logo_left {text-align:center;}
+  #header_logo {}
+  #header_tagline {padding:5px;}
+  #header_logo_right {padding:5px;}
+  #header_bottom_bar {border-top:1px solid black;}
+  #header_nav_bar {}
+  #header_nav_bar li {}
+  #header_nav_bar li a {padding:0 10px;}
+  #header_nav_bar li a span {}
+  
+  
+/* template / wireframe stylings - place class on body tag */
+  .wireframe .block_module, .wireframe .float_left_module, .wireframe .float_right_module, .wireframe .module_header
+    {margin:3px;border:2px solid black;margin:3px;}
+  .template .block_module, .template .float_left_module, .template .float_right_module, .template .module_header
+    {background-color:#CCCCCC;margin:8px;}
+
+/* helper styles */
+  .block {display:block;}
+  .list_column {display:block;text-decoration:none;padding:5px;}
+  .float_right {display:inline;float:left;padding:5px;}
+  .float_left {display:inline;float:left;padding:5px;}
+  .float_left_module {display:inline;float:left;padding:5px;}
+  .float_right_module {display:inline;float:right;padding:5px;}
+  .float_clear {overflow:hidden;}
+  .clear_both {clear:both;}
+  .align_left {text-align:left;}
+  .align_center {text-align:center;}
+  .align_right {text-align:right;}
+  .center {margin:0 auto;}
+  .module_header {display:block;text-align:center;}
+  .module_body {}
+  .width_100 {width:100px;}
+  .width_150 {width:150px;}
+  .width_200 {width:200px;}
+  .width_300 {width:300px;}
+  .width_400 {width:400px;}
+  .width_500 {width:500px;}
+  .width_600 {width:600px;}
+  .width_100_pct {width:100%;}
+  ._2_across {float:left;display:inline;width:50%;}
+  ._3_across {float:left;display:inline;width:33.33%;}
+  ._4_across {float:left;display:inline;width:25%;}
+  ._5_across {float:left;display:inline;width:20%;}
+  ._6_across {float:left;display:inline;width:16.66%;}
+  .nav_bar {overflow:hidden;}
+  .nav_bar ul, .nav_bar li {list-style: none;}
+  .nav_bar li {text-align:center;margin:0;padding:0;}
+  .left_nav li {text-align:left;margin:0;padding:2px 10px;}
+  .column_nav li {text-align:left;margin:0;padding:2px 10px;}
+  .error {color:#ff0000;font-size:larger;}
+  .warning {color:#ff0000;}
+  .header_status {}
+  .footer_status {}
+  .alert {color:#ff0000;font-size:larger;}
+  .notice {color:#ff0000;}
+  .nowrap {white-space:nowrap;}
+  .thin_border {border:1px solid black;}
+  .thin_border_top {border_top:1px solid black;}
+  .thin_border_right {border_right:1px solid black;}
+  .thin_border_bottom { border-bottom:1px solid black;}
+  .thin_border_left {border_left:1px solid black;}
+  
+/* label and value layouts for form fields */
+  #content_body .fields, #content_body .fields_20_80
+    {overflow:auto;}
+  #content_body .field {padding:3px 0;overflow:hidden;}
+  #content_body .field label, #content_body .field .label, #content_body .field .left_value
+    {float:left;display:inline;text-align:right;padding-right:3px;overflow:hidden;}
+  #content_body .field .value, #content_body .field .right_label
+    {float:left;display:inline;text-align:left;padding-left:3px;overflow:hidden;}
+  #content_body .field .value:before, #content_body .field .right_label:before
+    {content: ':';margin-right:5px;color:#CC0000;}
+  #content_body .fields_20_80 label, #content_body .fields_20_80 .label, #content_body .fields_20_80 .left_value
+    {width:19%;margin-right:-19%;}
+  #content_body .fields_20_80 .value, #content_body .fields_20_80 .right_label
+    {width:79%;margin-left:19%;}
+  #content_body .fields_25_75 label, #content_body .fields_25_75 .label, #content_body .fields_25_75 .left_value
+    {width:24%;margin-right:-24%;}
+  #content_body .fields_25_75 .value, #content_body .fields_25_75 .right_label
+    {width:74%;margin-left:24%;}
+  #content_body .fields_30_70 label, #content_body .fields_30_70 .label, #content_body .fields_30_70 .left_value
+    {width:29%;margin-right:-29%;}
+  #content_body .fields_30_70 .value, #content_body .fields_30_70 .right_label
+    {width:69%;margin-left:29%;}
+
