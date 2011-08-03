@@ -1,0 +1,24 @@
+# load_config.yml
+# see 
+
+application:
+    COMPANY_NAME: Taylored Web Sites
+    APP_NAME: Startup Authentication and Authorization app
+    
+    # Roles used for cancan implementation (see app/models/roles.rb, app/models/ability.rb)
+    # each role has layout: (Application/All)(Role)s
+    # First role must be default guest role *
+    VALID_ROLES: AllGuests AllAdmins App1Users App1Admins
+    DEFAULT_ROLE: AllGuests
+    
+development:
+    SEND_EMAILS: true
+
+
+production:
+    SEND_EMAILS: true
+
+
+test:
+    SEND_EMAILS: false
+

@@ -54,7 +54,7 @@
   
 /* mid level layout styles */
   #header_logo_bar {padding:10px;}
-  #header_logo_left {text-align:center;}
+  #header_logo_left {text-align:left;}
   #header_logo {}
   #header_tagline {padding:5px;}
   #header_logo_right {padding:5px;}
