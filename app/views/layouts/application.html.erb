@@ -1,14 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TwsAuth</title>
+  <title> - <%= yield(:page_title) || "Custom Systems" %></title>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
 </head>
 <body>
+  <div id="body_content">
+  
+    <div id="header">
+        <div id="header_logo_bar">
+          <div id="header_logo_left">
+            <div id="header_logo"><img src="../../images/header/header_logo.png" alt="home page"></div>
+            <div id="header_tagline">
+              <h1 class="nowrap">Welcome</h1>
+      	      <h2><%= yield(:page_title) %></h2>
+            </div>
+          </div><!-- end header_logo_left -->
+          <div id="header_logo_right" class="width_150">
+          	<div class="thin_border">
+              <div class="list_column">Phone</div>
+              <div class="list_column"><a href="mailto:xxx@yyy.com">General Email</a></div>
+            </div>
+          </div><!-- end header_logo_right -->
+        </div><!-- end header_logo_bar -->
+        <div id="header_bottom_bar">
+          <ul id="header_nav_bar">
+            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
+            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
+            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
+            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
+            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
+            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
+          </ul>
+        </div><!-- end header_nav_bar -->
+    </div><!-- end header -->
+    
+    <div id="middle_content">
+      <div id="left_content"><!-- left_content -->
+				<% if true %>
+          <p class="align_center">Welcome</p>
+        <% end %>
 
-<%= yield %>
+        <div class="block_module">
+          <div class="module_header">Left Navigation</div>
+          <ul class="module_body left_nav">
+            <li class="list_column"><a href="#"><span>Nav Item</span></a></li>
+            <li class="list_column"><a href="#"><span>Nav Item</span></a>
+              <ul class="left_nav">
+                <li class="list_column"><a href="#"><span>Sub Nav Item</span></a></li>
+                <li class="list_column"><a href="#"><span>Sub Nav Item</span></a></li>
+                <li class="list_column"><a href="#"><span>Sub Nav Item</span></a></li>
+              </ul>
+            </li>
+            <li class="list_column"><a href="#"><span>Nav Item</span></a></li>
+            <li class="list_column"><a href="#"><span>Nav Item</span></a></li>
+            <li class="list_column"><a href="#"><span>Nav Item</span></a></li>
+          </ul>
+        </div><!-- end block_module -->
 
+      </div><!-- end left_content -->
+
+      <div id="center_content">
+
+        <div id="content_header">
+          <p>status bar</p><!-- remove me -->
+          <p class="notice"><%= notice %></p>
+          <p class="alert"><%= alert %></p>
+        </div><!-- end content_header -->
+
+        <div id="content_body"><%= yield %></div>
+
+         <div id="content_footer">
+        </div><!-- end content_footer -->
+  
+     </div><!-- end center_content -->
+      <!-- div id="right"></div -->
+      
+    </div><!-- end middle -->
+    
+    <div id="footer">
+    	<div id="footer_content">
+        <div id="footer_status">
+          <span class="notice"><%= notice %></span>
+          <span class="alert"><%= alert %></span>
+        </div>
+      </div>
+    </div><!-- end footer -->
+    
+  </div><!-- end page -->
 </body>
 </html>

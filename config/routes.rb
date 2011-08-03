@@ -1,4 +1,10 @@
 TwsAuth::Application.routes.draw do
+
+  # routes for home controller
+  root :to => "home#index"		#	settings for devise - set root url
+  get "home/index"
+  get "home/help"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
