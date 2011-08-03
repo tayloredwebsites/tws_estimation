@@ -28,6 +28,8 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-rails'
   
+  gem 'capybara'
+  
   # autotest config
   gem 'autotest'
   gem 'ZenTest'
