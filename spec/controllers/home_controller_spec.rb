@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'capybara_spec_helper'
 
 describe HomeController do
+	render_views
 
   describe "GET 'index'" do
     it "should be successful" do
