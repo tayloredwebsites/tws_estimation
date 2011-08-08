@@ -7,7 +7,7 @@
   A grail two or three column layout using CSS.
   Widths of columns can be easily adjusted by modifying #middle_content, #left_content, and #right_content.
   Left, Center and Right columns can be of any length, and still have the footer at the bottom.
-  Some limitations on background-colors because middle_content (and center_content) background is not behind the left_content.
+  Some limitations on background-colors because middle_content (and center_content) background is not behind left_content (and optionally right_content)_.
 */
   body {font-family: Georgia, "Times New Roman", Times, serif;}
   #header {width:100%;min-height:100px;}
@@ -32,7 +32,7 @@
   #middle_content {}
   #left_content {border-right:1px solid black;}
   #center_content {position:relative;left:-1px;border-left:1px solid black;}
-  #content_header {padding:0 5px;border-bottom:1px solid black;}
+  #content_header {padding:0 5px;border-bottom:1px solid black;margin-top:-1px;}
   #content_body {padding:0 10px;}
   #content_footer {padding:5px;} /* border-top:1px solid black; } */
   #right_content {}
@@ -65,7 +65,7 @@
   #header_nav_bar li a span {}
   
   
-/* template / wireframe stylings - place class on body tag */
+/* template / wireframe stylings - optionally place a class on body tag to obtain effects */
   .wireframe .block_module, .wireframe .float_left_module, .wireframe .float_right_module, .wireframe .module_header
     {margin:3px;border:2px solid black;margin:3px;}
   .template .block_module, .template .float_left_module, .template .float_right_module, .template .module_header
@@ -125,8 +125,8 @@
     {float:left;display:inline;text-align:right;padding-right:3px;overflow:hidden;}
   #content_body .field .value, #content_body .field .right_label
     {float:left;display:inline;text-align:left;padding-left:3px;overflow:hidden;}
-  #content_body .field .value:before, #content_body .field .right_label:before
-    {content: ':';margin-right:5px;color:#CC0000;}
+  #content_body .field .label:after, #content_body .field .left_value:after
+    {content: ':';margin-left:5px;font-weight:900;}
   #content_body .fields_20_80 label, #content_body .fields_20_80 .label, #content_body .fields_20_80 .left_value
     {width:19%;margin-right:-19%;}
   #content_body .fields_20_80 .value, #content_body .fields_20_80 .right_label
@@ -139,4 +139,8 @@
     {width:29%;margin-right:-29%;}
   #content_body .fields_30_70 .value, #content_body .fields_30_70 .right_label
     {width:69%;margin-left:29%;}
+  #content_body .fields_80_20 label, #content_body .fields_80_20 .label, #content_body .fields_80_20 .left_value
+    {width:79%;margin-right:-79%;}
+  #content_body .fields_80_20 .value, #content_body .fields_80_20 .right_label
+    {width:19%;margin-left:79%;}
 
