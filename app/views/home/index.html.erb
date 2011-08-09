@@ -1,9 +1,9 @@
 <% page_title "Home" %>
 
-<h4>Application Configuration Constants</h4>
+<h4><%= I18n.translate('home.index.header') %></h4>
 <div class="fields_25_75">
   <div class="field">
-    <span class="label">Environment</span>
+    <span class="label">Environment(::Rails.env)</span>
     <span class="value"><%= ::Rails.env %></span>
   </div>
   <div class="field">
