@@ -13,11 +13,17 @@ describe "home/index.html.erb" do
 	end
 	describe "Home Index view test - " do
 		context "page content - " do
+			it "should find the header tag" do
+				rendered.should have_selector('h4')
+			end
 			it "should find the header tag content" do
 				rendered.should have_selector('h4', :text => pageHeader)
 			end
 			it "should find a span selector with content" do
 				rendered.should have_selector('div.field[1]/span.label', :text => 'Environment')
+			end
+			it "should find via xpath a span selector with content" do
+				rendered.should have_selector(:xpath, '//div[@class="field"][1]/span[@class="label"]', :text => 'Environment')
 			end
 			it "should find a span selector with content" do
 				rendered.should have_selector('div.field[1]/span.value', :text => ::Rails.env)
