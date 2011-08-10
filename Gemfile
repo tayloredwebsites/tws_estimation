@@ -25,10 +25,18 @@ gem 'ruby-debug19'
  
 
 group :development, :test do
-  gem 'rspec'
+  # gem 'rspec'
   gem 'rspec-rails'
-  
+end
+
+group :development do
+
+end
+
+group :test do
+
   gem 'capybara'
+  gem 'launchy'
   
   # autotest config
   gem 'autotest'
@@ -39,4 +47,5 @@ group :development, :test do
 
   # spork performance improvement to tests
   gem 'spork'
+
 end

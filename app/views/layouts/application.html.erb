@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<% pageScope = [:home, :index] %>
-  <title><%= APP_CONFIG["COMPANY_NAME"] %> - <%= APP_CONFIG['APP_NAME'] %> - <%= I18n.translate('.title', :scope => pageScope) %></title>
+  <title><%= APP_CONFIG["COMPANY_NAME"] %> - <%= APP_CONFIG['APP_NAME'] %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
@@ -17,7 +16,7 @@
             <div id="header_tagline">
               <h2 id="header_tagline_company_name" class="nowrap"><%= APP_CONFIG['COMPANY_NAME'] %></h2>
               <h2 id="header_tagline_app_name" class="nowrap"><%= APP_CONFIG['APP_NAME'] %></h2>
-      	      <h3 id="header_tagline_page_title"><%= I18n.translate('.title', :scope => pageScope) %></h3>
+      	      <h3 id="header_tagline_page_title"><%= I18n.translate('.title', :scope => @page_scope) %></h3>
             </div>
           </div><!-- end header_logo_left -->
           <div id="header_logo_right" class="width_150">
@@ -34,7 +33,7 @@
             <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
             <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
             <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
-            <li class="_6_across"><a href="/home/help""><span>Help</span></a></li>
+            <li class="_6_across"><a href="/home/help"">Help</a></li>
           </ul>
         </div><!-- end header_nav_bar -->
     </div><!-- end header -->
@@ -57,7 +56,7 @@
             </li>
             <li class="list_column"><a href="#"><span>Nav Item</span></a></li>
             <li class="list_column"><a href="#"><span>Nav Item</span></a></li>
-            <li class="list_column"><a href="/home/help"><span>Help</span></a></li>
+            <li class="list_column"><a href="/home/help">Help</a></li>
           </ul>
         </div><!-- end block_module -->
 
