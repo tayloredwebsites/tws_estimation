@@ -19,6 +19,8 @@ describe 'Integration Tests To Do- ' do
 		it 'should have user authentication'
 		it 'should have role based authorization'
 		it 'should have application specified in roles'
+		it 'should have multiple applications allowed in the app_config'
+		it 'should save page scope for page layout internationalization'
 		
 	end
 

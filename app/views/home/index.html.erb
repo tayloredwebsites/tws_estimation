@@ -1,6 +1,9 @@
-<% page_title "Home" %>
+<%
+  @page_scope = 'home.index'
+  #page_title I18n.translate('title', :scope => @page_scope)
+%>
 
-<h4><%= I18n.translate('home.index.header') %></h4>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 <div class="fields_25_75">
   <div class="field">
     <span class="label">Environment(::Rails.env)</span>

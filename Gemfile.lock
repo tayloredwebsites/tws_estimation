@@ -29,6 +29,7 @@ GEM
       activemodel (= 3.0.9)
       activesupport (= 3.0.9)
     activesupport (3.0.9)
+    addressable (2.2.6)
     archive-tar-minitar (0.5.2)
     arel (2.0.10)
     autotest (4.4.6)
@@ -55,6 +56,8 @@ GEM
     ffi (1.0.9)
     i18n (0.5.0)
     json_pure (1.5.3)
+    launchy (2.0.5)
+      addressable (~> 2.2.6)
     linecache19 (0.5.12)
       ruby_core_source (>= 0.1.4)
     mail (2.2.19)
@@ -138,8 +141,8 @@ DEPENDENCIES
   autotest-growl
   autotest-rails
   capybara
+  launchy
   rails (= 3.0.9)
-  rspec
   rspec-rails
   ruby-debug19
   spork
