@@ -3,13 +3,30 @@
 require 'autotest/growl'
 require 'autotest/fsevent'
 
-Autotest.add_hook(:initialize) {|at|
-  at.add_exception %r{^\.git}  # ignore Version Control System
-  at.add_exception %r{^./tmp}  # ignore temp files, lest autotest will run again, and again...
+Autotest.add_hook :initialize do |autotest|
   #  at.clear_mappings         # take out the default (test/test*rb)
-  at.add_mapping(%r{^lib/.*\.rb$}) {|f, _|
-    Dir['spec/**/*_spec.rb']
-  }
-  at.add_mapping(%r%^spec/(integration)/.*rb$%) {|filename, _| filename }
+  
+  # ignore changes to these files
+  %w{.git .svn .hg .DS_Store ._* vendor tmp log doc}.each do |exception|
+    autotest.add_exception(exception)
+  end
+  
+  # allows 'autotest app/models spec/models'
+  # allows 'autotest models'
+  unless ARGV.empty?
+    autotest.find_directories = ARGV.length == 1 ? ["spec/#{ARGV.first}","app/#{ARGV.first}"] : ARGV.dup
+  end
+  
+  # other possible additions
+  #autotest.add_mapping(%r{^lib/.*\.rb$}) {|f, _|
+  #  Dir['spec/**/*.rb']
+  #}
+  #at.add_mapping(/lib\/foo\/(.*).rb/, true) do |filename, matchdata|
+  #  ["spec/lib/foo/#{matchdata[1]}_spec.rb"]
+  
+  # match all _spec.rb files in spec directory
+  autotest.add_mapping(%r%spec/*/.*_spec.rb%) {|filename, _| filename }
+  
   nil
-}
+end
+
