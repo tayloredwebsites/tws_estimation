@@ -25,8 +25,12 @@ Autotest.add_hook :initialize do |autotest|
   #  ["spec/lib/foo/#{matchdata[1]}_spec.rb"]
   
   # match all _spec.rb files in spec directory
-  autotest.add_mapping(%r%spec/*/.*_spec.rb%) {|filename, _| filename }
-  
+  autotest.add_mapping(%r%spec/controllers/.*_spec.rb%) {|filename, _| filename }
+  autotest.add_mapping(%r%spec/helpers/.*_spec.rb%) {|filename, _| filename }
+  autotest.add_mapping(%r%spec/integration/.*_spec.rb%) {|filename, _| filename }
+  autotest.add_mapping(%r%spec/requests/.*_spec.rb%) {|filename, _| filename }
+  autotest.add_mapping(%r%spec/views/.*_spec.rb%) {|filename, _| filename }
+  # skipping to_do folder
   nil
 end
 

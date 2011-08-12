@@ -18,10 +18,10 @@ describe 'Home Integration Tests - ' do
       find('h4').text.should =~ /^#{pageHeader}$/
     end
     it 'should match a span tag with class label with value "APP_NAME"' do		# capybara find
-      find('div.field[3]/span.label').text.should =~ /\AAPP_NAME\z/
+      find('div#content_body').find('div.field[3]/span.label').text.should =~ /\AAPP_NAME\z/
     end
     it 'should match a span tag with class label with the value of APP_NAME' do		# capybara find
-      find('div.field[3]/span.value').text.should =~ /\A#{appName}\z/
+      find('div#content_body').find('div.field[3]/span.value').text.should =~ /\A#{appName}\z/
     end
 
   end
@@ -41,10 +41,10 @@ describe 'Home Integration Tests - ' do
     #  find('h4').should have_content('Home#help')
     #end
     it 'should match a span tag with class label with the exact value' do		# capybara find
-      find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
+      find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
     end
     it 'should match a span tag with class value with the exact value' do		# capybara find
-      find('div.field[1]/span.value').text.should =~ /\AUpdate me in app\/views\/home\/help.html.erb\z/
+      find('div#content_body').find('div.field[1]/span.value').text.should =~ /\AUpdate me in app\/views\/home\/help.html.erb\z/
     end
 
   end

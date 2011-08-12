@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'capybara_spec_helper'
 
-describe "Application Layout Links tests (capybara)" do
+describe "Layout Links tests (capybara)" do
 
   context 'visit home_index page' do
 
@@ -27,7 +27,7 @@ describe "Application Layout Links tests (capybara)" do
       # confirm at help page
       find('#header_tagline_page_title').text.should =~ /^#{homeHelpTitle}$/
       # click on logo
-      find(:xpath, '//img[@alt="home page"]/parent::a').click
+      find(:xpath, '//img[@alt="Home"]/parent::a').click
       # confirm at home page
       find('#header_tagline_page_title').text.should =~ /^#{homeIndexTitle}$/
     end
