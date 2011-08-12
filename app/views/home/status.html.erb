@@ -1,0 +1,48 @@
+<%
+  @page_scope = 'home.status'
+  #page_title I18n.translate('title', :scope => @page_scope)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+<div class="fields_25_75">
+  <div class="field">
+    <span class="label">Environment(::Rails.env)</span>
+    <span class="value"><%= ::Rails.env %></span>
+  </div>
+  <div class="field">
+    <span class="label">APP_CONFIG</span>
+    <span class="value"><%= APP_CONFIG %></span>
+  </div>
+  <div class="field">
+    <span class="label">APP_NAME</span>
+    <span class="value"><%= APP_CONFIG["APP_NAME"] %></span>
+  </div>
+  <div class="field">
+    <span class="label">SEND_EMAILS</span>
+    <span class="value"><%= APP_CONFIG["SEND_EMAILS"] %></span>
+  </div>
+  <div class="field">
+    <span class="label">request.env['warden']</span>
+    <span class="value"><%= request.env['warden'] %></span>
+  </div>
+  <div class="field">
+    <span class="label">request.headers['user_agent']</span>
+    <span class="value"><%= request.headers['user_agent'] %></span>
+  </div>
+  <div class="field">
+    <span class="label">request.headers['referrer']</span>
+    <span class="value"><%= request.headers['referrer'] %></span>
+  </div>
+  <div class="field">
+    <span class="label">request.headers['cookie']</span>
+    <span class="value"><%= request.headers['cookie'] %> </span>
+  </div>
+  <div class="field">
+    <span class="label">request.headers['host']</span>
+    <span class="value"><%= request.headers['host'] %></span>
+  </div>
+  <div class="field">
+    <span class="label">request.headers['content_type']</span>
+    <span class="value"><%= request.headers['content_type'] %></span>
+  </div>
+</div>

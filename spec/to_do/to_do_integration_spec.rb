@@ -12,7 +12,6 @@ describe 'Integration Tests To Do- ' do
     before(:each) do
       visit home_index_path
     end
-    it 'should have footer links for standard items such as about, contact, news, site map, help'		
     it 'should have an I18n application helper' do
       it 'should have I18n logging'
 	it 'should have I18n flash notify and alert handling'
