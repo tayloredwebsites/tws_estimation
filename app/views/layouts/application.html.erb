@@ -10,32 +10,44 @@
   <div id="body_content">
   
     <div id="header">
-        <div id="header_logo_bar">
-          <div id="header_logo_left">
-            <div id="header_logo"><a href="/"><img src="../../images/header/header_logo.png" alt="home page"></a></div>
-            <div id="header_tagline">
-              <h2 id="header_tagline_company_name" class="nowrap"><%= APP_CONFIG['COMPANY_NAME'] %></h2>
-              <h2 id="header_tagline_app_name" class="nowrap"><%= APP_CONFIG['APP_NAME'] %></h2>
-      	      <h3 id="header_tagline_page_title"><%= I18n.translate('.title', :scope => @page_scope) %></h3>
+      <div id="header_logo_bar">
+        <div id="header_logo_left">
+          <div id="header_logo">
+            <%= link_to image_tag("../../images/header/header_logo.png", :alt => "Home"), root_path %>
+          </div>
+          <div id="header_tagline">
+            <h2 id="header_tagline_company_name" class="nowrap"><%= APP_CONFIG['COMPANY_NAME'] %></h2>
+            <h2 id="header_tagline_app_name" class="nowrap"><%= APP_CONFIG['APP_NAME'] %></h2>
+            <h3 id="header_tagline_page_title"><%= I18n.translate('.title', :scope => @page_scope) %></h3>
+          </div>
+        </div><!-- end header_logo_left -->
+        <div id="header_logo_right" class="width_200">
+          <div class="fields_25_75 thin_border padding_5">
+            <div class="field">
+              <span class="label">Phone</span>
+              <span class="value"></span>
             </div>
-          </div><!-- end header_logo_left -->
-          <div id="header_logo_right" class="width_150">
-          	<div class="thin_border">
-              <div class="list_column">Phone</div>
-              <div class="list_column">eMail: <a href="mailto:tayloredwebsites@me.com">Taylored Web Sites</a></div>
+            <div class="field">
+              <span class="label">eMail:</span>
+              <span class="value"><%= mail_to 'tayloredwebsites@me.com', 'Taylored Web Sites' %></span>
             </div>
-          </div><!-- end header_logo_right -->
-        </div><!-- end header_logo_bar -->
-        <div id="header_bottom_bar">
-          <ul id="header_nav_bar">
-            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
-            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
-            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
-            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
-            <li class="_6_across"><a href="#"><span>Nav Item</span></a></li>
-            <li class="_6_across"><a href="/home/help"">Help</a></li>
-          </ul>
-        </div><!-- end header_nav_bar -->
+          </div>
+        </div><!-- end header_logo_right -->
+      </div><!-- end header_logo_bar -->
+      <div id="header_bottom_bar">
+        <ul id="header_nav_bar">
+          <li class="_6_across"><%= link_to 'Item', '#' %></li>
+          <li class="_6_across"><%= link_to 'Item', '#' %></li>
+          <li class="_6_across"><%= link_to 'Item', '#' %></li>
+          <li class="_6_across"><%= link_to 'Item', '#' %></li>
+          <li class="_6_across"><%= link_to 'Item', '#' %></li>
+          <li class="_6_across"><%= link_to 'Help', home_help_path %></li>
+        </ul><!-- end header_nav_bar -->
+      </div><!-- end header_bottom_bar -->
+      <div id="header_status">
+        <p class="notice"><%= notice %></span>
+        <p class="alert"><%= alert %></span>
+      </div>
     </div><!-- end header -->
     
     <div id="middle_content">
@@ -45,18 +57,25 @@
           <% if true %>
             <div class="module_header">Welcome</div>
           <% end %>
-          <ul class="module_body left_nav">
-            <li class="list_column"><a href="#"><span>Nav Item</span></a></li>
-            <li class="list_column"><a href="#"><span>Nav Item</span></a>
-              <ul class="left_nav">
-                <li class="list_column"><a href="#"><span>Sub Nav Item</span></a></li>
-                <li class="list_column"><a href="#"><span>Sub Nav Item</span></a></li>
-                <li class="list_column"><a href="#"><span>Sub Nav Item</span></a></li>
+          <ul class="module_body column_nav">
+            <li class="list_column off"><%= link_to 'Item', '#' %></li>
+            <li class="list_column on"><%= link_to 'Item', '#' %>
+              <ul class="column_nav">
+                <li class="list_column off"><%= link_to 'Sub Item', '#' %></li>
+                <li class="list_column off"><%= link_to 'Sub Item', '#' %></li>
+                <li class="list_column on"><%= link_to 'Sub Item', '#' %>
+                  <ul class="column_nav">
+                    <li class="list_column off"><%= link_to 'Sub Sub Item', '#' %></li>
+                    <li class="list_column on"><%= link_to 'Sub Sub Item', '#' %></li>
+                    <li class="list_column off"><%= link_to 'Sub Sub Item', '#' %></li>
+                  </ul>
+                </li>
+                <li class="list_column off"><%= link_to 'Sub Item', '#' %></li>
               </ul>
             </li>
-            <li class="list_column"><a href="#"><span>Nav Item</span></a></li>
-            <li class="list_column"><a href="#"><span>Nav Item</span></a></li>
-            <li class="list_column"><a href="/home/help">Help</a></li>
+            <li class="list_column off"><%= link_to 'Item', '#' %></li>
+            <li class="list_column off"><%= link_to 'Item', '#' %></li>
+            <li class="list_column off"><%= link_to 'Help', home_help_path %></li>
           </ul>
         </div><!-- end block_module -->
 
@@ -65,26 +84,34 @@
       <div id="center_content">
 
         <div id="content_header">
-          <p class="notice"><%= notice %></p>
-          <p class="alert"><%= alert %></p>
+          <p class="notice"><%= notice %></span>
+          <p class="alert"><%= alert %></span>
         </div><!-- end content_header -->
 
         <div id="content_body"><%= yield %></div>
 
-        <div id="content_footer">content footer
-        </div><!-- end content_footer -->
+        <div id="content_footer"></div><!-- end content_footer -->
   
      </div><!-- end center_content -->
       
     </div><!-- end middle -->
     
     <div id="footer">
-    	<div id="footer_content">
-        <div id="footer_status">
-          <p class="notice"><%= notice %></span>
-          <p class="alert"><%= alert %></span>
-        </div>
+      <div id="footer_status">
+        <p class="notice"><%= notice %></span>
+        <p class="alert"><%= alert %></span>
       </div>
+      <div id="footer_content">
+        <div id="footer_nav_bar">
+          <ul>
+            <li class="_across"><a href="#">About</a></li>
+            <li class="_across"><a href="#">Contact</a></li>
+            <li class="_across"><a href="#">News</a></li>
+            <li class="_across"><a href="#">Site Map</a></li>
+            <li class="_across"><%= link_to 'Help', home_help_path %></li>
+          </ul>
+        </div><!-- end footer_nav_bar -->
+      </div><!-- end footer_content -->
     </div><!-- end footer -->
     
   </div><!-- end page -->

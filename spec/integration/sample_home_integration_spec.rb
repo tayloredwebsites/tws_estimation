@@ -21,16 +21,16 @@ describe 'Sample Home Integration Tests - ' do
       find('h4').should have_content('Application Configuration Constants')
     end
     it 'should match a span tag with class label with value "APP_NAME"' do    # capybara find
-      find('div.field[3]/span.label').should have_content('APP_NAME')
+      find('div#content_body').find('div.field[3]/span.label').should have_content('APP_NAME')
     end
     it 'should match a span tag with class label with the value of APP_NAME' do    # capybara find
-      find('div.field[3]/span.value').should have_content("#{appName}")
+      find('div#content_body').find('div.field[3]/span.value').should have_content("#{appName}")
     end
     it 'should find via xpath a span tag with class label with the exact value "APP_NAME"' do    # capybara find
-      find(:xpath, '//div[@class="field"][3]/span[@class="label"]').text.should =~ /\AAPP_NAME\z/
+      find('div#content_body').find(:xpath, '//div[@class="field"][3]/span[@class="label"]').text.should =~ /\AAPP_NAME\z/
     end
     it 'should find via xpath a span tag with class label with the value of "APP_NAME"' do    # capybara find
-      find(:xpath, '//div[@class="field"][3]/span[@class="value"]').text.should =~ /\A#{appName}\z/
+      find('div#content_body').find(:xpath, '//div[@class="field"][3]/span[@class="value"]').text.should =~ /\A#{appName}\z/
     end
 
   end
@@ -54,16 +54,16 @@ describe 'Sample Home Integration Tests - ' do
     #  find('h4').should have_content(the_controller_name)    # controller not found here, but works in integration tests
     #end
     it 'should find a span tag with class label with value "To Do"' do    # capybara find
-      find('span.label[1]').should have_content('To Do')
+      find('div#content_body').find('span.label[1]').should have_content('To Do')
     end
     it 'should find via xpath content in the title' do    # capybara find
-      find(:xpath, '//span[@class="label"][1]').text.should =~ /^To Do$/  # match (a line) first occurrance of a span with class of label
+      find(:xpath, '//div[@id="content_body"]//span[@class="label"][1]').text.should =~ /^To Do$/  # match (a line) first occurrance of a span with class of label
     end
     it 'should match a span tag with class label with the exact value' do    # capybara find
-      find('div.field[1]/span.label').text.should =~ /\ATo Do\z/  # match entire string
+      find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/  # match entire string
     end
     it 'should match a span tag with class value with the exact value' do    # capybara find
-      find('div.field[1]/span.value').text.should =~ /\AUpdate me in app\/views\/home\/help.html.erb\z/
+      find('div#content_body').find('div.field[1]/span.value').text.should =~ /\AUpdate me in app\/views\/home\/help.html.erb\z/
     end
 
   end
