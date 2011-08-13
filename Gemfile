@@ -22,7 +22,7 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 
 group :development, :test do
   # gem 'rspec'
-  gem 'rspec-rails'
+  # gem 'rspec-rails'
 end
 
 group :development do
@@ -30,11 +30,16 @@ group :development do
   # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
   # gem 'ruby-debug'
   # gem 'ruby-debug19'
+  
+  gem 'rspec-rails'
+  gem 'annotate'
 
 end
 
 group :test do
 
+  gem 'rspec'
+  
   gem 'capybara'
   gem 'launchy'
   
@@ -47,5 +52,8 @@ group :test do
 
   # spork performance improvement to tests
   gem 'spork'
+  
+  # factory for testing
+  gem 'factory_girl_rails'
 
 end
