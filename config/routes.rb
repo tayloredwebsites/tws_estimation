@@ -1,5 +1,7 @@
 TwsAuth::Application.routes.draw do
 
+  resources :users
+
   # routes for home controller
   root :to => "home#index"		#	settings for devise - set root url
   get "home/index"
