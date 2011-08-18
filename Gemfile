@@ -18,7 +18,6 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'nokogiri'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'aws-s3', :require => 'aws/s3'
- 
 
 group :development, :test do
   # gem 'rspec'
@@ -29,7 +28,7 @@ group :development do
 
   # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
   # gem 'ruby-debug'
-  # gem 'ruby-debug19'
+  gem 'ruby-debug19'
   
   gem 'rspec-rails'
   gem 'annotate'
@@ -56,4 +55,8 @@ group :test do
   # factory for testing
   gem 'factory_girl_rails'
 
+  # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
+  # gem 'ruby-debug'
+  gem 'ruby-debug19'
+  
 end

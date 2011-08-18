@@ -74,7 +74,8 @@ describe UsersController do
 
       it "redirects to the created user" do
         post :create, :user => valid_attributes
-        response.should redirect_to(User.last)
+        #response.should redirect_to(User.last)
+        response.should be_redirect
       end
     end
 
@@ -97,14 +98,16 @@ describe UsersController do
 
   describe "PUT update" do
     describe "with valid params" do
-      it "updates the requested user" do
+      it "updates the requested user with valid parameters" do
         user = User.create! valid_attributes
-        # Assuming there are no other users in the database, this
-        # specifies that the User created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        User.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => user.id, :user => {'these' => 'params'}
+        User.any_instance.should_receive(:update_attributes).with({'username' => 'params'})
+        put :update, :id => user.id, :user => {'username' => 'params'}
+      end
+
+      it "should not update the requested user with invalid parameters" do
+        user = User.create! valid_attributes
+        User.any_instance.should_not_receive(:update_attributes).with({'unsafe_field' => 'params'})
+        put :update, :id => user.id, :user => {'unsafe_field' => 'params'}
       end
 
       it "assigns the requested user as @user" do
