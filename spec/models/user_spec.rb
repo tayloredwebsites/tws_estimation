@@ -1,6 +1,11 @@
+# spec/models/user_spec.rb
 require 'spec_helper'
 
 describe User do
+  it 'should create a new resource given valid attributes' do
+    User.create!(:first_name => 'Test', :last_name => 'User', :email => 'email@example.com', :username => 'TestUser')
+  end
+  
 end
 
 # == Schema Information

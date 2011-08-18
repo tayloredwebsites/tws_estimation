@@ -27,4 +27,8 @@ describe "users/edit.html.erb" do
       assert_select "input#user_password_salt", :name => "user[password_salt]"
     end
   end
+  
+  context 'integrated to layout' do
+    it 'shows label and values using layout css'
+  end
 end
