@@ -87,6 +87,12 @@
   a, a:visited {color:#00e;text-decoration:none;}
   a:hover {color:#f03;text-decoration:underline;}
 
+/* site wide table styles */
+  .odd {background-color:#eee;}
+  .even {background-color:#fff;}
+  table {border:1px solid #ddf;}  /* border-collapse:collapse;} */
+  table td, table th {border:1px solid #ddf; padding:1px 2px;}
+
 /* misc layout styles */
   .column_nav {margin:0 0 0 10px;border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid black;}
   .column_nav li {text-align:left;margin:0 0 0 5px;padding:2px 0;}
@@ -151,7 +157,7 @@
     {float:left;display:inline;text-align:right;padding-right:3px;overflow:hidden;}
   #content_body .field .value, #content_body .field .right_label
     {float:left;display:inline;text-align:left;padding-left:3px;overflow:hidden;}
-  #content_body .field .label:after, #content_body .field .left_value:after
+  #content_body .field .label:after, #content_body .field label:after, #content_body .field .left_value:after
     {content: ':';margin-left:5px;font-weight:900;}
   #content_body .fields_20_80 label, #content_body .fields_20_80 .label, #content_body .fields_20_80 .left_value
     {width:19%;margin-right:-19%;}

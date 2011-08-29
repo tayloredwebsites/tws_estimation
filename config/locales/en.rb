@@ -31,6 +31,25 @@
         :title => "Status",
         :header => "Status page"
       }
-    } # end home
+    }, # end home
+    :users => {
+      :title => 'Users',
+      :index => {
+        :title => "Listing Users",
+        :header => "List of all users"
+      },
+      :edit => {
+        :title => "User Edit",
+        :header => "Edit a user"
+      },
+      :new => {
+        :title => "User New",
+        :header => "Create a new User"
+      },
+      :show => {
+        :title => "User Show",
+        :header => "Show a user"
+      }
+    } # end users
   } # end en
 } #end localizations

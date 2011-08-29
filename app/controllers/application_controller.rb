@@ -1,10 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  BASE_PARAMS_FILTER = {} # see safe_params_init - default safe params - a hash of arrays, such as a hash of tables, with an array of fields that are bulk updatable
-    # BASE_PARAMS_FILTER = {'user' => ['created_at', 'updated_at']}
-    # e.g. 'controller' => ['user'], 'action' => ['index', 'view'] would only allow index and view actions for only the user controller
-  
   protected
   
   # to provide a replacement for attr-accessible, but at the controller level.
@@ -19,16 +15,13 @@ class ApplicationController < ActionController::Base
   #   end
   #
   # enhancement possibilities:
-  # ** provide good test coverage
-  # ** provide better error handling, such as providing exception handling
-  # ** provide for replacement of a matched hash value (for more default handling options, or possibly for model validations)
-  # - possibly provide for allowing fields for all models
+  # ** provide better test coverage
+  # ** provide better error handling, such as providing exception handling, with the possiblity of raising errors here up to user
+  # ** provide for a default hash value (validations for models, all controllers, by specific controller, etc)
   # - possibly provide for removal of fields from a matched hash value (part of protected options, plus more default handling options)
+  # - possibly provide for blacklisted fields (instead of whitelisted fields).
   # - clean up code (but still with proper error handling)
-  # - develop a better user interface that might:
-  #   - method to add a safe field to a model
-  # - expand to provide the protected option in addition to the accessible one currently available
-  # - add the ability to process 'params' hash values that are not hashes, but single values (especially if proves useful).
+  # - develop a better user interface that might provide a class that allows adding/removing fields to a model
   # - develop this as a gem
   #
   # Dave Taylor - Taylored Web Sites (tayloredwebsites.com) - 2011-Aug-16
@@ -39,39 +32,18 @@ class ApplicationController < ActionController::Base
       logger.error("safe_params is nil or not a hash - error")
       safe_params = {}
     end
-    # my_params_filter is a custom merge of the safe_params passed and the BASE_PARAMS_FILTER default values
-    my_params_filter = BASE_PARAMS_FILTER.merge(safe_params) { |key, base_p, safe_p|
-      # make sure each safe params hash item is an array
-      if !base_p.array? || !safe_p.array?
-        logger.error("safe_params are not an array in hash - error")
-        if base_p.array?
-          base_p
-        elsif safe_p.array?
-          safe_p
-        else
-          []
-        end
-      else
-        # return the union of the two arrays
-        logger.debug("merged safe params")
-        base_p | safe_p
-      end
-    }
-    @safe_params_filter = my_params_filter
     # loop through all of the 'param' hash entries - only filter if matches a hash entry in safe params
     @original_params = params
     @original_params.each do |key, value|
-      if my_params_filter.has_key?(key)
+      if safe_params.has_key?(key)
         # my_params_fields is the array of fields for the matched key/model
-        my_params_fields = my_params_filter.fetch(key)
+        my_params_fields = safe_params.fetch(key)
         logger.debug("match on #{key}'s safe fields: #{my_params_fields}")
-        logger.debug("params to match (value) = #{value}")
         matched_params = my_value = value.nil? ? {} : value
         keyed_removed_params = {}
         logger.debug("params to match = #{my_value}")
         my_value.each do |field, val|
           if !my_params_fields.include?(field)
-            # remove this - not in the safe params filter
             logger.error("param has #{key} with '#{field}', which is not in the safe params list")
             matched_params.delete(field)
             keyed_removed_params[field]=val
