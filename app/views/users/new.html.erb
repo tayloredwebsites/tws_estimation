@@ -1,5 +1,15 @@
-<h1>New user</h1>
+<%
+  @page_scope = 'users.new'
+  #page_title I18n.translate('title', :scope => @page_scope)
+%>
 
-<%= render 'form' %>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
-<%= link_to 'Back', users_path %>
+<%= form_for [@user], :action => 'create', do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<%= link_to 'List', users_path %>

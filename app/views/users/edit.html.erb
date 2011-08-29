@@ -1,6 +1,16 @@
-<h1>Editing user</h1>
+<%
+  @page_scope = 'users.edit'
+  #page_title I18n.translate('title', :scope => @page_scope)
+%>
 
-<%= render 'form' %>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
+<%= form_for [@user], :action => 'update', do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<%= link_to 'View', user_path(@user) %> |
+<%= link_to 'List', users_path %>

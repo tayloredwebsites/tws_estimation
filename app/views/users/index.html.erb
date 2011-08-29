@@ -1,6 +1,11 @@
-<h1>Listing users</h1>
+<%
+  @page_scope = 'users.index'
+  #page_title I18n.translate('title', :scope => @page_scope)
+%>
 
-<table>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<table cellspacing="0">
   <tr>
     <th>First name</th>
     <th>Last name</th>
@@ -15,7 +20,7 @@
   </tr>
 
 <% @users.each do |user| %>
-  <tr>
+  <tr class="<%= cycle('odd', 'even') %>">
     <td><%= user.first_name %></td>
     <td><%= user.last_name %></td>
     <td><%= user.email %></td>
@@ -23,13 +28,11 @@
     <td><%= user.username %></td>
     <td><%= user.encrypted_password %></td>
     <td><%= user.password_salt %></td>
-    <td><%= link_to 'Show', user %></td>
+    <td><%= link_to 'View', user %></td>
     <td><%= link_to 'Edit', edit_user_path(user) %></td>
     <td><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
-
-<br />
 
 <%= link_to 'New User', new_user_path %>

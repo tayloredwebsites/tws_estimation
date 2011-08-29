@@ -7,6 +7,7 @@ describe "Layout Links tests" do
 
     homeIndexTitle = I18n.translate('home.index.title')
     homeHelpTitle = I18n.translate('home.help.title')
+    usersTitle = I18n.translate('users.title')
 
     before(:each) do
       visit home_index_path
@@ -16,9 +17,22 @@ describe "Layout Links tests" do
     it "should start at the Home page" do
       find('#header_tagline_page_title').text.should =~ /^#{homeIndexTitle}$/
     end
+    it 'should go to Users index page when top nav Users link is clicked' do
+      find('#header_tagline_page_title').text.should =~ /^#{homeIndexTitle}$/
+      find('ul#header_nav_bar').find('a', :text => I18n.translate('users.title')).click
+      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.index.title')}$/
+    end
     it 'should go to help page when top nav help link is clicked' do
       find('#header_tagline_page_title').text.should =~ /^#{homeIndexTitle}$/
       find('ul#header_nav_bar').find('a', :text => homeHelpTitle).click
+      find('#header_tagline_page_title').text.should =~ /^#{homeHelpTitle}$/
+    end
+    it 'should go to Users index page when left nav Users link is clicked' do
+      find('div#left_content').find('a', :text => I18n.translate('users.title')).click
+      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.index.title')}$/
+    end
+    it 'should go to help page when left nav help link is clicked' do
+      find('div#left_content').find('a', :text => homeHelpTitle).click
       find('#header_tagline_page_title').text.should =~ /^#{homeHelpTitle}$/
     end
     it 'should go to the home page when the logo is clicked' do
@@ -30,10 +44,6 @@ describe "Layout Links tests" do
       find(:xpath, "//img[@alt=\"#{homeIndexTitle}\"]/parent::a").click
       # confirm at home page
       find('#header_tagline_page_title').text.should =~ /^#{homeIndexTitle}$/
-    end
-    it 'should go to help page when left nav help link is clicked' do
-      find('div#left_content').find('a', :text => homeHelpTitle).click
-      find('#header_tagline_page_title').text.should =~ /^#{homeHelpTitle}$/
     end
     it 'should go to the About page when the footer about link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.about.title')).click

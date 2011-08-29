@@ -1,40 +1,46 @@
+<%
+  @page_scope = 'users.show'
+  #page_title I18n.translate('title', :scope => @page_scope)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error")%> total errors: </h2>
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+<% end %>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>First name:</b>
-  <%= @user.first_name %>
-</p>
-
-<p>
-  <b>Last name:</b>
-  <%= @user.last_name %>
-</p>
-
-<p>
-  <b>Email:</b>
-  <%= @user.email %>
-</p>
-
-<p>
-  <b>Roles:</b>
-  <%= @user.roles %>
-</p>
-
-<p>
-  <b>Username:</b>
-  <%= @user.username %>
-</p>
-
-<p>
-  <b>Encrypted password:</b>
-  <%= @user.encrypted_password %>
-</p>
-
-<p>
-  <b>Password salt:</b>
-  <%= @user.password_salt %>
-</p>
+<div class="fields_20_80">
+  <div class="field">
+    <span class="label">First Name</span>
+    <span class="value"><%= @user.first_name %></span>
+  </div>
+  <div class="field">
+    <span class="label">Last name</span>
+    <span class="value"><%= @user.last_name %></span>
+  </div>
+  <div class="field">
+    <span class="label">Username</span>
+    <span class="value"><%= @user.username %></span>
+  </div>
+  <div class="field">
+    <span class="label">Email</span>
+    <span class="value"><%= @user.email %></span>
+  </div>
+  <div class="field">
+    <span class="label">Roles</span>
+    <span class="value"><%= @user.roles %></span>
+  </div>
+</div>
 
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= link_to 'List', users_path %>

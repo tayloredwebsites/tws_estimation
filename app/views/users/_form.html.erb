@@ -1,7 +1,6 @@
-<%= form_for(@user) do |f| %>
   <% if @user.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <h2><%= pluralize(@user.errors.count, "error") %> Total Errors:</h2>
 
       <ul>
       <% @user.errors.full_messages.each do |msg| %>
@@ -11,35 +10,33 @@
     </div>
   <% end %>
 
+<div class="fields_20_80">
   <div class="field">
-    <%= f.label :first_name %><br />
-    <%= f.text_field :first_name %>
-  </div>
-  <div class="field">
-    <%= f.label :last_name %><br />
-    <%= f.text_field :last_name %>
+    <%= f.label :first_name %>
+    <span class="value"><%= f.text_field :first_name %></span>
   </div>
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.text_field :email %>
+    <%= f.label :last_name %>
+    <span class="value"><%= f.text_field :last_name %></span>
   </div>
   <div class="field">
-    <%= f.label :roles %><br />
-    <%= f.text_field :roles %>
+    <%= f.label :email %>
+    <span class="value"><%= f.text_field :email %></span>
   </div>
   <div class="field">
-    <%= f.label :username %><br />
-    <%= f.text_field :username %>
+    <%= f.label :roles %>
+    <span class="value"><%= f.text_field :roles %></span>
   </div>
   <div class="field">
-    <%= f.label :encrypted_password %><br />
-    <%= f.text_field :encrypted_password %>
+    <%= f.label :username %>
+    <span class="value"><%= f.text_field :username %></span>
   </div>
   <div class="field">
-    <%= f.label :password_salt %><br />
-    <%= f.text_field :password_salt %>
+    <%= f.label :encrypted_password %>
+    <span class="value"><%= f.text_field :encrypted_password %></span>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="field">
+    <%= f.label :password_salt %>
+    <span class="value"><%= f.text_field :password_salt %></span>
   </div>
-<% end %>
+</div>
