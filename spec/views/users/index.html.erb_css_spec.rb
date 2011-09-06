@@ -28,23 +28,23 @@ describe "users/index.html.erb" do
     end
 
     it "renders a table of users" do
-      rendered.should have_xpath('//table/tr/td', :text => 'First Name'.to_s, :count => 2)
-      rendered.should have_xpath('//table/tr/td', :text => 'Last Name'.to_s, :count => 2)
-      rendered.should have_xpath('//table/tr/td', :text => 'Email'.to_s, :count => 2)
-      rendered.should have_xpath('//table/tr/td', :text => 'Roles'.to_s, :count => 2)
-      rendered.should have_xpath('//table/tr/td', :text => 'Username'.to_s, :count => 2)
-      rendered.should have_xpath('//table/tr/td', :text => 'Encrypted Password'.to_s, :count => 2)
-      rendered.should have_xpath('//table/tr/td', :text => 'Password Salt'.to_s, :count => 2)
+      assert_select "tr>td", :text => "First Name".to_s, :count => 2
+      assert_select "tr>td", :text => "Last Name".to_s, :count => 2
+      assert_select "tr>td", :text => "Email".to_s, :count => 2
+      assert_select "tr>td", :text => "Roles".to_s, :count => 2
+      assert_select "tr>td", :text => "Username".to_s, :count => 2
+      assert_select "tr>td", :text => "Encrypted Password".to_s, :count => 2
+      assert_select "tr>td", :text => "Password Salt".to_s, :count => 2
     end
 
     it "should find the header tag content" do
-      rendered.should have_xpath('//h4', :text => I18n.translate('users.index.header'))
+      rendered.should have_selector('h4', :text => I18n.translate('users.index.header'))
     end
     
     it "should show a styled table of users" do
-      rendered.should have_xpath('//table[@cellspacing="0"]', :count => 1)
-      rendered.should have_xpath('//table/tr[@class="odd"]', :count => 1)
-      rendered.should have_xpath('//table/tr[@class="even"]', :count => 1)
+      rendered.should have_selector('table[cellspacing="0"]', :count => 1)
+      rendered.should have_selector('tr.odd', :count => 1)
+      rendered.should have_selector('tr.even', :count => 1)
     end
 
   end
