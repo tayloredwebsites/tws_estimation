@@ -26,9 +26,10 @@ describe 'Integration Tests To Do- ' do
 
   context 'Miscellaneous items to do' do
     it 'should have an I18n application helper' do
-      it 'should have I18n logging'
-	it 'should have I18n flash notify and alert handling'
-	it 'should have a convenient scoping mechanism for controllers, actions and pages'
+      it 'should have I18n logging' do
+        it 'should have I18n flash notify and alert handling'
+        it 'should have a convenient scoping mechanism for controllers, actions and pages'
+      end
     end
     it 'should have standardized yields with the layout'
     it 'should be html5 with graceful degredations'

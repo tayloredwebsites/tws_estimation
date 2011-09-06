@@ -16,26 +16,24 @@ describe "users/edit.html.erb" do
       render
     end
 
-    it "renders the edit user form" do
-      assert_select "form", :action => users_path(@user), :method => "post" do
-        assert_select "input#user_first_name", :name => "user[first_name]"
-        assert_select "input#user_last_name", :name => "user[last_name]"
-        assert_select "input#user_email", :name => "user[email]"
-        assert_select "input#user_roles", :name => "user[roles]"
-        assert_select "input#user_username", :name => "user[username]"
-        assert_select "input#user_encrypted_password", :name => "user[encrypted_password]"
-        assert_select "input#user_password_salt", :name => "user[password_salt]"
-      end
+    it "renders all the input elements of the user form" do
+      rendered.should have_xpath("//form[@action=\"#{user_path(@user)}\"][@class=\"edit_user\"][@method=\"post\"]")
+      rendered.should have_xpath('//form//input[@id="user_first_name"][@name="user[first_name]"][@value="MyString"]')
+      rendered.should have_xpath('//form//input[@id="user_last_name"][@name="user[last_name]"][@value="MyString"]')
+      rendered.should have_xpath('//form//input[@id="user_email"][@name="user[email]"][@value="MyString"]')
+      rendered.should have_xpath('//form//input[@id="user_roles"][@name="user[roles]"][@value="MyString"]')
+      rendered.should have_xpath('//form//input[@id="user_username"][@name="user[username]"][@value="MyString"]')
+      rendered.should have_xpath('//form//input[@id="user_encrypted_password"][@name="user[encrypted_password]"][@value="MyString"]')
+      rendered.should have_xpath('//form//input[@id="user_password_salt"][@name="user[password_salt]"][@value="MyString"]')
     end
 
     it "should find the header tag content" do
-      rendered.should have_selector('h4', :text => I18n.translate('users.edit.header'))
+      rendered.should have_xpath('//h4', :text => I18n.translate('users.edit.header'))
     end
     
     it 'shows label and values using layout css' do
-      #rendered.should have_selector('div.field[1]/span.label')
-      rendered.should have_selector('div.field[1]/label')
-      rendered.should have_selector('div.field[1]/span.value')
+      rendered.should have_xpath('//div[1][@class="field"]/label[@for="user_first_name"]')
+      rendered.should have_xpath('//div[1][@class="field"]/span[@class="value"]/input[@id="user_first_name"]')
     end
 
   end
