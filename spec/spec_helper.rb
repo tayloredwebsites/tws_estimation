@@ -59,3 +59,18 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 end
+
+module UserTestHelper
+  def user_minimum_attributes
+    {:email => 'email@example.com', :username => 'TestUser'}
+  end
+  def user_safe_attributes
+    {:first_name => 'Test', :last_name => 'User', :email => 'email@example.com', :username => 'TestUser'}
+  end
+  def user_unsafe_attributes
+    {:roles => "admin", :encrypted_password => "HackMe", :password_salt => "Hackneyed"}
+  end
+  def user_bad_attributes
+    {:admin => "true", :foo => "true", :bar => "true", }
+  end
+end

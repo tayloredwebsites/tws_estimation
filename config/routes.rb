@@ -7,6 +7,7 @@ TwsAuth::Application.routes.draw do
   get "home/index"
   get "home/about"
   get "home/contact"
+  get "home/errors"
   get "home/news"
   get "home/site_map"
   get "home/status"

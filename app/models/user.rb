@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :email, :username
+  validates_presence_of :email, :username
 end
 
 # == Schema Information
