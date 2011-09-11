@@ -1,7 +1,18 @@
 class UsersController < ApplicationController
 
   before_filter do |controller|
-    safe_params_init({'user' => ['first_name', 'last_name', 'email', 'username']})
+    @errors = safe_params_init({'user' => ['first_name', 'last_name', 'email', 'username']})
+    if @errors.count > 0
+      render home_errors_path
+      return
+    else
+      @errors = required_params_init({'user' => ['email', 'username']})
+      if @errors.count > 0
+        render home_errors_path
+        return
+      end
+    end
+  
   end
     
   # GET /users
@@ -33,7 +44,8 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       logger.debug("UsersController.create successfully completed for User = #{@user.id}")
-      redirect_to(:action => 'show', :id => @user.id, :notice => 'User was successfully created.')
+      #redirect_to(:action => 'show', :id => @user.id, :notice => 'User was successfully created!')
+      render :action => 'show'
     else
       logger.debug("UsersController.create was unsuccessful")
       render :action => "new"
@@ -45,7 +57,8 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(params[:user])
-      redirect_to(@user, :notice => 'User was successfully updated.')
+      #redirect_to(:action => 'show', :id => @user.id, :notice => 'User was successfully created!')
+      render :action => 'show'
     else
       render :action => "edit"
     end
@@ -56,7 +69,11 @@ class UsersController < ApplicationController
   def destroy
     @user = User.find(params[:id])
     @user.destroy
-    redirect_to(users_url)
+    redirect_to(users_path)
+  end
+  
+  def errors
+    redirect_to(home_errors_path)
   end
 
 end

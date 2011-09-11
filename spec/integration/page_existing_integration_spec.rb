@@ -48,5 +48,11 @@ describe "Page Existing tests" do
     find('#header_tagline_page_title').text.should_not =~ /translation missing/
     find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.status.title')}$/
   end
+  it 'should be able to visit home_errors page' do
+    visit home_errors_path
+    find('#header_tagline_page_title').text.should_not =~ /\A\s*\z/
+    find('#header_tagline_page_title').text.should_not =~ /translation missing/
+    find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.errors.title')}$/
+  end
 
 end

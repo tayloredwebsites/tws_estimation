@@ -30,6 +30,10 @@
       :status => {
         :title => "Status",
         :header => "Status page"
+      },
+      :errors => {
+        :title => "Errors",
+        :header => "Errors page (unrecoverable errors)"
       }
     }, # end home
     :users => {

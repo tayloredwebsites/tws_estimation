@@ -7,9 +7,9 @@ application:
     
     # Roles used for cancan implementation (see app/models/roles.rb, app/models/ability.rb)
     # each role has layout: (Application/All)(Role)s
-    # First role must be default guest role *
-    VALID_ROLES: AllGuests AllAdmins App1Users App1Admins
-    DEFAULT_ROLE: AllGuests
+    # ??? First role must be default guest role ???
+    VALID_APP_ROLES: all_guest all_admin app1_user app1_admin
+    DEFAULT_APP_ROLE: all_guest
     
 development:
     SEND_EMAILS: true
