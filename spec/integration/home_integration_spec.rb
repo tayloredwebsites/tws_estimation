@@ -3,8 +3,8 @@ require 'capybara_spec_helper'
 
 describe 'Home Integration Tests - ' do
 
-  companyName = APP_CONFIG['COMPANY_NAME']
-  appName = APP_CONFIG['APP_NAME']
+  appName = I18n.translate('app_name')
+  companyName = I18n.translate('company_name')
 
   context 'visit home_index page - ' do
 	
@@ -133,10 +133,16 @@ describe 'Home Integration Tests - ' do
       find('h4').text.should =~ /^#{pageHeader}$/
     end
     it 'should match a span tag with class label with value "APP_NAME"' do		# capybara find
-      find('div#content_body').find('div.field[3]/span.label').text.should =~ /\AAPP_NAME\z/
+      find('div#content_body').find('div.field[2]/span.label').text.should =~ /\AAPP_NAME\z/
     end
     it 'should match a span tag with class label with the value of APP_NAME' do		# capybara find
-      find('div#content_body').find('div.field[3]/span.value').text.should =~ /\A#{appName}\z/
+      find('div#content_body').find('div.field[2]/span.value').text.should =~ /\A#{appName}\z/
+    end
+    it 'should find via xpath a span tag with class label with the exact value "APP_NAME"' do    # capybara find
+      find(:xpath, '//div[@id="content_body"]//div[@class="field"][2]/span[@class="label"]').text.should =~ /\AAPP_NAME\z/
+    end
+    it 'should find via xpath a span tag with class label with the value of "APP_NAME"' do    # capybara find
+      find(:xpath, '//div[@id="content_body"]//div[@class="field"][2]/span[@class="value"]').text.should =~ /\A#{appName}\z/
     end
 
   end

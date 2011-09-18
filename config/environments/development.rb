@@ -1,5 +1,15 @@
 TwsAuth::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
+    
+  #######################
+  # Application Constants
+  #######################
+
+
+  ############################
+  # Application configurations
+  ############################
+
 
   # In the development environment your application's code is reloaded on
   # every request.  This slows down response time but is perfect for development
@@ -16,6 +26,12 @@ TwsAuth::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
+
+  # specify logger and set to debug
+	config.logger = Logger.new(STDOUT)  #default
+  # See everything in the log (default is :info)
+  config.log_level = :debug
+	LOGGING = true  #default
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log

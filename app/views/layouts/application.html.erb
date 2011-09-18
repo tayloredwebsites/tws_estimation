@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= APP_CONFIG["COMPANY_NAME"] %> - <%= APP_CONFIG['APP_NAME'] %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
+  <title><%= I18n.translate('company_name') %> - <%= I18n.translate('app_name') %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
@@ -16,8 +16,8 @@
             <%= link_to image_tag("../../images/header/header_logo.png", :alt => "Home"), root_path %>
           </div>
           <div id="header_tagline">
-            <h2 id="header_tagline_company_name" class="nowrap"><%= APP_CONFIG['COMPANY_NAME'] %></h2>
-            <h2 id="header_tagline_app_name" class="nowrap"><%= APP_CONFIG['APP_NAME'] %></h2>
+            <h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('company_name') %></h2>
+            <h2 id="header_tagline_app_name" class="nowrap"><%= I18n.translate('app_name') %></h2>
             <h3 id="header_tagline_page_title"><%= I18n.translate('.title', :scope => @page_scope) %></h3>
           </div>
         </div><!-- end header_logo_left -->

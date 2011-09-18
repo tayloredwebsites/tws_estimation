@@ -10,16 +10,8 @@
     <span class="value"><%= ::Rails.env %></span>
   </div>
   <div class="field">
-    <span class="label">APP_CONFIG</span>
-    <span class="value"><%= APP_CONFIG %></span>
-  </div>
-  <div class="field">
     <span class="label">APP_NAME</span>
-    <span class="value"><%= APP_CONFIG["APP_NAME"] %></span>
-  </div>
-  <div class="field">
-    <span class="label">SEND_EMAILS</span>
-    <span class="value"><%= APP_CONFIG["SEND_EMAILS"] %></span>
+    <span class="value"><%= I18n.translate('app_name') %></span>
   </div>
   <div class="field">
     <span class="label">request.env['warden']</span>
@@ -46,3 +38,4 @@
     <span class="value"><%= request.headers['content_type'] %></span>
   </div>
 </div>
+<%= debug(params) if Rails.env.development? %>
