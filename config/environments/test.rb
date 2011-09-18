@@ -1,6 +1,17 @@
 TwsAuth::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
+  #######################
+  # Application Constants
+  #######################
+
+
+  ############################
+  # Application configurations
+  ############################
+
+
+
   # The test environment is used exclusively to run your application's
   # test suite.  You never need to work with it otherwise.  Remember that
   # your test database is "scratch space" for the test suite and is wiped
@@ -30,6 +41,12 @@ TwsAuth::Application.configure do
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
 
-  # Print deprecation notices to the stderr
-  config.active_support.deprecation = :stderr
+  # specify logger and set to debug
+	config.logger = Logger.new(STDOUT)
+  config.log_level = :debug
+	LOGGING = true
+  
+  # Print deprecation notices
+  config.active_support.deprecation = :stderr  # Print deprecation notices to the stderr
+  # config.active_support.deprecation = :log  # Print deprecation notices to the Rails logger
 end

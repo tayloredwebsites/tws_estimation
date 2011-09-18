@@ -3,8 +3,8 @@ require 'capybara_spec_helper'
 
 describe "home/status.html.erb" do
 
-  appName = APP_CONFIG['APP_NAME']
-  companyName = APP_CONFIG['COMPANY_NAME']
+  appName = I18n.translate('app_name')
+  companyName = I18n.translate('company_name')
   pageTitle = I18n.translate('home.status.title')
   pageHeader = I18n.translate('home.status.header')
 
@@ -29,13 +29,13 @@ describe "home/status.html.erb" do
         rendered.should have_selector('div.field[1]/span.value', :text => ::Rails.env)
       end
       it "should find a span selector with content" do
-        rendered.should have_selector('div.field[3]/span.label', :text => 'APP_NAME')
+        rendered.should have_selector('div.field[2]/span.label', :text => 'APP_NAME')
       end
       it "should not find a span selector with garbage" do
-        rendered.should have_selector('div.field[3]/span.value', :text => appName)
+        rendered.should have_selector('div.field[2]/span.value', :text => appName)
       end
       it "should not find a span selector with garbage" do
-        rendered.should_not have_selector('div.field[3]/span.value', :text => 'xxxx')
+        rendered.should_not have_selector('div.field[2]/span.value', :text => 'xxxx')
       end
     end
   end

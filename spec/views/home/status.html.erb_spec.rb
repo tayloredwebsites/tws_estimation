@@ -19,13 +19,13 @@ describe "home/status.html.erb" do
       rendered.should have_xpath('//div[1][@class="field"]/span[@class="value"]', :text => ::Rails.env)
     end
     it "should find a span selector with content" do
-      rendered.should have_xpath('//div[3][@class="field"]/span[@class="label"]', :text => 'APP_NAME')
+      rendered.should have_xpath('//div[2][@class="field"]/span[@class="label"]', :text => 'APP_NAME')
     end
     it "should not find a span selector with garbage" do
-      rendered.should have_xpath('//div[3][@class="field"]/span[@class="value"]', :text => APP_CONFIG['APP_NAME'])
+      rendered.should have_xpath('//div[2][@class="field"]/span[@class="value"]', :text => I18n.translate('app_name'))
     end
     it "should not find a span selector with garbage" do
-      rendered.should_not have_xpath('//div[3][@class="field"]/span[@class="value"]', :text => 'sasdfljk')
+      rendered.should_not have_xpath('//div[2][@class="field"]/span[@class="value"]', :text => 'sasdfljk')
     end
   end
 end

@@ -3,9 +3,6 @@ require 'capybara_spec_helper'
 
 describe 'Users Integration Tests - ' do
 
-  appName = APP_CONFIG['APP_NAME']
-  companyName = APP_CONFIG['COMPANY_NAME']
-
   context 'should confirm routing is correct' # see http://edgeguides.rubyonrails.org/routing.html
       #'assert_routing({ :path => "photos", :method => :post }, { :controller => "photos", :action => "create" })
   context 'should allow the users to view their own information'

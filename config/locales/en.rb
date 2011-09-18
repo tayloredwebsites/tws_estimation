@@ -2,6 +2,8 @@
 # localization file using ruby hash method (instead of yaml).
 {
   :en => {
+    :company_name => 'Controlled Air',
+    :app_name => 'Controlled Air Web Systems',
     :home => {
       :index => {
         :title => "Home",

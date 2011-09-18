@@ -3,8 +3,8 @@ require 'capybara_spec_helper'
 
 describe "home/help.html.erb" do
 
-  appName = APP_CONFIG['APP_NAME']
-  companyName = APP_CONFIG['COMPANY_NAME']
+  appName = I18n.translate('app_name')
+  companyName = I18n.translate('company_name')
   pageTitle = I18n.translate('home.help.title')
   pageHeader = I18n.translate('home.help.header')
 
