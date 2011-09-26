@@ -7,30 +7,35 @@
 
 <table cellspacing="0">
   <tr>
+    <th>ID</th>
     <th>First name</th>
     <th>Last name</th>
     <th>Email</th>
     <th>Roles</th>
     <th>Username</th>
-    <th>Encrypted password</th>
-    <th>Password salt</th>
+    <th>Deactivated</th>
     <th></th>
     <th></th>
     <th></th>
   </tr>
 
 <% @users.each do |user| %>
-  <tr class="<%= cycle('odd', 'even') %>">
-    <td><%= user.first_name %></td>
-    <td><%= user.last_name %></td>
-    <td><%= user.email %></td>
-    <td><%= user.roles %></td>
-    <td><%= user.username %></td>
-    <td><%= user.encrypted_password %></td>
-    <td><%= user.password_salt %></td>
+<%= tag :tr, options = {:id => "user_#{user.id}", :class => "#{cycle('odd', 'even')}"}, open = true %>
+    <td class="user_id"><%= user.id %></td>
+    <td class="user_first_name"><%= user.first_name %></td>
+    <td class="user_last_name"><%= user.last_name %></td>
+    <td class="user_email"><%= user.email %></td>
+    <td class="user_roles"><%= user.roles %></td>
+    <td class="user_username"><%= user.username %></td>
+    <td class="user_deactivated"><%= I18n.is_true_or_false(user.deactivated) %></td>
     <td><%= link_to 'View', user %></td>
     <td><%= link_to 'Edit', edit_user_path(user) %></td>
-    <td><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
+		<% if user.deactivated == true %>
+		 	<td><%= link_to 'Reactivate', user, :confirm => 'Are you sure?', :method => :reactivate %></td>
+		 	<td><%= link_to 'Delete', user, :confirm => 'Are you sure?', :method => :delete %></td>
+		<% else %>
+		 	<td><%= link_to 'Deactivate', user, :confirm => 'Are you sure?', :method => :deactivate %></td>
+		<% end %>
   </tr>
 <% end %>
 </table>

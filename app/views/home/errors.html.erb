@@ -4,13 +4,11 @@
 %>
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
-<div class="fields_25_75">
+<div class="fields_10_90">
+<% @errors.each do |err| %>
   <div class="field">
-    <span class="label">Environment(::Rails.env)</span>
-    <span class="value"><%= ::Rails.env %></span>
+    <span class="label">Error:</span>
+    <span class="value"><%= err %></span>
   </div>
-  <div class="field">
-    <span class="label">Errors</span>
-    <span class="value"><%= @errors %></span>
-  </div>
+<% end %>
 </div>

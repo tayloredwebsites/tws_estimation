@@ -1,14 +1,17 @@
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> Total Errors:</h2>
-
-      <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+<% if @user.errors.size > 0 %>
+  <div id="error_explanation">
+    <strong><%= pluralize(@user.errors.count, "Error") %>:</strong>
+    <p>Please fix the following errors and save.</p>
+	<% if @user.errors.size - @user.errors[:base].size > 0 %>
+	<p>Note the errors on specific fields below.</p>
+	<% end %>
+    <ul>
+    <% @user.errors[:base].each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
 
 <div class="fields_20_80">
   <div class="field">
@@ -25,7 +28,7 @@
   </div>
   <div class="field">
     <%= f.label :roles %>
-    <span class="value"><%= f.text_field :roles %></span>
+    <span class="value" id="user_roles"><%= @user.roles %></span>
   </div>
   <div class="field">
     <%= f.label :username %>
@@ -33,10 +36,14 @@
   </div>
   <div class="field">
     <%= f.label :encrypted_password %>
-    <span class="value"><%= f.text_field :encrypted_password %></span>
+    <span class="value" id="user_encrypted_password"><%= @user.encrypted_password %></span>
   </div>
   <div class="field">
     <%= f.label :password_salt %>
-    <span class="value"><%= f.text_field :password_salt %></span>
+    <span class="value" id="user_password_salt"><%= @user.password_salt %></span>
+  </div>
+  <div class="field">
+    <%= f.label :deactivated %>
+    <span class="value"><%= select( :user, :deactivated, [ [I18n.translate('view_text.false'), false], [I18n.translate('view_text.true'), true] ] ) %></span>
   </div>
 </div>

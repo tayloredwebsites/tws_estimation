@@ -17,11 +17,14 @@ module TwsAuth
     # each role has layout: (application_name/all)_(role_name/guest)
     VALID_ROLES = %w( AllGuests AllAdmins EstimUsers EstimAdmins )
     DEFAULT_ROLE = ['AllGuests']
+    VALID_EMAIL_EXPR = /^[a-zA-Z0-9!#$\%&'*+-\/=?^_`{|}~\-]*@(?:controlledair\.com|me\.com|gmail\.com)$/
+    VALID_EMAIL_EXPR2 = /^[a-zA-Z0-9!#$\%&'*+-\/=?^_`{|}~\-]*@[a-zA-Z0-9][a-zA-Z0-9\-]*\.[a-zA-Z]*$/
     
     
-    ############################
-    # Application configurations
-    ############################
+    
+    ###########################
+    # Application configuration
+    ###########################
     
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -55,3 +58,23 @@ module TwsAuth
     config.filter_parameters += [:password]
   end
 end
+
+
+###########################
+# Internationalize Configs
+###########################
+
+module I18n
+  class << self
+    def is_true_or_false(true_false_value)
+      if (true_false_value)
+        I18n.translate('view_text.true')
+      else
+        I18n.translate('view_text.false')
+      end
+    end
+  end
+end
+
+
+

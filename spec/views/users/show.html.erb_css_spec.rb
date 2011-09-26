@@ -25,8 +25,6 @@ describe "users/show.html.erb" do
     end
 
     it "should find the header tag content" do
-      rendered.should match(/Show a user/)
-      rendered.should have_selector('h4', :text => 'Show a user')
       rendered.should have_selector('h4', :text => I18n.translate('users.show.header'))
     end
     

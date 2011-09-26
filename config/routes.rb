@@ -1,6 +1,13 @@
 TwsAuth::Application.routes.draw do
 
-  resources :users
+  resources :users do
+    # match 'deactivate'  # route: user_deactivate        /users/:user_id/deactivate(.:format) {:action=>"deactivate", :controller=>"users"}
+    # match 'reactivate'  # route: user_reactivate        /users/:user_id/reactivate(.:format) {:action=>"reactivate", :controller=>"users"}
+    member do
+      get 'deactivate'  # route: deactivate_user GET    /users/:id/deactivate(.:format) {:action=>"deactivate", :controller=>"users"}
+      get 'reactivate'  # route: reactivate_user GET    /users/:id/reactivate(.:format) {:action=>"reactivate", :controller=>"users"}
+    end
+  end
 
   # routes for home controller
   root :to => "home#index"		#	settings for devise - set root url

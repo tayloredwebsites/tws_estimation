@@ -3,17 +3,6 @@ require 'capybara_spec_helper'
 
 describe 'Integration Tests To Do- ' do
 
-  context 'Miscellaneous items to do' do
-    it 'should have an I18n application helper' do
-      it 'should have I18n logging' do
-        it 'should have I18n flash notify and alert handling'
-        it 'should have a convenient scoping mechanism for controllers, actions and pages'
-      end
-    end
-    it 'should have standardized yields with the layout'
-    it 'should be html5 with graceful degradations'
-  end
-
   context 'User Authentication' do
     it 'should have user authentication'
     it 'may need to use email validations see lesson 56, 56:00 - 1:20:00'
@@ -35,6 +24,17 @@ describe 'Integration Tests To Do- ' do
     it 'should allow users to be assigned to a role'
     it 'should allow users to be assigned to an application with a particular role'
     it 'should allow users to be assigned a role to all applications'
+  end
+
+  context 'Miscellaneous items to do' do
+    describe 'should have an I18n application helper' do
+      describe 'should have I18n logging' do
+        it 'should have I18n flash notify and alert handling'
+        it 'should have a convenient scoping mechanism for controllers, actions and pages'
+      end
+    end
+    it 'should have standardized yields with the layout'
+    it 'should be html5 with graceful degradations'
   end
 
   context 'Have app_config fully tested' do

@@ -11,7 +11,8 @@ describe "users/edit.html.erb" do
         :roles => "MyString",
         :username => "MyString",
         :encrypted_password => "MyString",
-        :password_salt => "MyString"
+        :password_salt => "MyString",
+        :deactivated => false
       ))
       render
     end
@@ -21,10 +22,12 @@ describe "users/edit.html.erb" do
       rendered.should have_xpath('//form//input[@id="user_first_name"][@name="user[first_name]"][@value="MyString"]')
       rendered.should have_xpath('//form//input[@id="user_last_name"][@name="user[last_name]"][@value="MyString"]')
       rendered.should have_xpath('//form//input[@id="user_email"][@name="user[email]"][@value="MyString"]')
-      rendered.should have_xpath('//form//input[@id="user_roles"][@name="user[roles]"][@value="MyString"]')
+      # rendered.should have_xpath('//form//input[@id="user_roles"][@name="user[roles]"][@value="MyString"]')
       rendered.should have_xpath('//form//input[@id="user_username"][@name="user[username]"][@value="MyString"]')
-      rendered.should have_xpath('//form//input[@id="user_encrypted_password"][@name="user[encrypted_password]"][@value="MyString"]')
-      rendered.should have_xpath('//form//input[@id="user_password_salt"][@name="user[password_salt]"][@value="MyString"]')
+      # rendered.should have_xpath('//form//input[@id="user_encrypted_password"][@name="user[encrypted_password]"][@value="MyString"]')
+      # rendered.should have_xpath('//form//input[@id="user_password_salt"][@name="user[password_salt]"][@value="MyString"]')
+      rendered.should have_xpath('//*[@id="user_deactivated"]', :text => "#{I18n.translate('view_text.false')}")
+      
     end
 
     it "should find the header tag content" do

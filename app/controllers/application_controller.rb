@@ -41,6 +41,8 @@ class ApplicationController < ActionController::Base
     # make sure that safe_params is a hash
     if safe_params.nil? || !safe_params.class == hash
       logger.error("safe_params is nil or not a hash - error")
+      # possible code to add errors to a active record model class created before this call
+      # safe_model.errors.add(:base, "safe_params is nil or not a hash - error")
       @param_errors.push("safe_params is nil or not a hash - error")
       safe_params = {}
     end
@@ -138,6 +140,21 @@ class ApplicationController < ActionController::Base
     end
     logger.debug("ApplicationController required_params_init for params: #{params} got #{@param_errors}") if @param_errors.size > 0
     return @param_errors
+  end
+  
+  def notify_error (message)
+    logger.error(message)
+    flash[:notice] = message
+  end
+  
+  def notify_warning (message)
+    logger.warn(message)
+    flash[:notice] = message
+  end
+  
+  def notify_success (message)
+    logger.info(message)
+    flash[:notice] = message
   end
   
 end

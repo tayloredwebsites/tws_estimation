@@ -1,7 +1,19 @@
 class UsersController < ApplicationController
 
   before_filter do |controller|
-    @errors = safe_params_init({'user' => ['first_name', 'last_name', 'email', 'username']})
+    @model = User.new
+    # if %w(show edit update destroy delete deactivate reactivate).include?(params[:action])
+    #   @model = @user = User.find(params[:id])
+    # elsif params[:action]  == new
+    #   @model = @user = User.new
+    # elsif params[:action]  == create
+    #   @model = @user = User.new(params[:user])
+    # elsif params[:action]  == index
+    #   @users = User.all
+    #   @model = User.new
+    # end
+    # @errors = safe_params_init(@model, {'user' => ['first_name', 'last_name', 'email', 'username', 'deactivated']})
+    @errors = safe_params_init({'user' => ['first_name', 'last_name', 'email', 'username', 'deactivated']})
     if @errors.count > 0
       render home_errors_path
       return
@@ -16,19 +28,16 @@ class UsersController < ApplicationController
   end
     
   # GET /users
-  # GET /users.xml
   def index
     @users = User.all
   end
 
   # GET /users/1
-  # GET /users/1.xml
   def show
     @user = User.find(params[:id])
   end
 
   # GET /users/new
-  # GET /users/new.xml
   def new
     @user = User.new
   end
@@ -39,12 +48,10 @@ class UsersController < ApplicationController
   end
 
   # POST /users
-  # POST /users.xml
   def create
     @user = User.new(params[:user])
     if @user.save
-      logger.debug("UsersController.create successfully completed for User = #{@user.id}")
-      #redirect_to(:action => 'show', :id => @user.id, :notice => 'User was successfully created!')
+      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
       render :action => 'show'
     else
       logger.debug("UsersController.create was unsuccessful")
@@ -53,11 +60,10 @@ class UsersController < ApplicationController
   end
 
   # PUT /users/1
-  # PUT /users/1.xml
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(params[:user])
-      #redirect_to(:action => 'show', :id => @user.id, :notice => 'User was successfully created!')
+      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
       render :action => 'show'
     else
       render :action => "edit"
@@ -65,11 +71,46 @@ class UsersController < ApplicationController
   end
 
   # DELETE /users/1
-  # DELETE /users/1.xml
   def destroy
     @user = User.find(params[:id])
     @user.destroy
     redirect_to(users_path)
+  end
+  
+  # GET /users/:id/deactivate
+  def deactivate
+    @user = User.find(params[:id])
+    logger.debug("UsersController.deactivate was called for user: #{@user.id}, #{@user.username}")
+    if @user.deactivate
+      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+      render :action => 'show', :id => @user.id
+    else
+    	if @user.errors[:base].count > 0
+    	  notify_error( @user.errors[:base][0] )
+    	else
+    	  notify_error("Error deactivating user #{@user.username}")
+    	end
+      # @user.errors.add(:base, "error deactivating User")
+      render :action => 'edit', :id => @user.id
+    end
+  end
+  
+  # GET /users/:id/reactivate
+  def reactivate
+    @user = User.find(params[:id])
+    logger.debug("UsersController.reactivate was called for user: #{@user.id}, #{@user.username}")
+    if @user.reactivate
+      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+      render :action => 'show', :id => @user.id
+    else
+    	if @user.errors[:base].count > 0
+    	  notify_error( @user.errors[:base][0] )
+    	else
+        notify_error("Error reactivating user #{@user.username}")
+      end
+      # @user.errors.add(:base, "error reactivating User")
+      render :action => 'edit', :id => @user.id
+    end
   end
   
   def errors
