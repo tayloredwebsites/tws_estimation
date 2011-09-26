@@ -33,8 +33,8 @@ describe "users/index.html.erb" do
       rendered.should have_xpath('//table/tr/td', :text => 'Email'.to_s, :count => 2)
       rendered.should have_xpath('//table/tr/td', :text => 'Roles'.to_s, :count => 2)
       rendered.should have_xpath('//table/tr/td', :text => 'Username'.to_s, :count => 2)
-      rendered.should have_xpath('//table/tr/td', :text => 'Encrypted Password'.to_s, :count => 2)
-      rendered.should have_xpath('//table/tr/td', :text => 'Password Salt'.to_s, :count => 2)
+      # rendered.should have_xpath('//table/tr/td', :text => 'Encrypted Password'.to_s, :count => 2)
+      # rendered.should have_xpath('//table/tr/td', :text => 'Password Salt'.to_s, :count => 2)
     end
 
     it "should find the header tag content" do

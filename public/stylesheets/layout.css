@@ -1,6 +1,6 @@
 /* normalizations */
-  html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td
-    {margin: 0;padding: 0;} 
+  html, body, div, dl, dt, dd, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td
+    {margin: 0;padding: 0;} /* ul, ol,  */
   fieldset, img {border: none;}
   
 /* top level layouts
@@ -50,14 +50,14 @@
   #header_logo_right {display:inline;float:right;}
   #header_bottom_bar {display:block;}
   #header_nav_bar {overflow:hidden;}
-  #header_nav_bar ol, #header_nav_bar ul {list-style: none;}
-  #header_nav_bar li {display:inline;float:left;text-align:center;}
+  ul#header_nav_bar {list-style:none;margin:0;padding:0}
+  #header_nav_bar li {display:inline;float:left;text-align:center;list-style:none;margin:0;padding:0;}
   #header_nav_bar a {display:block;}
   #header_status {}
   #footer_status {}
   #footer_nav_bar {text-align:center;margin:0 auto;overflow:hidden;}
-  #footer_nav_bar ul {display:inline-block;}
-  #footer_nav_bar li {}
+  #footer_nav_bar ul {list-style:none;margin:0;padding:0;display:inline-block;}
+  #footer_nav_bar li {list-style:none;margin:0;padding:0;}
   #footer_nav_bar a {display:block;}
   .column_nav a {display:block;}
   
@@ -94,12 +94,24 @@
   table td, table th {border:1px solid #ddf; padding:1px 2px;}
 
 /* misc layout styles */
-  .column_nav {margin:0 0 0 10px;border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid black;}
+  .column_nav {margin:0 0 0 10px;padding:0;border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid black;}
   .column_nav li {text-align:left;margin:0 0 0 5px;padding:2px 0;}
   .column_nav li.on {#eee;font-weight:bold;}
   .column_nav li.off {font-weight:normal;}
   .column_nav li.on ul {border-top:1px solid #ddf;border-bottom:1px solid #ddf;border-left:10px solid #ddf;}
-  .column_nav ul {margin:0;}
+  .column_nav ul {margin:0;padding:0}
+
+/* error styling */
+.error {color:#f00;font-size:larger;}
+.warning {color:#f00;}
+.alert {color:#f00;font-size:larger;}
+.notice {color:#f00;}
+#error_explanation {border:1px solid #f00;color:#f00;padding:5px 10px;}
+#error_explanation ul {margin:5px 15px;padding:0px;}
+#error_explanation li {margin:0;padding:0;}
+/* .field_with_errors {display:inline;} - see fix in environment.rb */
+.field_with_errors, .field_with_errors label {border:1px solid #f00;color:#f00;}
+.field_with_errors .field_error {padding:0 5px;}
 
 /* helper styles */
   .block {display:block;}
@@ -134,10 +146,6 @@
   .nav_bar {overflow:hidden;}
   .nav_bar ul, .nav_bar li {list-style: none;}
   .nav_bar li {text-align:center;margin:0;padding:0;}
-  .error {color:#ff0000;font-size:larger;}
-  .warning {color:#ff0000;}
-  .alert {color:#ff0000;font-size:larger;}
-  .notice {color:#ff0000;}
   .nowrap {white-space:nowrap;}
   .thin_border {border:1px solid black;}
   .thin_border_top {border_top:1px solid black;}
@@ -159,6 +167,10 @@
     {float:left;display:inline;text-align:left;padding-left:3px;overflow:hidden;}
   #content_body .field .label:after, #content_body .field label:after, #content_body .field .left_value:after
     {content: ':';margin-left:5px;font-weight:900;}
+  #content_body .fields_10_90 label, #content_body .fields_10_90 .label, #content_body .fields_10_90 .left_value
+    {width:9%;margin-right:-9%;}
+  #content_body .fields_10_90 .value, #content_body .fields_10_90 .right_label
+    {width:89%;margin-left:9%;}
   #content_body .fields_20_80 label, #content_body .fields_20_80 .label, #content_body .fields_20_80 .left_value
     {width:19%;margin-right:-19%;}
   #content_body .fields_20_80 .value, #content_body .fields_20_80 .right_label

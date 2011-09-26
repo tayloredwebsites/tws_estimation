@@ -33,8 +33,8 @@ describe "users/index.html.erb" do
       assert_select "tr>td", :text => "Email".to_s, :count => 2
       assert_select "tr>td", :text => "Roles".to_s, :count => 2
       assert_select "tr>td", :text => "Username".to_s, :count => 2
-      assert_select "tr>td", :text => "Encrypted Password".to_s, :count => 2
-      assert_select "tr>td", :text => "Password Salt".to_s, :count => 2
+      # assert_select "tr>td", :text => "Encrypted Password".to_s, :count => 2
+      # assert_select "tr>td", :text => "Password Salt".to_s, :count => 2
     end
 
     it "should find the header tag content" do

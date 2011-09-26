@@ -106,20 +106,5 @@ describe UsersController do
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested user" do
-      user = User.create! user_minimum_attributes
-      expect {
-        delete :destroy, :id => user.id.to_s
-      }.to change(User, :count).by(-1)
-    end
-
-    it "redirects to the users list" do
-      user = User.create! user_minimum_attributes
-      delete :destroy, :id => user.id.to_s
-      response.should redirect_to(users_url)
-    end
-  end
-
 
 end

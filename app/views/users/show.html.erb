@@ -21,26 +21,31 @@
 <div class="fields_20_80">
   <div class="field">
     <span class="label">First Name</span>
-    <span class="value"><%= @user.first_name %></span>
+    <span class="value" id="user_first_name"><%= @user.first_name %></span>
   </div>
   <div class="field">
     <span class="label">Last name</span>
-    <span class="value"><%= @user.last_name %></span>
+    <span class="value" id="user_last_name"><%= @user.last_name %></span>
   </div>
   <div class="field">
     <span class="label">Username</span>
-    <span class="value"><%= @user.username %></span>
+    <span class="value" id="user_username"><%= @user.username %></span>
   </div>
   <div class="field">
     <span class="label">Email</span>
-    <span class="value"><%= @user.email %></span>
+    <span class="value" id="user_email"><%= @user.email %></span>
   </div>
   <div class="field">
     <span class="label">Roles</span>
-    <span class="value"><%= @user.roles %></span>
+    <span class="value" id="user_roles"><%= @user.roles %></span>
+  </div>
+  <div class="field">
+    <span class="label">Deactivated</span>
+    <span class="value" id="user_deactivated"><%= I18n.is_true_or_false(@user.deactivated) %></span>
   </div>
 </div>
 
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'List', users_path %>
+<%= link_to 'Edit', edit_user_path(@user) %>
+ | <%= link_to 'List', users_path %>
+ | <%= link_to 'New User', new_user_path %>

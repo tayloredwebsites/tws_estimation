@@ -49,10 +49,7 @@ describe 'Layout Integration Tests - ' do
       find('div#left_content').find('a', :text => 'Help')
     end
     it 'should have empty header notice' do
-      find('div#content_header').find('p.notice').text.should =~ /\A\s*\z/
-    end
-    it 'should have an empty header alert' do
-      find('div#content_header').find('p.alert').text.should =~ /\A\s*\z/
+      find('div#header_status').find('p.notice').text.should =~ /\A\s*\z/
     end
     it 'should have an empty footer notice' do
       find('div#footer_status').find('p.notice').text.should =~ /\A\s*\z/

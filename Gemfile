@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.9'
+gem 'rails', '3.0.10'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -43,12 +43,17 @@ group :test do
   gem 'launchy'
   
   # autotest config
-  gem 'autotest'
-  gem 'ZenTest'
-  gem 'autotest-rails'
-  gem 'autotest-growl'
-  gem 'autotest-fsevent'
+  # gem 'autotest'
+  # gem 'ZenTest'
+  # gem 'autotest-rails'
+  # gem 'autotest-growl'
+  # gem 'autotest-fsevent'
 
+  # guard config
+  gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+  gem 'guard-rspec'
+  gem 'guard-spork'
+  
   # spork performance improvement to tests
   gem 'spork'
   
