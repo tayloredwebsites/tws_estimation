@@ -64,11 +64,17 @@ module UserTestHelper
   def user_minimum_attributes
     {:email => 'email@example.com', :username => 'TestUser'}
   end
+  def user_create_attributes
+    {:password => 'test', :password_confirmation => 'test'}
+  end
+  def user_minimum_create_attributes
+    user_minimum_attributes.merge(user_create_attributes)
+  end
   def user_safe_attributes
     {:first_name => 'Test', :last_name => 'User', :email => 'email@example.com', :username => 'TestUser'}
   end
   def user_unsafe_attributes
-    {:roles => "admin", :encrypted_password => "HackMe", :password_salt => "Hackneyed"}
+    {:roles => "admin"}
   end
   def user_bad_attributes
     {:admin => "true", :foo => "true", :bar => "true", }

@@ -5,7 +5,7 @@ include UserTestHelper
 describe User do
 
   before(:each) do
-    @user1 = User.create!(UserTestHelper.user_minimum_attributes)
+    @user1 = User.create!(UserTestHelper.user_minimum_create_attributes)
     @model = User.new
   end
   
@@ -14,6 +14,7 @@ describe User do
     @user1.deactivated.should be_false
     # deactivate user
     @user1.deactivate
+    @user1.errors.count.should == 0
     #confirm no errors were generated
     @user1.errors.count.should be == 0
     # refresh the user from the database
@@ -27,6 +28,7 @@ describe User do
     @user1.deactivated.should be_false
     # deactivate user
     @user1.deactivate
+    @user1.errors.count.should == 0
     # refresh the user from the database
     @updated_user = User.find(@user1.id)
     #confirm the user has been deactivated
@@ -61,6 +63,7 @@ describe User do
     @user1.deactivated.should be_false
     # deactivate user
     @user1.deactivate
+    @user1.errors.count.should == 0
     # refresh the user from the database
     @updated_user = User.find(@user1.id)
     #confirm the user has been deactivated
@@ -105,6 +108,7 @@ describe User do
     @user1.deactivated.should be_false
     # deactivate user
     @user1.deactivate
+    @user1.errors.count.should == 0
     # refresh the user from the database
     @updated_user = User.find(@user1.id)
     #confirm the user has been deactivated
@@ -149,6 +153,7 @@ describe User do
     @user1.deactivated.should be_false
     # deactivate user
     @user1.deactivate
+    @user1.errors.count.should be == 0
     # refresh the user from the database
     @updated_user = User.find(@user1.id)
     #confirm the user has been deactivated

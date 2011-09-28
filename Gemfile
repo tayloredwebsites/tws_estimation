@@ -43,17 +43,18 @@ group :test do
   gem 'launchy'
   
   # autotest config
-  # gem 'autotest'
-  # gem 'ZenTest'
-  # gem 'autotest-rails'
-  # gem 'autotest-growl'
-  # gem 'autotest-fsevent'
+  gem 'autotest'
+  gem 'ZenTest'
+  gem 'autotest-rails'
+  gem 'autotest-growl'
+  gem 'autotest-fsevent'
 
-  # guard config
-  gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
-  gem 'guard-rspec'
-  gem 'guard-spork'
-  
+  # # guard config
+  # gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+  # gem 'guard-rspec'
+  # gem 'guard-spork'
+  # #gem 'growl_notify'
+
   # spork performance improvement to tests
   gem 'spork'
   

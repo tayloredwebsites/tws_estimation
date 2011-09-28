@@ -15,6 +15,14 @@
 
 <div class="fields_20_80">
   <div class="field">
+    <%= f.label :username %>
+    <span class="value"><%= f.text_field :username %></span>
+  </div>
+  <div class="field">
+    <%= f.label :email %>
+    <span class="value"><%= f.text_field :email %></span>
+  </div>
+  <div class="field">
     <%= f.label :first_name %>
     <span class="value"><%= f.text_field :first_name %></span>
   </div>
@@ -23,24 +31,8 @@
     <span class="value"><%= f.text_field :last_name %></span>
   </div>
   <div class="field">
-    <%= f.label :email %>
-    <span class="value"><%= f.text_field :email %></span>
-  </div>
-  <div class="field">
     <%= f.label :roles %>
     <span class="value" id="user_roles"><%= @user.roles %></span>
-  </div>
-  <div class="field">
-    <%= f.label :username %>
-    <span class="value"><%= f.text_field :username %></span>
-  </div>
-  <div class="field">
-    <%= f.label :encrypted_password %>
-    <span class="value" id="user_encrypted_password"><%= @user.encrypted_password %></span>
-  </div>
-  <div class="field">
-    <%= f.label :password_salt %>
-    <span class="value" id="user_password_salt"><%= @user.password_salt %></span>
   </div>
   <div class="field">
     <%= f.label :deactivated %>
