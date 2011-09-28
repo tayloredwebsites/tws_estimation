@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     #   @model = User.new
     # end
     # @errors = safe_params_init(@model, {'user' => ['first_name', 'last_name', 'email', 'username', 'deactivated']})
-    @errors = safe_params_init({'user' => ['first_name', 'last_name', 'email', 'username', 'deactivated']})
+    @errors = safe_params_init({'user' => %w(first_name last_name email username deactivated password password_confirmation)})
     if @errors.count > 0
       render home_errors_path
       return

@@ -1,12 +1,48 @@
 class User < ActiveRecord::Base
-  attr_accessible :first_name, :last_name, :email, :username, :deactivated
+  attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation
   validates_presence_of :email, :username
+  attr_accessor :password
+  validates :password,
+      # :presence => true,
+      :confirmation => true
+   
+  before_save :encrypt_password
+  before_create :validate_password
+  #before_update :validate_no_password
   
   after_initialize :init
   
   scope :deactivated, where(:deactivated => true)
   scope :active, where(:deactivated => !true)
   
+  # method to delete a record, only if it is already deactivated
+  def delete
+  	if self.deactivated == false
+      # errors.add(:deactivated, "cannot delete active record")
+			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'delete', :msg => I18n.translate('error_messages.is_active') ) )
+			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
+			return false
+  	end
+  	if errors.empty?
+			super # call parent to delete record
+  	end
+  end
+
+  # method to destroy a record, only if it is already deactivated
+  def destroy
+  	if self.deactivated == false
+      # errors.add(:deactivated, "cannot destroy active record")
+			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'destroy', :msg => I18n.translate('error_messages.is_active') ) )
+			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
+			return false
+			#raise "Error - cannot destroy active record"
+  	end
+  	if errors.empty?
+			super # call parent to destroy record
+  	end
+  end
+
+
   # method to deactivate record
   def deactivate
   	if !self.deactivated
@@ -41,39 +77,61 @@ class User < ActiveRecord::Base
     return true
   end
 
-  # method to delete a record, only if it is already deactivated
-  def delete
-  	if self.deactivated == false
-      # errors.add(:deactivated, "cannot delete active record")
-			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'delete', :msg => I18n.translate('error_messages.is_active') ) )
-			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
-			return false
-  	end
-  	if errors.empty?
-			super # call parent to delete record
-  	end
-  end
 
-  # method to destroy a record, only if it is already deactivated
-  def destroy
-  	if self.deactivated == false
-      # errors.add(:deactivated, "cannot destroy active record")
-			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'destroy', :msg => I18n.translate('error_messages.is_active') ) )
-			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
-			return false
-			#raise "Error - cannot destroy active record"
-  	end
-  	if errors.empty?
-			super # call parent to destroy record
-  	end
+  def has_password?(string)
+    self.encrypted_password == encrypt(string)
   end
-
+  
+  def self.authenticate(username, password_param)
+    user = self.find_by_username(username)
+    return nil if user.nil?
+    return user if user.has_password?(password_param)
+  end
+  
 
   protected
   
   # coding for after class initialization is done
   def init
     self.deactivated ||= false  # set deactivated to false if initialized to nil
+  end
+  
+  def validate_password
+    if self.password.blank?
+      errors.add(:password, I18n.translate('error_messages.missing_password') )
+     false
+    elsif self.password != self.password_confirmation
+      errors.add(:password_confirmation, I18n.translate('error_messages.password_mismatch') )
+      false
+    else
+      true
+    end
+  end
+  def validate_no_password
+    if self.password.blank? && self.password_confirmation.blank?
+      # OK
+      true
+    else
+      errors.add(:password, I18n.translate('error_messages.no_password_update') )
+      false
+    end
+  end
+
+  
+  private
+  
+  def encrypt_password
+    self.password_salt = generate_salt if self.new_record?
+    self.encrypted_password = encrypt(self.password)
+  end
+  def generate_salt
+    encrypt_hash("#{Time.now.utc}--#{self.password}")
+  end
+  def encrypt(string)
+    encrypt_hash("#{self.password_salt}--#{string}")
+  end
+  def encrypt_hash(string)
+    Digest::SHA2.hexdigest(string)
   end
   
 end

@@ -16,12 +16,17 @@
       :success_method_obj_name => "Successful %{method} of %{obj} %{name}",
       :success_method => "Successful %{method}",
       :cannot_method_obj_id => "Cannot %{method} of %{obj} with ID %{id}",
-      :cannot_method_msg => "Cannot %{method} - %{msg}"
+      :cannot_method_msg => "Cannot %{method} - %{msg}",
+      :invalid_call => 'invalid call to %{method}'
     },
     :error_messages => {
       :is_active => 'is an active record.',
       :is_deactivated => 'is a deactivated record.',
       :got_error => 'got an error.',
+      :missing_password => 'missing password',
+      :password_mismatch => 'passwords mismatched',
+      :no_password_update => 'cannot update password here',
+      :invalid_password => 'invalid username/password'
     },
     :view_text => {
       :true => 'truly',

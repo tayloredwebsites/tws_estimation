@@ -7,7 +7,7 @@ describe "Users Links tests" do
 
   context 'visit Users Index page' do
     before(:each) do
-      @user = User.create!(UserTestHelper.user_minimum_attributes)
+      @user = User.create!(UserTestHelper.user_minimum_create_attributes)
       visit users_path
       # save_and_open_page
     end

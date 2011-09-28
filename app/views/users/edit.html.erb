@@ -7,8 +7,10 @@
 
 <%= form_for [@user], :action => 'update', do |f| %>
   <%= render :partial => 'form', :locals => { :f => f } %>
+  <div class="hidden"><input type="hidden" id="user_password" name="user_password" value="" /></div>
+  <div class="hidden"><input type="hidden" id="user_password_confirmation" name="user_password_confirmation" value="" /></div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit 'Update' %>
   </div>
 <% end %>
 
