@@ -6,8 +6,12 @@
       :company_name => 'Controlled Air',
       :app_name => 'Controlled Air Systems'
     },
-    :errors => {
+    :warning => {
       :sure? => 'Are you sure?',
+      :sure_action? => 'Are you sure you want to %{action}?',
+      :sure_action_name? => 'Are you sure you want to %{action} %{name}?'
+    },
+    :errors => {
       :cannot_find_obj => "Cannot find %{obj}",
       :cannot_find_obj_id => "Cannot find %{obj} with ID %{id}",
       :invalid_record_obj => "Invalid record for %{obj}",
@@ -28,24 +32,33 @@
       :no_password_update => 'cannot update password here',
       :invalid_password => 'invalid username/password'
     },
-    :view_text => {
+    :view_field_value => {
       :true => 'truly',
       :false => 'not',
+      :deactivated => 'Deactivated',
+      :reactivated => 'Active',
+      :active => 'Active'
+    },
+    :view_action => {
+      :list => 'List',
+      :new => 'New',
+      :create => 'Create',
+      :edit => 'Edit',
+      :update => 'Update',
+      :show => 'View',
+      :view => 'View',
       :deactivate => 'Deactivate',
       :reactivate => 'Reactivate',
       :destroy => 'Destroy',
       :delete => 'Delete',
-      :index_title => 'List',
-      :edit_title => 'Edit',
-      :new_title => 'New',
-      :show_title => 'View'
+      :update_password => 'Update Password!'
     },
     :company_name => 'Controlled Air',
     :app_name => 'Controlled Air Systems',
-    :index_title => 'List',
-    :edit_title => 'Edit',
-    :new_title => 'New',
-    :show_title => 'View',
+    # :index_title => 'List', # use :view_action.list or :users.index.title
+    # :edit_title => 'Edit', # use :view_action.edit or :users.edit.title
+    # :new_title => 'New', # use :view_action.new or :users.new.title
+    # :show_title => 'View', # use :view_action.show or :users.show.title
     :home => {
       :index => {
         :title => "Home",
@@ -97,7 +110,33 @@
       :show => {
         :title => "View User",
         :header => "View a user"
-      }
+      },
+      :update_password => {
+        :title => "Update Password",
+        :header => "Update your User Password "
+      },
+      :field_name => {
+        :id => 'ID',
+        :first_name => 'First Name',
+        :last_name => 'Last Name',
+        :email => 'Email Address',
+        :roles => 'Authorized Roles',
+        :username => 'Username',
+        :password => 'Password',
+        :confirmation => 'Password Confirmation',
+        :deactivated => 'Deactivated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :first_name => 'First',
+        :last_name => 'Last',
+        :email => 'Email',
+        :roles => 'Roles',
+        :username => 'Username',
+        :password => 'Password',
+        :confirmation => 'Confirmation',
+        :deactivated => 'Deactivated'
+      },
     } # end users
   } # end en
 } #end localizations

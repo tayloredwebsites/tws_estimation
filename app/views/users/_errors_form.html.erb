@@ -1,0 +1,15 @@
+<% if @user.errors.size > 0 %>
+  <div id="error_explanation">
+    <strong><%= pluralize(@user.errors.count, "Error") %>:</strong>
+    <p>Please fix the following errors and save.</p>
+	<% if @user.errors.size - @user.errors[:base].size > 0 %>
+	<p>Note the errors on specific fields below.</p>
+	<% end %>
+    <ul>
+    <% @user.errors[:base].each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+

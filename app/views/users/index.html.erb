@@ -7,13 +7,13 @@
 
 <table cellspacing="0">
   <tr>
-    <th>ID</th>
-    <th>First name</th>
-    <th>Last name</th>
-    <th>Email</th>
-    <th>Roles</th>
-    <th>Username</th>
-    <th>Deactivated</th>
+    <th><%= I18n.translate('users.field_name_short.id') %></th>
+    <th><%= I18n.translate('users.field_name_short.first_name') %></th>
+    <th><%= I18n.translate('users.field_name_short.last_name') %></th>
+    <th><%= I18n.translate('users.field_name_short.email') %></th>
+    <th><%= I18n.translate('users.field_name_short.roles') %></th>
+    <th><%= I18n.translate('users.field_name_short.username') %></th>
+    <th><%= I18n.translate('users.field_name_short.deactivated') %></th>
     <th></th>
     <th></th>
     <th></th>
@@ -27,17 +27,17 @@
     <td class="user_email"><%= user.email %></td>
     <td class="user_roles"><%= user.roles %></td>
     <td class="user_username"><%= user.username %></td>
-    <td class="user_deactivated"><%= I18n.is_true_or_false(user.deactivated) %></td>
-    <td><%= link_to 'View', user %></td>
-    <td><%= link_to 'Edit', edit_user_path(user) %></td>
+    <td class="user_deactivated"><%= I18n.is_deactivated_or_not(user.deactivated) %></td>
+    <td><%= link_to I18n.translate('view_action.view'), user %></td>
+    <td><%= link_to I18n.translate('view_action.edit'), edit_user_path(user) %></td>
 		<% if user.deactivated == true %>
-		 	<td><%= link_to 'Reactivate', user, :confirm => 'Are you sure?', :method => :reactivate %></td>
-		 	<td><%= link_to 'Delete', user, :confirm => 'Are you sure?', :method => :delete %></td>
+		 	<td><%= link_to I18n.translate('view_action.reactivate'), reactivate_user_path(user.id), :method => :put, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.reactivate'), :name => user.username+"?") %></td>
+		 	<td><%= link_to I18n.translate('view_action.delete'), user, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.delete'), :name => user.username+"?"), :method => :delete  %></td>
 		<% else %>
-		 	<td><%= link_to 'Deactivate', user, :confirm => 'Are you sure?', :method => :deactivate %></td>
+		 	<td><%= link_to I18n.translate('view_action.deactivate'), deactivate_user_path(user.id), :method => :put, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.deactivate'), :name => user.username+"?") %></td>
 		<% end %>
   </tr>
 <% end %>
 </table>
 
-<%= link_to 'New User', new_user_path %>
+<%= link_to I18n.translate('users.new.title'), new_user_path %>

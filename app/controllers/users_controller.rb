@@ -80,7 +80,6 @@ class UsersController < ApplicationController
   # GET /users/:id/deactivate
   def deactivate
     @user = User.find(params[:id])
-    logger.debug("UsersController.deactivate was called for user: #{@user.id}, #{@user.username}")
     if @user.deactivate
       notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
       render :action => 'show', :id => @user.id
@@ -98,7 +97,6 @@ class UsersController < ApplicationController
   # GET /users/:id/reactivate
   def reactivate
     @user = User.find(params[:id])
-    logger.debug("UsersController.reactivate was called for user: #{@user.id}, #{@user.username}")
     if @user.reactivate
       notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
       render :action => 'show', :id => @user.id
@@ -111,6 +109,19 @@ class UsersController < ApplicationController
       # @user.errors.add(:base, "error reactivating User")
       render :action => 'edit', :id => @user.id
     end
+  end
+  
+  # PUT /users/:id/update_password
+  def update_password
+    @user = User.find(params[:id])
+    # should this bomb out ????????
+    if @user.update_attributes(params[:user])
+      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+      render :action => 'show'
+    else
+      render :action => "edit"
+    end
+    # shouldn't this call a model class update_password, for security's sake ?????????
   end
   
   def errors
