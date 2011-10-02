@@ -20,32 +20,32 @@
 
 <div class="fields_20_80">
   <div class="field">
-    <span class="label">Username</span>
+    <span class="label"><%= I18n.translate('users.field_name.username') %></span>
     <span class="value" id="user_username"><%= @user.username %></span>
   </div>
   <div class="field">
-    <span class="label">Email</span>
+    <span class="label"><%= I18n.translate('users.field_name.email') %></span>
     <span class="value" id="user_email"><%= @user.email %></span>
   </div>
   <div class="field">
-    <span class="label">First Name</span>
+    <span class="label"><%= I18n.translate('users.field_name.first_name') %></span>
     <span class="value" id="user_first_name"><%= @user.first_name %></span>
   </div>
   <div class="field">
-    <span class="label">Last name</span>
+    <span class="label"><%= I18n.translate('users.field_name.last_name') %></span>
     <span class="value" id="user_last_name"><%= @user.last_name %></span>
   </div>
   <div class="field">
-    <span class="label">Roles</span>
+    <span class="label"><%= I18n.translate('users.field_name.roles') %></span>
     <span class="value" id="user_roles"><%= @user.roles %></span>
   </div>
   <div class="field">
-    <span class="label">Deactivated</span>
-    <span class="value" id="user_deactivated"><%= I18n.is_true_or_false(@user.deactivated) %></span>
+    <span class="label"><%= I18n.translate('users.field_name.deactivated') %></span>
+    <span class="value" id="user_deactivated"><%= I18n.is_deactivated_or_not(@user.deactivated) %></span>
   </div>
 </div>
 
 
-<%= link_to 'Edit', edit_user_path(@user) %>
- | <%= link_to 'List', users_path %>
- | <%= link_to 'New User', new_user_path %>
+<%= link_to I18n.translate('users.edit.title'), edit_user_path(@user) %>
+ | <%= link_to I18n.translate('users.index.title'), users_path %>
+ | <%= link_to I18n.translate('users.new.title'), new_user_path %>

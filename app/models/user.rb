@@ -46,6 +46,7 @@ class User < ActiveRecord::Base
   # method to deactivate record
   def deactivate
   	if !self.deactivated
+  	  logger.debug('User is active on deactivate method - OK to deactivate.')
 			self.deactivated = true;
 			if !self.save
 			  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.got_error') ) )
@@ -53,6 +54,7 @@ class User < ActiveRecord::Base
 			  return false
 			end
   	else
+  	  logger.debug('User is already deactivated on deactivate method.')
 		  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') ) )
 			errors.add(:deactivated, I18n.translate('error_messages.is_deactivated') )
 			return false

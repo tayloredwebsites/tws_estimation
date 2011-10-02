@@ -9,9 +9,9 @@ describe "Users Links tests" do
     before(:each) do
       @user = User.create!(UserTestHelper.user_minimum_create_attributes)
       visit users_path
-      # save_and_open_page
     end
     it "should have a working New user link" do
+      # save_and_open_page
       # should start at the Users Index page
       find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.index.title')}$/
       # should click on the new user link
@@ -25,7 +25,7 @@ describe "Users Links tests" do
       # should be on index page
       find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
       # should click on show button
-      find(:xpath, "//tr[@id=\"user_#{@user.id}\"]//a", :text => "#{I18n.translate('show_title')}").click
+      find(:xpath, "//tr[@id=\"user_#{@user.id}\"]//a", :text => "#{I18n.translate('view_action.show')}").click
       # should bring user to the Show User page
       find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.show.title')}$/
     end
@@ -35,7 +35,7 @@ describe "Users Links tests" do
       # should be on index page
       find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
       # should click on show button
-      find(:xpath, "//tr[@id=\"user_#{@user.id}\"]//a", :text => "#{I18n.translate('edit_title')}").click
+      find(:xpath, "//tr[@id=\"user_#{@user.id}\"]//a", :text => "#{I18n.translate('view_action.edit')}").click
       # should bring user to the Show User page
       find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.edit.title')}$/
     end

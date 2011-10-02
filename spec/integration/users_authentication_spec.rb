@@ -83,6 +83,15 @@ describe 'Users Authentication Tests' do
     
   end
   
+  it 'should allow a user to sign in'
+  it 'should allow a user to sign out'
+  it 'should allow passwords to be initialized from the create action'
+  it 'should allow passwords to be updated from the update_password method, action and view'
+  it 'should not allow passwords to be updated from the update action'
+  it 'should allow passwords to be updated in the update method in the model'
+  it 'allow users to modify their password'
+  it 'should allow an administrator to reset their password (and get it sent to email)'
+
   # it 'should allow users to log in'
   # it 'should prevent guests from signing in without correct username/password'
   # it 'should always provide the code with the state and information of the current logged in user'

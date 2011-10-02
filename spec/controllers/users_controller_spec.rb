@@ -106,5 +106,103 @@ describe UsersController do
     end
   end
 
+  it 'deactivate action should deactivate an active user' do
+    @user1 = User.create!(UserTestHelper.user_minimum_create_attributes)
+    #confirm the user is not deactivated
+    @user1.deactivated.should be_false
+    # call the deactivate user action
+    put :deactivate, :id => @user1.id
+    # response code should be success
+    response.should be_success
+    response.code.should be == '200'
+    # there should be no errors
+    assigns(:user).errors.count.should be == 0
+    # should be show page after successful deactivate action
+    response.should render_template("show")
+    # refresh the user from the database
+    @updated_user = User.find(@user1.id)
+    #confirm the user has been deactivated
+    @updated_user.deactivated.should be_true
+  end
+
+  it 'deactivate action should give an error when deactivating a deactivated user' do
+    @user1 = User.create!(UserTestHelper.user_minimum_create_attributes)
+    #confirm the user is not deactivated
+    @user1.deactivated.should be_false
+    # deactivate user
+    @user1.deactivate
+    @user1.errors.count.should be == 0
+    # refresh the user from the database
+    @updated_user = User.find(@user1.id)
+    #confirm the user has been deactivated
+    @updated_user.deactivated.should be_true
+    # call the deactivate user action
+    put :deactivate, :id => @user1.id
+    # response code should be success
+    response.should be_success
+    response.code.should be == '200'
+    # there should be errors
+    assigns(:user).errors.count.should be > 0
+    assigns(:user).errors[:base][0].should == I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') )
+    assigns(:user).errors[:deactivated][0].should == I18n.translate('error_messages.is_deactivated')
+    # user should still be deactivated
+    assigns(:user).should_not be_nil
+    assigns(:user).should be_a(User)
+    assigns(:user).deactivated.should be_true
+    # should be edit page after unsuccessful deactivate action
+    response.should render_template("edit")
+  end
+  
+  it 'reactivate action should reactivate an deactivated user' do
+    @user1 = User.create!(UserTestHelper.user_minimum_create_attributes)
+    #confirm the user is not deactivated
+    @user1.deactivated.should be_false
+    # deactivate user
+    @user1.deactivate
+    # refresh the user from the database
+    @updated_user = User.find(@user1.id)
+    #confirm the user has been deactivated
+    @updated_user.deactivated.should be_true
+    # call the reactivate user action
+    put :reactivate, :id => @user1.id
+    # response code should be success
+    response.should be_success
+    response.code.should be == '200'
+    # there should be no errors
+    assigns(:user).errors.count.should be == 0
+    # user should be reactivated
+    assigns(:user).should_not be_nil
+    assigns(:user).should be_a(User)
+    assigns(:user).deactivated.should be_false
+    # should be show page after successful reactivate action
+    response.should render_template("show")
+    # refresh the user from the database
+    @updated_user = User.find(@user1.id)
+    # confirm the user is reactivated
+    @updated_user.deactivated.should be_false
+  end
+  
+  it 'reactivate action should give an error when reactivating a active user' do
+    @user1 = User.create!(UserTestHelper.user_minimum_create_attributes)
+    #confirm the user is not deactivated
+    @user1.deactivated.should be_false
+    # call the deactivate user action
+    put :reactivate, :id => @user1.id
+    # response code should be success
+    response.should be_success
+    response.code.should be == '200'
+    # there should be errors
+    assigns(:user).errors.count.should be > 0
+    assigns(:user).errors[:base][0].should == I18n.translate('errors.cannot_method_msg', :method => 'reactivate', :msg => I18n.translate('error_messages.is_active') )
+    assigns(:user).errors[:deactivated][0].should == I18n.translate('error_messages.is_active')
+    # user should still be active
+    assigns(:user).should_not be_nil
+    assigns(:user).should be_a(User)
+    assigns(:user).deactivated.should be_false
+    # should be edit page after unsuccessful deactivate action
+    response.should render_template("edit")
+  end
+  
+  
 
 end

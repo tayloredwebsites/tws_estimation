@@ -1,41 +1,24 @@
-<% if @user.errors.size > 0 %>
-  <div id="error_explanation">
-    <strong><%= pluralize(@user.errors.count, "Error") %>:</strong>
-    <p>Please fix the following errors and save.</p>
-	<% if @user.errors.size - @user.errors[:base].size > 0 %>
-	<p>Note the errors on specific fields below.</p>
-	<% end %>
-    <ul>
-    <% @user.errors[:base].each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-    </ul>
-  </div>
-<% end %>
-
-<div class="fields_20_80">
   <div class="field">
-    <%= f.label :username %>
+    <%= f.label :username, I18n.translate('users.field_name.username') %>
     <span class="value"><%= f.text_field :username %></span>
   </div>
   <div class="field">
-    <%= f.label :email %>
+    <%= f.label :email, I18n.translate('users.field_name.email') %>
     <span class="value"><%= f.text_field :email %></span>
   </div>
   <div class="field">
-    <%= f.label :first_name %>
+    <%= f.label :first_name, I18n.translate('users.field_name.first_name') %>
     <span class="value"><%= f.text_field :first_name %></span>
   </div>
   <div class="field">
-    <%= f.label :last_name %>
+    <%= f.label :last_name, I18n.translate('users.field_name.last_name') %>
     <span class="value"><%= f.text_field :last_name %></span>
   </div>
   <div class="field">
-    <%= f.label :roles %>
+    <%= f.label :roles, I18n.translate('users.field_name.roles') %>
     <span class="value" id="user_roles"><%= @user.roles %></span>
   </div>
   <div class="field">
-    <%= f.label :deactivated %>
-    <span class="value"><%= select( :user, :deactivated, [ [I18n.translate('view_text.false'), false], [I18n.translate('view_text.true'), true] ] ) %></span>
+    <%= f.label :deactivated, I18n.translate('users.field_name.deactivated') %>
+    <span class="value"><%= select( :user, :deactivated, [ [I18n.is_deactivated_or_not(false), false], [I18n.is_deactivated_or_not(true), true] ] ) %></span>
   </div>
-</div>

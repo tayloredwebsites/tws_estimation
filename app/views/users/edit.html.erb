@@ -6,14 +6,19 @@
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
 <%= form_for [@user], :action => 'update', do |f| %>
-  <%= render :partial => 'form', :locals => { :f => f } %>
-  <div class="hidden"><input type="hidden" id="user_password" name="user_password" value="" /></div>
-  <div class="hidden"><input type="hidden" id="user_password_confirmation" name="user_password_confirmation" value="" /></div>
-  <div class="actions">
-    <%= f.submit 'Update' %>
-  </div>
+
+	<%= render :partial => 'errors_form', :locals => { :f => f } %>
+
+	<div class="fields_20_80">
+		<%= render :partial => 'form', :locals => { :f => f } %>
+	</div>
+
+	<div class="actions">
+		<%= f.submit I18n.translate('view_action.update') %>
+	</div>
+	
 <% end %>
 
-<%= link_to 'View', user_path(@user) %>
- | <%= link_to 'List', users_path %>
- | <%= link_to 'New User', new_user_path %>
+<%= link_to I18n.translate('users.show.title'), user_path(@user.id) %>
+ | <%= link_to I18n.translate('users.index.title'), users_path %>
+ | <%= link_to I18n.translate('users.new.title'), new_user_path %>
