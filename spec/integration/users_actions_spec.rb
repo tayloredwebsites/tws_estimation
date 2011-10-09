@@ -3,7 +3,7 @@ include UserTestHelper
 
 require 'capybara_spec_helper'
 
-describe 'Users Integration Tests' do
+describe 'Users Actions Tests' do
 
   before(:each) do
     @user1 = User.create!(UserTestHelper.user_minimum_create_attributes)
@@ -141,6 +141,65 @@ describe 'Users Integration Tests' do
     @updated_user.deactivated.should be_true
   end
   
+  it "should have a working New user link on the index page" do
+    UserTestHelper.user_safe_attributes.each do |key, value|
+      User.create!( UserTestHelper.user_minimum_create_attributes.merge({key => value}) )
+    end
+    @user_deact = User.create!(UserTestHelper.user_minimum_create_attributes.merge({:deactivated => true}))
+    # get the initial users count
+    @num_users = User.count
+    # should have a user
+    @num_users.should > 1
+    # go to the List Users page
+    visit users_path()
+    # save_and_open_page
+    # should start at the Users Index page
+    find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.index.title')}$/
+    # should click on the new user link
+    find('a', :text => I18n.translate('users.new.title')).click
+    # should bring user to the New User page
+    find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.new.title')}$/
+  end
+  
+  it "should have a working View user link on the index page" do
+    UserTestHelper.user_safe_attributes.each do |key, value|
+      User.create!( UserTestHelper.user_minimum_create_attributes.merge({key => value}) )
+    end
+    @user_deact = User.create!(UserTestHelper.user_minimum_create_attributes.merge({:deactivated => true}))
+    # get the initial users count
+    @num_users = User.count
+    # should have a user
+    @num_users.should > 1
+    # go to the List Users page
+    visit users_path()
+    # save_and_open_page
+    # should be on index page
+    find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
+    # should click on show button
+    find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]//a", :text => "#{I18n.translate('view_action.show')}").click
+    # should bring user to the Show User page
+    find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.show.title')}$/
+  end
+  
+  it "should have a working Edit user link on the index page" do
+    UserTestHelper.user_safe_attributes.each do |key, value|
+      User.create!( UserTestHelper.user_minimum_create_attributes.merge({key => value}) )
+    end
+    @user_deact = User.create!(UserTestHelper.user_minimum_create_attributes.merge({:deactivated => true}))
+    # get the initial users count
+    @num_users = User.count
+    # should have a user
+    @num_users.should > 1
+    # go to the List Users page
+    visit users_path()
+    # save_and_open_page
+    # should be on index page
+    find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
+    # should click on show button
+    find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]//a", :text => "#{I18n.translate('view_action.edit')}").click
+    # should bring user to the Show User page
+    find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+  end
   it 'should allow a user to be deactivated from the index page' do
     UserTestHelper.user_safe_attributes.each do |key, value|
       User.create!( UserTestHelper.user_minimum_create_attributes.merge({key => value}) )

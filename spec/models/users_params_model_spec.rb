@@ -22,7 +22,7 @@ describe UsersController do
       User.count.should == (@num_users)
     end
     
-    it "should create user, with errors when created with the minimum_attributes (model validates_presence_of attributes)" do
+    it "should create user, with no errors when created with the minimum_attributes (model validates_presence_of attributes)" do
       @num_users = User.count
       user = User.create(UserTestHelper.user_minimum_create_attributes)
       user.should be_instance_of(User)
