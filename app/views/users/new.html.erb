@@ -7,7 +7,7 @@
 
 <%= form_for [@user], :action => 'create', do |f| %>
 
-	<%= render :partial => 'errors_form', :locals => { :f => f } %>
+	<%= render :partial => 'layouts/errors_form', :locals => { :f => f } %>
 
 	<div class="fields_20_80">
 		<%= render :partial => 'form', :locals => { :f => f } %>

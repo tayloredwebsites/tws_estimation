@@ -58,23 +58,24 @@ describe 'Users Authentication Tests' do
     # make sure user has a password salt accessor
     @user1.should respond_to(:password_salt)
     
-    # make sure that user cannot be created with a missing password
-    lambda {User.create!(UserTestHelper.user_minimum_attributes)}.should raise_error(ActiveRecord::RecordNotSaved)
-    # make sure that user cannot be created with an empty password
-    lambda {User.create!(UserTestHelper.user_minimum_attributes).
-      merge(UserTestHelper.user_create_empty_attributes)}.
-      should raise_error(ActiveRecord::RecordNotSaved)
+    # # make sure that user cannot be created with a missing password
+    # lambda {User.create!(UserTestHelper.user_minimum_attributes)}.should raise_error(ActiveRecord::RecordNotSaved)
+    # # make sure that user cannot be created with an empty password
+    # lambda {User.create!(UserTestHelper.user_minimum_attributes).
+    #   merge(UserTestHelper.user_create_empty_attributes)}.
+    #   should raise_error(ActiveRecord::RecordNotSaved)
+    
     # make sure that encrypted_password in database is not blank
     @user1.encrypted_password.should_not be_blank # do not allow nil, empty string or string with spaces
     
-    # make sure User class has an authenticate method (class level)
-    User.should respond_to(:authenticate)
+    # make sure User class has a method to validate passwords (class level)
+    User.should respond_to(:valid_password?)
     # make sure authenticate returns nil on bad username / bad password
-    User.authenticate('xx', 'yy').should be_nil
+    User.valid_password?('xx', 'yy').should be_nil
     # make sure authenticate returns nil on good username / bad password
-    User.authenticate(UserTestHelper.user_minimum_create_attributes[:username], 'yy').should be_nil
+    User.valid_password?(UserTestHelper.user_minimum_create_attributes[:username], 'yy').should be_nil
     # make sure authenticate returns username on good username / good password
-    User.authenticate(UserTestHelper.user_minimum_create_attributes[:username],
+    User.valid_password?(UserTestHelper.user_minimum_create_attributes[:username],
       UserTestHelper.user_minimum_create_attributes[:password]).should == @user1
     
     
@@ -83,31 +84,19 @@ describe 'Users Authentication Tests' do
     
   end
   
-  it 'should allow a user to sign in'
-  it 'should allow a user to sign out'
+  it 'should allow a user to sign in (chapter 9)'
+  it 'should allow a user to sign out (chapter 9)'
   it 'should allow passwords to be initialized from the create action'
   it 'should allow passwords to be updated from the update_password method, action and view'
   it 'should not allow passwords to be updated from the update action'
   it 'should allow passwords to be updated in the update method in the model'
-  it 'allow users to modify their password'
-  it 'should allow an administrator to reset their password (and get it sent to email)'
 
-  # it 'should allow users to log in'
-  # it 'should prevent guests from signing in without correct username/password'
-  # it 'should always provide the code with the state and information of the current logged in user'
-  # it 'should allow for users to be assigned roles'
-  # it 'should limit access to the application based upon the user roles'
-  # it 'should allow for the specification of the application for a particular role'
-  # 
-  # it 'should allow the users to edit their own information'
-  # it 'should allow the admins to edit their any user\'s information' 
-  # it 'should not allow deactivate unless signed in as admin'
-  # it 'should not allow reactivate unless signed in as admin'
-  # it 'should not allow delete unless signed in as admin, has been deactivated, and table ok for deletes without cleanup'
-  # 
-  # it 'should ensure that email is unique (code 6/1:10 and db 6/1:15)'
-  # it 'should ensure that username is unique (code and db)'
-  # it 'should ensure that email is valid regex (see application constants)'
-  # it 'should ensure that username comes from email'
+  it 'should ensure that email is unique (code 6/1:10 and db 6/1:15)'
+  it 'should ensure that username is unique (code and db)'
+  it 'should ensure that email is valid regex (see application constants)'
+  it 'should ensure that username comes from email'
+
+  it 'should prevent guests from signing in without correct username/password'
+  it 'should always provide the code with the state and information of the current logged in user'
 
 end

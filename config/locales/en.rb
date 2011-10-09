@@ -51,7 +51,9 @@
       :reactivate => 'Reactivate',
       :destroy => 'Destroy',
       :delete => 'Delete',
-      :update_password => 'Update Password!'
+      :update_password => 'Update Password!',
+      :login => 'Log In',
+      :logout => 'Log Out'
     },
     :company_name => 'Controlled Air',
     :app_name => 'Controlled Air Systems',
@@ -136,7 +138,34 @@
         :password => 'Password',
         :confirmation => 'Confirmation',
         :deactivated => 'Deactivated'
+      }
+    }, # end users
+    :sessions => {
+      :title => 'Sessions',
+      :index => {
+        :title => "List Sessions",
+        :header => "List of all sessions"
       },
+      :new => {
+        :title => "Login",
+        :header => "Login"
+      },
+      :create => {
+        :title => "Logged In",
+        :header => "Logged in"
+      },
+      :destroy => {
+        :title => "Logged Out",
+        :header => "Logged out"
+      },
+      :field_name => {
+        :username => 'Username',
+        :password => 'Password'
+      },
+      :field_name_short => {
+        :username => 'Username',
+        :password => 'Password'
+      }
     } # end users
   } # end en
 } #end localizations
