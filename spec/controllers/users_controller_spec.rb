@@ -204,5 +204,36 @@ describe UsersController do
   end
   
   
+  context 'all users -' do
+    it 'should be able to navigate to the PUT reset_password page'
+  end
+  
+  context 'not logged in (guest user) -' do
+    it 'should not be able to navigate to the PUT deactivate page'
+    it 'should not be able to navigate to the PUT reactivate page'
+    it 'should not be able to navigate to the GET edit_password page'
+    it 'should not be able to navigate to the PUT update_password page'
+    it 'should not be able to navigate to the GET index page'
+    it 'should not be able to navigate to the POST create page'
+    it 'should not be able to navigate to the GET new page'
+    it 'should not be able to navigate to the GET edit page'
+    it 'should not be able to navigate to the GET show page'
+    it 'should not be able to navigate to the PUT update page'
+    it 'should not be able to navigate to the DELETE destroy page'
+  end
+  
+  context 'logged in user -' do
+    it 'should be able to navigate to the PUT deactivate page'
+    it 'should be able to navigate to the PUT reactivate page'
+    it 'should be able to navigate to the GET edit_password page'
+    it 'should be able to navigate to the PUT update_password page'
+    it 'should be able to navigate to the GET index page'
+    it 'should be able to navigate to the POST create page'
+    it 'should be able to navigate to the GET new page'
+    it 'should be able to navigate to the GET edit page'
+    it 'should be able to navigate to the GET show page'
+    it 'should be able to navigate to the PUT update page'
+    it 'should be able to navigate to the DELETE destroy page'
+  end
 
 end

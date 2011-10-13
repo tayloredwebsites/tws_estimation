@@ -1,6 +1,13 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-
+  
+  include ApplicationHelper
+  
+  def initialize
+    super
+    @session = Session.new
+  end
+  
   protected
   
   # to provide a replacement for attr-accessible, but at the controller level.

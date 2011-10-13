@@ -92,18 +92,13 @@ class User < ActiveRecord::Base
 
 
   def self.valid_password? (username, password, password_confirmation=nil)
-    logger.debug('username:'+username.to_s)
-    logger.debug('password:'+password.to_s)
-    logger.debug('password_confirmation:'+password_confirmation.to_s)
-    auth_user = find_by_username(username)
+    auth_user = find_by_username(username) if !username.nil?
     if auth_user.nil?
-      logger.debug ("cannot find username")
       return nil
     else
       auth_user.password = auth_user.password_confirmation = password
       auth_user.password_confirmation = password_confirmation if !password_confirmation.nil?
       auth_user.validate_password
-      logger.debug ("validate_password errors") if auth_user.errors.count > 0
       return (auth_user.errors.count == 0 ? auth_user : nil)
     end
   end
@@ -112,24 +107,25 @@ class User < ActiveRecord::Base
   # good for create or udpate
   def validate_password
     if self.new_record?
-      logger.debug ("missing password")
       errors.add(:password, I18n.translate('error_messages.missing_password') ) if self.password.blank?
     end
     if !self.password.blank?
-      logger.debug("have a password")
       if self.password != self.password_confirmation
-        logger.debug("password mismatch")
         errors.add(:password_confirmation, I18n.translate('error_messages.password_mismatch') )
       else
-        logger.debug("invalid password - pwd : "+self.password)
-        logger.debug("invalid password - !new record? : "+(!self.new_record?).to_s)
-        logger.debug("invalid password - !has_matching_password? : "+(!has_matching_password?).to_s)
         errors.add(:password, I18n.translate('error_messages.invalid_password') ) if !self.new_record? && !has_matching_password?
       end
     end
   end
   
-
+  def full_name
+    name = ''
+    name += self.first_name if !self.first_name.nil?
+    name += ' ' + self.last_name if !self.last_name.nil?
+    return name
+  end
+  
+  
   private
  
   # coding for after class initialization is done

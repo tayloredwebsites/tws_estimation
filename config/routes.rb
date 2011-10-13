@@ -1,11 +1,13 @@
 TwsAuth::Application.routes.draw do
 
-  resources :sessions, :only => [:new, :create, :destroy]
-  # get 'sessions/new'
-  # post 'sessions/create'
-  # put 'sessions/destroy'
-  match '/signin', :to => 'sessions#new'
-  match '/signout', :to => 'sessions#destroy'
+  resources :sessions, :only => ['create'] do
+    member do
+      get 'signin'
+      put 'signout'
+    end
+  end
+  match '/signin', :to => 'sessions#signin'
+  match '/signout', :to => 'sessions#signout'
 
   resources :users do
     # match 'deactivate'  # route:      user_deactivate        /users/:user_id/deactivate(.:format) {:action=>"deactivate", :controller=>"users"}

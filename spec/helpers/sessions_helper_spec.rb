@@ -1,4 +1,6 @@
 require 'spec_helper'
+include UserTestHelper
+
 
 # Specs in this file have access to a helper object that includes
 # the SessionsHelper. For example:
@@ -11,5 +13,5 @@ require 'spec_helper'
 #   end
 # end
 describe SessionsHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  
 end

@@ -3,8 +3,9 @@
 {
   :en => {
     :config => {
-      :company_name => 'Controlled Air',
-      :app_name => 'Controlled Air Systems'
+      :company_name => 'Taylored Web Sites',
+      :company_email => 'tayloredwebsites@me.com',
+      :app_name => 'User Auth Base Application'
     },
     :warning => {
       :sure? => 'Are you sure?',
@@ -38,6 +39,11 @@
       :deactivated => 'Deactivated',
       :reactivated => 'Active',
       :active => 'Active'
+    },
+    :view_labels => {
+      :phone => 'Phone:',
+      :email => 'eMail:',
+      :welcome_user => 'Welcome %{user}'
     },
     :view_action => {
       :list => 'List',
@@ -142,11 +148,7 @@
     }, # end users
     :sessions => {
       :title => 'Sessions',
-      :index => {
-        :title => "List Sessions",
-        :header => "List of all sessions"
-      },
-      :new => {
+      :signin => {
         :title => "Login",
         :header => "Login"
       },
@@ -154,7 +156,7 @@
         :title => "Logged In",
         :header => "Logged in"
       },
-      :destroy => {
+      :signout => {
         :title => "Logged Out",
         :header => "Logged out"
       },

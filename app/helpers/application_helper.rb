@@ -17,5 +17,9 @@ module ApplicationHelper
   #   end
   #   out_string
   # end
+  
+  def current_user_full_name
+    @session.current_user_full_name if !@session.nil?
+  end
     
 end

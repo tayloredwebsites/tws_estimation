@@ -31,22 +31,22 @@ describe 'Layout Integration Tests - ' do
       find('div#content_body').text.should_not =~ /\A\s*\z/
     end
     it 'should have eMail in the upper left header' do
-      find('div#header_logo_right').should have_content('eMail:')
+      find('div#header_logo_right').should have_content(I18n.translate('view_labels.email'))
     end
     it 'should have a user item in the top nav bar 1st item' do
-      find('ul#header_nav_bar').find('li[1]/a').text.should =~ /\AUsers\z/
+      find('ul#header_nav_bar').find('li[1]/a').text.should =~ /\A#{I18n.translate('users.title')}\z/
     end
     it 'should have a help item in the top nav bar 6th item' do
-      find('ul#header_nav_bar').find('li[6]/a').text.should =~ /\AHelp\z/
+      find('ul#header_nav_bar').find('li[6]/a').text.should =~ /\A#{I18n.translate('home.help.title')}\z/
     end
     it 'should have Welcome in a left module header' do
-      find('div.module_header', :text => 'Welcome')
+      find('div.module_header', :text => I18n.translate('view_labels.welcome_user', :user => ''))
     end
     it 'should have a Users link in the left nav bar' do
       find('div#left_content').find('a', :text => I18n.translate('users.title'))
     end
     it 'should have a help link in the left nav bar' do
-      find('div#left_content').find('a', :text => 'Help')
+      find('div#left_content').find('a', :text => I18n.translate('home.help.title'))
     end
     it 'should have empty header notice' do
       find('div#header_status').find('p.notice').text.should =~ /\A\s*\z/
