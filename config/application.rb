@@ -8,24 +8,6 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 module TwsAuth
   class Application < Rails::Application
-    
-    #######################
-    # Application Constants
-    #######################
-
-    # Roles used for cancan implementation (to do) (see app/models/roles.rb, app/models/ability.rb)
-    # each role has layout: (application_name/all)_(role_name/guest)
-    VALID_ROLES = %w( AllGuests AllAdmins EstimUsers EstimAdmins )
-    DEFAULT_ROLE = ['AllGuests']
-    VALID_EMAIL_EXPR = /^[a-zA-Z0-9!#$\%&'*+-\/=?^_`{|}~\-]*@(?:controlledair\.com|me\.com|gmail\.com)$/
-    VALID_EMAIL_EXPR2 = /^[a-zA-Z0-9!#$\%&'*+-\/=?^_`{|}~\-]*@[a-zA-Z0-9][a-zA-Z0-9\-]*\.[a-zA-Z]*$/
-    
-    
-    
-    ###########################
-    # Application configuration
-    ###########################
-    
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

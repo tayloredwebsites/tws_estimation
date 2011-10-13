@@ -14,15 +14,11 @@ class UsersController < ApplicationController
     # end
     # @errors = safe_params_init(@model, {'user' => ['first_name', 'last_name', 'email', 'username', 'deactivated']})
     @errors = safe_params_init({'user' => %w(first_name last_name email username deactivated password password_confirmation)})
+    @errors = required_params_init({'user' => ['email', 'username']}) if @errors.count == 0
+    # @errors = validate_login_status
     if @errors.count > 0
       render home_errors_path
       return
-    else
-      @errors = required_params_init({'user' => ['email', 'username']})
-      if @errors.count > 0
-        render home_errors_path
-        return
-      end
     end
   
   end
@@ -122,6 +118,10 @@ class UsersController < ApplicationController
       render :action => "edit"
     end
     # shouldn't this call a model class update_password, for security's sake ?????????
+  end
+  
+  def validate_login_status
+    
   end
   
   def errors
