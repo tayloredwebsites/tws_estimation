@@ -3,43 +3,46 @@ class Session
   attr_accessor :username, :password
   
   
+  # always initialize all current user and session form information at class initialization
   def initialize
     self.username = ''
     self.password = ''
-    @current_user_id = nil
-    @current_sign_in_time = nil
-    @current_user = User.new
+    @cur_user_id = nil
+    @cur_sign_in_time = nil
+    @cur_user = User.new
   end
   
+  # method to sign_in a user (per username/password passed in) to the current session
+  # returns current user id if valid, else nil
   def sign_in(username, password)
     user =  User.valid_password?(username, password)
     if !user.nil?
-      @current_user_id = user.id
-      @current_sign_in_time = Time.now
-      @current_user = user
+      @cur_user_id = user.id
+      @cur_sign_in_time = Time.now
+      @cur_user = user
     else
       initialize
     end
-    return @current_user_id
+    return @cur_user
   end
   
   def sign_out
-    @current_user_id = nil
-    @current_sign_in_time = nil
+    self.initialize
   end
   
   def current_user
-   @current_user
+    validate_session_length
+    @cur_user
   end
 
   def current_user_id
     validate_session_length
-    @current_user_id
+    @cur_user_id
   end
 
   def current_user_full_name
     validate_session_length
-    @current_user.full_name
+    @cur_user.full_name
   end
 
   #def current_user=(user)
@@ -52,21 +55,22 @@ class Session
     
   def signed_in?
     validate_session_length
-    ( @current_user_id.nil? ) ? false : true
+    ( @cur_user_id.nil? ) ? false : true
   end
   
   def signed_in_at
     validate_session_length
-    @current_sign_in_time if !@current_sign_in_time.nil?
+    @cur_sign_in_time if !@current_sign_in_time.nil?
   end
   
-  private
-  
   def validate_session_length
-    if @current_sign_in_time != nil && @current_sign_in_time < SESSION_TIMEOUT
-      logger.debug ('set sign in time to nil:'+@current_sign_in_time.to_s)
-      @current_sign_in_time = nil 
+    if @cur_sign_in_time != nil && @cur_sign_in_time < 10.minutes.ago
+      self.initialize
     end
+  end
+  
+  def current_sign_in_time
+    @cur_sign_in_time
   end
   
   

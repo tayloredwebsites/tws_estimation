@@ -1,4 +1,11 @@
-class UsersController < ApplicationController
+class UsersController< SecureApplicationController
+
+  
+  before_filter :load_session, :except => []
+  after_filter :save_session, :except => []
+
+	
+	skip_filter :authenticate_user  #, :only => [:signin, :create]
 
   before_filter do |controller|
     @model = User.new

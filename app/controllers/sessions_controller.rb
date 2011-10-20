@@ -1,18 +1,27 @@
 class SessionsController < SecureApplicationController
-
-	
-	skip_before_filter :authenticate_user, :only => [:signin, :create]
-	
+  #   
+  # after_filter :save_session
+  #   
   before_filter do |controller|
+    # self.load_session
+    # logger.debug('Sessions Controller filter = '+%w{ signout }.index(params[:action]).to_s)
+    # self.authenticate_user if !(%w{ site_map }.index(params[:action]).nil?)
     @model = User.new
+    @errors = Array.new
   end
-  
-  def initialize
-    logger.debug('initialize')
-    self.clear_session
-    super
-  end
-
+    
+  # skip_filter :authenticate_user, :only => [:signin, :create]
+  #   
+  # before_filter do |controller|
+  #   @model = User.new
+  # end
+  # 
+  # def initialize
+  #   logger.debug('initialize')
+  #   # self.clear_session
+  #   super
+  # end
+  # 
   def signin
   end
 
