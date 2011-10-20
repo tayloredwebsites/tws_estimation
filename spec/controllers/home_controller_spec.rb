@@ -56,11 +56,34 @@ describe HomeController do
   end
   
   context 'not logged in (guest user) -' do
-    it 'should not be able to navigate to the GET site_map page'
+    it 'should not be able to navigate to the GET site_map page' do
+      get :site_map
+      response.should_not be_success
+      response.code.should be == '302'
+      response.should be_redirect
+      response.should redirect_to('/signin')
+      assigns(:session).should_not be_nil
+      assigns(:session).current_user.should_not be_nil
+      assigns(:session).current_user.id.should be_nil
+    end
   end
 
   context 'logged in user -' do
-    it 'should be able to navigate to the GET site_map page'
+    it 'should be able to navigate to the GET site_map page' do
+      FactoryGirl.create(:user_min_create_attr)
+      assigns(:session).should_not be_nil
+      assigns(:session).current_user.should_not be_nil
+      assigns(:session).current_user.id.should be_nil
+      assigns(:session).sign_in(FactoryGirl.attributes_for(:user_session)[:username], FactoryGirl.attributes_for(:user_session)[:password])
+      assigns(:session).current_user.id.should_not be_nil
+      get :site_map
+      response.should be_success
+      response.code.should be == '200'
+      response.should render_template("site_map")
+      assigns(:session).should_not be_nil
+      assigns(:session).current_user.should_not be_nil
+      assigns(:session).current_user.id.should_not be_nil
+    end
   end
   
 end

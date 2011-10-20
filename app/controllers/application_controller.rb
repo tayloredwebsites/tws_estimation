@@ -3,13 +3,34 @@ class ApplicationController < ActionController::Base
   
   include ApplicationHelper
   
+  before_filter :load_session
+  after_filter :save_session
+  
   def initialize
-    super
     @session = Session.new
   end
   
-  protected
-  
+  def load_session
+    # logger.debug ("load_session called, Rails.cache.read(:session) =  #{Rails.cache.read("session").inspect}")
+    @session = Rails.cache.read("session") || Session.new
+    # logger.debug ('time.now = '+Time.now.to_s)
+    # logger.debug ('10.minutes.ago = '+10.minutes.ago.to_s)
+    # logger.debug ('* call session.validate_session_length: '+@session.current_sign_in_time.to_s)
+    @session.validate_session_length
+    # logger.debug ('* updated sign in time: '+@session.current_sign_in_time.to_s)
+    # logger.debug ("load_session called, with session.user_id #{@session.current_user_id.to_s}")
+    logger.debug('* logged in!') if !@session.current_user_id.nil?
+    logger.debug('* logged out!') if @session.current_user_id.nil?
+  end
+
+  def save_session
+    # logger.debug ("save_session to save session.user_id #{@session.current_user_id.to_s}")
+    Rails.cache.write("session", @session)
+    # logger.debug ("save_session saved session =  #{Rails.cache.read("session").inspect}")
+    logger.debug('* logged in!') if !@session.current_user_id.nil?
+    logger.debug('* logged out!') if @session.current_user_id.nil?
+  end
+    
   # to provide a replacement for attr-accessible, but at the controller level.
   # can't use param_protected gem because it is not working in rails 3 at development time.
   # filters and updates items in the 'params' hash.

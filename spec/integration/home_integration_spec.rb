@@ -102,21 +102,35 @@ describe 'Home Integration Tests - ' do
 
     pageTitle = I18n.translate('home.site_map.title')
     pageHeader = I18n.translate('home.site_map.header')
+    
+    context 'logged in user' do
 
-    before(:each) do
-      visit home_site_map_path
-    end
-    it 'should find the exact content to match an h4 tag' do		# capybara find
-      find('div#content_body').find('h4').text.should =~ /^#{pageHeader}$/
-    end
-    #it 'should find the content from the home help page' do		# capybara find
-    #  find('h4').should have_content('Home#help')
-    #end
-    it 'should match a span tag with class label with the exact value' do		# capybara find
-      find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
-    end
-    it 'should match a span tag with class value with the exact value' do		# capybara find
-      find('div#content_body').find('div.field[1]/span.value').text.should =~ /\AUpdate me in app\/views\/home\/site_map.html.erb\z/
+      before(:each) do
+      end
+      
+      it 'should go to the site_map page' do		# capybara find
+        @user1 = FactoryGirl.create(:user_min_create_attr)
+        @model = User.new
+        visit signin_path
+        # save_and_open_page
+        # should be on login page
+        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('sessions.signin.title')}$/
+        # should fill in the login form to login
+        page.fill_in("session[username]", :with => FactoryGirl.attributes_for(:user_min_create_attr)[:username] )
+        page.fill_in('session[password]', :with => FactoryGirl.attributes_for(:user_min_create_attr)[:password] )
+        find(:xpath, '//input[@id="session_submit"]').click
+        # should be on the Session Create page
+        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('sessions.create.title')}$/
+        find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
+          /^#{I18n.translate('view_labels.welcome_user', :user => current_user_full_name) }$/
+        save_and_open_page
+        visit home_site_map_path
+        save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('home.site_map.title')}$/
+        find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
+        find('div#content_body').find('div.field[1]/span.value').text.should =~ /\AUpdate me in app\/views\/home\/site_map.html.erb\z/
+      end
+      
     end
 
   end

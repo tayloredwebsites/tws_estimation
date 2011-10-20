@@ -2,7 +2,11 @@ class SecureApplicationController < ApplicationController
   # default cross-site request forgery protection
   protect_from_forgery
 
-	before_filter :authenticate_user
+  
+  # before_filter :load_session, :except => []
+  # after_filter :save_session, :except => []
+  # 
+  # before_filter :authenticate_user
 	
 	
 	protected

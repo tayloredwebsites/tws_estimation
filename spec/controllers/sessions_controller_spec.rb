@@ -90,8 +90,11 @@ describe SessionsController do
   end
   
   context 'not logged in (guest user) -' do
-    it 'should not be able to the logout action on a current valid user session ' do
+    it 'should not be able to the logout action if not logged in' do
       FactoryGirl.create(:user_min_create_attr)
+      assigns(:session).should_not be_nil
+      assigns(:session).current_user.should_not be_nil
+      assigns(:session).current_user.id.should be_nil
       put :signout  #, FactoryGirl.attributes_for(:user_session)[:id]
       response.should_not be_success
       response.code.should be == '302'

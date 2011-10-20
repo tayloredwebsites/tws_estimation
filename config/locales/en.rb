@@ -119,9 +119,9 @@
         :title => "View User",
         :header => "View a user"
       },
-      :update_password => {
-        :title => "Update Password",
-        :header => "Update your User Password "
+      :edit_password => {
+        :title => "Edit Password",
+        :header => "Edit your User Password "
       },
       :field_name => {
         :id => 'ID',
@@ -131,7 +131,7 @@
         :roles => 'Authorized Roles',
         :username => 'Username',
         :password => 'Password',
-        :confirmation => 'Password Confirmation',
+        :password_confirmation => 'Password Confirmation',
         :deactivated => 'Deactivated'
       },
       :field_name_short => {
@@ -142,7 +142,7 @@
         :roles => 'Roles',
         :username => 'Username',
         :password => 'Password',
-        :confirmation => 'Confirmation',
+        :password_confirmation => 'Confirmation',
         :deactivated => 'Deactivated'
       }
     }, # end users
