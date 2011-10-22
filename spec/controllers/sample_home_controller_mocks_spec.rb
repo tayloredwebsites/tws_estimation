@@ -1,8 +1,14 @@
 require 'spec_helper'
 require 'capybara_spec_helper'
+include ApplicationHelper
+
 
 describe HomeController do
-  render_views
+#  render_views
+
+  before(:each) do
+    clear_session
+  end
 
   context "Mock tests - " do 
 	

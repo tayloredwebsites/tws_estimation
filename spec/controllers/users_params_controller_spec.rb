@@ -1,8 +1,12 @@
 require 'spec_helper'
 include UserTestHelper
+include ApplicationHelper
 
 describe UsersController do
 
+  before(:each) do
+    clear_session
+  end
 
   context 'UsersController should validate Users parameters on a Post Create -' do
 

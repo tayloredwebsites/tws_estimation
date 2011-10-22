@@ -122,10 +122,10 @@ describe 'Home Integration Tests - ' do
         # should be on the Session Create page
         find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('sessions.create.title')}$/
         find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
-          /^#{I18n.translate('view_labels.welcome_user', :user => current_user_full_name) }$/
-        save_and_open_page
+          /^#{I18n.translate('view_labels.welcome_user', :user => @user1.full_name) }$/
+        #save_and_open_page
         visit home_site_map_path
-        save_and_open_page
+        #save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('home.site_map.title')}$/
         find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
         find('div#content_body').find('div.field[1]/span.value').text.should =~ /\AUpdate me in app\/views\/home\/site_map.html.erb\z/

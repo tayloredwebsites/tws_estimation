@@ -1,8 +1,13 @@
 require 'spec_helper'
 include UserTestHelper
+include ApplicationHelper
 
 
 describe SessionsController do
+
+  before(:each) do
+    clear_session
+  end
 
   describe "GET 'signin'" do
     it "should be successful" do
@@ -90,11 +95,16 @@ describe SessionsController do
   end
   
   context 'not logged in (guest user) -' do
-    it 'should not be able to the logout action if not logged in' do
-      FactoryGirl.create(:user_min_create_attr)
+    it 'should not be able to the signout action if not signed in' do
+#      FactoryGirl.create(:user_min_create_attr)
+      get :signin
+      response.should be_success
+      response.code.should be == '200'
+      response.should render_template("/signin")
       assigns(:session).should_not be_nil
       assigns(:session).current_user.should_not be_nil
       assigns(:session).current_user.id.should be_nil
+      assigns(:session).signed_in?.should be_false
       put :signout  #, FactoryGirl.attributes_for(:user_session)[:id]
       response.should_not be_success
       response.code.should be == '302'
@@ -108,8 +118,6 @@ describe SessionsController do
   
   
   context 'logged in user -' do
-    before(:each) do
-    end
     
     it 'should be able to do the signout action on the current valid user session' do
       FactoryGirl.create(:user_min_create_attr)
