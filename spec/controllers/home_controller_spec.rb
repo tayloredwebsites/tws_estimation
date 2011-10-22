@@ -1,8 +1,15 @@
 require 'spec_helper'
+include UserTestHelper
 require 'capybara_spec_helper'
+include ApplicationHelper
+
 
 describe HomeController do
   
+  before(:each) do
+    clear_session
+  end
+
   context 'all users -' do
     it 'should be able to navigate to the GET index page' do
       get :index
@@ -58,24 +65,29 @@ describe HomeController do
   context 'not logged in (guest user) -' do
     it 'should not be able to navigate to the GET site_map page' do
       get :site_map
+      assigns(:session).should_not be_nil
+      assigns(:session).current_user.should_not be_nil
+      assigns(:session).current_user.id.should be_nil
+      assigns(:session).signed_in?.should be_false
       response.should_not be_success
       response.code.should be == '302'
       response.should be_redirect
       response.should redirect_to('/signin')
-      assigns(:session).should_not be_nil
-      assigns(:session).current_user.should_not be_nil
-      assigns(:session).current_user.id.should be_nil
     end
   end
 
   context 'logged in user -' do
     it 'should be able to navigate to the GET site_map page' do
       FactoryGirl.create(:user_min_create_attr)
+      signin_session(FactoryGirl.attributes_for(:user_session)[:username], FactoryGirl.attributes_for(:user_session)[:password])
+      get :index
+      response.should be_success
+      response.code.should be == '200'
+      response.should render_template("index")
       assigns(:session).should_not be_nil
       assigns(:session).current_user.should_not be_nil
-      assigns(:session).current_user.id.should be_nil
-      assigns(:session).sign_in(FactoryGirl.attributes_for(:user_session)[:username], FactoryGirl.attributes_for(:user_session)[:password])
       assigns(:session).current_user.id.should_not be_nil
+      assigns(:session).signed_in?.should be_true
       get :site_map
       response.should be_success
       response.code.should be == '200'
@@ -83,6 +95,7 @@ describe HomeController do
       assigns(:session).should_not be_nil
       assigns(:session).current_user.should_not be_nil
       assigns(:session).current_user.id.should_not be_nil
+      assigns(:session).signed_in?.should be_true
     end
   end
   

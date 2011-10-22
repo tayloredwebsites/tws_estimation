@@ -1,8 +1,13 @@
 require 'spec_helper'
 include UserTestHelper
+include ApplicationHelper
 
 
 describe UsersController do
+
+  before(:each) do
+    clear_session
+  end
 
   describe "GET index" do
     it "assigns all users as @users" do

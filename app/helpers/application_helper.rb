@@ -19,8 +19,13 @@ module ApplicationHelper
   # end
   
   def current_user_full_name
-    logger.debug('nil session in ApplicationHelper.current_user_full_name') if @session.nil?
     @session.current_user_full_name if !@session.nil?
   end
+  
+  def clear_session
+    @session = Session.new
+    Rails.cache.write("session", @session)
+  end
+    
     
 end

@@ -27,7 +27,7 @@ class Session
   end
   
   def sign_out
-    self.initialize
+    initialize
   end
   
   def current_user
@@ -60,7 +60,7 @@ class Session
   
   def signed_in_at
     validate_session_length
-    @cur_sign_in_time if !@current_sign_in_time.nil?
+    @cur_sign_in_time
   end
   
   def validate_session_length

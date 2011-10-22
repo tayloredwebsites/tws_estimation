@@ -79,4 +79,10 @@ module UserTestHelper
   def user_bad_attributes
     {:admin => "true", :foo => "true", :bar => "true", }
   end
+  def signin_session(username, password)
+    @session = Session.new
+    @session.sign_in(username, password)
+    Rails.cache.write("session", @session)
+  end
+  
 end

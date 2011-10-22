@@ -5,7 +5,7 @@ class SessionsController < SecureApplicationController
   before_filter do |controller|
     # self.load_session
     # logger.debug('Sessions Controller filter = '+%w{ signout }.index(params[:action]).to_s)
-    # self.authenticate_user if !(%w{ site_map }.index(params[:action]).nil?)
+    self.authenticate_user if !(%w{ signout }.index(params[:action]).nil?)
     @model = User.new
     @errors = Array.new
   end
