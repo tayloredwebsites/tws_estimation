@@ -46,9 +46,9 @@ describe 'Users Actions Tests' do
     # should be on index page
     find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
     # should show first user as not deactivated
-    find(:xpath, '//tr[@id="user_1"]/td[@class="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
+    find(:xpath, "//tr[@id=\"user_#{@user1.id}\"]/td[@class=\"user_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     # should show first user with the deactivate link available
-    find(:xpath, '(//tr[@id="user_1"]//a)[3]').text.should =~ /\A#{I18n.translate('view_action.deactivate')}\z/
+    find(:xpath, "(//tr[@id=\"user_#{@user1.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.deactivate')}\z/
     # should show deactivated user as deactivated
     find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]/td[@class=\"user_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
     # should show the deactivated user with the reactivate link available
@@ -215,11 +215,11 @@ describe 'Users Actions Tests' do
     # should be on index page
     find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
     # should show first user as not deactivated
-    find(:xpath, '//tr[@id="user_1"]/td[@class="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
-    # # should show first user with the deactivate link available
-    find(:xpath, '(//tr[@id="user_1"]//a)[3]').text.should =~ /\A#{I18n.translate('view_action.deactivate')}\z/
+    find(:xpath, "//tr[@id=\"user_#{@user1.id}\"]/td[@class=\"user_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
+    # should show first user with the deactivate link available
+    find(:xpath, "(//tr[@id=\"user_#{@user1.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.deactivate')}\z/
     # should be able to click the deactivate button
-    find(:xpath, '//tr[@id="user_1"]//a', :text => I18n.translate('view_action.deactivate') ).click
+    find(:xpath, "//tr[@id=\"user_#{@user1.id}\"]//a", :text => I18n.translate('view_action.deactivate') ).click
     # save_and_open_page
     # response code should be success
     page.driver.status_code.should be 200
@@ -233,7 +233,7 @@ describe 'Users Actions Tests' do
     # should show the user as deactivated
     find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
     # refresh the user from the database
-    @updated_user = User.find(1)
+    @updated_user = User.find(@user1.id)
     #confirm the user has been deactivated
     @updated_user.deactivated.should be_true
   end
@@ -271,7 +271,7 @@ describe 'Users Actions Tests' do
     # should show the user as deactivated
     find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     # refresh the user from the database
-    @updated_user = User.find(1)
+    @updated_user = User.find(@user1.id)
     #confirm the user has been deactivated
     @updated_user.deactivated.should be_false
   end

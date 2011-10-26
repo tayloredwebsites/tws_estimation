@@ -57,7 +57,22 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  #config.use_transactional_fixtures = true
+  
+  # fix for records not being removed after capybara fill in and click
+  # per http://stackoverflow.com/questions/6576592/failing-to-test-devise-with-capybara
+  # requires the database_cleaner gem
+  config.use_transactional_fixtures = false
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation
+  end
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+  
 end
 
 module UserTestHelper
@@ -79,10 +94,14 @@ module UserTestHelper
   def user_bad_attributes
     {:admin => "true", :foo => "true", :bar => "true", }
   end
-  def signin_session(username, password)
-    @session = Session.new
-    @session.sign_in(username, password)
-    Rails.cache.write("session", @session)
+  def session_signin(username, password)
+    session[:current_user_id] = nil
+    @user_session = UserSession.new (session)
+    @user_session.sign_in(username, password)
+    if @user_session.signed_in?
+      session[:current_user_id] = @user_session.current_user_id
+    end
+    return @user_session
   end
   
 end

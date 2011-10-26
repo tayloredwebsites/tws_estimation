@@ -19,12 +19,12 @@ module ApplicationHelper
   # end
   
   def current_user_full_name
-    @session.current_user_full_name if !@session.nil?
+    @session.current_user_full_name if !@user_session.nil?
   end
   
   def clear_session
-    @session = Session.new
-    Rails.cache.write("session", @session)
+    session[:current_user_id] = nil
+    @user_session = UserSession.new (session)
   end
     
     

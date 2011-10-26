@@ -36,11 +36,13 @@ describe "Page Existing tests" do
     find('#header_tagline_page_title').text.should_not =~ /translation missing/
     find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.news.title')}$/
   end
-  it 'should be able to visit home_site_map page' do
+  # see spec/integration/users_authentication_spec.rb for signed in tests
+  it 'should not be able to visit home_site_map page (goes to signin page)' do
     visit home_site_map_path
     find('#header_tagline_page_title').text.should_not =~ /\A\s*\z/
     find('#header_tagline_page_title').text.should_not =~ /translation missing/
-    find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.site_map.title')}$/
+    find('#header_tagline_page_title').text.should_not =~ /^#{I18n.translate('home.site_map.title')}$/
+    find('div.module_header/a', :text => I18n.translate('users_sessions.signin.title'))
   end
   it 'should be able to visit home_status page' do
     visit home_status_path

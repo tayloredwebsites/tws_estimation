@@ -3,7 +3,7 @@ include UserTestHelper
 include ApplicationHelper
 
 
-describe SessionsController do
+describe UsersSessionsController do
 
   before(:each) do
     clear_session
@@ -14,7 +14,7 @@ describe SessionsController do
       get :signin
       response.should be_success
       response.should render_template('/signin')
-      assigns(:session).should_not be_nil
+      assigns(:user_session).should_not be_nil
     end
   end
 
@@ -27,26 +27,26 @@ describe SessionsController do
     describe "with valid params - " do
 
       before(:each) do
-        post :create, :session => FactoryGirl.attributes_for(:user_session)
+        post :create, :user_session => FactoryGirl.attributes_for(:user_session)
       end
       
       it "should successfully render the user session created page" do
         response.should be_success
-        response.should render_template('sessions/create')
+        response.should render_template('users_sessions/create')
       end
       
       it "should return the current_user" do
-        assigns(:session).current_user.should_not be_nil
-        assigns(:session).current_user.should be_a(User)
-        assigns(:session).current_user.should be_persisted
-        assigns(:session).current_user.id.should_not be_nil
-        assigns(:session).current_user.username.should eq(FactoryGirl.attributes_for(:user_session)[:username])
+        assigns(:user_session).current_user.should_not be_nil
+        assigns(:user_session).current_user.should be_a(User)
+        assigns(:user_session).current_user.should be_persisted
+        assigns(:user_session).current_user.id.should_not be_nil
+        assigns(:user_session).current_user.username.should eq(FactoryGirl.attributes_for(:user_session)[:username])
       end
       
       it 'should be signed_in?' do
-        assigns(:session).should_not be_nil
-        assigns(:session).signed_in?.should be_true
-        assigns(:session).should_not be_nil
+        assigns(:user_session).should_not be_nil
+        assigns(:user_session).signed_in?.should be_true
+        assigns(:user_session).should_not be_nil
       end
 
     end
@@ -54,7 +54,7 @@ describe SessionsController do
     describe "with invalid params - " do
 
       before(:each) do
-        post :create, :session => FactoryGirl.attributes_for(:invalid_user_session)
+        post :create, :user_session => FactoryGirl.attributes_for(:invalid_user_session)
       end
       
       it "should redirect the user back to the login page" do
@@ -63,14 +63,14 @@ describe SessionsController do
       end
 
       it "should not return the current_user" do
-        assigns(:session).current_user.should_not be_nil
-        assigns(:session).current_user.id.should be_nil
+        #assigns(:user_session).current_user.should_not be_nil
+        assigns(:user_session).current_user_id.should be_nil
       end
 
       it 'should not be signed_in?' do
-        assigns(:session).should_not be_nil
-        assigns(:session).current_user_id.should be_nil
-        #assigns(:session).signed_in?.should be_false
+        assigns(:user_session).should_not be_nil
+        assigns(:user_session).current_user_id.should be_nil
+        #assigns(:suser_ession).signed_in?.should be_false
       end
 
     end
@@ -79,7 +79,7 @@ describe SessionsController do
   context 'all users -' do
     it 'should be able to navigate to the POST create page' do
       FactoryGirl.create(:user_min_create_attr)
-      post :create, :session => FactoryGirl.attributes_for(:user_session)
+      post :create, :user_session => FactoryGirl.attributes_for(:user_session)
       response.should be_success
       response.code.should be == '200'
       response.should render_template("create")
@@ -101,18 +101,18 @@ describe SessionsController do
       response.should be_success
       response.code.should be == '200'
       response.should render_template("/signin")
-      assigns(:session).should_not be_nil
-      assigns(:session).current_user.should_not be_nil
-      assigns(:session).current_user.id.should be_nil
-      assigns(:session).signed_in?.should be_false
+      assigns(:user_session).should_not be_nil
+      #assigns(:user_session).current_user.should_not be_nil
+      assigns(:user_session).current_user_id.should be_nil
+      assigns(:user_session).signed_in?.should be_false
       put :signout  #, FactoryGirl.attributes_for(:user_session)[:id]
       response.should_not be_success
       response.code.should be == '302'
       response.should be_redirect
       response.should redirect_to('/signin')
-      assigns(:session).should_not be_nil
-      assigns(:session).current_user.should_not be_nil
-      assigns(:session).current_user.id.should be_nil
+      assigns(:user_session).should_not be_nil
+      #assigns(:user_session).current_user.should_not be_nil
+      assigns(:user_session).current_user_id.should be_nil
     end
   end
   
@@ -121,7 +121,7 @@ describe SessionsController do
     
     it 'should be able to do the signout action on the current valid user session' do
       FactoryGirl.create(:user_min_create_attr)
-      post :create, :session => FactoryGirl.attributes_for(:user_session)
+      post :create, :user_session => FactoryGirl.attributes_for(:user_session)
       response.should be_success
       response.code.should be == '200'
       response.should render_template("create")
@@ -129,9 +129,9 @@ describe SessionsController do
       response.should be_success
       response.code.should be == '200'
       response.should render_template('/signout')
-      assigns(:session).should_not be_nil
-      assigns(:session).current_user.should_not be_nil
-      assigns(:session).current_user.id.should be_nil
+      assigns(:user_session).should_not be_nil
+      #assigns(:user_session).current_user.should_not be_nil
+      assigns(:user_session).current_user_id.should be_nil
       response.should be_success
     end
     
@@ -142,9 +142,9 @@ describe SessionsController do
       response.code.should be == '302'
       response.should be_redirect
       response.should redirect_to('/signin')
-      assigns(:session).should_not be_nil
-      assigns(:session).current_user.should_not be_nil
-      assigns(:session).current_user.id.should be_nil
+      assigns(:user_session).should_not be_nil
+      #assigns(:user_session).current_user.should_not be_nil
+      assigns(:user_session).current_user_id.should be_nil
     end
     
   end

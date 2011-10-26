@@ -3,31 +3,27 @@ class ApplicationController < ActionController::Base
   
   include ApplicationHelper
   
-  before_filter :load_session
-  after_filter :save_session
+  before_filter :load_user_session
+  after_filter :save_user_session
   
   def initialize
     super
-    @session = Session.new
+    @user_session = UserSession.new
   end
   
-  def load_session
-    logger.debug ("load_session called, Rails.cache.read(:session) =  #{Rails.cache.read("session").inspect}")
-    @session = Rails.cache.read("session") || Session.new
-    logger.debug ('* call session.validate_session_length: '+@session.current_sign_in_time.to_s)
-    @session.validate_session_length
-    logger.debug ('* updated sign in time: '+@session.current_sign_in_time.to_s)
-    logger.debug ("load_session called, with session.user_id #{@session.current_user_id.to_s}")
-    logger.debug('* logged in!') if !@session.current_user_id.nil?
-    logger.debug('* logged out!') if @session.current_user_id.nil?
+  def load_user_session
+    #logger.debug ("session = "+session.inspect) if !session.nil?
+    @user_session = UserSession.new (session)
+    #logger.debug ("* user session created:  "+@user_session.inspect)
+    (@user_session.signed_in?) ? logger.debug('* load_user_session Signed in!') : logger.debug('* load_user_session Signed out!') 
   end
 
-  def save_session
-    # logger.debug ("save_session to save session.user_id #{@session.current_user_id.to_s}")
-    Rails.cache.write("session", @session)
-    # logger.debug ("save_session saved session =  #{Rails.cache.read("session").inspect}")
-    logger.debug('* logged in!') if !@session.current_user_id.nil?
-    logger.debug('* logged out!') if @session.current_user_id.nil?
+  def save_user_session
+    @user_session.save_user_session 
+    session[:current_user_id] = @user_session.current_user_id
+    session[:time_last_accessed] = Time.now
+    #logger.debug ("* user session saved:  "+@user_session.inspect)
+    (@user_session.signed_in?) ? logger.debug('* save_user_session Signed in!') : logger.debug('* save_user_session Signed out!') 
   end
   
     

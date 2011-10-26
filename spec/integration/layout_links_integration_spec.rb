@@ -57,9 +57,11 @@ describe "Layout Links tests" do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.news.title')).click
       find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.news.title')}$/
     end			
-    it 'should go to the Site map page when the footer site map link is clicked' do
+    # see spec/integration/users_authentication_spec.rb for signed in tests
+    it 'should not go to the Site map page when the footer site map link is clicked (goes to signin page)' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.site_map.title')}$/
+      find('#header_tagline_page_title').text.should_not =~ /^#{I18n.translate('home.site_map.title')}$/
+      find('div.module_header/a', :text => I18n.translate('users_sessions.signin.title'))
     end			
     it 'should go to the Status page when the footer status link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.status.title')).click
