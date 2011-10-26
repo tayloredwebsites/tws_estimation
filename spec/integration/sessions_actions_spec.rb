@@ -18,13 +18,13 @@ describe 'Sessions Actions Tests' do
       visit signin_path
       # save_and_open_page
       # should be on login page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
       # should show the username field
-      find(:xpath, '//input[@id="session_username"]').should_not be_nil
+      find(:xpath, '//input[@id="user_session_username"]').should_not be_nil
       # should show the password field
-      find(:xpath, '//input[@id="session_password"]').should_not be_nil
+      find(:xpath, '//input[@id="user_session_password"]').should_not be_nil
       # should show the login button
-      find(:xpath, '//input[@id="session_submit"]').should_not be_nil
+      find(:xpath, '//input[@id="user_session_submit"]').should_not be_nil
     end
     
   end
@@ -35,29 +35,29 @@ describe 'Sessions Actions Tests' do
       visit signin_path
       # save_and_open_page
       # should be on login page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
     end
 
     context 'login with invalid credentials - ' do
       
       before(:each) do
         # should fill in the login form to login
-        page.fill_in("session[username]", :with => FactoryGirl.attributes_for(:user_min_create_attr)[:username] )
-        page.fill_in('session[password]', :with => 'invalidpwd' )
+        page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:user_min_create_attr)[:username] )
+        page.fill_in('user_session[password]', :with => 'invalidpwd' )
         # save_and_open_page
-        find(:xpath, '//input[@id="session_submit"]').click
+        find(:xpath, '//input[@id="user_session_submit"]').click
       end
       
       it 'should send the user to the Login page (Session New page) with invalid credentials submitted' do
         # save_and_open_page
         # should be on the Session Create page
-        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('sessions.signin.title')}$/
+        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
         # it should display an error to the user
       end
       
-      it 'should remove the users name from the layout' do
-        find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
-          /^#{I18n.translate('view_labels.welcome_user', :user => '') }$/
+      it 'should not welcome user, should request user to signin' do
+        find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
+          /^#{I18n.translate('users_sessions.signin.title') }$/
       end
     end
     
@@ -65,20 +65,20 @@ describe 'Sessions Actions Tests' do
       
       before(:each) do
         # should fill in the login form to login
-        page.fill_in("session[username]", :with => FactoryGirl.attributes_for(:user_min_create_attr)[:username] )
-        page.fill_in('session[password]', :with => FactoryGirl.attributes_for(:user_min_create_attr)[:password] )
-        find(:xpath, '//input[@id="session_submit"]').click
+        page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:user_min_create_attr)[:username] )
+        page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:user_min_create_attr)[:password] )
+        find(:xpath, '//input[@id="user_session_submit"]').click
       end
       
       it 'should send the user to the Logged In page (Session Create page) with valid credentials submitted' do
         # save_and_open_page
         # should be on the Session Create page
-        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('sessions.create.title')}$/
+        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.create.title')}$/
       end
       
       it 'should remove the users name from the layout' do
         find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
-          /^#{I18n.translate('view_labels.welcome_user', :user => current_user_full_name) }$/
+          /#{I18n.translate('view_labels.welcome_user', :user => current_user_full_name) }/
       end
       it 'should have the user in the current session'
       it 'should have all further actions be performed by the authenticated user'

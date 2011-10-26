@@ -38,6 +38,10 @@ module TwsAuth
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+    
+    # set up cache store to memory
+    # config.cache_store = :memory_store  #, :size => 64.megabytes
+    # config.cache_store = :file_store, Rails.root.join('tmp', 'cachedir') #"/path/to/cache/directory"
   end
 end
 

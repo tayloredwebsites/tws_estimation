@@ -1,0 +1,27 @@
+<%
+  @page_scope = 'users_sessions.signin'
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= form_for(:user_session, :url => users_sessions_path) do |f| %>
+
+	<!-- render :partial => 'errors_form' -->
+
+	<div class="fields_20_80">
+	  <div class="field">
+	    <%= f.label :username, I18n.translate('users_sessions.field_name.username') %>
+	    <span class="value"><%= f.text_field :username %></span>
+	  </div>
+		<div class="field">
+		  <%= f.label :password, I18n.translate('users_sessions.field_name.password') %>
+		  <span class="value"><%= f.password_field :password %></span>
+		</div>
+	</div>
+
+	<div class="actions">
+		<%= f.submit I18n.translate('users_sessions.signin.action') %>
+	</div>
+	
+<% end %>
+<%= javascript_tag "$('user_session_username').focus()" %>

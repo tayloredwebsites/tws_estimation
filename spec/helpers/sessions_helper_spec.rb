@@ -12,6 +12,6 @@ include UserTestHelper
 #     end
 #   end
 # end
-describe SessionsHelper do
+describe UsersSessionsHelper do
   
 end

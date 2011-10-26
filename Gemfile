@@ -65,4 +65,7 @@ group :test do
   # gem 'ruby-debug'
   gem 'ruby-debug19'
   
+  # see spec/spec_helper.rb - for fix of test records not removed after capybara fill_in and click
+  gem 'database_cleaner'
+  
 end

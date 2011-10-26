@@ -1,8 +1,8 @@
 class UsersController< SecureApplicationController
 
   
-  before_filter :load_session, :except => []
-  after_filter :save_session, :except => []
+  # before_filter :load_user_session
+  # after_filter :save_session
 
 	
 	skip_filter :authenticate_user  #, :only => [:signin, :create]

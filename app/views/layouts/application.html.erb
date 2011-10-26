@@ -3,7 +3,7 @@
 <head>
   <title><%= I18n.translate('company_name') %> - <%= I18n.translate('app_name') %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
   <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag :all %>
   <%= csrf_meta_tag %>
 </head>
 <body>
@@ -54,10 +54,16 @@
       <div id="left_content"><!-- left_content -->
 
         <div class="block_module">
-          <% if true %>
-            <div class="module_header"><%= I18n.translate('view_labels.welcome_user', :user => current_user_full_name) %></div>
-          <% end %>
-          <ul class="module_body column_nav">
+          <div class="module_header">
+						<% if @user_session.signed_in? %>
+							<%= I18n.translate('view_labels.welcome_user', :user => @user_session.current_user_full_name) %>
+							<br/>
+							<%= link_to I18n.translate('users_sessions.signout.action'), signout_path  %>
+					  <% else %>
+							<%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %>
+						<% end %>
+          </div>
+         <ul class="module_body column_nav">
             <li class="list_column off"><%= link_to I18n.translate('users.title'), users_path %></li>
             <li class="list_column on"><%= link_to 'Item', '#' %>
               <ul class="column_nav">
@@ -114,5 +120,10 @@
     </div><!-- end footer -->
     
   </div><!-- end page -->
+
+	<div><%= debug(params) if Rails.env.development? %></div>
+	<div><%= session.inspect if Rails.env.development? && !session.nil? %></div>
+
+
 </body>
 </html>

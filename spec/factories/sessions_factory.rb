@@ -1,6 +1,6 @@
 FactoryGirl.define do
   
-  factory :user_session, :class => Session do
+  factory :user_session, :class => UserSession do
     username  'TestUser'
     password  'test'
     

@@ -39,8 +39,13 @@ describe 'Layout Integration Tests - ' do
     it 'should have a help item in the top nav bar 6th item' do
       find('ul#header_nav_bar').find('li[6]/a').text.should =~ /\A#{I18n.translate('home.help.title')}\z/
     end
-    it 'should have Welcome in a left module header' do
-      find('div.module_header', :text => I18n.translate('view_labels.welcome_user', :user => ''))
+    # see spec/integration/users_authentication_spec.rb for signed in tests
+    it 'should not have Welcome in a left module header' do
+      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should_not =~
+        /#{I18n.translate('view_labels.welcome_user', :user => '') }/
+    end
+    it 'should have a signin link in a left module header' do
+      find('div.module_header/a', :text => I18n.translate('users_sessions.signin.title'))
     end
     it 'should have a Users link in the left nav bar' do
       find('div#left_content').find('a', :text => I18n.translate('users.title'))
