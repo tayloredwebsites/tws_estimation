@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  require 'capybara'
   
   include ApplicationHelper
   
@@ -14,16 +15,28 @@ class ApplicationController < ActionController::Base
   def load_user_session
     #logger.debug ("session = "+session.inspect) if !session.nil?
     @user_session = UserSession.new (session)
+    if @user_session.errors.count > 0
+      notify_error("Error restoring session")
+      @user_session.errors.each do |attr, msg|
+        logger.debug("Session error: "+msg)
+      end
+      # redirect_to('/home/errors')
+      @user_session.errors.clear
+      # redirect_to('/signin')
+    end
     #logger.debug ("* user session created:  "+@user_session.inspect)
     (@user_session.signed_in?) ? logger.debug('* load_user_session Signed in!') : logger.debug('* load_user_session Signed out!') 
   end
 
   def save_user_session
+    (session[:current_user_id].nil?) ? logger.debug('* start of save_user_session - no session user id') : logger.debug('* start of save_user_session - have a session user id!') 
     @user_session.save_user_session 
     session[:current_user_id] = @user_session.current_user_id
     session[:time_last_accessed] = Time.now
+    logger.debug ("time_last_accessed = #{session[:time_last_accessed].to_s}")
     #logger.debug ("* user session saved:  "+@user_session.inspect)
     (@user_session.signed_in?) ? logger.debug('* save_user_session Signed in!') : logger.debug('* save_user_session Signed out!') 
+    (@user_session.current_user_id.nil?) ? logger.debug('* save_user_session - no user id') : logger.debug('* save_user_session - have a user id!') 
   end
   
     

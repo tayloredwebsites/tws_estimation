@@ -1,7 +1,5 @@
 class UsersSessionsController < SecureApplicationController
-  #   
-  # after_filter :save_session
-  #   
+
   before_filter do |controller|
     # self.load_session
     logger.debug('Sessions Controller filter = '+%w{ signout }.index(params[:action]).to_s)

@@ -20,6 +20,10 @@ describe 'Users Authorization Tests' do
 # it 'should not allow deactivate unless signed in as admin'
 # it 'should not allow reactivate unless signed in as admin'
 # it 'should not allow delete unless signed in as admin, has been deactivated, and table ok for deletes without cleanup'
+# it 'should allow the users to view their own information' # see users_controller_spec.rb
+# it 'should not allow users to view other users information' # to do in users_controller_spec.rb
+# it 'should allow users limited access to modify or delete their own information' # to do in users_controller_spec.rb
+
 # 
 
 end
