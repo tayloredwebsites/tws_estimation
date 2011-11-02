@@ -39,8 +39,8 @@ group :test do
 
   gem 'rspec'
   
-  gem 'capybara'
-  gem 'launchy'
+  # gem 'capybara'
+  # gem 'launchy'
   
   # autotest config
   gem 'autotest'
