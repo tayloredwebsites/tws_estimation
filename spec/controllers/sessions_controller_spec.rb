@@ -116,23 +116,10 @@ describe UsersSessionsController do
     end
   end
   
-  
-  context 'logged in user -' do
+  context 'logged out user -' do
     
-    it 'should be able to do the signout action on the current valid user session' do
+    before(:each) do
       FactoryGirl.create(:user_min_create_attr)
-      post :create, :user_session => FactoryGirl.attributes_for(:user_session)
-      response.should be_success
-      response.code.should be == '200'
-      response.should render_template("create")
-      post :signout #, FactoryGirl.attributes_for(:user_session)[:id]
-      response.should be_success
-      response.code.should be == '200'
-      response.should render_template('/signout')
-      assigns(:user_session).should_not be_nil
-      #assigns(:user_session).current_user.should_not be_nil
-      assigns(:user_session).current_user_id.should be_nil
-      response.should be_success
     end
     
     it 'should not be able to do the signout action on an invalid user session' do
@@ -145,6 +132,30 @@ describe UsersSessionsController do
       assigns(:user_session).should_not be_nil
       #assigns(:user_session).current_user.should_not be_nil
       assigns(:user_session).current_user_id.should be_nil
+    end
+
+  end
+
+  
+  context 'logged in user -' do
+    
+    before(:each) do
+      FactoryGirl.create(:user_min_create_attr)
+      post :create, :user_session => FactoryGirl.attributes_for(:user_session)
+      response.should be_success
+      response.code.should be == '200'
+      response.should render_template("create")
+    end
+    
+    it 'should be able to do the signout action' do
+      post :signout #, FactoryGirl.attributes_for(:user_session)[:id]
+      response.should be_success
+      response.code.should be == '200'
+      response.should render_template('/signout')
+      assigns(:user_session).should_not be_nil
+      #assigns(:user_session).current_user.should_not be_nil
+      assigns(:user_session).current_user_id.should be_nil
+      response.should be_success
     end
     
   end

@@ -1,12 +1,14 @@
 class UsersController< SecureApplicationController
 
-  
-  # before_filter :load_user_session
-  # after_filter :save_session
-
-	
-	skip_filter :authenticate_user  #, :only => [:signin, :create]
-
+  before_filter do |controller|
+    # self.load_session
+    # logger.debug('Sessions Controller filter = '+%w{ index show new create edit update destroy deactivate reactivate }.index(params[:action]).to_s)
+    # all actions require authentication (so far)
+    self.authenticate_user  # if !(%w{ index show new create edit update destroy deactivate reactivate }.index(params[:action]).nil?)
+    @model = User.new
+    @errors = Array.new
+  end
+    
   before_filter do |controller|
     @model = User.new
     # if %w(show edit update destroy delete deactivate reactivate).include?(params[:action])
@@ -20,7 +22,7 @@ class UsersController< SecureApplicationController
     #   @model = User.new
     # end
     # @errors = safe_params_init(@model, {'user' => ['first_name', 'last_name', 'email', 'username', 'deactivated']})
-    @errors = safe_params_init({'user' => %w(first_name last_name email username deactivated password password_confirmation)})
+    @errors = safe_params_init({'user' => %w(first_name last_name email username deactivated password password_confirmation old_password)})
     @errors = required_params_init({'user' => ['email', 'username']}) if @errors.count == 0
     # @errors = validate_login_status
     if @errors.count > 0
@@ -51,13 +53,28 @@ class UsersController< SecureApplicationController
   end
 
   # POST /users
+  # def create
+  #   @user = User.new(params[:user])
+  #   if @user.save
+  #     notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+  #     render :action => 'show'
+  #   else
+  #     logger.debug("UsersController.create was unsuccessful")
+  #     render :action => "new"
+  #   end
+  # end
   def create
     @user = User.new(params[:user])
-    if @user.save
-      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+    @user.save
+    # @user = User.create!(params[:user])
+    if @user.errors.count == 0
+      # notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
       render :action => 'show'
     else
-      logger.debug("UsersController.create was unsuccessful")
+      # logger.errors("UsersController.create was unsuccessful")
+      # @user.errors.each do |attr, msg|
+      #   logger.debug("User create error: "+msg)
+      # end
       render :action => "new"
     end
   end
@@ -76,8 +93,17 @@ class UsersController< SecureApplicationController
   # DELETE /users/1
   def destroy
     @user = User.find(params[:id])
-    @user.destroy
-    redirect_to(users_path)
+    if @user.destroy
+      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+      render :action => 'index'
+    else
+    	if @user.errors[:base].count > 0
+    	  notify_error( @user.errors[:base][0] )
+    	else
+    	  notify_error("Error deleting user #{@user.username}")
+    	end
+      render :action => 'edit', :id => @user.id
+    end
   end
   
   # GET /users/:id/deactivate
@@ -114,6 +140,11 @@ class UsersController< SecureApplicationController
     end
   end
   
+  # GET /users/1/edit_password
+  def edit_password
+    @user = User.find(params[:id])
+  end
+
   # PUT /users/:id/update_password
   def update_password
     @user = User.find(params[:id])
@@ -122,7 +153,7 @@ class UsersController< SecureApplicationController
       notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
       render :action => 'show'
     else
-      render :action => "edit"
+      render :action => "edit_password"
     end
     # shouldn't this call a model class update_password, for security's sake ?????????
   end

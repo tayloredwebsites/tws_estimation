@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
-  attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation
+  attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password
   validates_presence_of :email, :username
-  attr_accessor :password
+  attr_accessor :password, :old_password
   validates :password,
       # :presence => true,
       :confirmation => true
@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
     return true
   end
 
-
+  # class level valid_password to check password against user in database
   def self.valid_password? (username, password, password_confirmation=nil)
     auth_user = find_by_username(username) if !username.nil?
     if auth_user.nil?
@@ -102,6 +102,18 @@ class User < ActiveRecord::Base
       return (auth_user.errors.count == 0 ? auth_user : nil)
     end
   end
+  
+  # instance level password check against current user
+  def has_password? (password_in, password_confirmation=nil)
+    if !password_confirmation.nil? && password_in != password_confirmation
+      false
+    elsif self.encrypted_password != encrypt(password_in)
+      false
+    else
+      true
+    end
+  end
+
 
   # validate password fields and place errors into active model errors
   # good for create or udpate
@@ -116,6 +128,44 @@ class User < ActiveRecord::Base
         errors.add(:password, I18n.translate('error_messages.invalid_password') ) if !self.new_record? && !has_matching_password?
       end
     end
+  end
+  
+  def update_attributes(params)
+    logger.debug('update_attributes with params: '+params.inspect.to_s)
+    super(params) if valid_passwords(params[:username], params[:old_password], params[:password], params[:password_confirmation])
+  end
+  
+  # make sure passwords are valid if any password fields are passed to update
+  def valid_passwords(username, old_password, password, password_confirmation)
+    logger.debug('calling valid_passwords')
+    ret_val = false
+    if (old_password.blank? && password.blank? && password_confirmation.blank?)
+      ret_val = true  # not changing password, call super
+  	elsif self.deactivated
+  	  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'edit_password', :msg => I18n.translate('error_messages.is_deactivated') ) )
+  	elsif self.new_record?
+      errors.add(:base, I18n.translate('obj_does_not_exist', 'user') )
+    elsif password.blank?
+      errors.add(:password, I18n.translate('missing_password') )
+    elsif password != password_confirmation
+      errors.add(:password_confirmation, I18n.translate('error_messages.password_mismatch') )
+  	else
+  	  ret_val = false # don't call super, update is done here
+  	  self.password = password
+  	  self.password_confirmation = password
+  	  self.old_password = old_password
+  	  logger.debug('call save')
+  	  if self.save
+  	    if errors.count == 0
+    	    logger.debug("edit_password had successful save")
+    	  else
+    	    logger.debug('got errors on save'+errors.inspect.to_s)
+    	  end
+  	  else
+		    errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'edit_password', :msg => I18n.translate('error_messages.got_error') ) )
+		  end
+  	end
+    return ret_val
   end
   
   def full_name
@@ -133,6 +183,7 @@ class User < ActiveRecord::Base
     self.deactivated ||= false  # set deactivated to false if initialized to nil
   end
   
+  # validation before save method is called !!
   # if passing in password, validate it before save (validate if password is not blank)
   def validate_save
     self.validate_password
@@ -141,16 +192,24 @@ class User < ActiveRecord::Base
     
   # see if password passed in matches the encryped password
   def has_matching_password?
+    logger.debug('has_matching_password = '+self.password.to_s+', '+self.password_confirmation.to_s+', '+self.old_password.to_s+', '+self.encrypted_password.to_s)
     if self.password.blank? || self.encrypted_password.blank?
+      logger.debug('no password check')
       false
-    else
+    elsif self.old_password.nil?
+      # match current password against encrypted password
+      logger.debug('check against current password')
       self.encrypted_password == encrypt(self.password)
+    else
+      # match old password against encrypted password (for password change)
+      logger.debug('check against old_password')
+      self.encrypted_password == encrypt(self.old_password)
     end
   end
   
   def encrypt_password
     self.password_salt = generate_salt if self.new_record?
-    self.encrypted_password = encrypt(self.password)
+    self.encrypted_password = encrypt(self.password) if !self.password.blank?
   end
   def generate_salt
     encrypt_hash("#{Time.now.utc}--#{self.password}")

@@ -1,125 +1,79 @@
 # spec/models/user_spec.rb
 require 'spec_helper'
-include UserTestHelper
+# include UserTestHelper
 
 describe User do
 
   before(:each) do
-    @user1 = User.create!(UserTestHelper.user_minimum_create_attributes)
+    @user1 = FactoryGirl.create(:admin_user_min_create_attr)
     @model = User.new
   end
   
   it 'deactivate method should deactivate an active user' do
-    #confirm the user is not deactivated
     @user1.deactivated.should be_false
-    # deactivate user
     @user1.deactivate
     @user1.errors.count.should == 0
-    #confirm no errors were generated
     @user1.errors.count.should be == 0
-    # refresh the user from the database
     @updated_user = User.find(@user1.id)
-    #confirm the user has been deactivated
     @updated_user.deactivated.should be_true
   end
 
   it 'reactivate method should reactivate a deactivated user' do
-    #confirm the user is not deactivated
     @user1.deactivated.should be_false
-    # deactivate user
     @user1.deactivate
     @user1.errors.count.should == 0
-    # refresh the user from the database
     @updated_user = User.find(@user1.id)
-    #confirm the user has been deactivated
     @updated_user.deactivated.should be_true
-    # reactivate user
     @user1.reactivate
-    #confirm no errors were generated
     @user1.errors.count.should be == 0
-    # refresh the user from the database
     @updated_user = User.find(@user1.id)
-    #confirm the user has been reactivated
     @updated_user.deactivated.should be_false
   end
 
   it 'reactivate method should not reactivate an active user' do
-    #confirm the user is not deactivated
     @user1.deactivated.should be_false
-    # reactivate user
     @user1.reactivate
-    #confirm errors were generated
     @user1.errors.count.should be > 0
-    # confirm got an error on the deactivated field
     @user1.errors[:deactivated].should == ["#{I18n.translate('error_messages.is_active')}"]
-    # refresh the user from the database
     @updated_user = User.find(@user1.id)
-    #confirm the user is still not deactivated
     @updated_user.deactivated.should be_false
   end
 
   it 'deactivate method should not deactivate a deactivated user' do
-    #confirm the user is not deactivated
     @user1.deactivated.should be_false
-    # deactivate user
     @user1.deactivate
     @user1.errors.count.should == 0
-    # refresh the user from the database
     @updated_user = User.find(@user1.id)
-    #confirm the user has been deactivated
     @updated_user.deactivated.should be_true
-    # deactivate user
     @user1.deactivate
-    #confirm errors were generated
     @user1.errors.count.should be > 0
-    # confirm got an error on the deactivated field
     @user1.errors[:deactivated].should == ["#{I18n.translate('error_messages.is_deactivated')}"]
-    # confirm got a :base error
     @user1.errors[:base].should == ["#{I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') )}"]
-    # refresh the user from the database
     @updated_user = User.find(@user1.id)
-    #confirm the user is still deactivated
     @updated_user.deactivated.should be_true
   end
 
   it 'destroy should not destroy an active user' do
-    #confirm the user is active
     @user1.deactivated.should be_false
-    # save the user id
     @user_id = @user1.id
-    # destroy user
     @user1.destroy
-    #confirm errors were generated
     @user1.errors.count.should be > 0
-    # confirm got an error on the deactivated field
     @user1.errors[:deactivated].should == ["#{I18n.translate('error_messages.is_active')}"]
-    # confirm got a :base error
     @user1.errors[:base].should == ["#{I18n.translate('errors.cannot_method_msg', :method => 'destroy', :msg => I18n.translate('error_messages.is_active') )}"]
-    # refresh the user from the database
     @updated_user = User.find(@user_id)
-    #confirm the user has been deactivated
     @updated_user.should_not be_nil
-    #confirm the user still active
     @updated_user.deactivated.should be_false
   end
   
   it 'destroy should destroy a deactivated user' do
-    #confirm the user is active
     @user1.deactivated.should be_false
-    # deactivate user
     @user1.deactivate
     @user1.errors.count.should == 0
-    # refresh the user from the database
     @updated_user = User.find(@user1.id)
-    #confirm the user has been deactivated
     @updated_user.deactivated.should be_true
-    # save the user id
     @user_id = @user1.id
-    # destroy user
     @user1.destroy
-    #confirm no errors were generated
     @user1.errors.count.should be == 0
-    # confirm the user is not in the database
     lambda {User.find(@user_id)}.should raise_error(ActiveRecord::RecordNotFound)
     # # refresh the user from the database
     # @updated_user = User.find(@user_id)
@@ -128,43 +82,26 @@ describe User do
   end
   
   it 'delete should not delete an active user' do
-    #confirm the user is active
     @user1.deactivated.should be_false
-    # save the user id
     @user_id = @user1.id
-    # deactivate user
     @user1.delete
-    #confirm errors were generated
     @user1.errors.count.should be > 0
-    # confirm got a :base error
     @user1.errors[:base].should == ["#{I18n.translate('errors.cannot_method_msg', :method => 'delete', :msg => I18n.translate('error_messages.is_active') )}"]
-    # confirm got an error on the deactivated field
     @user1.errors[:deactivated].should == ["#{I18n.translate('error_messages.is_active')}"]
-    # refresh the user from the database
     @updated_user = User.find(@user_id)
-    #confirm the user has been deactivated
     @updated_user.should_not be_nil
-    #confirm the user still active
     @updated_user.deactivated.should be_false
   end
   
   it 'delete should delete a deactivated user' do
-    #confirm the user is active
     @user1.deactivated.should be_false
-    # deactivate user
     @user1.deactivate
     @user1.errors.count.should be == 0
-    # refresh the user from the database
     @updated_user = User.find(@user1.id)
-    #confirm the user has been deactivated
     @updated_user.deactivated.should be_true
-    # save the user id
     @user_id = @user1.id
-    # delete user
     @user1.delete
-    #confirm no errors were generated
     @user1.errors.count.should be == 0
-    # confirm the user is not in the database
     lambda {User.find(@user_id)}.should raise_error(ActiveRecord::RecordNotFound)
     # # refresh the user from the database
     # @updated_user = User.find(@user_id)
@@ -172,7 +109,147 @@ describe User do
     # @updated_user.should be_nil
   end
   
+  context "parameter validations -" do
 
+    it "should raise an error create user with no attributes" do
+      @num_users = User.count
+      lambda {User.create!()}.should raise_error(ActiveRecord::RecordInvalid)
+      User.count.should == (@num_users)
+    end
+    
+    it "should not create user when created with no attributes" do
+      @num_users = User.count
+      user = User.create()
+      user.should be_instance_of(User)
+      user.username.should be_nil
+      user.id.should be_nil
+      user.errors.count.should > 0
+      User.count.should == (@num_users)
+    end
+    
+    it "should create user when created with the minimum_attributes" do
+      @num_users = User.count
+      user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr))
+      user.should be_instance_of(User)
+      user.username.should == FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username]
+      user.id.should_not be_nil
+      user.errors.count.should == 0
+      User.count.should == (@num_users+1)
+    end
+    
+    it "should not create user when created without password" do
+      @num_users = User.count
+      user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).delete(:password))
+      user.should be_instance_of(User)
+      user.username.should == nil
+      user.password.should be_nil
+      user.id.should be_nil
+      user.errors.count.should > 0
+      User.count.should == (@num_users)
+    end
+    
+    it "should not create user when created without password_confirmation" do
+      @num_users = User.count
+      user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).delete(:password_confirmation))
+      user.should be_instance_of(User)
+      user.username.should == nil
+      user.password_confirmation.should be_nil
+      user.id.should be_nil
+      user.errors.count.should > 0
+      User.count.should == (@num_users)
+    end
+    
+    it 'should not create user when created without a minimum (required) attribute' do
+      FactoryGirl.attributes_for(:reg_user_min_attr).each do |key, value|
+        test_attributes = FactoryGirl.attributes_for(:reg_user_min_create_attr)
+        test_attributes.delete(key)
+        # confirm we have a reduced size set of attributes
+        FactoryGirl.attributes_for(:reg_user_min_create_attr).size.should == (test_attributes.size+1)
+        @num_users = User.count
+        user = User.create test_attributes
+        user.should be_instance_of(User)
+        user[key].should be_nil
+        user.id.should be_nil
+        user.errors.count.should > 0
+        User.count.should == (@num_users)
+      end
+    end
+    
+    it 'should create user when created with safe_attributes' do
+      FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
+        @num_users = User.count
+        user = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({key => value}))
+        User.count.should == (@num_users+1)
+      end
+    end
+
+    it 'should create user when created without any unsafe_attributes' do
+      FactoryGirl.attributes_for(:user_unsafe_attr).each do |key, value|
+        @num_users = User.count
+        user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({key => value}))
+        user.should_not be_nil
+        user.should be_instance_of(User)
+        user[key].should be_nil
+        user.errors.count.should == 0
+        User.count.should == (@num_users+1)
+      end
+    end
+
+    it "should create user when created without any invalid attributes" do
+      FactoryGirl.attributes_for(:user_inval_attr).each do |key, value|
+        @num_users = User.count
+        user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({key => value}))
+        user.should_not be_nil
+        user.should be_instance_of(User)
+        user[key].should be_nil
+        user.errors.count.should == 0
+        User.count.should == (@num_users+1)
+      end
+    end
+    it 'should allow the user to update their passwords' do
+      user = User.create(FactoryGirl.attributes_for(:user_min_create_attr))
+      user.update_attributes(FactoryGirl.attributes_for(:user_update_password_attr) )
+      user.errors.count.should == 0
+      user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
+      # user.errors[:password].should == ["#{I18n.translate('error_messages.invalid_password')}"]
+      # user.errors[:base].should == ["#{I18n.translate('obj_does_not_exist', 'user')}"]
+      updated_user = User.find(user.id)
+      updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
+    end
+    it 'should ensure that email is unique (code 6/1:10 and db 6/1:15)'
+    it 'should ensure that username is unique (code and db)'
+    it 'should ensure that email is valid regex (see application constants)'
+    it 'should ensure that username comes from email'
+
+  end
+  
+  it 'should should have accessible attributes and methods' do
+    FactoryGirl.attributes_for(:reg_user_min_create_attr).each do |key, value|
+      @user1.should respond_to(key)
+    end
+    FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
+      @user1.should respond_to(key)
+    end
+    @user1.should respond_to(:password)
+    @user1.should respond_to(:password_confirmation)
+    @user1.should respond_to(:encrypted_password)
+    @user1.should respond_to(:password_salt)
+    User.should respond_to(:valid_password?)
+  end
+
+  context 'logged in regular user -' do
+    
+    before(:each) do
+      @me = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr))
+      @model = User.new
+      @user_session = UserSession.new
+      @user_session.sign_in(FactoryGirl.attributes_for(:reg_user_session)[:username], FactoryGirl.attributes_for(:reg_user_session)[:password])
+      @user_session.current_user_id.should == @me.id
+    end
+    it 'should allow the user to update their passwords'
+    it 'should allow passwords to be updated in the update method in the model'
+    
+  end
   
 end
 

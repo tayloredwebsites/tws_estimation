@@ -76,24 +76,7 @@ RSpec.configure do |config|
 end
 
 module UserTestHelper
-  def user_minimum_attributes
-    {:email => 'email@example.com', :username => 'TestUser'}
-  end
-  def user_create_attributes
-    {:password => 'test', :password_confirmation => 'test'}
-  end
-  def user_minimum_create_attributes
-    user_minimum_attributes.merge(user_create_attributes)
-  end
-  def user_safe_attributes
-    {:first_name => 'Test', :last_name => 'User', :email => 'email@example.com', :username => 'TestUser'}
-  end
-  def user_unsafe_attributes
-    {:roles => "admin"}
-  end
-  def user_bad_attributes
-    {:admin => "true", :foo => "true", :bar => "true", }
-  end
+  # signin capability for controller tests
   def session_signin(username, password)
     session[:current_user_id] = nil
     @user_session = UserSession.new (session)
@@ -102,6 +85,9 @@ module UserTestHelper
       session[:current_user_id] = @user_session.current_user_id
     end
     return @user_session
+  end
+  def get_session
+    session.dup
   end
   
 end

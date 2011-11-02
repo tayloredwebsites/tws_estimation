@@ -1,4 +1,6 @@
 class UserSession
+  
+  include ActiveModel::Validations  # to give standard errors
 
   attr_accessor :username, :password
   
@@ -6,16 +8,20 @@ class UserSession
   # http://stackoverflow.com/questions/5407940/named-parameters-in-ruby-structs
   # changed instance_of? to is_a? because session inherits from Hash (is not an instance of Hash)
   def initialize *args
-    if (args.length == 1 && args.first.is_a?(Hash) )    # && !args.first[:current_user_id].nil?)
-      #args.first.each_pair do |k, v|
-      #  self[k] = v if members.map {|x| x.intern}.include? k
-      #end
-      @session = args.first
-      self.load_user_session
-    else
-      # super
+    if args.length == 0
+      # ok - no errors, create empty session
       self.init
+    elsif args.length > 1
+      errors.add(:base, I18n.translate('errors.invalid_method_argument', :method => 'user_session', :argument => '# args') )
+      self.init
+    elsif !args.first.is_a?(Hash)
+      errors.add(:base, I18n.translate('errors.invalid_method_argument', :method => 'user_session', :argument => '!is_a? Hash') )
+      self.init
+    else
+      @app_session = args.first
+      self.load_user_session
     end
+    super
   end
 
   def init
@@ -32,21 +38,31 @@ class UserSession
   end
   
   def load_user_session
-    if !@session.nil?
+    if !@app_session.nil?
       self.build_user_session
+      validate_session_length
     else
       self.init
     end
   end
   
   def build_user_session
-    @sign_in_time = @session[:sign_in_time]
-    @time_last_accessed = @session[:time_last_accessed].nil?
-    @cur_user_id = @session[:current_user_id]
-    @cur_user = (@cur_user_id.nil?) ? nil : User.find_by_id(@cur_user_id)
+    @sign_in_time = @app_session[:sign_in_time]
+    @time_last_accessed = @app_session[:time_last_accessed]
+    @cur_user_id = @app_session[:current_user_id]
+    if @cur_user_id.nil?
+      # errors.add(:base, I18n.translate('errors.missing_msg', :msg => 'current_user_id') )
+      @cur_user = nil
+    else
+      @cur_user = User.find_by_id(@cur_user_id)
+    end
   end
   
   def save_user_session
+  end
+  
+  def get_app_session
+    @app_session
   end
 
   # method to sign_in a user (per username/password passed in) to the current session
@@ -85,10 +101,15 @@ class UserSession
   end
   
   def validate_session_length
-    if @sign_in_time != nil && @sign_in_time < 30.seconds.ago
+    if @time_last_accessed != nil && @time_last_accessed < 30.seconds.ago
+      # errors.add(:base, I18n.translate('users_sessions.messages.session_timeout') ) # this causes controller problems
       self.sign_out
     end
-    (@sign_in_time.nil?) ? false : true
+    (@time_last_accessed.nil?) ? false : true
+  end
+  
+  def expire_user_session
+    @time_last_accessed = 60.seconds.ago
   end
   
   

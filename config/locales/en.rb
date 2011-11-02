@@ -5,7 +5,8 @@
     :config => {
       :company_name => 'Taylored Web Sites',
       :company_email => 'tayloredwebsites@me.com',
-      :app_name => 'User Auth Base Application'
+      :app_name => 'User Auth Base Application',
+      :app => 'tws_auth'
     },
     :warning => {
       :sure? => 'Are you sure?',
@@ -22,7 +23,10 @@
       :success_method => "Successful %{method}",
       :cannot_method_obj_id => "Cannot %{method} of %{obj} with ID %{id}",
       :cannot_method_msg => "Cannot %{method} - %{msg}",
-      :invalid_call => 'invalid call to %{method}'
+      :invalid_call => 'invalid call to %{method}',
+      :invalid_method_argument => 'Method %{method} has invalid argument %{argument}',
+      :missing_msg => "Missing %{msg}",
+      :obj_does_not_exist => '%{obj} user does not exist'
     },
     :error_messages => {
       :is_active => 'is an active record.',
@@ -31,7 +35,7 @@
       :missing_password => 'missing password',
       :password_mismatch => 'passwords mismatched',
       :no_password_update => 'cannot update password here',
-      :invalid_password => 'invalid username/password'
+      :invalid_password => 'invalid username or password'
     },
     :view_field_value => {
       :true => 'truly',
@@ -166,6 +170,9 @@
       :field_name_short => {
         :username => 'Username',
         :password => 'Password'
+      },
+      :messages => {
+        :session_timeout => 'Your session has timed out'
       }
     } # end users
   } # end en
