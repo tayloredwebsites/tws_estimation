@@ -4,18 +4,14 @@ require 'capybara_spec_helper'
 describe 'Integration Tests To Do- ' do
 
   context 'User Authentication' do
-    it 'should have user authentication'
     it 'may need to use email validations see lesson 56, 56:00 - 1:20:00'
     context 'all users -' do
       it 'should be able to navigate to the PUT reset_password page'
     end
     context 'not logged in (guest user) -' do
-      it 'should not be able to navigate to the GET edit_password page'
-      it 'should not be able to navigate to the PUT update_password page'
     end
     context 'logged in user -' do
-      it 'should be able to navigate to the GET edit_password page'
-      it 'should be able to navigate to the PUT update_password page'
+      it 'should be able to update password'
     end
 
   end
@@ -25,6 +21,7 @@ describe 'Integration Tests To Do- ' do
     it 'should have role based authorization'
     it 'should have application specified in roles'
     it 'should have multiple applications allowed in the app_config'
+    it 'should have applications to have their own scope'
   end
 
   context 'User Administration' do

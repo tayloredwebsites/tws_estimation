@@ -216,9 +216,46 @@ describe User do
       updated_user = User.find(user.id)
       updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
     end
-    it 'should ensure that email is unique (code 6/1:10 and db 6/1:15)'
+    it 'should accept valid email addresses using VALID_EMAIL_EXPR application constant' do
+      # %w{ test@controlledair.com test@testing.com test@me.com test@gmail.com test@example.com 1@me.com}.each do |email_addr|
+      #   @user_count = User.count
+      #   a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => email_addr) )
+      #   User.count.should == @user_count+1
+      # end
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => 'test@controlledair.com') )
+      User.count.should == @user_count+1
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => 'test@me.com') )
+      User.count.should == @user_count+1
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => 'test@gmail.com') )
+      User.count.should == @user_count+1
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => 'test@example.com') )
+      User.count.should == @user_count+1
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => '1@me.com') )
+      User.count.should == @user_count+1
+    end
+    it 'should reject invalid email addresses using VALID_EMAIL_EXPR application constant' do
+      # %w{ test@testing.com a.b.com me@yahoo.com hello }.each do |email_addr|
+      #   @user_count = User.count
+      #   a_user = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => email_addr) )
+      #   User.count.should == @user_count
+      # end
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => 'test@testing.com') )
+      User.count.should == @user_count
+      a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => 'a.b.com') )
+      User.count.should == @user_count
+      a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => 'me@yahoo.com') )
+      User.count.should == @user_count
+      a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => 'hello') )
+      User.count.should == @user_count
+    end
+    it 'should ensure that email is unique'
     it 'should ensure that username is unique (code and db)'
-    it 'should ensure that email is valid regex (see application constants)'
     it 'should ensure that username comes from email'
 
   end

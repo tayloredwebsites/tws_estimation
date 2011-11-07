@@ -1,5 +1,17 @@
 FactoryGirl.define do
   
+  sequence :email do |n|
+    "user_#{n}@me.com"
+  end
+  sequence :username do |n|
+    "username_#{n}"
+  end
+  
+  factory :users, :class => User do
+    email       Factory.next(:email)
+    username    Factory.next(:username)
+  end
+  
   factory :user_min_attr, :class => User do
     email     'email@example.com'
     username  'TestUser'
