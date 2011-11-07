@@ -304,7 +304,7 @@ describe UsersController do
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
       assigns(:user).username.should eq(user.username)
-      assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
+      # assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
       updated_user = User.find(user.id)
       updated_user.username.should eq(user.username)
       updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
@@ -394,7 +394,7 @@ describe UsersController do
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
       assigns(:user).username.should eq(user.username)
-      assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
+      # assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
       updated_user = User.find(user.id)
       updated_user.username.should eq(user.username)
       updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true

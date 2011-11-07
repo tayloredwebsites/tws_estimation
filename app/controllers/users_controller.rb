@@ -52,17 +52,6 @@ class UsersController< SecureApplicationController
     @user = User.find(params[:id])
   end
 
-  # POST /users
-  # def create
-  #   @user = User.new(params[:user])
-  #   if @user.save
-  #     notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
-  #     render :action => 'show'
-  #   else
-  #     logger.debug("UsersController.create was unsuccessful")
-  #     render :action => "new"
-  #   end
-  # end
   def create
     @user = User.new(params[:user])
     @user.save
@@ -148,14 +137,16 @@ class UsersController< SecureApplicationController
   # PUT /users/:id/update_password
   def update_password
     @user = User.find(params[:id])
-    # should this bomb out ????????
-    if @user.update_attributes(params[:user])
-      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
-      render :action => 'show'
+    if !@user.valid_password_change?(params[:user])  # params[:username], params[:old_password], params[:password], params[:password_confirmation])
+      render :action => 'edit_password'
     else
-      render :action => "edit_password"
+      if @user.update_attributes(params[:user])
+        notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+        render :action => 'show'
+      else
+        render :action => "edit_password"
+      end
     end
-    # shouldn't this call a model class update_password, for security's sake ?????????
   end
   
   def validate_login_status

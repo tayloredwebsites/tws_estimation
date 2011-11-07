@@ -10,5 +10,7 @@ SESSION_TIMEOUT =  8.hours.ago
 VALID_ROLES = %w( AllGuests AllAdmins EstimUsers EstimAdmins )
 DEFAULT_ROLE = ['AllGuests']
 
+VALID_EMAIL_EXPR = /^[a-zA-Z0-9!#$\%&'*+-\/=?^_`{|}~\-]*@(?:controlledair\.com|me\.com|gmail\.com|example\.com)$/
+
 # TwsAuth::Application.config.app_constants.VALID_EMAIL_EXPR = /^[a-zA-Z0-9!#$\%&'*+-\/=?^_`{|}~\-]*@(?:controlledair\.com|me\.com|gmail\.com)$/
 # TwsAuth::Application.config.app_constants.VALID_EMAIL_EXPR2 = /^[a-zA-Z0-9!#$\%&'*+-\/=?^_`{|}~\-]*@[a-zA-Z0-9][a-zA-Z0-9\-]*\.[a-zA-Z]*$/
