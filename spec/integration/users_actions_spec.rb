@@ -7,8 +7,8 @@ describe 'Signed in Users Integration Tests' do
 
   before(:each) do
     @model = User.new
-    @user1 = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr))
-    @me = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
+    @user1 = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
+    @me = User.create!(FactoryGirl.attributes_for(:admin_user_min_create_attr))
     visit signin_path
     find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
     # should fill in the login form to login
@@ -39,7 +39,7 @@ describe 'Signed in Users Integration Tests' do
     # UserTestHelper.user_safe_attributes.each do |key, value|
     #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
     # end
-    @user_deact = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({:deactivated => true}))
+    @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => true}))
     User.count.should > 1
     visit users_path()
     # save_and_open_page
@@ -107,7 +107,7 @@ describe 'Signed in Users Integration Tests' do
     # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
     #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
     # end
-    @user_deact = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({:deactivated => true}))
+    @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => true}))
     @num_users = User.count
     @num_users.should > 1
     visit users_path()
@@ -121,7 +121,7 @@ describe 'Signed in Users Integration Tests' do
     # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
     #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
     # end
-    @user_deact = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({:deactivated => true}))
+    @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => true}))
     @num_users = User.count
     @num_users.should > 1
     visit users_path()
@@ -135,7 +135,7 @@ describe 'Signed in Users Integration Tests' do
    # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
    #    User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
    #  end
-    @user_deact = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({:deactivated => true}))
+    @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => true}))
     @num_users = User.count
     @num_users.should > 1
     visit users_path()
@@ -186,7 +186,7 @@ describe 'Signed in Users Integration Tests' do
     page.driver.status_code.should be 200
     find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
     find(:xpath, '//*[@id="header_status"]/p').text.should =~
-      /^#{I18n.translate('errors.success_method_obj_name', :method => 'reactivate', :obj => @model.class.name, :name => @user1.username )}$/
+      /^#{I18n.translate('errors.success_method_obj_name', :method => 'reactivate', :obj => @model.class.name, :name => @user_deact.username )}$/
     User.count.should == (@num_users)
     find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     @updated_user = User.find(@user1.id)

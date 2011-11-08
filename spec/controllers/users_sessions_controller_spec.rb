@@ -118,10 +118,6 @@ describe UsersSessionsController do
   
   context 'logged out user -' do
     
-    before(:each) do
-      FactoryGirl.create(:user_min_create_attr)
-    end
-    
     it 'should not be able to do the signout action on an invalid user session' do
       FactoryGirl.create(:user_min_create_attr)
       post :signout #, -9999

@@ -2,22 +2,23 @@ TwsAuth::Application.routes.draw do
 
   resources :users_sessions, :only => ['create'] do
     member do
-      get 'signin'
-      put 'signout'
+      get 'signin'          # route:         signin_users_session GET    /users_sessions/:id/signin(.:format)         {:action=>"signin", :controller=>"users_sessions"}
+      put 'signout'         # route:        signout_users_session PUT    /users_sessions/:id/signout(.:format)        {:action=>"signout", :controller=>"users_sessions"}
     end
   end
   match '/signin', :to => 'users_sessions#signin'
   match '/signout', :to => 'users_sessions#signout'
+  match '/reset_password', :to => 'users_sessions#reset_password'
 
   resources :users do
     # match 'deactivate'  # route:      user_deactivate        /users/:user_id/deactivate(.:format) {:action=>"deactivate", :controller=>"users"}
     # match 'reactivate'  # route:      user_reactivate        /users/:user_id/reactivate(.:format) {:action=>"reactivate", :controller=>"users"}
     member do
-      put 'deactivate'      # route:      deactivate_user PUT    /users/:id/deactivate(.:format)      {:action=>"deactivate", :controller=>"users"}
-      put 'reactivate'      # route:      reactivate_user PUT    /users/:id/reactivate(.:format)      {:action=>"reactivate", :controller=>"users"}
-      get 'edit_password'   # route:   edit_password_user GET    /users/:id/edit_password(.:format)   {:action=>"edit_password", :controller=>"users"}
-      put 'update_password' # route: update_password_user PUT    /users/:id/update_password(.:format) {:action=>"update_password", :controller=>"users"}
-      put 'reset_password'  # route:  reset_password_user PUT    /users/:id/reset_password(.:format)  {:action=>"reset_password", :controller=>"users"}
+      put 'deactivate'      # route:              deactivate_user PUT    /users/:id/deactivate(.:format)      {:action=>"deactivate", :controller=>"users"}
+      put 'reactivate'      # route:              reactivate_user PUT    /users/:id/reactivate(.:format)      {:action=>"reactivate", :controller=>"users"}
+      get 'edit_password'   # route:           edit_password_user GET    /users/:id/edit_password(.:format)   {:action=>"edit_password", :controller=>"users"}
+      put 'update_password' # route:         update_password_user PUT    /users/:id/update_password(.:format) {:action=>"update_password", :controller=>"users"}
+      put 'reset_password'  # route:          reset_password_user PUT    /users/:id/reset_password(.:format)          {:action=>"reset_password", :controller=>"users"}
     end
   end
 

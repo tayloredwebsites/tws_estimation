@@ -74,6 +74,58 @@ describe UsersController do
       response.should redirect_to('/signin')
       assigns(:user).should be_nil
     end
+    
+    it 'should be able to navigate to the PUT reset_password page with username and email' do
+      user = FactoryGirl.create(:reg_user_min_create_attr)
+      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+      put :reset_password, :id => user.id, :user =>{
+        :username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username],
+        :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]
+      }
+      response.should_not redirect_to('/home/errors')
+      response.should render_template("show")
+      assigns(:user).should_not be_nil
+      assigns(:user).should be_a(User)
+      assigns(:user).username.should == 'RegUser'
+    end
+    it 'should be able to navigate to the PUT reset_password page with just username' do
+      user = FactoryGirl.create(:reg_user_min_create_attr)
+      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+      put :reset_password, :id => user.id, :user =>{
+        :username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username],
+        :email => ''
+      }
+      response.should_not redirect_to('/home/errors')
+      response.should render_template("show")
+      assigns(:user).should_not be_nil
+      assigns(:user).should be_a(User)
+      assigns(:user).username.should == 'RegUser'
+    end
+    it 'should be able to navigate to the PUT reset_password page with just email' do
+      user = FactoryGirl.create(:reg_user_min_create_attr)
+      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+      put :reset_password, :id => user.id, :user =>{
+        :username => '',
+        :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]
+      }
+      response.should_not redirect_to('/home/errors')
+      response.should render_template("show")
+      assigns(:user).should_not be_nil
+      assigns(:user).should be_a(User)
+      assigns(:user).username.should == 'RegUser'
+    end
+    it 'should not be able to navigate to the PUT reset_password page unless there is a username or email' do
+      user = FactoryGirl.create(:reg_user_min_create_attr)
+      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+      put :reset_password, :id => user.id, :user =>{
+        :username => '',
+        :email => ''
+      }
+      response.should redirect_to('/home/errors')
+      response.should_not render_template("show")
+      assigns(:user).should be_nil
+    end
+    
   end
   
   context 'logged in admin user -' do
@@ -183,7 +235,7 @@ describe UsersController do
     it 'should create user with each of the safe parameters' do
       FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
         @num_users = User.count
-        post :create, :user => FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value})
+        post :create, :user => FactoryGirl.attributes_for(:users_create).merge({key => value})
         assigns(:user).should_not be_nil
         assigns(:user).should be_instance_of(User)
         assigns(:user)[key].should == value
@@ -193,7 +245,7 @@ describe UsersController do
     it "should not create user with any of the unsafe parameters" do
       FactoryGirl.attributes_for(:user_unsafe_attr).each do |key, value|
         @num_users = User.count
-        post :create, :user => FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value})
+        post :create, :user => FactoryGirl.attributes_for(:users_create).merge({key => value})
         assigns(:user).should be_nil
         User.count.should == (@num_users)
       end
@@ -201,14 +253,14 @@ describe UsersController do
     it "should not create user with any of the bad_attributes (attributes not in Users model)" do
       FactoryGirl.attributes_for(:user_inval_attr).each do |key, value|
         @num_users = User.count
-        post :create, :user => FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value})
+        post :create, :user => FactoryGirl.attributes_for(:users_create).merge({key => value})
         assigns(:user).should be_nil
         User.count.should == (@num_users)
       end
     end
     it 'should not create a user with mismatched password' do
       @num_users = User.count
-      post :create, :user => FactoryGirl.attributes_for(:user_min_create_attr).merge({:password_confirmation => 'not_the_password'})
+      post :create, :user => FactoryGirl.attributes_for(:users_create).merge({:password_confirmation => 'not_the_password'})
       User.count.should == (@num_users)
       assigns(:user).should_not be_nil
       assigns(:user).should be_instance_of(User) 
@@ -352,7 +404,7 @@ describe UsersController do
       updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
     end
     
-    it 'should allow the user to update with no password information' do
+    it 'should allow the user to update with no password information (password untouched)' do
       user = FactoryGirl.create(:user_min_create_attr)
       get :edit, :id => user.id
       response.should be_success
@@ -372,10 +424,10 @@ describe UsersController do
       response.should render_template('show')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).username.should eq(user.username)
+      assigns(:user).username.should eq(FactoryGirl.attributes_for(:user_safe_attr)[:username])
       assigns(:user).has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
       updated_user = User.find(user.id)
-      updated_user.username.should eq(user.username)
+      updated_user.username.should eq(FactoryGirl.attributes_for(:user_safe_attr)[:username])
       updated_user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
     end
     
@@ -393,10 +445,10 @@ describe UsersController do
       response.should render_template('show')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).username.should eq(user.username)
+      assigns(:user).username.should eq(FactoryGirl.attributes_for(:user_safe_attr)[:username])
       # assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
       updated_user = User.find(user.id)
-      updated_user.username.should eq(user.username)
+      updated_user.username.should eq(FactoryGirl.attributes_for(:user_safe_attr)[:username])
       updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
     end
     

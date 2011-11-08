@@ -4,18 +4,52 @@ require 'autotest/growl'
 require 'autotest/fsevent'
 
 Autotest.add_hook :initialize do |autotest|
-  #  at.clear_mappings         # take out the default (test/test*rb)
-  
+  # autotest.clear_mappings         # take out the default (test/test*rb)
+
   # ignore changes to these files
   %w{.git .svn .hg .DS_Store ._* vendor tmp log doc}.each do |exception|
     autotest.add_exception(exception)
   end
   
-  # allows 'autotest app/models spec/models'
-  # allows 'autotest models'
-  unless ARGV.empty?
-    autotest.find_directories = ARGV.length == 1 ? ["spec/#{ARGV.first}","app/#{ARGV.first}"] : ARGV.dup
-  end
+
+  # autotest.add_mapping(%r{^spec/**/.*_spec.rb$}) {|filename, _| filename }
+  
+  # examples from http://rubydoc.info/github/rspec/rspec-rails/master/Autotest/RailsRspec2
+  # add_mapping(%r%^spec/.*_spec\.rb$%) { |filename, _|
+  #   filename
+  # }
+  # add_mapping(%r%^app/models/(.*)\.rb$%) { |_, m|
+  #   ["spec/models/#{m[1]}_spec.rb"]
+  # }
+  # add_mapping(%r%^app/views/(.*)$%) { |_, m|
+  #   files_matching %r%^spec/views/#{m[1]}_spec.rb$%
+  # }
+  # add_mapping(%r%^app/controllers/(.*)\.rb$%) { |_, m|
+  #   if m[1] == "application"
+  #     files_matching %r%^spec/controllers/.*_spec\.rb$%
+  #   else
+  #     ["spec/controllers/#{m[1]}_spec.rb"]
+  #   end
+  # }
+  # add_mapping(%r%^app/helpers/(.*)_helper\.rb$%) { |_, m|
+  #   if m[1] == "application" then
+  #     files_matching(%r%^spec/(views|helpers)/.*_spec\.rb$%)
+  #   else
+  #     ["spec/helpers/#{m[1]}_helper_spec.rb"] + files_matching(%r%^spec\/views\/#{m[1]}/.*_spec\.rb$%)
+  #   end
+  # }
+
+
+  
+  # allow the public directory to be checked
+  # autotest.remove_exception "public/"
+  # %w{.git public/stylesheets public/images public/assets}.each {|exception|at.add_exception(exception)}
+  
+  # # allows 'autotest app/models spec/models'
+  # # allows 'autotest models'
+  # unless ARGV.empty?
+  #   autotest.find_directories = ARGV.length == 1 ? ["spec/#{ARGV.first}","app/#{ARGV.first}"] : ARGV.dup
+  # end
   
   # other possible additions
   #autotest.add_mapping(%r{^lib/.*\.rb$}) {|f, _|
@@ -24,13 +58,15 @@ Autotest.add_hook :initialize do |autotest|
   #at.add_mapping(/lib\/foo\/(.*).rb/, true) do |filename, matchdata|
   #  ["spec/lib/foo/#{matchdata[1]}_spec.rb"]
   
-  # match all _spec.rb files in spec directory
-  autotest.add_mapping(%r%spec/controllers/.*_spec.rb%) {|filename, _| filename }
-  autotest.add_mapping(%r%spec/helpers/.*_spec.rb%) {|filename, _| filename }
-  autotest.add_mapping(%r%spec/integration/.*_spec.rb%) {|filename, _| filename }
-  autotest.add_mapping(%r%spec/requests/.*_spec.rb%) {|filename, _| filename }
-  autotest.add_mapping(%r%spec/views/.*_spec.rb%) {|filename, _| filename }
-  # skipping to_do folder
+  # match all _spec.rb files by specific directory
+  # autotest.add_mapping(%r%spec/controllers/.*_spec.rb%) {|filename, _| filename }
+  # autotest.add_mapping(%r%spec/helpers/.*_spec.rb%) {|filename, _| filename }
+  # autotest.add_mapping(%r%spec/integration/.*_spec.rb%) {|filename, _| filename }
+  # autotest.add_mapping(%r%spec/requests/.*_spec.rb%) {|filename, _| filename }
+  # autotest.add_mapping(%r%spec/views/.*_spec.rb%) {|filename, _| filename }
+  # # skipping to_do folder
+
+
   nil
 end
 

@@ -1,15 +1,19 @@
 class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password
-  validates_presence_of :email, :username
   attr_accessor :password, :old_password
+  validates :username,
+      :presence => true,
+      :uniqueness => true
   validates :password,
       # :presence => true,
       :confirmation => true
+  validates :email,
+      :presence => true,
+      :uniqueness => true,
+      :format => {:with => Regexp.new(VALID_EMAIL_EXPR) }
    
   before_save :validate_save
   #before_update_password :validate_password
-  
-  validates :email, :format => {:with => Regexp.new(VALID_EMAIL_EXPR) }
   
   after_initialize :init
   
@@ -160,6 +164,15 @@ class User < ActiveRecord::Base
     end
   end
   
+  def reset_password
+    self.password = generate_password
+    self.password_confirmation = self.password
+    encrypt_password
+    logger.debug('reset_password: '+self.password.to_s)
+  end
+  
+  
+  
   def full_name
     name = ''
     name += self.first_name if !self.first_name.nil?
@@ -208,7 +221,9 @@ class User < ActiveRecord::Base
   def encrypt_hash(string)
     Digest::SHA2.hexdigest(string)
   end
-  
+  def generate_password
+    encrypt_hash("#{Time.now.utc}.str[1,8]")
+  end
 end
 
 # == Schema Information
