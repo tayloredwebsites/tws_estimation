@@ -4,7 +4,7 @@ class UsersController< SecureApplicationController
     # self.load_session
     # logger.debug('Sessions Controller filter = '+%w{ index show new create edit update destroy deactivate reactivate }.index(params[:action]).to_s)
     # all actions require authentication (so far)
-    self.authenticate_user  # if !(%w{ index show new create edit update destroy deactivate reactivate }.index(params[:action]).nil?)
+    self.authenticate_user if (%w{ reset_password }.index(params[:action]).nil?)
     @model = User.new
     @errors = Array.new
   end
@@ -24,7 +24,6 @@ class UsersController< SecureApplicationController
     # @errors = safe_params_init(@model, {'user' => ['first_name', 'last_name', 'email', 'username', 'deactivated']})
     @errors = safe_params_init({'user' => %w(first_name last_name email username deactivated password password_confirmation old_password)})
     @errors = required_params_init({'user' => ['email', 'username']}) if @errors.count == 0
-    # @errors = validate_login_status
     if @errors.count > 0
       render home_errors_path
       return
@@ -57,13 +56,8 @@ class UsersController< SecureApplicationController
     @user.save
     # @user = User.create!(params[:user])
     if @user.errors.count == 0
-      # notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
       render :action => 'show'
     else
-      # logger.errors("UsersController.create was unsuccessful")
-      # @user.errors.each do |attr, msg|
-      #   logger.debug("User create error: "+msg)
-      # end
       render :action => "new"
     end
   end
@@ -72,7 +66,11 @@ class UsersController< SecureApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(params[:user])
-      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+      notify_success( I18n.translate('errors.success_method_obj_name',
+        :method => params[:action],
+        :obj => @model.class.name,
+        :name => @user.username )
+      )
       render :action => 'show'
     else
       render :action => "edit"
@@ -83,7 +81,11 @@ class UsersController< SecureApplicationController
   def destroy
     @user = User.find(params[:id])
     if @user.destroy
-      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+      notify_success( I18n.translate('errors.success_method_obj_name',
+        :method => params[:action],
+        :obj => @model.class.name,
+        :name => @user.username )
+      )
       render :action => 'index'
     else
     	if @user.errors[:base].count > 0
@@ -99,7 +101,11 @@ class UsersController< SecureApplicationController
   def deactivate
     @user = User.find(params[:id])
     if @user.deactivate
-      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+      notify_success( I18n.translate('errors.success_method_obj_name',
+        :method => params[:action],
+        :obj => @model.class.name,
+        :name => @user.username )
+      )
       render :action => 'show', :id => @user.id
     else
     	if @user.errors[:base].count > 0
@@ -116,7 +122,11 @@ class UsersController< SecureApplicationController
   def reactivate
     @user = User.find(params[:id])
     if @user.reactivate
-      notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+      notify_success( I18n.translate('errors.success_method_obj_name',
+        :method => params[:action],
+        :obj => @model.class.name,
+        :name => @user.username )
+      )
       render :action => 'show', :id => @user.id
     else
     	if @user.errors[:base].count > 0
@@ -137,11 +147,15 @@ class UsersController< SecureApplicationController
   # PUT /users/:id/update_password
   def update_password
     @user = User.find(params[:id])
-    if !@user.valid_password_change?(params[:user])  # params[:username], params[:old_password], params[:password], params[:password_confirmation])
+    if !@user.valid_password_change?(params[:user])
       render :action => 'edit_password'
     else
       if @user.update_attributes(params[:user])
-        notify_success( I18n.translate('errors.success_method_obj_name', :method => params[:action], :obj => @model.class.name, :name => @user.username ) )
+        notify_success( I18n.translate('errors.success_method_obj_name',
+          :method => params[:action],
+          :obj => @model.class.name,
+          :name => @user.username )
+        )
         render :action => 'show'
       else
         render :action => "edit_password"
@@ -149,8 +163,30 @@ class UsersController< SecureApplicationController
     end
   end
   
-  def validate_login_status
-    
+  def reset_password
+    logger.debug('users_controller.reset_password - email='+ params[:user][:email].to_s+', username='+params[:user][:username].to_s)
+    @user = User.find(:first, :conditions => ['email = ? OR username = ?', params[:user][:email].to_s, params[:user][:username].to_s ] )
+    if @user.nil?
+      notify_error( I18n.translate('errors.cannot_find_obj', :obj => @model.class.name) )
+      redirect_to(home_errors_path)
+    else
+      @user.reset_password
+      # must remove search parameters so that they are not used to update the record
+      params[:user].delete(:email)
+      params[:user].delete(:username)
+      logger.debug('before update_attributes - params[:user]:'+params[:user].to_s)
+      if @user.update_attributes(params[:user])
+        notify_success( I18n.translate('errors.success_method_obj_name',
+          :method => params[:action],
+          :obj => @model.class.name,
+          :name => @user.username )
+        )
+        render :action => 'show'
+      else
+        logger.debug('reset_password errors='+@user.errors.to_s)
+        redirect_to(home_errors_path)
+      end
+    end
   end
   
   def errors

@@ -46,6 +46,12 @@ describe 'Layout Integration Tests - ' do
     end
     it 'should have a signin link in a left module header' do
       find('div.module_header/a', :text => I18n.translate('users_sessions.signin.title'))
+      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
+        /^#{I18n.translate('users_sessions.signin.title') }$/
+    end
+    it 'should have a reset password link in a left module header' do
+      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
+        /#{I18n.translate('users_sessions.signin.action')}/
     end
     it 'should have a Users link in the left nav bar' do
       find('div#left_content').find('a', :text => I18n.translate('users.title'))

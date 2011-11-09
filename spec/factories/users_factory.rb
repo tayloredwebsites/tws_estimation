@@ -8,8 +8,15 @@ FactoryGirl.define do
   end
   
   factory :users, :class => User do
-    email       Factory.next(:email)
-    username    Factory.next(:username)
+    email       {Factory.next(:email)}
+    username    {Factory.next(:username)}
+  end
+  
+  factory :users_create, :class => User do
+    email       {Factory.next(:email)}
+    username    {Factory.next(:username)}
+    password              'test'
+    password_confirmation 'test'
   end
   
   factory :user_min_attr, :class => User do
@@ -33,8 +40,8 @@ FactoryGirl.define do
   factory :user_safe_attr, :class => User do
     first_name      'Test'
     last_name       'User'
-    email           'email@example.com'
-    username        'TestUser'
+    email           'email2@example.com'
+    username        'TestUser2'
   end
   factory :user_unsafe_attr, :class => User do
     admin          'true'
