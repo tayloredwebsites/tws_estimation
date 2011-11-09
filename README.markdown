@@ -30,6 +30,6 @@ Next Step - Role Based Authentication:
 	Hopefully this can be modularized by putting this code into gems or engines.
 4. Thus the Authentication system must have a role based system that can specify the role a user has within each (or all) system.
 To this end, each role will specify the application that it corresponds with.
-
+Next Step - Role Based Authentication:
 
 
