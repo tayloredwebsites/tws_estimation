@@ -176,11 +176,15 @@ describe User do
     end
     
     it 'should create user when created with safe_attributes' do
-      FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
-        @num_users = User.count
-        user = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({key => value}))
-        User.count.should == (@num_users+1)
-      end
+      @num_users = User.count
+      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:first_name => FactoryGirl.attributes_for(:user_safe_attr)[:first_name]))
+      User.count.should == (@num_users+1)
+      @num_users = User.count
+      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:last_name => FactoryGirl.attributes_for(:user_safe_attr)[:last_name]))
+      User.count.should == (@num_users+1)
+      @num_users = User.count
+      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:username => FactoryGirl.attributes_for(:user_safe_attr)[:username]))
+      User.count.should == (@num_users+1)
     end
 
     it 'should create user when created without any unsafe_attributes' do
@@ -195,16 +199,20 @@ describe User do
       end
     end
 
-    it "should create user when created without any invalid attributes" do
-      FactoryGirl.attributes_for(:user_inval_attr).each do |key, value|
-        @num_users = User.count
-        user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({key => value}))
-        user.should_not be_nil
-        user.should be_instance_of(User)
-        user[key].should be_nil
-        user.errors.count.should == 0
-        User.count.should == (@num_users+1)
-      end
+    it "should ignore invalid attributes when creating a user" do
+      @num_users = User.count
+      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:first_name => FactoryGirl.attributes_for(:user_inval_attr)[:admin]))
+      user.should_not respond_to(:admin)
+      User.count.should == (@num_users+1)
+      @num_users = User.count
+      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:last_name => FactoryGirl.attributes_for(:user_inval_attr)[:foo]))
+      user.should_not respond_to(:foo)
+      User.count.should == (@num_users+1)
+      @num_users = User.count
+      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:username => FactoryGirl.attributes_for(:user_inval_attr)[:bar]))
+      user.should_not respond_to(:bar)
+      User.count.should == (@num_users+1)
+      @num_users = User.count
     end
     it 'should allow the user to update their passwords' do
       user = User.create(FactoryGirl.attributes_for(:user_min_create_attr))
@@ -216,10 +224,76 @@ describe User do
       updated_user = User.find(user.id)
       updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
     end
-    it 'should ensure that email is unique (code 6/1:10 and db 6/1:15)'
-    it 'should ensure that username is unique (code and db)'
-    it 'should ensure that email is valid regex (see application constants)'
-    it 'should ensure that username comes from email'
+    it 'should be able to reset_password' do
+      user = User.create(FactoryGirl.attributes_for(:user_min_create_attr))
+      user.reset_password
+      user.update_attributes(:id => user.id)
+      user.errors.count.should == 0
+      updated_user = User.find(user.id)
+      # should not have the old password any more
+      updated_user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_false
+    end
+    it 'should accept valid email addresses using VALID_EMAIL_EXPR application constant' do
+      # %w{ test@controlledair.com test@testing.com test@me.com test@gmail.com test@example.com 1@me.com}.each do |email_addr|
+      #   @user_count = User.count
+      #   a_user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => email_addr) )
+      #   User.count.should == @user_count+1
+      # end
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@controlledair.com') )
+      User.count.should == @user_count+1
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@me.com') )
+      User.count.should == @user_count+1
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@gmail.com') )
+      User.count.should == @user_count+1
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@example.com') )
+      User.count.should == @user_count+1
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => '1@me.com') )
+      User.count.should == @user_count+1
+    end
+    it 'should reject invalid email addresses using VALID_EMAIL_EXPR application constant' do
+      # %w{ test@testing.com a.b.com me@yahoo.com hello }.each do |email_addr|
+      #   @user_count = User.count
+      #   a_user = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge(:email => email_addr) )
+      #   User.count.should == @user_count
+      # end
+      @user_count = User.count
+      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@testing.com') )
+      User.count.should == @user_count
+      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'a.b.com') )
+      User.count.should == @user_count
+      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'me@yahoo.com') )
+      User.count.should == @user_count
+      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'hello') )
+      User.count.should == @user_count
+    end
+    it 'should reject an email that is not unique' do
+      @user_count = User.count
+      user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@example.com') )
+      # user.errors.each do |type, msg|
+      #   msg.should == ''
+      # end
+      user.errors.count.should == 0
+      User.count.should == @user_count+1
+      @user_count = User.count
+      user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@example.com') )
+      user.errors.count.should > 0
+      User.count.should == @user_count
+    end
+    it 'should reject a username is not unique' do
+      @user_count = User.count
+      user = User.create(FactoryGirl.attributes_for(:users_create).merge(:username => 'MyName') )
+      user.errors.count.should == 0
+      User.count.should == @user_count+1
+      @user_count = User.count
+      user = User.create(FactoryGirl.attributes_for(:users_create).merge(:username => 'MyName') )
+      user.errors.count.should > 0
+      User.count.should == @user_count
+    end
 
   end
   
@@ -246,8 +320,23 @@ describe User do
       @user_session.sign_in(FactoryGirl.attributes_for(:reg_user_session)[:username], FactoryGirl.attributes_for(:reg_user_session)[:password])
       @user_session.current_user_id.should == @me.id
     end
-    it 'should allow the user to update their passwords'
-    it 'should allow passwords to be updated in the update method in the model'
+    it 'should allow the user to update their passwords' do
+      # check that update_password does
+      user = FactoryGirl.create(:user_min_create_attr)
+      user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
+      password_attribs = {
+        :old_password => FactoryGirl.attributes_for(:user_min_create_attr)[:password],
+        :password => 'NewPass',
+        :password_confirmation => 'NewPass'
+      }
+      user.valid_password_change?(password_attribs).should be_true
+      user.errors.count.should == 0
+      # process that both update_password and update use
+      user.update_attributes(password_attribs)
+      user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_false
+      updated_user = User.find(user.id)
+      updated_user.has_password?('NewPass').should be_true
+    end
     
   end
   
