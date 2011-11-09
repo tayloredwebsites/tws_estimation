@@ -20,6 +20,7 @@
       :invalid_record_obj_id => "Invalid record for %{obj} with ID %{id}",
       :success_method_obj_id => "Successful %{method} of %{obj} with ID %{id}",
       :success_method_obj_name => "Successful %{method} of %{obj} %{name}",
+      :success_method_obj_msg => "Successful %{method} of %{obj} %{msg}",
       :success_method => "Successful %{method}",
       :cannot_method_obj_id => "Cannot %{method} of %{obj} with ID %{id}",
       :cannot_method_msg => "Cannot %{method} - %{msg}",
@@ -35,7 +36,8 @@
       :missing_password => 'missing password',
       :password_mismatch => 'passwords mismatched',
       :no_password_update => 'cannot update password here',
-      :invalid_password => 'invalid username or password'
+      :invalid_password => 'invalid username or password',
+      :check_email => 'check your email for next step'
     },
     :view_field_value => {
       :true => 'truly',
@@ -124,6 +126,11 @@
         :title => "Edit Password",
         :header => "Edit your User Password "
       },
+      :reset_password => {
+        :title => "Reset Password",
+        :header => "Reset your User Password",
+        :action => "Reset Password"
+      },
       :field_name => {
         :id => 'ID',
         :first_name => 'First Name',
@@ -145,6 +152,9 @@
         :password => 'Password',
         :password_confirmation => 'Confirmation',
         :deactivated => 'Deactivated'
+      },
+        :messages => {
+        :session_timeout => 'Your session has timed out'
       }
     }, # end users
     :users_sessions => {

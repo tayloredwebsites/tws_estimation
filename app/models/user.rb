@@ -1,10 +1,16 @@
 class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password
-  validates_presence_of :email, :username
   attr_accessor :password, :old_password
+  validates :username,
+      :presence => true,
+      :uniqueness => true
   validates :password,
       # :presence => true,
       :confirmation => true
+  validates :email,
+      :presence => true,
+      :uniqueness => true,
+      :format => {:with => Regexp.new(VALID_EMAIL_EXPR) }
    
   before_save :validate_save
   #before_update_password :validate_password
@@ -15,14 +21,12 @@ class User < ActiveRecord::Base
   scope :active, where(:deactivated => !true)
   
   def create
-    logger.debug ("create has errors: ") if !errors.empty?
-    logger.debug (errors.to_a) if !errors.empty?
+    logger.debug ("create has errors: "+errors.to_a) if !errors.empty?
     super if errors.empty?
   end
   
   def save
-    logger.debug ("save has errors: ") if !errors.empty?
-    logger.debug (errors.to_a) if !errors.empty?
+    logger.debug ("save has errors: "+errors.to_a) if !errors.empty?
     super if errors.empty?
   end
   
@@ -57,7 +61,6 @@ class User < ActiveRecord::Base
   # method to deactivate record
   def deactivate
   	if !self.deactivated
-  	  logger.debug('User is active on deactivate method - OK to deactivate.')
 			self.deactivated = true;
 			if !self.save
 			  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.got_error') ) )
@@ -65,7 +68,6 @@ class User < ActiveRecord::Base
 			  return false
 			end
   	else
-  	  logger.debug('User is already deactivated on deactivate method.')
 		  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') ) )
 			errors.add(:deactivated, I18n.translate('error_messages.is_deactivated') )
 			return false
@@ -131,42 +133,45 @@ class User < ActiveRecord::Base
   end
   
   def update_attributes(params)
-    logger.debug('update_attributes with params: '+params.inspect.to_s)
-    super(params) if valid_passwords(params[:username], params[:old_password], params[:password], params[:password_confirmation])
+    if valid_password_change?(params)
+      self.password = params[:password]
+      self.password_confirmation = params[:password_confirmation]
+      params.delete(:old_password)
+      encrypt_password
+    else
+      params.delete(:old_password)
+      params.delete(:password)
+      params.delete(:password_confirmation)
+    end
+    super(params)
   end
   
-  # make sure passwords are valid if any password fields are passed to update
-  def valid_passwords(username, old_password, password, password_confirmation)
-    logger.debug('calling valid_passwords')
-    ret_val = false
-    if (old_password.blank? && password.blank? && password_confirmation.blank?)
-      ret_val = true  # not changing password, call super
-  	elsif self.deactivated
-  	  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'edit_password', :msg => I18n.translate('error_messages.is_deactivated') ) )
-  	elsif self.new_record?
-      errors.add(:base, I18n.translate('obj_does_not_exist', 'user') )
-    elsif password.blank?
-      errors.add(:password, I18n.translate('missing_password') )
-    elsif password != password_confirmation
+  def valid_password_change?(params)
+    if params[:old_password].blank?
+      # cannot be a password change if there is no old password
+      false
+    elsif params[:password].blank?
+      false
+    elsif params[:password] != params[:password_confirmation]
       errors.add(:password_confirmation, I18n.translate('error_messages.password_mismatch') )
-  	else
-  	  ret_val = false # don't call super, update is done here
-  	  self.password = password
-  	  self.password_confirmation = password
-  	  self.old_password = old_password
-  	  logger.debug('call save')
-  	  if self.save
-  	    if errors.count == 0
-    	    logger.debug("edit_password had successful save")
-    	  else
-    	    logger.debug('got errors on save'+errors.inspect.to_s)
-    	  end
-  	  else
-		    errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'edit_password', :msg => I18n.translate('error_messages.got_error') ) )
-		  end
-  	end
-    return ret_val
+      false
+    elsif self.encrypted_password != encrypt(params[:old_password])
+      errors.add(:password_confirmation, I18n.translate('error_messages.invalid_password') )
+      errors.add(:password, I18n.translate('error_messages.invalid_password') ) 
+      false
+    else
+      true
+    end
   end
+  
+  def reset_password
+    self.password = generate_password
+    self.password_confirmation = self.password
+    encrypt_password
+    logger.debug('reset_password: '+self.password.to_s)
+  end
+  
+  
   
   def full_name
     name = ''
@@ -192,17 +197,13 @@ class User < ActiveRecord::Base
     
   # see if password passed in matches the encryped password
   def has_matching_password?
-    logger.debug('has_matching_password = '+self.password.to_s+', '+self.password_confirmation.to_s+', '+self.old_password.to_s+', '+self.encrypted_password.to_s)
     if self.password.blank? || self.encrypted_password.blank?
-      logger.debug('no password check')
       false
     elsif self.old_password.nil?
       # match current password against encrypted password
-      logger.debug('check against current password')
       self.encrypted_password == encrypt(self.password)
     else
       # match old password against encrypted password (for password change)
-      logger.debug('check against old_password')
       self.encrypted_password == encrypt(self.old_password)
     end
   end
@@ -220,7 +221,9 @@ class User < ActiveRecord::Base
   def encrypt_hash(string)
     Digest::SHA2.hexdigest(string)
   end
-  
+  def generate_password
+    encrypt_hash("#{Time.now.utc}.str[1,8]")
+  end
 end
 
 # == Schema Information
