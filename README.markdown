@@ -3,6 +3,7 @@
 This is a startup application by [Taylored Web Sites](http://www.tayloredwebsites.com).
 
 Philosophy / Approaches:
+
 1. Readability and Documentation goes before DRY (don't repeat yourself).
 	Still working on what this means in detail, but functionality should not be hidden / obfuscated.
 2. Code is written in parallel with tests.
@@ -20,6 +21,7 @@ Philosophy / Approaches:
 7. I have some controller based parameter checking (I will re-factor after the next phase of the project).
 
 Next Step - Role Based Authentication:
+
 1. Authentication will allow the application to control access to actions based upon the user's rights (multiple roles can be assigned to a user).
 	For performance purposes, roles are stored in a single string field in the users table.
 	Uses the  [CanCan](https://github.com/ryanb/cancan) authorization library.
@@ -29,7 +31,7 @@ Next Step - Role Based Authentication:
 	Authentication, Authorization and common data will be most easily available to each system.
 	Hopefully this can be modularized by putting this code into gems or engines.
 4. Thus the Authentication system must have a role based system that can specify the role a user has within each (or all) system.
-To this end, each role will specify the application that it corresponds with.
-Next Step - Role Based Authentication:
+	To this end, each role will specify the application that it corresponds with.
+
 
 
