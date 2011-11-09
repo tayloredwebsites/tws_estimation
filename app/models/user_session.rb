@@ -101,7 +101,7 @@ class UserSession
   end
   
   def validate_session_length
-    if @time_last_accessed != nil && @time_last_accessed < 30.seconds.ago
+    if @time_last_accessed != nil && @time_last_accessed < SESSION_TIMEOUT_SECONDS.seconds.ago # DateTime.ago(SESSION_TIMEOUT_SECONDS)  # 30.seconds.ago
       # errors.add(:base, I18n.translate('users_sessions.messages.session_timeout') ) # this causes controller problems
       self.sign_out
     end
@@ -109,15 +109,7 @@ class UserSession
   end
   
   def expire_user_session
-    @time_last_accessed = 60.seconds.ago
-  end
-  
-  
-  def user_session_expired
-    lambda{10.minutes.ago}
-  end
-  def user_session_expires_in
-    lambda{10.minutes}
+    @time_last_accessed = SESSION_TIMEOUT_SECONDS.seconds.ago # DateTime.ago(SESSION_TIMEOUT_SECONDS)  # 60.seconds.ago
   end
   
 end
