@@ -19,7 +19,15 @@ module ApplicationHelper
   # end
   
   def current_user_full_name
-    @user_session.current_user_full_name if !@user_session.nil?
+    @user_session.current_user_full_name
+  end
+  
+  def current_user_id
+    @user_session.current_user_id
+  end
+  
+  def current_user
+    @user_session.current_user
   end
   
   def clear_session

@@ -64,12 +64,12 @@ describe UsersSessionsController do
 
       it "should not return the current_user" do
         #assigns(:user_session).current_user.should_not be_nil
-        assigns(:user_session).current_user_id.should be_nil
+        assigns(:user_session).current_user_id.should == 0
       end
 
       it 'should not be signed_in?' do
         assigns(:user_session).should_not be_nil
-        assigns(:user_session).current_user_id.should be_nil
+        assigns(:user_session).current_user_id.should == 0
         #assigns(:suser_ession).signed_in?.should be_false
       end
 
@@ -103,7 +103,7 @@ describe UsersSessionsController do
       response.should render_template("/signin")
       assigns(:user_session).should_not be_nil
       #assigns(:user_session).current_user.should_not be_nil
-      assigns(:user_session).current_user_id.should be_nil
+      assigns(:user_session).current_user_id.should == 0
       assigns(:user_session).signed_in?.should be_false
       put :signout  #, FactoryGirl.attributes_for(:user_session)[:id]
       response.should_not be_success
@@ -112,7 +112,7 @@ describe UsersSessionsController do
       response.should redirect_to('/signin')
       assigns(:user_session).should_not be_nil
       #assigns(:user_session).current_user.should_not be_nil
-      assigns(:user_session).current_user_id.should be_nil
+      assigns(:user_session).current_user_id.should == 0
     end
   end
   
@@ -127,7 +127,7 @@ describe UsersSessionsController do
       response.should redirect_to('/signin')
       assigns(:user_session).should_not be_nil
       #assigns(:user_session).current_user.should_not be_nil
-      assigns(:user_session).current_user_id.should be_nil
+      assigns(:user_session).current_user_id.should == 0
     end
 
   end
@@ -150,7 +150,7 @@ describe UsersSessionsController do
       response.should render_template('/signout')
       assigns(:user_session).should_not be_nil
       #assigns(:user_session).current_user.should_not be_nil
-      assigns(:user_session).current_user_id.should be_nil
+      assigns(:user_session).current_user_id.should == 0
       response.should be_success
     end
     

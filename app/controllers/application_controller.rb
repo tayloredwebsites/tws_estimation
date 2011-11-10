@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+	layout "application"
   
   include ApplicationHelper
   
@@ -15,27 +16,25 @@ class ApplicationController < ActionController::Base
     #logger.debug ("session = "+session.inspect) if !session.nil?
     @user_session = UserSession.new (session)
     if @user_session.errors.count > 0
-      notify_error("Error restoring session")
+      notify_error("!!! ApplicationController - load_user_session - Error restoring session")
       @user_session.errors.each do |attr, msg|
-        logger.debug("Session error: "+msg)
+        logger.error("!!! ApplicationController - load_user_session - Session error: "+msg)
       end
       # redirect_to('/home/errors')
       @user_session.errors.clear
       # redirect_to('/signin')
     end
     #logger.debug ("* user session created:  "+@user_session.inspect)
-    (@user_session.signed_in?) ? logger.debug('* load_user_session Signed in!') : logger.debug('* load_user_session Signed out!') 
+    (@user_session.signed_in?) ? logger.debug('* ApplicationController - load_user_session - Signed in!') : logger.debug('* ApplicationController - load_user_session - Signed out!') 
   end
 
   def save_user_session
-    (session[:current_user_id].nil?) ? logger.debug('* start of save_user_session - no session user id') : logger.debug('* start of save_user_session - have a session user id!') 
     @user_session.save_user_session 
     session[:current_user_id] = @user_session.current_user_id
     session[:time_last_accessed] = Time.now
-    logger.debug ("time_last_accessed = #{session[:time_last_accessed].to_s}")
+    logger.debug ("* ApplicationController - save_user_session - time_last_accessed = #{session[:time_last_accessed].to_s}")
     #logger.debug ("* user session saved:  "+@user_session.inspect)
-    (@user_session.signed_in?) ? logger.debug('* save_user_session Signed in!') : logger.debug('* save_user_session Signed out!') 
-    (@user_session.current_user_id.nil?) ? logger.debug('* save_user_session - no user id') : logger.debug('* save_user_session - have a user id!') 
+    (@user_session.signed_in?) ? logger.debug('* ApplicationController - save_user_session - Signed in!') : logger.debug('* ApplicationController - save_user_session - Signed out!') 
   end
   
     
@@ -71,12 +70,12 @@ class ApplicationController < ActionController::Base
   def safe_params_init (safe_params)
 
     @param_errors = Array.new()
-    logger.debug("ApplicationController.safe_params_init was sent params: #{params}")
+    logger.debug("* ApplicationController - safe_params_init - was sent params: #{params}")
 
     #logger.debug("original params = #{params}")
     # make sure that safe_params is a hash
     if safe_params.nil? || !safe_params.class == hash
-      logger.error("safe_params is nil or not a hash - error")
+      logger.error("!!! ApplicationController - safe_params_init - safe_params is nil or not a hash - error")
       # possible code to add errors to a active record model class created before this call
       # safe_model.errors.add(:base, "safe_params is nil or not a hash - error")
       @param_errors.push("safe_params is nil or not a hash - error")
@@ -84,32 +83,32 @@ class ApplicationController < ActionController::Base
     end
     # loop through all of the 'param' hash entries - only filter if matches a hash entry in safe params
     @original_params = params
-    logger.debug("ApplicationController.safe_params_init - safe_params: #{safe_params}")
-    logger.debug("ApplicationController.safe_params_init - @original_params: #{@original_params}")
+    logger.debug("* ApplicationController - safe_params_init - safe_params: #{safe_params}")
+    logger.debug("* ApplicationController - safe_params_init - @original_params: #{@original_params}")
     @original_params.each do |key, value|
       if safe_params.has_key?(key)
         # matched on key, we should perform filtering on the values for that key
         # my_params_fields is the array of fields (from safe_params) for the matched key/model
         my_params_fields = safe_params.fetch(key)
-        logger.debug("match on #{key}'s safe fields: #{my_params_fields}")
+        logger.debug("* ApplicationController - safe_params_init - match on #{key}'s safe fields: #{my_params_fields}")
         matched_params = my_value = value.nil? ? {} : value
-        logger.debug("params to match = #{my_value}")
+        logger.debug("* ApplicationController - safe_params_init - params to match = #{my_value}")
         my_value.each do |field, val|
           if !my_params_fields.include?(field)
-            logger.error("param has #{key} with '#{field}', which is not in the safe params list")
+            logger.error("!!! ApplicationController - safe_params_init - param has #{key} with '#{field}', which is not in the safe params list")
             @param_errors.push("param has #{key} with '#{field}', which is not in the safe params list")
             matched_params.delete(field)
           end
         end
         if @param_errors.length > 0
-          logger.debug("replaced #{key} with only safe values #{matched_params}")
+          logger.debug("* ApplicationController - safe_params_init - replaced #{key} with only safe values #{matched_params}")
           params[key] = matched_params
         end
       else
-        logger.debug("no match on #{key}")
+        logger.debug("* ApplicationController - safe_params_init - no match on #{key}")
       end
     end
-    logger.debug("ApplicationController safe_params_init for params: #{params} got #{@param_errors}") if @param_errors.size > 0
+    logger.debug("* ApplicationController - safe_params_init - params: #{params} got #{@param_errors}") if @param_errors.size > 0
     return @param_errors
   end
   
@@ -145,11 +144,11 @@ class ApplicationController < ActionController::Base
   def required_params_init (required_params)
 
     @param_errors = Array.new()
-    logger.debug("ApplicationController.required_params_init was sent params: #{params}")
+    logger.debug("* ApplicationController - required_params_init - was sent params: #{params}")
 
     # make sure that required_params is a hash
     if required_params.nil? || !required_params.class == hash
-      logger.error("required_params is nil or not a hash - error")
+      logger.error("!!! ApplicationController - required_params_init - required_params is nil or not a hash - error")
       @param_errors.push("required_params is nil or not a hash - error")
       required_params = {}
     end
@@ -160,12 +159,12 @@ class ApplicationController < ActionController::Base
         # matched on key, we should perform filtering on the values for that key
         # my_params_fields is the array of fields (from required_params) for the matched key/model
         my_params_fields = required_params.fetch(key)
-        logger.debug("match on #{key}'s required fields: #{my_params_fields}")
+        logger.debug("* ApplicationController - required_params_init - match on #{key}'s required fields: #{my_params_fields}")
         matched_params = my_value = value.nil? ? {} : value
-        logger.debug("params to match = #{my_value}")
+        logger.debug("* ApplicationController - required_params_init - params to match = #{my_value}")
         my_params_fields.each do |field|
           if !my_value.include?(field)
-            logger.error("param has #{key} without '#{field}', which is in the required params list.")
+            logger.error("!!! ApplicationController - required_params_init - param has #{key} without '#{field}', which is in the required params list.")
             @param_errors.push("param has #{key} without '#{field}', which is in the required params list.")
           end
         end
@@ -174,7 +173,7 @@ class ApplicationController < ActionController::Base
         end
       end
     end
-    logger.debug("ApplicationController required_params_init for params: #{params} got #{@param_errors}") if @param_errors.size > 0
+    logger.debug("* ApplicationController - required_params_init - params: #{params} got #{@param_errors}") if @param_errors.size > 0
     return @param_errors
   end
   
