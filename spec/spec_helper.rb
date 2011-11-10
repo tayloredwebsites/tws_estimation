@@ -78,11 +78,12 @@ end
 module UserTestHelper
   # signin capability for controller tests
   def session_signin(username, password)
-    session[:current_user_id] = nil
+    session[:current_user_id] = 0
     @user_session = UserSession.new (session)
     @user_session.sign_in(username, password)
     if @user_session.signed_in?
       session[:current_user_id] = @user_session.current_user_id
+      session[:time_last_accessed] = @user_session.time_last_accessed
     end
     return @user_session
   end

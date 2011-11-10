@@ -21,6 +21,7 @@ class UsersSessionsController < SecureApplicationController
   # end
   # 
   def signin
+    self.clear_session
   end
 
   def create
@@ -38,12 +39,12 @@ class UsersSessionsController < SecureApplicationController
   end
 
   def signout
-    logger.debug("session.signout")
     self.clear_session
     session[:current_user_id] = nil
   end
   
   def clear_session
+    Rails.logger.debug('* UsersSessionController - clear_session')
     @user_session = UserSession.new
   end
   

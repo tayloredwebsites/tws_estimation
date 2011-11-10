@@ -20,6 +20,14 @@ class User < ActiveRecord::Base
   scope :deactivated, where(:deactivated => true)
   scope :active, where(:deactivated => !true)
   
+  def self.guest
+    @user = self.new
+    @user.id = 0
+    @user.username = 'Guest'
+    @user.first_name = 'Guest'
+    return @user
+  end
+  
   def create
     logger.debug ("create has errors: "+errors.to_a) if !errors.empty?
     super if errors.empty?
@@ -27,7 +35,7 @@ class User < ActiveRecord::Base
   
   def save
     logger.debug ("save has errors: "+errors.to_a) if !errors.empty?
-    super if errors.empty?
+    super if errors.empty? && self.id != 0
   end
   
   # method to delete a record, only if it is already deactivated
@@ -96,11 +104,14 @@ class User < ActiveRecord::Base
   def self.valid_password? (username, password, password_confirmation=nil)
     auth_user = find_by_username(username) if !username.nil?
     if auth_user.nil?
+      Rails.logger.debug('* User.valid_password? - username not found')
       return nil
     else
+      Rails.logger.debug('* User.valid_password? - username matched:'+auth_user.username.to_s)
       auth_user.password = auth_user.password_confirmation = password
       auth_user.password_confirmation = password_confirmation if !password_confirmation.nil?
       auth_user.validate_password
+      Rails.logger.debug('* User.valid_password? - auth_user.errors.count='+auth_user.errors.count.to_s)
       return (auth_user.errors.count == 0 ? auth_user : nil)
     end
   end
