@@ -52,7 +52,9 @@ class UsersController< SecureApplicationController
   end
 
   def create
+    Rails.logger.debug("* users_controller - create - new(#{params[:user].inspect.to_s})")
     @user = User.new(params[:user])
+    Rails.logger.debug("* users_controller - create - save")
     @user.save
     # @user = User.create!(params[:user])
     if @user.errors.count == 0
