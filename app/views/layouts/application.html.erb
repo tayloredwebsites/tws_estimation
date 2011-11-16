@@ -36,7 +36,11 @@
       </div><!-- end header_logo_bar -->
       <div id="header_bottom_bar">
         <ul id="header_nav_bar">
-          <li class="_6_across"><%= link_to I18n.translate('users.title'), users_path %></li>
+					<% if can? :read, User %>
+          	<li class="_6_across"><%= link_to I18n.translate('users.title'), users_path %></li>
+					<% else %>
+          	<li class="_6_across"><%= link_to I18n.translate('users.show.title'), user_path(current_user_id) %></li>
+					<% end %>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
@@ -64,7 +68,11 @@
 						<% end %>
           </div>
          <ul class="module_body column_nav">
-            <li class="list_column off"><%= link_to I18n.translate('users.title'), users_path %></li>
+					<% if can? :read , User %>
+            	<li class="list_column off"><%= link_to I18n.translate('users.title'), users_path %></li>
+							<% else %>
+		          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(current_user_id) %></li>
+							<% end %>
             <li class="list_column on"><%= link_to 'Item', '#' %>
               <ul class="column_nav">
                 <li class="list_column off"><%= link_to 'Sub Item', '#' %></li>

@@ -220,15 +220,14 @@ describe UsersController do
       User.count.should == (@num_users+1)
     end
     it 'should not create user missing any one of the minimum_attributes' do
-      FactoryGirl.attributes_for(:user_min_attr).each do |key, value| # shouldn't this be :user_min_create_attr
-        test_attributes = FactoryGirl.attributes_for(:user_min_attr) # shouldn't this be :user_min_create_attr
+      FactoryGirl.attributes_for(:user_min_create_attr).each do |key, value| # shouldn't this be :user_min_create_attr
+        test_attributes = FactoryGirl.attributes_for(:user_min_create_attr) # shouldn't this be :user_min_create_attr
         test_attributes.delete(key)
         # confirm we have a reduced size set of attributes
-        FactoryGirl.attributes_for(:user_min_attr).size.should == (test_attributes.size+1)
+        FactoryGirl.attributes_for(:user_min_create_attr).size.should == (test_attributes.size+1)
         @num_users = User.count
         post :create, :user => test_attributes
-        assigns(:user).should be_nil
-        response.should render_template("/home/errors")
+        response.should render_template("new")
         User.count.should == (@num_users)
       end
     end
@@ -242,20 +241,22 @@ describe UsersController do
         User.count.should == (@num_users+1)
       end
     end
-    it "should not create user with any of the unsafe parameters" do
+    it "should ignore unsafe parameters in create user" do
       FactoryGirl.attributes_for(:user_unsafe_attr).each do |key, value|
         @num_users = User.count
         post :create, :user => FactoryGirl.attributes_for(:users_create).merge({key => value})
-        assigns(:user).should be_nil
-        User.count.should == (@num_users)
+        assigns(:user).should_not be_nil
+        assigns(:user)[key].should_not == value
+        User.count.should == (@num_users+1)
       end
     end
-    it "should not create user with any of the bad_attributes (attributes not in Users model)" do
+    it "should ignore any of the bad_attributes when creating a user" do
       FactoryGirl.attributes_for(:user_inval_attr).each do |key, value|
         @num_users = User.count
         post :create, :user => FactoryGirl.attributes_for(:users_create).merge({key => value})
-        assigns(:user).should be_nil
-        User.count.should == (@num_users)
+        assigns(:user).should_not be_nil
+        assigns(:user)[key].should_not == value
+        User.count.should == (@num_users+1)
       end
     end
     it 'should not create a user with mismatched password' do
@@ -292,10 +293,11 @@ describe UsersController do
       user = FactoryGirl.create(:user_min_create_attr)
       FactoryGirl.attributes_for(:user_inval_attr).each do |key, value|
         put :update, :id => user.id, :user => FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value})
-        assigns(:user).should be_nil
+        assigns(:user).should_not be_nil
+        assigns(:user)[key].should_not == value
         updated_user = User.find(user.id)
         updated_user.should eq(user)
-        response.should render_template(home_errors_path)
+        response.should render_template('show')
       end
     end
     it 'should be able to GET show and assign the requested user as @user' do
@@ -306,13 +308,19 @@ describe UsersController do
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
       assigns(:user).should eq(user)
+      assigns(:user).deactivated.should be_false
     end
     it 'should not be able to DELETE destroy an active user' do
-      user = FactoryGirl.create(:user_min_create_attr)
       @user_count = User.count
+      user = FactoryGirl.create(:user_min_create_attr)
+      User.count.should == @user_count + 1
+      user.deactivated.should be_false
       delete :destroy, :id => user.id
+      assigns(:user).errors.count.should > 0
       response.should render_template('/edit')
-      @user_count.should == User.count
+      assigns(:user).should be_a(User)
+      assigns(:user).should eq(user)
+      User.count.should == @user_count + 1
     end
     it 'should be able to DELETE destroy a deactivated user' do
       user = FactoryGirl.create(:user_min_create_attr)

@@ -22,8 +22,9 @@ class UsersController< SecureApplicationController
     #   @model = User.new
     # end
     # @errors = safe_params_init(@model, {'user' => ['first_name', 'last_name', 'email', 'username', 'deactivated']})
-    @errors = safe_params_init({'user' => %w(first_name last_name email username deactivated password password_confirmation old_password)})
-    @errors = required_params_init({'user' => ['email', 'username']}) if @errors.count == 0
+    
+    # @errors = safe_params_init({'user' => %w(first_name last_name email username deactivated password password_confirmation old_password)})
+    # @errors = required_params_init({'user' => ['email', 'username']}) if @errors.count == 0
     if @errors.count > 0
       render home_errors_path
       return
@@ -52,7 +53,9 @@ class UsersController< SecureApplicationController
   end
 
   def create
+    Rails.logger.debug("* users_controller - create - new(#{params[:user].inspect.to_s})")
     @user = User.new(params[:user])
+    Rails.logger.debug("* users_controller - create - save")
     @user.save
     # @user = User.create!(params[:user])
     if @user.errors.count == 0
