@@ -20,5 +20,5 @@
   </div>
   <div class="field">
     <%= f.label :deactivated, I18n.translate('users.field_name.deactivated') %>
-    <span class="value"><%= select( :user, :deactivated, [ [I18n.is_deactivated_or_not(false), false], [I18n.is_deactivated_or_not(true), true] ] ) %></span>
+    <span class="value"><%= select( "user", "deactivated", [ [I18n.is_deactivated_or_not(true), true], [I18n.is_deactivated_or_not(false), false] ], {:selected => @user.deactivated == true} ) %></span>
   </div>

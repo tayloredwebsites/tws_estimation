@@ -339,7 +339,7 @@ describe User do
     end
     
   end
-  
+
 end
 
 # == Schema Information

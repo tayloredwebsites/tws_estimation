@@ -3,18 +3,6 @@ require 'capybara_spec_helper'
 
 describe 'Integration Tests To Do- ' do
 
-  context 'User Role Based Authorization' do
-    it 'should allow for users to be assigned roles'
-    it 'should limit access to the application based upon the user roles'
-    it 'should allow for the specification of the application for a particular role'
-    it 'should have role based authorization'
-    it 'should have application specified in roles'
-    it 'should have multiple applications allowed in the app_config'
-    it 'should allow (administrative) users to assign a user to a role'
-    it 'should allow (administrative) users to assign a user to an application with a particular role'
-    it 'should allow (administrative) users to assign a user to all applications with a particular'
-    it 'should have applications to have their own scope'
-  end
 
   context 'User Administration - ' do
     it 'should allow the users to edit their own information'

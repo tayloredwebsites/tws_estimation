@@ -306,13 +306,19 @@ describe UsersController do
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
       assigns(:user).should eq(user)
+      assigns(:user).deactivated.should be_false
     end
     it 'should not be able to DELETE destroy an active user' do
-      user = FactoryGirl.create(:user_min_create_attr)
       @user_count = User.count
+      user = FactoryGirl.create(:user_min_create_attr)
+      User.count.should == @user_count + 1
+      user.deactivated.should be_false
       delete :destroy, :id => user.id
+      assigns(:user).errors.count.should > 0
       response.should render_template('/edit')
-      @user_count.should == User.count
+      assigns(:user).should be_a(User)
+      assigns(:user).should eq(user)
+      User.count.should == @user_count + 1
     end
     it 'should be able to DELETE destroy a deactivated user' do
       user = FactoryGirl.create(:user_min_create_attr)
