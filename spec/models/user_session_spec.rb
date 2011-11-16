@@ -50,7 +50,7 @@ describe UserSession do
     end
 
     it 'current_user should return a nil user' do
-      @user_session.current_user_id.should be_nil
+      @user_session.current_user_id.should == 0
     end
     
     it 'signed_in? should be false' do

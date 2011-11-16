@@ -32,6 +32,9 @@ TwsAuth::Application.routes.draw do
   get "home/site_map"	      # route:        home_site_map GET    /home/site_map(.:format)             {:controller=>"home", :action=>"site_map"}
   get "home/status"	        # route:          home_status GET    /home/status(.:format)               {:controller=>"home", :action=>"status"}
   get "home/help"	          # route:            home_help GET    /home/help(.:format)                 {:controller=>"home", :action=>"help"}
+  
+  # match '/readme', :to => redirect('/README.markdown')
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

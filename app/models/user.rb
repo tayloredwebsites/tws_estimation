@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  
+  include UserRoles
+  
   attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password
   attr_accessor :password, :old_password
   validates :username,
@@ -12,22 +15,39 @@ class User < ActiveRecord::Base
       :uniqueness => true,
       :format => {:with => Regexp.new(VALID_EMAIL_EXPR) }
    
-  before_save :validate_save
+  before_save :validate_save, :unload_assigned_roles
   #before_update_password :validate_password
-  
-  after_initialize :init
+  after_find :load_assigned_roles
   
   scope :deactivated, where(:deactivated => true)
   scope :active, where(:deactivated => !true)
   
+  def initialize(*args)
+    init_user_roles([])
+    super(*args)
+    self.deactivated ||= false  # set deactivated to false if initialized to nil
+  end
+  
+  def self.guest
+    logger.debug("* User - self.guest")
+    @user = self.new
+    @user.id = 0
+    @user.username = 'Guest'
+    @user.first_name = 'Guest'
+    @user.roles = DEFAULT_ROLE
+    logger.debug("* User - self.guest - about to call @user.init_user_roles(#{DEFAULT_ROLE})")
+    @user.init_user_roles(@user.roles)
+    return @user
+  end
+  
   def create
-    logger.debug ("create has errors: "+errors.to_a) if !errors.empty?
+    logger.debug ("create has errors") if !errors.empty?
     super if errors.empty?
   end
   
   def save
-    logger.debug ("save has errors: "+errors.to_a) if !errors.empty?
-    super if errors.empty?
+    logger.debug ("save has errors") if !errors.empty?
+    super if errors.empty? && self.id != 0
   end
   
   # method to delete a record, only if it is already deactivated
@@ -45,7 +65,10 @@ class User < ActiveRecord::Base
 
   # method to destroy a record, only if it is already deactivated
   def destroy
+    Rails.logger.debug("* User - destroy - deactivated.nil? = #{self.deactivated.nil?}")
+    Rails.logger.debug("* User - destroy - deactivated = #{self.deactivated.to_s}")
   	if self.deactivated == false
+  	  Rails.logger.debug("* User - destroy - cannot destroy active user")
       # errors.add(:deactivated, "cannot destroy active record")
 			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'destroy', :msg => I18n.translate('error_messages.is_active') ) )
 			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
@@ -96,11 +119,14 @@ class User < ActiveRecord::Base
   def self.valid_password? (username, password, password_confirmation=nil)
     auth_user = find_by_username(username) if !username.nil?
     if auth_user.nil?
+      Rails.logger.debug('* User.valid_password? - username not found')
       return nil
     else
+      Rails.logger.debug('* User.valid_password? - username matched:'+auth_user.username.to_s)
       auth_user.password = auth_user.password_confirmation = password
       auth_user.password_confirmation = password_confirmation if !password_confirmation.nil?
       auth_user.validate_password
+      Rails.logger.debug('* User.valid_password? - auth_user.errors.count='+auth_user.errors.count.to_s)
       return (auth_user.errors.count == 0 ? auth_user : nil)
     end
   end
@@ -183,11 +209,6 @@ class User < ActiveRecord::Base
   
   private
  
-  # coding for after class initialization is done
-  def init
-    self.deactivated ||= false  # set deactivated to false if initialized to nil
-  end
-  
   # validation before save method is called !!
   # if passing in password, validate it before save (validate if password is not blank)
   def validate_save

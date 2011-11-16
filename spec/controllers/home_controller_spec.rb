@@ -71,7 +71,7 @@ describe HomeController do
       response.should redirect_to('/signin')
       assigns(:user_session).should_not be_nil
       #assigns(:session).current_user.should_not be_nil
-      assigns(:user_session).current_user_id.should be_nil
+      assigns(:user_session).current_user_id.should == 0
       assigns(:user_session).signed_in?.should be_false
     end
   end

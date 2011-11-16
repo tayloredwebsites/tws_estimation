@@ -15,7 +15,7 @@ describe HomeController do
   
     it 'should load session information into the user_session' do
       session[:current_user_id] = @user1.id
-      session[:time_last_accessed] = 1.hour.ago
+      session[:time_last_accessed] = 2.hours.ago
       @user_session = UserSession.new (session)
       @user_session.errors.count.should == 0
       # no errors in session timeout - messes up action flows
@@ -23,6 +23,7 @@ describe HomeController do
       #@user_session.errors.each do |attr, msg|
       #  msg.should == I18n.translate('users_sessions.messages.session_timeout')
       #end
+      @user_session.current_user_id.should == 0
       @user_session.signed_in?.should be_false
     end
   
