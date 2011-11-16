@@ -41,12 +41,12 @@ class User < ActiveRecord::Base
   end
   
   def create
-    logger.debug ("create has errors: "+errors.to_a) if !errors.empty?
+    logger.debug ("create has errors") if !errors.empty?
     super if errors.empty?
   end
   
   def save
-    logger.debug ("save has errors: "+errors.to_a) if !errors.empty?
+    logger.debug ("save has errors") if !errors.empty?
     super if errors.empty? && self.id != 0
   end
   
