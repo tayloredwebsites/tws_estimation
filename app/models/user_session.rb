@@ -91,7 +91,7 @@ class UserSession
   end
   
   def current_user
-    validate_session_length
+    # validate_session_length
     @cur_user
   end
 

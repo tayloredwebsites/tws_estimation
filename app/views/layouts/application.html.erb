@@ -39,7 +39,7 @@
 					<% if can? :read, User %>
           	<li class="_6_across"><%= link_to I18n.translate('users.title'), users_path %></li>
 					<% else %>
-          	<li class="_6_across"><%= link_to I18n.translate('users.show.title'), user_path(current_user_id) %></li>
+          	<li class="_6_across"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
 					<% end %>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
@@ -71,7 +71,7 @@
 					<% if can? :read , User %>
             	<li class="list_column off"><%= link_to I18n.translate('users.title'), users_path %></li>
 							<% else %>
-		          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(current_user_id) %></li>
+		          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
 							<% end %>
             <li class="list_column on"><%= link_to 'Item', '#' %>
               <ul class="column_nav">
@@ -132,6 +132,12 @@
 	<div><%= debug(params) if Rails.env.development? %></div>
 	<div><%= session.inspect if Rails.env.development? && !session.nil? %></div>
 
+<div style="display:none">
+	<% if !Rails.env.production? %>
+	current_user_full_name = <%= @user_session.current_user_full_name.to_s %>
+	current_user_id = <%= @user_session.current_user_id.to_s %>
+	<% end %>
+</div>
 
 </body>
 </html>

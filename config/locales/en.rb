@@ -27,7 +27,8 @@
       :invalid_call => 'invalid call to %{method}',
       :invalid_method_argument => 'Method %{method} has invalid argument %{argument}',
       :missing_msg => "Missing %{msg}",
-      :obj_does_not_exist => '%{obj} user does not exist'
+      :obj_does_not_exist => "%{obj} user does not exist",
+      :msg => "%{msg}"
     },
     :error_messages => {
       :is_active => 'is an active record.',
