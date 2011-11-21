@@ -37,6 +37,10 @@ class ApplicationController < ActionController::Base
     (@user_session.signed_in?) ? logger.debug('* ApplicationController - save_user_session - Signed in!') : logger.debug('* ApplicationController - save_user_session - Signed out!') 
   end
   
+  def current_user  # needed for cancan
+    @user_session.current_user
+  end
+  
   #   
   # # to provide a replacement for attr-accessible, but at the controller level.
   # # can't use param_protected gem because it is not working in rails 3 at development time.

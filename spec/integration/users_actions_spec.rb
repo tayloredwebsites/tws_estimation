@@ -1,6 +1,8 @@
 require 'spec_helper'
 include UserTestHelper
 
+include ApplicationHelper
+
 require 'capybara_spec_helper'
 
 describe 'Signed in Users Integration Tests' do
@@ -191,17 +193,6 @@ describe 'Signed in Users Integration Tests' do
     find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     @updated_user = User.find(@user1.id)
     @updated_user.deactivated.should be_false
-  end
-
-  context 'User Role Based Authorization' do
-    it 'should ensure that logged out users have the default role'
-    it 'should allow for users to be assigned roles from the VALID_ROLES app_constant'
-    it 'should not allow for users to be assigned roles not in the VALID_ROLES app_constant'
-    it 'should ensure that user assigned roles are preserved in the database'
-    it 'should have which subsystems are specified in each role'
-    it 'should allow admin users to assign a user to an subsystem role'
-    it 'should limit access to each subsystem based upon the user roles'
-    it 'should have multiple subsystems allowed in the app_config'
   end
 
 end

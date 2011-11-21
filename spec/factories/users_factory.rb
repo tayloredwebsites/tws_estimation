@@ -29,6 +29,14 @@ FactoryGirl.define do
     password              'test'
     password_confirmation 'test'
   end
+  factory :user_full_create_attr, :class => User do
+    first_name      'Test'
+    last_name       'User'
+    email     'email@example.com'
+    username  'TestUser'
+    password              'test'
+    password_confirmation 'test'
+  end
   factory :user_update_password_attr, :class => User do
     email     'email@example.com'
     username              'TestUser'
