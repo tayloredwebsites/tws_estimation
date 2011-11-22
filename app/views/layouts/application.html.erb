@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= I18n.translate('company_name') %> - <%= I18n.translate('app_name') %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
+  <title><%= I18n.translate('config.company_name') %> - <%= I18n.translate('config.app_name') %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :all %>
   <%= csrf_meta_tag %>
@@ -16,8 +16,8 @@
             <%= link_to image_tag("../../images/header/header_logo.png", :alt => "Home"), root_path %>
           </div>
           <div id="header_tagline">
-            <h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('company_name') %></h2>
-            <h2 id="header_tagline_app_name" class="nowrap"><%= I18n.translate('app_name') %></h2>
+            <h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('config.company_name') %></h2>
+            <h2 id="header_tagline_app_name" class="nowrap"><%= I18n.translate('config.app_name') %></h2>
             <h3 id="header_tagline_page_title"><%= I18n.translate('.title', :scope => @page_scope) %></h3>
           </div>
         </div><!-- end header_logo_left -->
@@ -29,7 +29,7 @@
             </div>
             <div class="field">
               <span class="label"><%= I18n.translate('view_labels.email') %></span>
-              <span class="value"><%= mail_to I18n.translate('company_email'), I18n.translate('company_name') %></span>
+              <span class="value"><%= mail_to I18n.translate('config.company_email'), I18n.translate('config.company_name') %></span>
             </div>
           </div>
         </div><!-- end header_logo_right -->

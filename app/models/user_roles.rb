@@ -1,5 +1,5 @@
 module UserRoles
-  # module for the user class (see is_valid_role? and is_not_valid_role?)
+  # module for the user class
 
   def init_user_roles(roles)
     @assigned_roles = []
@@ -10,6 +10,10 @@ module UserRoles
         @assigned_roles.push(role)
         # Rails.logger.debug("* UserRoles - init_user_roles - @assigned_roles.size #{@assigned_roles.size}")
       end
+    end
+    @valid_roles = []
+    VALID_ROLES.each do |role|
+      @valid_roles.push(Role.new(role))
     end
   end
   
@@ -79,6 +83,10 @@ module UserRoles
 	  if !self.has_role?(DEFAULT_ROLE[0])
       self.add_role(DEFAULT_ROLE[0])
     end
+	end
+	
+	def valid_roles
+	  @valid_roles
 	end
 	
 	def assigned_roles

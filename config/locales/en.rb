@@ -5,8 +5,44 @@
     :config => {
       :company_name => 'Taylored Web Sites',
       :company_email => 'tayloredwebsites@me.com',
-      :app_name => 'User Auth Base Application',
+      :app_name => 'TWS Rails Startup App',
       :app => 'tws_auth'
+    },
+    :systems => {
+      :all => {
+        :abbreviation => 'All',
+        :full_name => 'All Systems',
+        :actual => 'false'
+      },
+      :maint => {
+        :abbreviation => 'Maint',
+        :full_name =>'Application Maintenance',
+        :actual => 'true'
+      },
+      :estim => {
+        :abbreviation => 'Estim',
+        :full_name => 'Estimation',
+        :actual => 'true'
+      },
+      :prevail => {
+        :abbreviation => 'Prevail',
+        :full_name =>'Prevailing wages',
+        :actual => 'true'
+      }
+    },
+    :roles => {
+      :guests => {
+        :abbreviation => 'Guest',
+        :full_name => 'Guest'
+      },
+      :users => {
+        :abbreviation => 'User',
+        :full_name => 'User'
+      },
+      :admins     => {
+        :abbreviation => 'Admin',
+        :full_name => 'Administrator'
+      }
     },
     :warning => {
       :sure? => 'Are you sure?',
@@ -65,8 +101,6 @@
       :destroy => 'Destroy',
       :delete => 'Delete'
     },
-    :company_name => 'Controlled Air',
-    :app_name => 'Controlled Air Systems',
     # :index_title => 'List', # use :view_action.list or :users.index.title
     # :edit_title => 'Edit', # use :view_action.edit or :users.edit.title
     # :new_title => 'New', # use :view_action.new or :users.new.title

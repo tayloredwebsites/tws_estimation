@@ -129,6 +129,11 @@
   .center {margin:0 auto;}
   .module_header {display:block;margin-left:10px;font-weight:bold;line-height:1.5;font-size:larger;}
   .module_body {}
+  .width_20 {width:20px;}
+  .width_40 {width:40px;}
+  .width_50 {width:50px;}
+  .width_60 {width:60px;}
+  .width_80 {width:80px;}
   .width_100 {width:100px;}
   .width_150 {width:150px;}
   .width_200 {width:200px;}
@@ -157,6 +162,10 @@
   .padding_10 {padding:10px;}
   .padding_15 {padding:15px;}
   .padding_20 {padding:20px;}
+  .margin_right_5 {margin-right:5px;}
+  .margin_right_10 {margin-right:10px;}
+  .margin_right_15 {margin-right:15px;}
+  .margin_right_20 {margin-right:20px;}
   
 /* label and value layouts for form fields */
   #content_body .fields, #content_body .fields_20_80

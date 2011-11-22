@@ -3,8 +3,8 @@ require 'capybara_spec_helper'
 
 describe 'Layout Integration Tests - ' do
 
-  appName = I18n.translate('app_name')
-  companyName = I18n.translate('company_name')
+  appName = I18n.translate('config.app_name')
+  companyName = I18n.translate('config.company_name')
   homeIndexTitle = I18n.translate('home.index.title')
   homeIndexHeader = I18n.translate('home.index.header')
 
