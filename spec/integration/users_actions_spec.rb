@@ -60,7 +60,7 @@ describe 'Signed in Users Integration Tests' do
     @updated_user.deactivated.should be_true
     @num_users = User.count
     visit edit_user_path (@user1.id)
-    # save_and_open_page
+    save_and_open_page
     find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
     find(:xpath, '//*[@id="user_deactivated"]').text.should_not =~ /\A\s*\z/
     find(:xpath, '//*[@id="user_deactivated"]').value.should =~ /\Atrue\z/

@@ -85,7 +85,7 @@ describe 'Sessions Actions Tests' do
   end
     
   context 'User Role Based Authorization' do
-    it 'should ensure that logged out users have the default role'
+    # it 'should ensure that logged out users have the default role'  # not an integration test
     it 'should allow for users to be assigned roles from the VALID_ROLES app_constant' do
       # should fill in the login form to login
       page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:user_full_create_attr)[:username] )
@@ -96,7 +96,7 @@ describe 'Sessions Actions Tests' do
       save_and_open_page
       # now have current_user_full_name and current_user_id on page for test and dev
     end
-    it 'should not allow for users to be assigned roles not in the VALID_ROLES app_constant'
+    # it 'should not allow for users to be assigned roles not in the VALID_ROLES app_constant'  # not an integration test
     it 'should ensure that user assigned roles are preserved in the database'
     it 'should have which subsystems are specified in each role'
     it 'should allow admin users to assign a user to an subsystem role'
