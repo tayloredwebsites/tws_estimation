@@ -129,6 +129,7 @@ describe UsersSessionsController do
       #assigns(:user_session).current_user.should_not be_nil
       assigns(:user_session).current_user_id.should == 0
     end
+    it 'should ensure that logged out users have the default role'
 
   end
 

@@ -331,7 +331,21 @@ describe UsersController do
       response.should render_template('/index')
       @user_count.should == User.count+1
     end
+    
   end
+
+  context 'Signed in Admin User - User Pages - Roles - ' do
+    it 'should see a listing of all users'
+    it 'should be able to view all users'
+    it 'should be able to edit all users'
+    it 'should allow for users to be assigned roles from the VALID_ROLES app_constant'
+    it 'should not allow for users to be assigned roles not in the VALID_ROLES app_constant'
+    it 'should ensure that user assigned roles are preserved in the database'
+    it 'should limit access to each subsystem based upon the user roles'
+    it 'should have multiple subsystems allowed in the app_config'
+  end
+
+  
   context 'logged in regular user -' do
     
     before(:each) do

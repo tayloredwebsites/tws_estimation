@@ -132,12 +132,5 @@
 	<div><%= debug(params) if Rails.env.development? %></div>
 	<div><%= session.inspect if Rails.env.development? && !session.nil? %></div>
 
-<div style="display:none">
-	<% if !Rails.env.production? %>
-	current_user_full_name = <%= @user_session.current_user_full_name.to_s %>
-	current_user_id = <%= @user_session.current_user_id.to_s %>
-	<% end %>
-</div>
-
 </body>
 </html>

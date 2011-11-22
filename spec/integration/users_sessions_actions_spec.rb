@@ -9,6 +9,7 @@ describe 'Sessions Actions Tests' do
 
   before(:each) do
     @user1 = FactoryGirl.create(:user_full_create_attr)
+    @admin = FactoryGirl.create(:admin_user_full_create_attr)
     @model = User.new
     visit signin_path
   end
@@ -84,21 +85,33 @@ describe 'Sessions Actions Tests' do
     end
   end
     
-  context 'User Role Based Authorization' do
-    # it 'should ensure that logged out users have the default role'  # not an integration test
-    it 'should allow for users to be assigned roles from the VALID_ROLES app_constant' do
+  context 'Roles - Signed in Admin User - User Pages - ' do
+    before(:each) do
       # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:user_full_create_attr)[:password] )
+      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
+      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
       find(:xpath, '//input[@id="user_session_submit"]').click
       # should be on the Session Create page
       find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.create.title')}$/
-      save_and_open_page
-      # now have current_user_full_name and current_user_id on page for test and dev
+      # save_and_open_page
+      visit edit_user_path (@user1.id)
     end
-    # it 'should not allow for users to be assigned roles not in the VALID_ROLES app_constant'  # not an integration test
+    it 'should list all of the systems in VALID_ROLES (app_constant.rb) using I18n' do
+      # save_and_open_page
+      VALID_ROLES.each do |role|
+        find(:xpath, '//form[@class="edit_user"]/div/div/label', :text => Role.new(role).sys_name ).should be_true
+      end
+    end
+    it 'should list all of the valid roles by system using i18n' do
+      # save_and_open_page
+      VALID_ROLES.each do |role|
+        find(:xpath, '//form[@class="edit_user"]/div/div/span/span', :text => Role.new(role).role_name ).should be_true
+      end
+    end
+    it 'should show all of the users authorized roles as checked'
+    it 'should set all roles for the user when checked'
+    it 'should remove all roles from the user when unchecked'    
     it 'should ensure that user assigned roles are preserved in the database'
-    it 'should have which subsystems are specified in each role'
     it 'should allow admin users to assign a user to an subsystem role'
     it 'should limit access to each subsystem based upon the user roles'
     it 'should have multiple subsystems allowed in the app_config'
