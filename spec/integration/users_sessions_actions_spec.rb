@@ -112,9 +112,8 @@ describe 'Sessions Actions Tests' do
     it 'should set all roles for the user when checked'
     it 'should remove all roles from the user when unchecked'    
     it 'should ensure that user assigned roles are preserved in the database'
-    it 'should allow admin users to assign a user to an subsystem role'
-    it 'should limit access to each subsystem based upon the user roles'
-    it 'should have multiple subsystems allowed in the app_config'
+    it 'should limit access to each system based upon the user roles'
+    it 'should have multiple systems allowed in the app_config'
   end
 
 

@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   
   include UserRoles
   
-  attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password
+  attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password, :roles
   attr_accessor :password, :old_password
   validates :username,
       :presence => true,
@@ -34,9 +34,9 @@ class User < ActiveRecord::Base
     @user.id = 0
     @user.username = 'Guest'
     @user.first_name = 'Guest'
-    @user.roles = DEFAULT_ROLE
-    logger.debug("* User - self.guest - about to call @user.init_user_roles(#{DEFAULT_ROLE})")
-    @user.init_user_roles(@user.roles)
+    logger.debug("* User - self.guest - about to call @user.init_user_roles([])")
+    @user.init_user_roles([])
+    @user.roles =  @user.validate_assigned_roles
     return @user
   end
   
@@ -158,19 +158,50 @@ class User < ActiveRecord::Base
     end
   end
   
+  def validate_roles(value)
+    Rails.logger.debug("* User - validate_roles - roles:#{value.inspect.to_s}")
+    init_user_roles(value)
+    self.roles = validate_assigned_roles
+  end
+  
   def update_attributes(params)
+    # Rails.logger.debug("* User - update_attributes - params=#{params.inspect.to_s}")
     if valid_password_change?(params)
+      # valid password change, set it
       self.password = params[:password]
       self.password_confirmation = params[:password_confirmation]
       params.delete(:old_password)
       encrypt_password
     else
+      # not a valid password change, clear them out
       params.delete(:old_password)
       params.delete(:password)
       params.delete(:password_confirmation)
     end
+    if !params[:roles].nil?
+      # Rails.logger.debug("* User - update_attributes - initial params[:roles]:#{params[:roles].inspect.to_s}")
+      params[:roles]=validate_roles(params[:roles])
+      # Rails.logger.debug("* User - update_attributes - updated params[:roles]:#{params[:roles].inspect.to_s}")
+    end
+    # Rails.logger.debug("* User - update_attributes - call to super(#{params.inspect.to_s})")
     super(params)
   end
+  
+  def update_attribute(name,value)
+    # do not allow password change through update_attribute
+    if %w{password password_confirmation old_password}.index(name).nil?
+      if name.to_s == 'roles'
+        # Rails.logger.debug("* User - update_attributes - initial roles:#{value.inspect.to_s}")
+        new_values = validate_roles(value)
+        super(name,new_values) # update db with validated roles
+        # Rails.logger.debug("* User - update_attributes - updated roles:#{value.inspect.to_s}")
+      else
+        # not password or roles, so update
+        super(name,value)
+      end
+    end
+  end
+  
   
   def valid_password_change?(params)
     if params[:old_password].blank?
