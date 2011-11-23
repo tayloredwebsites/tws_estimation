@@ -195,7 +195,7 @@ describe UsersController do
       assigns(:user).deactivated.should be_false
       response.should render_template("edit")
     end
-    it 'should be able to GET the index page and assign all users as @users' do
+    it 'should be able to GET the index page and see all users (@users)' do
       user = FactoryGirl.create(:user_min_create_attr)
       get :index
       response.should be_success
@@ -268,7 +268,7 @@ describe UsersController do
       assigns(:user).should_not be_persisted
       response.should render_template("new")
     end
-    it 'should be able to GET edit and assign the requested user as @user' do
+    it 'should be able to GET edit another user as @user' do
       user = FactoryGirl.create(:user_min_create_attr)
       get :edit, :id => user.id.to_s
       response.should be_success
@@ -300,7 +300,25 @@ describe UsersController do
         response.should render_template('show')
       end
     end
-    it 'should be able to GET show and assign the requested user as @user' do
+    it 'should be able to PUT update roles from the VALID_ROLES app_constant' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      VALID_ROLES.each do |role|
+        newRoles = DEFAULT_ROLE.clone
+        newRoles.push(role)
+        put :update, :id => user.id, :user => {:roles => newRoles}
+        assigns(:user).should_not be_nil
+        assigns(:user).should be_a(User)
+        assigns(:user).has_role?(role).should be_true
+        updated_user = User.find(user.id)
+        updated_user.should_not be_nil
+        Rails.logger.debug("has_role?(#{role})")
+        updated_user.has_role?(role).should be_true
+        response.should render_template("show")
+      end
+    end
+    it 'should not be able to PUT update roles not in the VALID_ROLES app_constant'
+    it 'should ensure that user assigned roles are preserved in the database'
+    it 'should be able to GET show and another user as @user' do
       user = FactoryGirl.create(:user_min_create_attr)
       get :show, :id => user.id.to_s
       response.should be_success
@@ -334,17 +352,6 @@ describe UsersController do
     
   end
 
-  context 'Signed in Admin User - User Pages - Roles - ' do
-    it 'should see a listing of all users'
-    it 'should be able to view all users'
-    it 'should be able to edit all users'
-    it 'should allow for users to be assigned roles from the VALID_ROLES app_constant'
-    it 'should not allow for users to be assigned roles not in the VALID_ROLES app_constant'
-    it 'should ensure that user assigned roles are preserved in the database'
-    it 'should limit access to each subsystem based upon the user roles'
-    it 'should have multiple subsystems allowed in the app_config'
-  end
-
   
   context 'logged in regular user -' do
     
@@ -352,6 +359,10 @@ describe UsersController do
       @me = FactoryGirl.create(:reg_user_min_create_attr)
       @my_session = session_signin(FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], FactoryGirl.attributes_for(:reg_user_min_create_attr)[:password])
     end
+
+    it 'should not see a listing of all users'
+    it 'should not be able to view other users'
+    
     context 'should allow the users to view their own information' do
       it 'should view the content from the Users Show page' do
         get :show, :id => @me.id
@@ -362,7 +373,8 @@ describe UsersController do
         assigns(:user).should eq(@me)
       end
     end
-
+    it 'should not be able to edit other users'
+    it 'should not be allowed to assigned roles'
     it 'should allow the user to update_passwords with good old password and matching new passwords' do
       user = FactoryGirl.create(:user_min_create_attr)
       get :edit_password, :id => user.id
@@ -518,7 +530,11 @@ describe UsersController do
       updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
     end
     
-    
+  end
+  
+  describe 'Role based authorization - ' do
+    it 'should limit access to systems by roles - based upon the user roles'
+    it 'should have multiple subsystems allowed in the app_config'
   end
     
   describe "routing" do
