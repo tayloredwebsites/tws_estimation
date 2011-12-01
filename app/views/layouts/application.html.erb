@@ -36,7 +36,7 @@
       </div><!-- end header_logo_bar -->
       <div id="header_bottom_bar">
         <ul id="header_nav_bar">
-					<% if can? :read, User %>
+					<% if can? :manage, User %>
           	<li class="_6_across"><%= link_to I18n.translate('users.title'), users_path %></li>
 					<% else %>
           	<li class="_6_across"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
@@ -68,7 +68,7 @@
 						<% end %>
           </div>
          <ul class="module_body column_nav">
-					<% if can? :read , User %>
+					<% if can? :manage , User %>
             	<li class="list_column off"><%= link_to I18n.translate('users.title'), users_path %></li>
 							<% else %>
 		          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>

@@ -23,12 +23,15 @@ describe User do
     it 'should allow for users to be assigned roles from the VALID_ROLES app_constant' do
       @user = User.guest
       VALID_ROLES.each do |role|
-        @user.has_role?(role).should be_false if role != DEFAULT_ROLE[0]
-        UserRoles.is_valid_role?(role).should be_true
-        @user.add_role(role)
-        @user.has_role?(role).should be_true
-        @user.remove_role(role) if role != DEFAULT_ROLE[0]
-        @user.has_role?(role).should be_false if role != DEFAULT_ROLE[0]
+        if DEFAULT_ROLE.index(role).nil?
+          Rails.logger.debug("T user_roles_spec - role:#{role.to_s}")
+          @user.has_role?(role).should be_false 
+          UserRoles.is_valid_role?(role).should be_true
+          @user.add_role(role)
+          @user.has_role?(role).should be_true
+          @user.remove_role(role)
+          @user.has_role?(role).should be_false
+        end
       end
     end
     it 'should not allow for users to be assigned roles not in the VALID_ROLES app_constant' do

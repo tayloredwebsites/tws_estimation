@@ -15,7 +15,6 @@ describe UsersController do
       @user1.deactivated.should be_false
       put :deactivate, :id => @user1.id
       response.should redirect_to('/signin')
-      assigns(:user).should be_nil
     end
     it 'should not be able to PUT reactivate an deactivated user' do
       @user1 = FactoryGirl.create(:reg_user_min_create_attr)
@@ -25,7 +24,6 @@ describe UsersController do
       @updated_user.deactivated.should be_true
       put :reactivate, :id => @user1.id
       response.should redirect_to('/signin')
-      assigns(:user).should be_nil
     end
     it 'should not be able to GET the index page and not assign all users as @users' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
@@ -34,12 +32,10 @@ describe UsersController do
       # response.code.should be == '302'
       # response.should be_redirect
       response.should redirect_to('/signin')
-      assigns(:users).should be_nil
     end
     it 'should not be able to GET new user as @user' do
       get :new
       response.should redirect_to('/signin')
-      assigns(:user).should be_nil
     end
     it 'should not be able to POST create' do
       expect {
@@ -47,32 +43,27 @@ describe UsersController do
       }.to change(User, :count).by(0)
       post :create, :user => FactoryGirl.attributes_for(:reg_user_min_create_attr)
       response.should redirect_to('/signin')
-      assigns(:user).should be_nil
     end
     it 'should not be able to GET edit' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
       get :edit, :id => user.id.to_s
       response.should redirect_to('/signin')
-      assigns(:user).should be_nil
     end
     it 'should not be able to PUT update' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
       put :update, :id => user.id, :user => (FactoryGirl.attributes_for(:reg_user_min_attr)).merge(FactoryGirl.attributes_for(:user_safe_attr))
       response.should redirect_to('/signin')
-      assigns(:user).should be_nil
     end
     it 'should not be able to GET show' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
       get :show, :id => user.id
       response.should redirect_to('/signin')
-      assigns(:user).should be_nil
     end
 
     it 'should not be able to navigate to the DELETE destroy page' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
       delete :destroy, :id => user.id
       response.should redirect_to('/signin')
-      assigns(:user).should be_nil
     end
     
     it 'should be able to navigate to the PUT reset_password page with username and email' do
@@ -92,8 +83,8 @@ describe UsersController do
       user = FactoryGirl.create(:reg_user_min_create_attr)
       #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
       put :reset_password, :id => user.id, :user =>{
-        :username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username],
-        :email => ''
+       :username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username],
+       :email => ''
       }
       response.should_not redirect_to('/home/errors')
       response.should render_template("show")
@@ -121,18 +112,19 @@ describe UsersController do
         :username => '',
         :email => ''
       }
-      response.should redirect_to('/home/errors')
+      response.should redirect_to('/home/errors') # not to login - want user to see errors, not try to login
       response.should_not render_template("show")
-      assigns(:user).should be_nil
     end
-    
+                        
   end
   
   context 'logged in admin user -' do
     
     before(:each) do
-      @me = FactoryGirl.create(:admin_user_min_create_attr)
-      @my_session = session_signin(FactoryGirl.attributes_for(:admin_user_min_create_attr)[:username], FactoryGirl.attributes_for(:admin_user_min_create_attr)[:password])
+      @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
+      @my_session = session_signin(FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username], FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password])
+      @my_session.signed_in?.should be_true
+      @my_session.current_user.has_role?('all_admins').should be_true
     end
     
     it 'should be able to PUT deactivate an active user' do
@@ -141,7 +133,7 @@ describe UsersController do
       put :deactivate, :id => @user1.id
       response.should be_success
       response.code.should be == '200'
-      assigns(:user).errors.count.should be == 0
+      response.should_not redirect_to('/home/errors')
       response.should render_template("show")
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated.should be_true
@@ -196,7 +188,8 @@ describe UsersController do
       response.should render_template("edit")
     end
     it 'should be able to GET the index page and see all users (@users)' do
-      user = FactoryGirl.create(:user_min_create_attr)
+      # user = FactoryGirl.create(:user_min_create_attr)
+      user = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
       get :index
       response.should be_success
       response.should render_template('/index')
@@ -305,9 +298,10 @@ describe UsersController do
       VALID_ROLES.each do |role|
         newRoles = DEFAULT_ROLE.clone
         newRoles.push(role)
-        put :update, :id => user.id, :user => {:roles => newRoles}
+        put :update, :id => user.id, :user => {:roles => newRoles.join(' ')}
         assigns(:user).should_not be_nil
         assigns(:user).should be_a(User)
+        Rails.logger.debug("T users_controller_spec - valid_role:#{role.to_s}")
         assigns(:user).has_role?(role).should be_true
         updated_user = User.find(user.id)
         updated_user.should_not be_nil
@@ -316,8 +310,16 @@ describe UsersController do
         response.should render_template("show")
       end
     end
-    it 'should not be able to PUT update roles not in the VALID_ROLES app_constant'
-    it 'should ensure that user assigned roles are preserved in the database'
+    it 'should not be able to PUT update roles not in the VALID_ROLES app_constant' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      put :update, :id => user.id, :user => {:roles => %w{ bad_role }}
+      assigns(:user).errors.count.should > 0
+      assigns(:user).has_role?('bad_role').should be_false
+      updated_user = User.find(user.id)
+      updated_user.should_not be_nil
+      updated_user.has_role?('bad_role').should be_false
+      response.should render_template("edit")
+    end
     it 'should be able to GET show and another user as @user' do
       user = FactoryGirl.create(:user_min_create_attr)
       get :show, :id => user.id.to_s
@@ -353,15 +355,169 @@ describe UsersController do
   end
 
   
-  context 'logged in regular user -' do
+  context 'logged in regular user (maint_users) - for other users - ' do
     
     before(:each) do
-      @me = FactoryGirl.create(:reg_user_min_create_attr)
-      @my_session = session_signin(FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], FactoryGirl.attributes_for(:reg_user_min_create_attr)[:password])
+      @me = FactoryGirl.create(:reg_user_full_create_attr)
+      @my_session = session_signin(FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username], FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password])
     end
 
-    it 'should not see a listing of all users'
-    it 'should not be able to view other users'
+    it 'should not be able to PUT deactivate an active user' do
+      @user1 = FactoryGirl.create(:user_min_create_attr)
+      @user1.deactivated.should be_false
+      put :deactivate, :id => @user1.id
+      response.should redirect_to('/home/errors')
+    end
+    it 'should not be able to PUT reactivate an deactivated user' do
+      @user1 = FactoryGirl.create(:user_min_create_attr)
+      @user1.deactivated.should be_false
+      @user1.deactivate
+      @updated_user = User.find(@user1.id)
+      @updated_user.deactivated.should be_true
+      put :reactivate, :id => @user1.id
+      response.should redirect_to('/home/errors')
+    end
+    it 'should not be able to GET the index page (not see a listing of all users)' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      get :index
+      response.should_not be_success
+      response.code.should be == '302'
+      response.should be_redirect
+      response.should redirect_to('/home/errors')
+    end
+    it 'should not be able to GET new user as @user' do
+      get :new
+      response.should redirect_to('/home/errors')
+    end
+    it 'should not be able to POST create' do
+      expect {
+        post :create, :user => FactoryGirl.attributes_for(:user_min_create_attr)
+      }.to change(User, :count).by(0)
+      post :create, :user => FactoryGirl.attributes_for(:user_min_create_attr)
+      response.should redirect_to('/home/errors')
+    end
+    it 'should not be able to GET edit user (not be able to edit other users)' do
+      user = FactoryGirl.create(:user_full_create_attr)
+      get :edit, :id => user.id
+      response.should redirect_to('/home/errors')
+    end
+    it 'should not be able to PUT update user (not be able to edit other users)' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      put :update, :id => user.id, :user => (FactoryGirl.attributes_for(:user_min_create_attr)).merge(FactoryGirl.attributes_for(:user_safe_attr))
+      response.should redirect_to('/home/errors')
+    end
+    it 'should not be able to GET show user (not be able to view other users)' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      get :show, :id => user.id
+      response.should redirect_to('/home/errors')
+    end
+
+    it 'should not be able to navigate to the DELETE destroy page for user' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      delete :destroy, :id => user.id
+      response.should redirect_to('/home/errors')
+    end
+    
+  end
+
+
+  context 'logged in regular user (maint_users) - for self - ' do
+
+    before(:each) do
+      @me = FactoryGirl.create(:reg_user_full_create_attr)
+      @my_session = session_signin(FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username], FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password])
+    end
+
+    it 'should not be able to PUT deactivate self' do
+      @me.deactivated.should be_false
+      put :deactivate, :id => @me.id
+      response.should redirect_to('/home/errors')
+    end
+    it 'should not be able to PUT reactivate self' do
+      @me.deactivated.should be_false
+      @me.deactivate
+      @updated_user = User.find(@me.id)
+      @updated_user.deactivated.should be_true
+      put :reactivate, :id => @me.id
+      response.should redirect_to('/home/errors')
+    end
+    it 'should not be able to DELETE destroy self' do
+      delete :destroy, :id => @me.id
+      response.should redirect_to('/home/errors')
+    end
+    it 'should be able to GET edit self' do
+      get :edit, :id => @me.id.to_s
+      response.should be_success
+      response.should render_template('users/edit')
+      assigns(:user).should eq(@me)
+    end
+    it 'should be able to PUT update self' do
+      put :update, :id => @me.id, :user => (FactoryGirl.attributes_for(:reg_user_min_create_attr)).merge(FactoryGirl.attributes_for(:user_safe_attr))
+      response.should be_success
+      response.should render_template('users/show')
+      assigns(:user).should eq(@me)
+    end
+    it 'should not be able to PUT update user roles (not be allowed to assign roles)' do
+      put :update, :id => @me.id, :user => (FactoryGirl.attributes_for(:reg_user_min_create_attr)).merge(FactoryGirl.attributes_for(:user_admin_attr))
+      response.should render_template('users/edit')
+    end
+    it 'should be able to GET show self' do
+      get :show, :id => @me.id
+      response.should be_success
+      response.should render_template('users/show')
+      assigns(:user).should eq(@me)
+    end
+    
+    it 'should be able to navigate to the PUT reset_password page with username and email' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+      put :reset_password, :id => user.id, :user =>{
+        :username => FactoryGirl.attributes_for(:user_min_create_attr)[:username],
+        :email => FactoryGirl.attributes_for(:user_min_create_attr)[:email]
+      }
+      response.should_not redirect_to('/home/errors')
+      response.should render_template("show")
+      assigns(:user).should_not be_nil
+      assigns(:user).should be_a(User)
+      assigns(:user).username.should == 'TestUser'
+    end
+    it 'should be able to navigate to the PUT reset_password page with just username' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+      put :reset_password, :id => user.id, :user =>{
+        :username => FactoryGirl.attributes_for(:user_min_create_attr)[:username],
+        :email => ''
+      }
+      response.should_not redirect_to('/home/errors')
+      response.should render_template("show")
+      assigns(:user).should_not be_nil
+      assigns(:user).should be_a(User)
+      assigns(:user).username.should == 'TestUser'
+    end
+    it 'should be able to navigate to the PUT reset_password page with just email' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+      put :reset_password, :id => user.id, :user =>{
+        :username => '',
+        :email => FactoryGirl.attributes_for(:user_min_create_attr)[:email]
+      }
+      response.should_not redirect_to('/home/errors')
+      response.should render_template("show")
+      assigns(:user).should_not be_nil
+      assigns(:user).should be_a(User)
+      assigns(:user).username.should == 'TestUser'
+    end
+    it 'should not be able to navigate to the PUT reset_password page unless there is a username or email' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+      put :reset_password, :id => user.id, :user =>{
+        :username => '',
+        :email => ''
+      }
+      response.should redirect_to('/home/errors')
+      response.should_not render_template("show")
+      assigns(:user).should be_nil
+    end
     
     context 'should allow the users to view their own information' do
       it 'should view the content from the Users Show page' do
@@ -373,107 +529,105 @@ describe UsersController do
         assigns(:user).should eq(@me)
       end
     end
-    it 'should not be able to edit other users'
-    it 'should not be allowed to assigned roles'
-    it 'should allow the user to update_passwords with good old password and matching new passwords' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      get :edit_password, :id => user.id
+    it 'should allow the user to update_passwords (for themself) with good old password and matching new passwords' do
+      # user = FactoryGirl.create(:user_min_create_attr)
+      get :edit_password, :id => @me.id
       response.should be_success
       response.should render_template('edit_password')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).should eq(user)
-      put :update_password, :id => user.id, :user => FactoryGirl.attributes_for(:user_update_password_attr)
+      assigns(:user).should eq(@me)
+      put :update_password, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr)
       response.should be_success
       response.should_not render_template(home_errors_path)
       response.should render_template('show')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).username.should eq(user.username)
+      assigns(:user).username.should eq(@me.username)
       # assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
-      updated_user = User.find(user.id)
-      updated_user.username.should eq(user.username)
-      updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
+      updated_user = User.find(@me.id)
+      updated_user.username.should eq(@me.username)
+      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:password]).should be_true
     end
     
-    it 'should not allow the user to update_passwords with bad old password' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      get :edit_password, :id => user.id
+    it 'should not allow the user to update_passwords (for themself) with bad old password' do
+      # user = FactoryGirl.create(:user_min_create_attr)
+      get :edit_password, :id => @me.id
       response.should be_success
       response.should render_template('edit_password')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).should eq(user)
-      put :update_password, :id => user.id, :user => FactoryGirl.attributes_for(:user_update_password_attr).merge({:old_password => 'bad_value'})
+      assigns(:user).should eq(@me)
+      put :update_password, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr).merge({:old_password => 'bad_value'})
       response.should be_success
       response.should_not render_template(home_errors_path)
       response.should render_template('edit_password')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).username.should eq(user.username)
-      assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
-      updated_user = User.find(user.id)
-      updated_user.username.should eq(user.username)
-      updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
+      assigns(:user).username.should eq(@me.username)
+      assigns(:user).has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
+      updated_user = User.find(@me.id)
+      updated_user.username.should eq(@me.username)
+      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
     end
     
-    it 'should not allow the user to update_passwords with mismatched new passwords' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      get :edit_password, :id => user.id
+    it 'should not allow the user to update_passwords (for themself) with mismatched new passwords' do
+      # user = FactoryGirl.create(:user_min_create_attr)
+      get :edit_password, :id => @me.id
       response.should be_success
       response.should render_template('edit_password')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).should eq(user)
-      put :update_password, :id => user.id, :user => FactoryGirl.attributes_for(:user_update_password_attr).merge({:password => 'bad_value'})
+      assigns(:user).should eq(@me)
+      put :update_password, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr).merge({:password => 'bad_value'})
       response.should be_success
       response.should_not render_template(home_errors_path)
       response.should render_template('edit_password')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).username.should eq(user.username)
-      assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
-      updated_user = User.find(user.id)
-      updated_user.username.should eq(user.username)
-      updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
+      assigns(:user).username.should eq(@me.username)
+      assigns(:user).has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
+      updated_user = User.find(@me.id)
+      updated_user.username.should eq(@me.username)
+      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
     end
     
-    it 'should allow the user to update with no password information (password untouched)' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      get :edit, :id => user.id
+    it 'should allow the user to update (for themself) with no password information (password untouched)' do
+      # user = FactoryGirl.create(:user_min_create_attr)
+      get :edit_password, :id => @me.id
       response.should be_success
       response.should render_template('edit')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).should eq(user)
+      assigns(:user).should eq(@me)
       # update with a full set of attributes, less any password fields
-      attribs = FactoryGirl.attributes_for(:user_min_create_attr).merge( FactoryGirl.attributes_for(:user_safe_attr))
+      attribs = FactoryGirl.attributes_for(:reg_user_min_create_attr).merge( FactoryGirl.attributes_for(:user_safe_attr))
       attribs.delete(:password)
       attribs.delete(:password_confirmation)
       attribs.delete(:old_password)
       # attribs.should == {:email=>"email@example.com", :username=>"TestUser", :first_name=>"Test", :last_name=>"User"}
-      put :update, :id => user.id, :user => attribs
+      put :update, :id => @me.id, :user => attribs
       response.should be_success
       response.should_not render_template(home_errors_path)
       response.should render_template('show')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
       assigns(:user).username.should eq(FactoryGirl.attributes_for(:user_safe_attr)[:username])
-      assigns(:user).has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
-      updated_user = User.find(user.id)
+      assigns(:user).has_password?(FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password]).should be_true
+      updated_user = User.find(@me.id)
       updated_user.username.should eq(FactoryGirl.attributes_for(:user_safe_attr)[:username])
-      updated_user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
+      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password]).should be_true
     end
     
     it 'should allow the user to change passwords in update with good old password and matching new passwords' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      get :edit, :id => user.id
+      # user = FactoryGirl.create(:user_min_create_attr)
+      get :edit_password, :id => @me.id
       response.should be_success
       response.should render_template('edit')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).should eq(user)
-      put :update, :id => user.id, :user => FactoryGirl.attributes_for(:user_update_password_attr).merge( FactoryGirl.attributes_for(:user_safe_attr) )
+      assigns(:user).should eq(@me)
+      put :update, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr).merge( FactoryGirl.attributes_for(:user_safe_attr) )
       response.should be_success
       response.should_not render_template(home_errors_path)
       response.should render_template('show')
@@ -481,62 +635,57 @@ describe UsersController do
       assigns(:user).should be_a(User)
       assigns(:user).username.should eq(FactoryGirl.attributes_for(:user_safe_attr)[:username])
       # assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
-      updated_user = User.find(user.id)
+      updated_user = User.find(@me.id)
       updated_user.username.should eq(FactoryGirl.attributes_for(:user_safe_attr)[:username])
-      updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
+      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:password]).should be_true
     end
     
     it 'should not allow the user to change passwords in update with bad old password' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      get :edit_password, :id => user.id
+      # user = FactoryGirl.create(:user_min_create_attr)
+      get :edit_password, :id => @me.id
       response.should be_success
       response.should render_template('edit')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).should eq(user)
-      put :update_password, :id => user.id, :user => FactoryGirl.attributes_for(:user_update_password_attr).merge( \
+      assigns(:user).should eq(@me)
+      put :update_password, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr).merge( \
         FactoryGirl.attributes_for(:user_safe_attr).merge({:old_password => 'bad_value'}) )
       response.should be_success
       response.should_not render_template(home_errors_path)
       response.should render_template('edit')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).username.should eq(user.username)
-      assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
-      updated_user = User.find(user.id)
-      updated_user.username.should eq(user.username)
-      updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
+      assigns(:user).username.should eq(@me.username)
+      assigns(:user).has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
+      updated_user = User.find(@me.id)
+      updated_user.username.should eq(@me.username)
+      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
     end
     
     it 'should not allow the user to change passwords in update with mismatched new passwords' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      get :edit_password, :id => user.id
+      # user = FactoryGirl.create(:user_min_create_attr)
+      get :edit_password, :id => @me.id
       response.should be_success
       response.should render_template('edit_password')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).should eq(user)
-      put :update_password, :id => user.id, :user => FactoryGirl.attributes_for(:user_update_password_attr).merge( \
+      assigns(:user).should eq(@me)
+      put :update_password, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr).merge( \
         FactoryGirl.attributes_for(:user_safe_attr).merge({:password => 'bad_value'}) )
       response.should be_success
       response.should_not render_template(home_errors_path)
       response.should render_template('edit_password')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).username.should eq(user.username)
-      assigns(:user).has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
-      updated_user = User.find(user.id)
-      updated_user.username.should eq(user.username)
-      updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:old_password]).should be_true
+      assigns(:user).username.should eq(@me.username)
+      assigns(:user).has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
+      updated_user = User.find(@me.id)
+      updated_user.username.should eq(@me.username)
+      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
     end
     
   end
   
-  describe 'Role based authorization - ' do
-    it 'should limit access to systems by roles - based upon the user roles'
-    it 'should have multiple subsystems allowed in the app_config'
-  end
-    
   describe "routing" do
     it "routes to #index" do
       { :get => '/users' }.should route_to("users#index")
