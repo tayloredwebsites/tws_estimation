@@ -2,31 +2,38 @@
 class Ability
   include CanCan::Ability
 	
-  def initialize(user)
+  def initialize(user)  #, session)
 
     user ||= User.new # all_guests user
-    can :read, :all
-    
-    #     # UserRoles.user_roles_init
-    #     
-    #     if user.has_role? 'all_admins'
-    #       can :manage, :all
-    #   can :deactivate, :all
-    #   can :reactivate, :all
-    #     elsif user.has_role? 'all_guests'
-    #   cannot :read, :all    # set it so that if cannot read, then nothing else can be done
-    #   #cannot :selfread, :all
-    #   #cannot :selfupdate, :all
-    #   #cannot :update, :all
-    #   #cannot :selfupdate, :all
-    #   #cannot :create, :all
-    #   #cannot :deactivate, :all
-    #   #cannot :reactivate, :all
-    #     elsif user.has_role? 'estim_admins'
-    #       can :manage, :all
-    #   can :deactivate, :all
-    #   can :reactivate, :all
-    # elsif user.has_role? 'estim_users'
+    Rails.logger.debug("* Ability - initialize - current user full_name:#{user.full_name}, roles:#{user.roles.inspect.to_s}")
+    if user.has_role? 'all_admins'
+      can :manage, :all
+      can :deactivate, :all
+      can :reactivate, :all
+      can :reset_password, User
+      can :edit_password, User
+    end
+    if user.has_role? 'all_guests'
+      can :reset_password, User
+    end
+    if user.has_role? 'maint_admins'
+      can :manage, User
+      can :deactivate, User
+      can :reactivate, User
+      can :reset_password, User
+      can :edit_password, User
+      can :update_password, User
+    end
+    if user.has_role? 'maint_users'
+      can :read, User, :id => user.id
+      can :update, User, :id => user.id
+      can :reset_password, User, :id => user.id
+      can :edit_password, User, :id => user.id
+      can :update_password, User, :id => user.id
+      cannot :index, User
+      # lockdown of self update of roles in code (this only filters records that can be updated)
+    end
+    # if user.has_role? 'estim_users'
     #       can :selfread, User, :id => user.id
     #   can :selfupdate, User, :id => user.id
     #   # can only read/update own User record ???
@@ -34,6 +41,14 @@ class Ability
     #       #  estimate.try(:user) == user
     #       #end
     #     end
+
+    # # debugging cancan authorize! # note cannot prevent self update of roles by cancan - it only filters records available
+    # ability = Ability.new(@user)
+    # Rails.logger.debug("* UsersController - update - ability.can?(:update, @user):#{ability.can?(:update, @user)}") # see if user can access the user
+    Rails.logger.debug("* Ability - initialize - User.accessible_by(self):#{User.accessible_by(self).inspect.to_s}") # see if returns the records the user can access
+    Rails.logger.debug("* Ability - initialize - User.accessible_by(self):#{User.accessible_by(self).to_sql}") # see what the generated SQL looks like
+    # Rails.logger.debug("* UsersController - update - ''.to_sql:#{User.accessible_by(ability).to_sql}") # see what the generated SQL looks like
+    # # end debugging cancan authorize!
     
   end
   

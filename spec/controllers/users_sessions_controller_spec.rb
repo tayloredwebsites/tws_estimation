@@ -96,12 +96,16 @@ describe UsersSessionsController do
   
   context 'not logged in (guest user) -' do
     it 'should not be able to the signout action if not signed in' do
-#      FactoryGirl.create(:user_min_create_attr)
+      # FactoryGirl.create(:user_min_create_attr)
       get :signin
       response.should be_success
       response.code.should be == '200'
       response.should render_template("/signin")
       assigns(:user_session).should_not be_nil
+      # should have default roles
+      DEFAULT_ROLE.each do |role|
+        assigns(:user_session).current_user.has_role?(role).should be_true
+      end
       #assigns(:user_session).current_user.should_not be_nil
       assigns(:user_session).current_user_id.should == 0
       assigns(:user_session).signed_in?.should be_false
@@ -128,8 +132,11 @@ describe UsersSessionsController do
       assigns(:user_session).should_not be_nil
       #assigns(:user_session).current_user.should_not be_nil
       assigns(:user_session).current_user_id.should == 0
+      # should have default roles
+      DEFAULT_ROLE.each do |role|
+        assigns(:user_session).current_user.has_role?(role).should be_true
+      end
     end
-    it 'should ensure that logged out users have the default role'
 
   end
 

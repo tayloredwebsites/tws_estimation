@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   def initialize
     super
     @user_session = UserSession.new
+    @errors = Array.new
+    @guest_ability = Ability.new(User.guest)
   end
   
   def load_user_session
@@ -40,6 +42,33 @@ class ApplicationController < ActionController::Base
   def current_user  # needed for cancan
     @user_session.current_user
   end
+
+  # # cancan - ability initialization with session available
+  # # https://github.com/ryanb/cancan/issues/133
+  # def current_ability
+  #   @current_ability ||= Ability.new(@user_session.current_user)  #(current_user, session)
+  # end
+
+  # cancan - global rescue from access denied - sends to errors page.
+  rescue_from CanCan::AccessDenied do |exception|
+    Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}"
+    if !params.nil?
+      Rails.logger.debug("* ApplicationController - rescue_from CanCan:: - params:#{params.inspect.to_s}")
+    end
+    notify_error("Access denied!#{exception.message}")
+    Rails.logger.debug("* ApplicationController - rescue_from CanCan:: - guest can do this?:#{@guest_ability.can?(params[:action].to_sym, User.guest)}")
+    if @user_session.signed_in?
+      redirect_to('/home/errors')
+    else
+      if @guest_ability.can?(params[:action].to_sym, User.guest)
+        Rails.logger.debugger("* ApplicationController - rescue_from CanCan:: - guest can do this!!, don't make them signin.")
+        redirect_to('/home/errors')
+      else
+        redirect_to('/signin')
+      end
+    end
+  end
+
   
   #   
   # # to provide a replacement for attr-accessible, but at the controller level.
@@ -183,17 +212,22 @@ class ApplicationController < ActionController::Base
   
   def notify_error (message)
     logger.error(message)
-    flash[:notice] = message
+    user_notify(message)
   end
   
   def notify_warning (message)
     logger.warn(message)
-    flash[:notice] = message
+    user_notify(message)
   end
   
   def notify_success (message)
     logger.info(message)
+    user_notify(message)
+  end
+  
+  def user_notify(message)
     flash[:notice] = message
+    @errors.push(message)
   end
   
 end

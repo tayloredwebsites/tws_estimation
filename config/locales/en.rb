@@ -64,6 +64,7 @@
       :invalid_method_argument => 'Method %{method} has invalid argument %{argument}',
       :missing_msg => "Missing %{msg}",
       :obj_does_not_exist => "%{obj} user does not exist",
+      :cannot_method_your_obj => "Cannot %{method} your own %{obj}",
       :msg => "%{msg}"
     },
     :error_messages => {
@@ -188,8 +189,9 @@
         :password_confirmation => 'Confirmation',
         :deactivated => 'Deactivated'
       },
-        :messages => {
-        :session_timeout => 'Your session has timed out'
+      :messages => {
+        :session_timeout => 'Your session has timed out',
+        :invalid_role => "Invalid role %{role}"
       }
     }, # end users
     :users_sessions => {
