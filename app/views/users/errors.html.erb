@@ -1,0 +1,11 @@
+<%
+  @page_scope = 'users.errors'
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'layouts/errors_form', :locals => { :errors => @errors  } %>
+
+<%= (link_to I18n.translate('users.show.action'), user_path(@user.id)) if @user && @user.id %>
+ | <%= link_to I18n.translate('users.index.action'), users_path if can? :manage, User %>
+ | <%= link_to I18n.translate('users.new.action'), new_user_path if can? :manage, User %>

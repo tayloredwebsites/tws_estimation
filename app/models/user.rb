@@ -185,10 +185,10 @@ class User < ActiveRecord::Base
   
   # value parameter should be the roles string
   def validate_roles(value)
-    # Rails.logger.debug("* User - validate_roles - roles:#{value.inspect.to_s}")
+    Rails.logger.debug("* User - validate_roles - roles:#{value.inspect.to_s}")
     init_user_roles(value)
-    # Rails.logger.debug("* User - validate_roles - roles after init_user_roles - value:#{value.inspect.to_s}")
-    # Rails.logger.debug("* User - validate_roles - roles after init_user_roles - self.roles:#{self.roles.inspect.to_s}")
+    Rails.logger.debug("* User - validate_roles - roles after init_user_roles - value:#{value.inspect.to_s}")
+    Rails.logger.debug("* User - validate_roles - roles after init_user_roles - self.roles:#{self.roles.inspect.to_s}")
     self.roles = validate_assigned_roles
   end
   

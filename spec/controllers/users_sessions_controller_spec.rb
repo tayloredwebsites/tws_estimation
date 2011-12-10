@@ -31,8 +31,7 @@ describe UsersSessionsController do
       end
       
       it "should successfully render the user session created page" do
-        response.should be_success
-        response.should render_template('users_sessions/create')
+        response.should redirect_to(:controller => 'users_sessions', :action => 'index')
       end
       
       it "should return the current_user" do
@@ -80,9 +79,7 @@ describe UsersSessionsController do
     it 'should be able to navigate to the POST create page' do
       FactoryGirl.create(:user_min_create_attr)
       post :create, :user_session => FactoryGirl.attributes_for(:user_session)
-      response.should be_success
-      response.code.should be == '200'
-      response.should render_template("create")
+      response.should redirect_to(:controller => 'users_sessions', :action => 'index')
     end
     
     it 'should be able to navigate to the GET signin page' do
@@ -146,9 +143,7 @@ describe UsersSessionsController do
     before(:each) do
       FactoryGirl.create(:user_min_create_attr)
       post :create, :user_session => FactoryGirl.attributes_for(:user_session)
-      response.should be_success
-      response.code.should be == '200'
-      response.should render_template("create")
+      response.should redirect_to(:controller => 'users_sessions', :action => 'index')
     end
     
     it 'should be able to do the signout action' do

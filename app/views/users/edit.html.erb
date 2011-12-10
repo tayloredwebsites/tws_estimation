@@ -7,7 +7,7 @@
 
 <%= form_for [@user], :action => 'update', do |f| %>
 
-	<%= render :partial => 'layouts/errors_form', :locals => { :f => f } %>
+	<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @user, :sys_errors => @errors  } %>
 
 	<div class="fields_20_80">
 		<%= render :partial => 'form', :locals => { :f => f } %>
@@ -19,6 +19,6 @@
 	
 <% end %>
 
-<%= link_to I18n.translate('users.show.title'), user_path(@user.id) %>
- | <%= link_to I18n.translate('users.index.title'), users_path %>
- | <%= link_to I18n.translate('users.new.title'), new_user_path %>
+<%= link_to I18n.translate('users.show.action'), user_path(@user.id) %>
+ | <%= link_to I18n.translate('users.index.action'), users_path if can? :manage, User %>
+ | <%= link_to I18n.translate('users.new.action'), new_user_path if can? :manage, User %>

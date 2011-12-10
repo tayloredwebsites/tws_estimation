@@ -65,6 +65,8 @@
       :missing_msg => "Missing %{msg}",
       :obj_does_not_exist => "%{obj} user does not exist",
       :cannot_method_your_obj => "Cannot %{method} your own %{obj}",
+      :access_denied_msg => "Access Denied! %{msg}",
+      :active_record_error_msg => "Active Record Error! %{msg}",
       :msg => "%{msg}"
     },
     :error_messages => {
@@ -143,29 +145,34 @@
     :users => {
       :title => 'Users',
       :index => {
+        :action => "List Users",
         :title => "List Users",
         :header => "List of all users"
       },
       :edit => {
+        :action => "Edit User",
         :title => "Edit User",
         :header => "Edit a user"
       },
       :new => {
+        :action => "New User",
         :title => "New User",
         :header => "Create a new User"
       },
       :show => {
+        :action => "View User",
         :title => "View User",
         :header => "View a user"
       },
       :edit_password => {
+        :action => "Edit Password",
         :title => "Edit Password",
         :header => "Edit your User Password "
       },
       :reset_password => {
+        :action => "Reset Password",
         :title => "Reset Password",
-        :header => "Reset your User Password",
-        :action => "Reset Password"
+        :header => "Reset your User Password"
       },
       :field_name => {
         :id => 'ID',
@@ -196,6 +203,10 @@
     }, # end users
     :users_sessions => {
       :title => 'User Sessions',
+      :index => {
+        :title => "Main Menu",
+        :header => "Main Menu"
+      },
       :signin => {
         :title => "Sign In",
         :header => "Sign In",

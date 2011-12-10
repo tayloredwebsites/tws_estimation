@@ -1,22 +1,22 @@
   <div class="field">
-    <%= f.label :username, I18n.translate('users.field_name.username') %>
+    <%= f.label :username, I18n.translate('users.field_name.username'), :class => 'label' %>
     <span class="value"><%= f.text_field :username %></span>
   </div>
   <div class="field">
-    <%= f.label :email, I18n.translate('users.field_name.email') %>
+    <%= f.label :email, I18n.translate('users.field_name.email'), :class => 'label' %>
     <span class="value"><%= f.text_field :email %></span>
   </div>
   <div class="field">
-    <%= f.label :first_name, I18n.translate('users.field_name.first_name') %>
+    <%= f.label :first_name, I18n.translate('users.field_name.first_name'), :class => 'label' %>
     <span class="value"><%= f.text_field :first_name %></span>
   </div>
   <div class="field">
-    <%= f.label :last_name, I18n.translate('users.field_name.last_name') %>
+    <%= f.label :last_name, I18n.translate('users.field_name.last_name'), :class => 'label' %>
     <span class="value"><%= f.text_field :last_name %></span>
   </div>
 	
   <div class="field">
-    <%= f.label :roles, I18n.translate('users.field_name.roles') %>
+    <%= f.label :roles, I18n.translate('users.field_name.roles'), :class => 'label' %>
     <span class="value" id="user_roles"><%= @user.roles %>
   <%
 	last_role = Role.new
@@ -28,16 +28,17 @@
 	%>
 	</div>
 	<div class="field">
-			<%= f.label :roles, cur_role.sys_name %>
+			<%= f.label :roles, cur_role.sys_name, :class => 'label' %>
 			<span class="value">
 		<% end %>
-      <span class="width_40"><%= check_box_tag 'user[roles][]', role.to_s, @user.has_role?(role) %></span>
-      <span class="margin_right_10"><%= cur_role.role_name %></span>
+      <span class="width_40"><%= check_box_tag "user[roles][#{role.to_s}]", role.to_s, @user.has_role?(role), :name => "user[roles][]" %></span>
+      <!-- span class="margin_right_10"><%= cur_role.role_name %></span -->
+			<%= label_tag "roles_#{role}", cur_role.role_name, :class => 'span_after_label' %>
 		<% end %>
 		</span>
 	</div>
 
  	<div class="field">
-   <%= f.label :deactivated, I18n.translate('users.field_name.deactivated') %>
+   <%= f.label :deactivated, I18n.translate('users.field_name.deactivated'), :class => 'label' %>
    <span class="value"><%= select( "user", "deactivated", [ [I18n.is_deactivated_or_not(true), true], [I18n.is_deactivated_or_not(false), false] ], {:selected => @user.deactivated == true} ) %></span>
 	</div>

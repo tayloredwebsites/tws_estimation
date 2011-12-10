@@ -1,6 +1,6 @@
 require 'spec_helper'
 include UserTestHelper
-require 'capybara_spec_helper'
+#  require 'capybara_spec_helper'
 include ApplicationHelper
 
 

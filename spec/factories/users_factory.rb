@@ -34,7 +34,7 @@ FactoryGirl.define do
     last_name       'User'
     email     'email@example.com'
     username  'TestUser'
-    roles     'all_guests maint_users'
+    roles     DEFAULT_ROLE.join(' ')
     password              'test'
     password_confirmation 'test'
   end

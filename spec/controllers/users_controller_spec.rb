@@ -14,7 +14,7 @@ describe UsersController do
       @user1 = FactoryGirl.create(:reg_user_min_create_attr)
       @user1.deactivated.should be_false
       put :deactivate, :id => @user1.id
-      response.should redirect_to('/signin')
+      response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
     it 'should not be able to PUT reactivate an deactivated user' do
       @user1 = FactoryGirl.create(:reg_user_min_create_attr)
@@ -23,7 +23,7 @@ describe UsersController do
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated.should be_true
       put :reactivate, :id => @user1.id
-      response.should redirect_to('/signin')
+      response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
     it 'should not be able to GET the index page and not assign all users as @users' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
@@ -31,11 +31,11 @@ describe UsersController do
       # response.should_not be_success
       # response.code.should be == '302'
       # response.should be_redirect
-      response.should redirect_to('/signin')
+      response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
     it 'should not be able to GET new user as @user' do
       get :new
-      response.should redirect_to('/signin')
+      response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
     it 'should not be able to POST create' do
       expect {
@@ -47,23 +47,23 @@ describe UsersController do
     it 'should not be able to GET edit' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
       get :edit, :id => user.id.to_s
-      response.should redirect_to('/signin')
+      response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
     it 'should not be able to PUT update' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
       put :update, :id => user.id, :user => (FactoryGirl.attributes_for(:reg_user_min_attr)).merge(FactoryGirl.attributes_for(:user_safe_attr))
-      response.should redirect_to('/signin')
+      response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
     it 'should not be able to GET show' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
       get :show, :id => user.id
-      response.should redirect_to('/signin')
+      response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
 
     it 'should not be able to navigate to the DELETE destroy page' do
       user = FactoryGirl.create(:reg_user_min_create_attr)
       delete :destroy, :id => user.id
-      response.should redirect_to('/signin')
+      response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
     
     it 'should be able to navigate to the PUT reset_password page with username and email' do
@@ -133,7 +133,7 @@ describe UsersController do
       put :deactivate, :id => @user1.id
       response.should be_success
       response.code.should be == '200'
-      response.should_not redirect_to('/home/errors')
+      response.should_not redirect_to(:controller => 'home', :action => 'errors')
       response.should render_template("show")
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated.should be_true
@@ -351,6 +351,10 @@ describe UsersController do
       response.should render_template('/index')
       @user_count.should == User.count+1
     end
+    it 'should see the errors page on an ActiveRecord error' do
+      get :show, :id => 0
+      response.should redirect_to(:controller => 'home', :action => 'errors')
+    end
     
   end
 
@@ -366,7 +370,7 @@ describe UsersController do
       @user1 = FactoryGirl.create(:user_min_create_attr)
       @user1.deactivated.should be_false
       put :deactivate, :id => @user1.id
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to PUT reactivate an deactivated user' do
       @user1 = FactoryGirl.create(:user_min_create_attr)
@@ -375,7 +379,7 @@ describe UsersController do
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated.should be_true
       put :reactivate, :id => @user1.id
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to GET the index page (not see a listing of all users)' do
       user = FactoryGirl.create(:user_min_create_attr)
@@ -383,39 +387,39 @@ describe UsersController do
       response.should_not be_success
       response.code.should be == '302'
       response.should be_redirect
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to GET new user as @user' do
       get :new
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to POST create' do
       expect {
         post :create, :user => FactoryGirl.attributes_for(:user_min_create_attr)
       }.to change(User, :count).by(0)
       post :create, :user => FactoryGirl.attributes_for(:user_min_create_attr)
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to GET edit user (not be able to edit other users)' do
       user = FactoryGirl.create(:user_full_create_attr)
       get :edit, :id => user.id
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to PUT update user (not be able to edit other users)' do
       user = FactoryGirl.create(:user_min_create_attr)
       put :update, :id => user.id, :user => (FactoryGirl.attributes_for(:user_min_create_attr)).merge(FactoryGirl.attributes_for(:user_safe_attr))
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to GET show user (not be able to view other users)' do
       user = FactoryGirl.create(:user_min_create_attr)
       get :show, :id => user.id
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
 
     it 'should not be able to navigate to the DELETE destroy page for user' do
       user = FactoryGirl.create(:user_min_create_attr)
       delete :destroy, :id => user.id
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     
   end
@@ -431,7 +435,7 @@ describe UsersController do
     it 'should not be able to PUT deactivate self' do
       @me.deactivated.should be_false
       put :deactivate, :id => @me.id
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to PUT reactivate self' do
       @me.deactivated.should be_false
@@ -439,11 +443,11 @@ describe UsersController do
       @updated_user = User.find(@me.id)
       @updated_user.deactivated.should be_true
       put :reactivate, :id => @me.id
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to DELETE destroy self' do
       delete :destroy, :id => @me.id
-      response.should redirect_to('/home/errors')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should be able to GET edit self' do
       get :edit, :id => @me.id.to_s
@@ -514,9 +518,9 @@ describe UsersController do
         :username => '',
         :email => ''
       }
-      response.should redirect_to('/home/errors')
-      response.should_not render_template("show")
       assigns(:user).should be_nil
+      response.should redirect_to('/home/errors') # not to login - want user to see errors, not try to login
+      response.should_not render_template("show")
     end
     
     context 'should allow the users to view their own information' do
