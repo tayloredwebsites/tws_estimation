@@ -46,6 +46,6 @@
 </div>
 
 
-<%= link_to I18n.translate('users.edit.title'), edit_user_path(@user) %>
- | <%= link_to I18n.translate('users.index.title'), users_path %>
- | <%= link_to I18n.translate('users.new.title'), new_user_path %>
+<%= link_to I18n.translate('users.edit.action'), edit_user_path(@user) %>
+ | <%= link_to I18n.translate('users.index.action'), users_path if can? :manage, User %>
+ | <%= link_to I18n.translate('users.new.action'), new_user_path if can? :manage, User %>

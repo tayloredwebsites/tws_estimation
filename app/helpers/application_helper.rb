@@ -29,7 +29,7 @@ module ApplicationHelper
   def cur_user
     Rails.logger.debug("* ApplicationHelper - cur_user - session: #{@user_session.inspect.to_s}")
     Rails.logger.debug("* ApplicationHelper - cur_user - cur_user: #{@user_session.current_user.inspect.to_s}")
-    # @user_session.current_user
+    @user_session.current_user
   end
   
   def clear_session

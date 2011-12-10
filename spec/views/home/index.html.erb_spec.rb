@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'capybara_spec_helper'
+# require 'capybara_spec_helper'
 
 describe "home/index.html.erb" do
 

@@ -71,6 +71,7 @@ class UsersController< SecureApplicationController
   # PUT /users/1
   def update
     Rails.logger.debug("* UsersController - update - authorize")
+    Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
     @user = User.find(params[:id])
     # # debugging cancan authorize! # note cannot prevent self update of roles by cancan - it only filters records available
     # ability = Ability.new(@user)
@@ -78,7 +79,9 @@ class UsersController< SecureApplicationController
     # Rails.logger.debug("* UsersController - update - User.accessible_by(ability):#{User.accessible_by(ability).inspect.to_s}") # see if returns the records the user can access
     # Rails.logger.debug("* UsersController - update - ''.to_sql:#{User.accessible_by(ability).to_sql}") # ee what the generated SQL looks like
     # # end debugging cancan authorize!
+    Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
     authorize! :update, @user   # authorize from CanCan::ControllerAdditions
+    Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
     working_params = params[:user].clone
     Rails.logger.debug("* UsersController - update - params[:user]=#{working_params.inspect.to_s}")
     # is this a self update?

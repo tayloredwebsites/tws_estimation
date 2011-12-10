@@ -38,8 +38,10 @@
         <ul id="header_nav_bar">
 					<% if can? :manage, User %>
           	<li class="_6_across"><%= link_to I18n.translate('users.title'), users_path %></li>
-					<% else %>
+					<% elsif @user_session.signed_in? %>
           	<li class="_6_across"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
+					<% else %>
+	          <li class="_6_across"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
 					<% end %>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
@@ -70,8 +72,10 @@
          <ul class="module_body column_nav">
 					<% if can? :manage , User %>
             	<li class="list_column off"><%= link_to I18n.translate('users.title'), users_path %></li>
-							<% else %>
+							<% elsif @user_session.signed_in? %>
 		          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
+							<% else %>
+			          <li class="list_column off"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
 							<% end %>
             <li class="list_column on"><%= link_to 'Item', '#' %>
               <ul class="column_nav">
@@ -119,7 +123,9 @@
             <li class="_across"><%= link_to I18n.translate('home.about.title'), home_about_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.contact.title'), home_contact_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.news.title'), home_news_path %></li>
-            <li class="_across"><%= link_to I18n.translate('home.site_map.title'), home_site_map_path %></li>
+						<% if @user_session.signed_in? %>
+							<li class="_across"><%= link_to I18n.translate('home.site_map.title'), home_site_map_path %></li>
+						<% end %>
             <li class="_across"><%= link_to I18n.translate('home.status.title'), home_status_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.help.title'), home_help_path %></li>
           </ul>

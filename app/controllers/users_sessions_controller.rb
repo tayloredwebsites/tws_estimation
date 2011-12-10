@@ -34,8 +34,11 @@ class UsersSessionsController < SecureApplicationController
     else
       logger.debug ("valid_password? returned something = logged in.")
       @user_session.sign_in(user.username, user.password)
+      session[:current_user_id] = @user_session.current_user_id
+      Rails.logger.debug("* UsersSessions - create - redirect_back(users_sessions#index)")
+      redirect_back(:controller => 'users_sessions', :action => 'index')
     end
-    session[:current_user_id] = @user_session.current_user_id
+    
   end
 
   def signout
