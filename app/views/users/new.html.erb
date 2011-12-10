@@ -20,5 +20,5 @@
 	
 <% end %>
 
- <%= link_to I18n.translate('users.index.title'), users_path %>
+ <%= link_to I18n.translate('users.index.action'), users_path if can? :manage, User %>
 

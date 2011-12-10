@@ -22,19 +22,19 @@ class UserSession
       @app_session = args.first
       self.load_user_session
     end
-    super
+    super *args
   end
 
   def init
     Rails.logger.debug('* UserSession - init')
     @sign_in_time = nil
     # self.username = ''
-    Rails.logger.debug('* UserSession - init - call sign_out')
+    # Rails.logger.debug('* UserSession - init - call sign_out')
     self.sign_out
   end
   
   def sign_out
-    Rails.logger.debug('* UserSession - sign_out')
+    # Rails.logger.debug('* UserSession - sign_out')
     @time_last_accessed = nil
     # self.password = ''
     # @cur_user_id = nil
@@ -91,7 +91,7 @@ class UserSession
   end
   
   def current_user
-    validate_session_length
+    # validate_session_length
     @cur_user
   end
 

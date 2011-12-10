@@ -18,15 +18,17 @@ module ApplicationHelper
   #   out_string
   # end
   
-  def current_user_full_name
+  def cur_user_full_name
     @user_session.current_user_full_name
   end
   
-  def current_user_id
+  def cur_user_id
     @user_session.current_user_id
   end
   
-  def current_user
+  def cur_user
+    Rails.logger.debug("* ApplicationHelper - cur_user - session: #{@user_session.inspect.to_s}")
+    Rails.logger.debug("* ApplicationHelper - cur_user - cur_user: #{@user_session.current_user.inspect.to_s}")
     @user_session.current_user
   end
   

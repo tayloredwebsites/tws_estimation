@@ -1,6 +1,6 @@
 TwsAuth::Application.routes.draw do
 
-  resources :users_sessions, :only => ['create'] do
+  resources :users_sessions, :only => ['index', 'create'] do
     member do
       get 'signin'          # route:         signin_users_session GET    /users_sessions/:id/signin(.:format)         {:action=>"signin", :controller=>"users_sessions"}
       put 'signout'         # route:        signout_users_session PUT    /users_sessions/:id/signout(.:format)        {:action=>"signout", :controller=>"users_sessions"}
