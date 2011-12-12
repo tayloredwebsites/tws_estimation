@@ -27,10 +27,10 @@
     <td class="user_email"><%= user.email %></td>
     <td class="user_roles"><%= user.roles %></td>
     <td class="user_username"><%= user.username %></td>
-    <td class="user_deactivated"><%= I18n.is_deactivated_or_not(user.deactivated) %></td>
+    <td class="user_deactivated"><%= I18n.is_deactivated_or_not(user.deactivated?) %></td>
     <td><%= link_to I18n.translate('view_action.view'), user %></td>
     <td><%= link_to I18n.translate('view_action.edit'), edit_user_path(user) %></td>
-		<% if user.deactivated == true %>
+		<% if user.deactivated? %>
 		 	<td><%= link_to I18n.translate('view_action.reactivate'), reactivate_user_path(user.id), :method => :put, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.reactivate'), :name => user.username+"?") %></td>
 		 	<td><%= link_to I18n.translate('view_action.delete'), user, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.delete'), :name => user.username+"?"), :method => :delete  %></td>
 		<% else %>

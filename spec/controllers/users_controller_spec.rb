@@ -12,16 +12,16 @@ describe UsersController do
   context 'not logged in (guest user) -' do
     it 'should not be able to PUT deactivate an active user' do
       @user1 = FactoryGirl.create(:reg_user_min_create_attr)
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       put :deactivate, :id => @user1.id
       response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
     it 'should not be able to PUT reactivate an deactivated user' do
       @user1 = FactoryGirl.create(:reg_user_min_create_attr)
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       @user1.deactivate
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_true
+      @updated_user.deactivated?.should be_true
       put :reactivate, :id => @user1.id
       response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
@@ -129,22 +129,22 @@ describe UsersController do
     
     it 'should be able to PUT deactivate an active user' do
       @user1 = FactoryGirl.create(:user_min_create_attr)
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       put :deactivate, :id => @user1.id
       response.should be_success
       response.code.should be == '200'
       response.should_not redirect_to(:controller => 'home', :action => 'errors')
       response.should render_template("show")
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_true
+      @updated_user.deactivated?.should be_true
     end
     it 'should give an error when PUT deactivating a deactivated user' do
       @user1 = FactoryGirl.create(:user_min_create_attr)
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       @user1.deactivate
       @user1.errors.count.should be == 0
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_true
+      @updated_user.deactivated?.should be_true
       put :deactivate, :id => @user1.id
       response.should be_success
       response.code.should be == '200'
@@ -153,29 +153,29 @@ describe UsersController do
       assigns(:user).errors[:deactivated][0].should == I18n.translate('error_messages.is_deactivated')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).deactivated.should be_true
+      assigns(:user).deactivated?.should be_true
       response.should render_template("edit")
     end
     it 'should be able to PUT reactivate a deactivated user' do
       @user1 = FactoryGirl.create(:user_min_create_attr)
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       @user1.deactivate
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_true
+      @updated_user.deactivated?.should be_true
       put :reactivate, :id => @user1.id
       response.should be_success
       response.code.should be == '200'
       assigns(:user).errors.count.should be == 0
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).deactivated.should be_false
+      assigns(:user).deactivated?.should be_false
       response.should render_template("show")
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_false
+      @updated_user.deactivated?.should be_false
     end
     it 'should give an error when reactivating a active user' do
       @user1 = FactoryGirl.create(:user_min_create_attr)
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       put :reactivate, :id => @user1.id
       response.should be_success
       response.code.should be == '200'
@@ -184,7 +184,7 @@ describe UsersController do
       assigns(:user).errors[:deactivated][0].should == I18n.translate('error_messages.is_active')
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
-      assigns(:user).deactivated.should be_false
+      assigns(:user).deactivated?.should be_false
       response.should render_template("edit")
     end
     it 'should be able to GET the index page and see all users (@users)' do
@@ -328,13 +328,13 @@ describe UsersController do
       assigns(:user).should_not be_nil
       assigns(:user).should be_a(User)
       assigns(:user).should eq(user)
-      assigns(:user).deactivated.should be_false
+      assigns(:user).deactivated?.should be_false
     end
     it 'should not be able to DELETE destroy an active user' do
       @user_count = User.count
       user = FactoryGirl.create(:user_min_create_attr)
       User.count.should == @user_count + 1
-      user.deactivated.should be_false
+      user.deactivated?.should be_false
       delete :destroy, :id => user.id
       assigns(:user).errors.count.should > 0
       response.should render_template('/edit')
@@ -368,16 +368,16 @@ describe UsersController do
 
     it 'should not be able to PUT deactivate an active user' do
       @user1 = FactoryGirl.create(:user_min_create_attr)
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       put :deactivate, :id => @user1.id
       response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to PUT reactivate an deactivated user' do
       @user1 = FactoryGirl.create(:user_min_create_attr)
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       @user1.deactivate
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_true
+      @updated_user.deactivated?.should be_true
       put :reactivate, :id => @user1.id
       response.should redirect_to(:controller => 'home', :action => 'errors')
     end
@@ -433,15 +433,15 @@ describe UsersController do
     end
 
     it 'should not be able to PUT deactivate self' do
-      @me.deactivated.should be_false
+      @me.deactivated?.should be_false
       put :deactivate, :id => @me.id
       response.should redirect_to(:controller => 'home', :action => 'errors')
     end
     it 'should not be able to PUT reactivate self' do
-      @me.deactivated.should be_false
+      @me.deactivated?.should be_false
       @me.deactivate
       @updated_user = User.find(@me.id)
-      @updated_user.deactivated.should be_true
+      @updated_user.deactivated?.should be_true
       put :reactivate, :id => @me.id
       response.should redirect_to(:controller => 'home', :action => 'errors')
     end

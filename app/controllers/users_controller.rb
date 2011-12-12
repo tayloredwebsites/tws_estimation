@@ -36,6 +36,7 @@ class UsersController< SecureApplicationController
   # GET /users/1
   def show
     @user = User.find(params[:id])
+    Rails.logger.debug("* UsersController - show @user:#{@user.inspect.to_s}")
     authorize! :show, @user   # authorize from CanCan::ControllerAdditions
   end
 

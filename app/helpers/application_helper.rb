@@ -40,6 +40,5 @@ module ApplicationHelper
   def get_app_session
     @user_session.get_app_session
   end
-  
-    
+      
 end

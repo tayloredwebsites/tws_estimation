@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   
   include UserRoles
+  include CommonMethods
   
   attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password, :roles
   attr_accessor :password, :old_password
@@ -19,14 +20,15 @@ class User < ActiveRecord::Base
   
   #before_update_password :validate_password
   # after_find :load_assigned_roles
+  after_find :load_deactivated
   
-  scope :deactivated, where(:deactivated => true)
-  scope :active, where(:deactivated => !true)
+  scope :deactivated, where(:deactivated => DB_TRUE)
+  scope :active, where(:deactivated => DB_FALSE)
   
   def initialize(*args)
     # init_user_roles([])
     super(*args)
-    self.deactivated ||= false  # set deactivated to false if initialized to nil
+    load_deactivated
   end
   
   def self.guest
@@ -77,7 +79,7 @@ class User < ActiveRecord::Base
   
   # method to delete a record, only if it is already deactivated
   def delete
-  	if self.deactivated == false
+  	if active?
       # errors.add(:deactivated, "cannot delete active record")
 			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'delete', :msg => I18n.translate('error_messages.is_active') ) )
 			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
@@ -92,7 +94,7 @@ class User < ActiveRecord::Base
   def destroy
     # Rails.logger.debug("* User - destroy - deactivated.nil? = #{self.deactivated.nil?}")
     # Rails.logger.debug("* User - destroy - deactivated = #{self.deactivated.to_s}")
-  	if self.deactivated == false
+  	if active?
   	  Rails.logger.debug("* User - destroy - cannot destroy active user")
       # errors.add(:deactivated, "cannot destroy active record")
 			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'destroy', :msg => I18n.translate('error_messages.is_active') ) )
@@ -108,25 +110,25 @@ class User < ActiveRecord::Base
 
   # method to deactivate record
   def deactivate
-  	if !self.deactivated
-			self.deactivated = true;
+  	if deactivated?
+		  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') ) )
+			errors.add(:deactivated, I18n.translate('error_messages.is_deactivated') )
+			return false
+  	else
+			self.deactivated = DB_TRUE;
 			if !self.save
 			  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.got_error') ) )
 			  errors.add(:deactivated, I18n.translate('error_messages.got_error') )
 			  return false
 			end
-  	else
-		  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') ) )
-			errors.add(:deactivated, I18n.translate('error_messages.is_deactivated') )
-			return false
   	end
   	return true
   end
 
   # method to reactivate record
   def reactivate
-  	if self.deactivated
-			self.deactivated = false;
+  	if deactivated?
+			self.deactivated = DB_FALSE;
 			if !self.save
 			  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'reactivate', :msg => I18n.translate('error_messages.got_error') ) )
 			  errors.add(:deactivated, I18n.translate('error_messages.got_error') )
@@ -138,6 +140,25 @@ class User < ActiveRecord::Base
 			return false
   	end
     return true
+  end
+  
+  def deactivated?
+    if self.deactivated == DB_TRUE
+      return true
+    elsif self.deactivated == DB_FALSE
+      return false
+    else
+      Rails.logger.error("*Error User - invalid value for deactivated:#{self.deactivated.to_s}")
+      return load_deactivated
+    end
+  end
+  
+  def reactivated?
+    return !deactivated?
+  end
+  
+  def active?
+    return !deactivated?
   end
 
   # class level valid_password to check password against user in database
@@ -305,6 +326,17 @@ class User < ActiveRecord::Base
   def generate_password
     encrypt_hash("#{Time.now.utc}.str[1,8]")
   end
+  
+  def load_deactivated
+    if db_value_true?(self.deactivated)
+      self.deactivated = DB_TRUE
+      return true
+    else
+      self.deactivated = DB_FALSE
+      return false
+    end
+  end
+    
 end
 
 # == Schema Information
