@@ -41,7 +41,7 @@ describe 'Users Integration Tests' do
       # UserTestHelper.user_safe_attributes.each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => true}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
       User.count.should > 1
       visit users_path()
       # save_and_open_page
@@ -52,12 +52,12 @@ describe 'Users Integration Tests' do
       find(:xpath, "(//tr[@id=\"user_#{@user_deact.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.reactivate')}\z/
       find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]/td/a[@data-method=\"delete\"]").text.should =~ /\A#{I18n.translate('view_action.delete')}\z/
     end
-  
+    
     it 'Update action should allow a change from deactivated to active' do
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       @user1.deactivate
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_true
+      @updated_user.deactivated?.should be_true
       @num_users = User.count
       visit edit_user_path (@user1.id)
       # save_and_open_page
@@ -78,11 +78,11 @@ describe 'Users Integration Tests' do
       User.count.should == (@num_users)
       find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_false
+      @updated_user.deactivated?.should be_false
     end
   
     it 'Update action should allow a change from active to deactivated' do
-      @user1.deactivated.should be_false
+      @user1.deactivated?.should be_false
       @num_users = User.count
       visit edit_user_path (@user1.id)
       # save_and_open_page
@@ -102,14 +102,14 @@ describe 'Users Integration Tests' do
       User.count.should == (@num_users)
       find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_true
+      @updated_user.deactivated?.should be_true
     end
   
     it "should have a working New user link on the index page" do
       # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => true}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
       @num_users = User.count
       @num_users.should > 1
       visit users_path()
@@ -123,7 +123,7 @@ describe 'Users Integration Tests' do
       # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => true}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
       @num_users = User.count
       @num_users.should > 1
       visit users_path()
@@ -137,7 +137,7 @@ describe 'Users Integration Tests' do
      # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
      #    User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
      #  end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => true}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
       @num_users = User.count
       @num_users.should > 1
       visit users_path()
@@ -151,7 +151,7 @@ describe 'Users Integration Tests' do
       # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({:deactivated => true}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({:deactivated => DB_TRUE}))
       @num_users = User.count
       @num_users.should > 1
       visit users_path()
@@ -168,14 +168,14 @@ describe 'Users Integration Tests' do
       User.count.should == (@num_users)
       find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_true
+      @updated_user.deactivated?.should be_true
     end
   
     it 'should allow a user to be reactivated from the index page' do
       # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({:deactivated => true}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr).merge({:deactivated => DB_TRUE}))
       @num_users = User.count
       @num_users.should > 1
       visit users_path()
@@ -193,7 +193,7 @@ describe 'Users Integration Tests' do
       User.count.should == (@num_users)
       find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       @updated_user = User.find(@user1.id)
-      @updated_user.deactivated.should be_false
+      @updated_user.deactivated?.should be_false
     end
   
   end

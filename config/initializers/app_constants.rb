@@ -15,3 +15,8 @@ USER_SELF_NO_UPDATE_FIELDS = %w{ roles }
 VALID_EMAIL_EXPR = /^[a-zA-Z0-9!#$\%&'*+-\/=?^_`{|}~\-]*@(?:controlledair\.com|me\.com|gmail\.com|example\.com)$/
 
 SESSION_TIMEOUT_SECONDS = 30*60    # 30 minutes
+
+DB_TRUE = 'T'
+DB_TRUE_VALUES = ['T', 'true', 'True', 'TRUE', '1']
+DB_FALSE = 'F'
+DB_FALSE_VALUES = ['F', 'false', 'False', 'FALSE', '0']

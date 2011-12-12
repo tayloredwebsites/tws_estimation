@@ -10,51 +10,51 @@ describe User do
   end
   
   it 'deactivate method should deactivate an active user' do
-    @user1.deactivated.should be_false
+    @user1.deactivated?.should be_false
     @user1.deactivate
     @user1.errors.count.should == 0
     @user1.errors.count.should be == 0
     @updated_user = User.find(@user1.id)
-    @updated_user.deactivated.should be_true
+    @updated_user.deactivated?.should be_true
   end
 
   it 'reactivate method should reactivate a deactivated user' do
-    @user1.deactivated.should be_false
+    @user1.deactivated?.should be_false
     @user1.deactivate
     @user1.errors.count.should == 0
     @updated_user = User.find(@user1.id)
-    @updated_user.deactivated.should be_true
+    @updated_user.deactivated?.should be_true
     @user1.reactivate
     @user1.errors.count.should be == 0
     @updated_user = User.find(@user1.id)
-    @updated_user.deactivated.should be_false
+    @updated_user.deactivated?.should be_false
   end
 
   it 'reactivate method should not reactivate an active user' do
-    @user1.deactivated.should be_false
+    @user1.deactivated?.should be_false
     @user1.reactivate
     @user1.errors.count.should be > 0
     @user1.errors[:deactivated].should == ["#{I18n.translate('error_messages.is_active')}"]
     @updated_user = User.find(@user1.id)
-    @updated_user.deactivated.should be_false
+    @updated_user.deactivated?.should be_false
   end
 
   it 'deactivate method should not deactivate a deactivated user' do
-    @user1.deactivated.should be_false
+    @user1.deactivated?.should be_false
     @user1.deactivate
     @user1.errors.count.should == 0
     @updated_user = User.find(@user1.id)
-    @updated_user.deactivated.should be_true
+    @updated_user.deactivated?.should be_true
     @user1.deactivate
     @user1.errors.count.should be > 0
     @user1.errors[:deactivated].should == ["#{I18n.translate('error_messages.is_deactivated')}"]
     @user1.errors[:base].should == ["#{I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') )}"]
     @updated_user = User.find(@user1.id)
-    @updated_user.deactivated.should be_true
+    @updated_user.deactivated?.should be_true
   end
 
   it 'destroy should not destroy an active user' do
-    @user1.deactivated.should be_false
+    @user1.deactivated?.should be_false
     @user_id = @user1.id
     @user1.destroy
     @user1.errors.count.should be > 0
@@ -62,15 +62,15 @@ describe User do
     @user1.errors[:base].should == ["#{I18n.translate('errors.cannot_method_msg', :method => 'destroy', :msg => I18n.translate('error_messages.is_active') )}"]
     @updated_user = User.find(@user_id)
     @updated_user.should_not be_nil
-    @updated_user.deactivated.should be_false
+    @updated_user.deactivated?.should be_false
   end
   
   it 'destroy should destroy a deactivated user' do
-    @user1.deactivated.should be_false
+    @user1.deactivated?.should be_false
     @user1.deactivate
     @user1.errors.count.should == 0
     @updated_user = User.find(@user1.id)
-    @updated_user.deactivated.should be_true
+    @updated_user.deactivated?.should be_true
     @user_id = @user1.id
     @user1.destroy
     @user1.errors.count.should be == 0
@@ -82,7 +82,7 @@ describe User do
   end
   
   it 'delete should not delete an active user' do
-    @user1.deactivated.should be_false
+    @user1.deactivated?.should be_false
     @user_id = @user1.id
     @user1.delete
     @user1.errors.count.should be > 0
@@ -90,15 +90,15 @@ describe User do
     @user1.errors[:deactivated].should == ["#{I18n.translate('error_messages.is_active')}"]
     @updated_user = User.find(@user_id)
     @updated_user.should_not be_nil
-    @updated_user.deactivated.should be_false
+    @updated_user.deactivated?.should be_false
   end
   
   it 'delete should delete a deactivated user' do
-    @user1.deactivated.should be_false
+    @user1.deactivated?.should be_false
     @user1.deactivate
     @user1.errors.count.should be == 0
     @updated_user = User.find(@user1.id)
-    @updated_user.deactivated.should be_true
+    @updated_user.deactivated?.should be_true
     @user_id = @user1.id
     @user1.delete
     @user1.errors.count.should be == 0

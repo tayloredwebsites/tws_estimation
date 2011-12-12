@@ -30,7 +30,7 @@ describe "Error Handling Display to User - " do
     end
 
     it "should display Access Denied! error in the error at the top of the page" do
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => true}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
       User.count.should > 1
       visit users_path()
       # save_and_open_page
