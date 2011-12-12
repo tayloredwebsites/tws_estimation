@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= I18n.translate('company_name') %> - <%= I18n.translate('app_name') %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
+  <title><%= I18n.translate('config.company_name') %> - <%= I18n.translate('config.app_name') %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :all %>
   <%= csrf_meta_tag %>
@@ -16,8 +16,8 @@
             <%= link_to image_tag("../../images/header/header_logo.png", :alt => "Home"), root_path %>
           </div>
           <div id="header_tagline">
-            <h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('company_name') %></h2>
-            <h2 id="header_tagline_app_name" class="nowrap"><%= I18n.translate('app_name') %></h2>
+            <h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('config.company_name') %></h2>
+            <h2 id="header_tagline_app_name" class="nowrap"><%= I18n.translate('config.app_name') %></h2>
             <h3 id="header_tagline_page_title"><%= I18n.translate('.title', :scope => @page_scope) %></h3>
           </div>
         </div><!-- end header_logo_left -->
@@ -29,17 +29,19 @@
             </div>
             <div class="field">
               <span class="label"><%= I18n.translate('view_labels.email') %></span>
-              <span class="value"><%= mail_to I18n.translate('company_email'), I18n.translate('company_name') %></span>
+              <span class="value"><%= mail_to I18n.translate('config.company_email'), I18n.translate('config.company_name') %></span>
             </div>
           </div>
         </div><!-- end header_logo_right -->
       </div><!-- end header_logo_bar -->
       <div id="header_bottom_bar">
         <ul id="header_nav_bar">
-					<% if can? :read, User %>
+					<% if can? :manage, User %>
           	<li class="_6_across"><%= link_to I18n.translate('users.title'), users_path %></li>
+					<% elsif @user_session.signed_in? %>
+          	<li class="_6_across"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
 					<% else %>
-          	<li class="_6_across"><%= link_to I18n.translate('users.show.title'), user_path(current_user_id) %></li>
+	          <li class="_6_across"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
 					<% end %>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
@@ -68,10 +70,12 @@
 						<% end %>
           </div>
          <ul class="module_body column_nav">
-					<% if can? :read , User %>
+					<% if can? :manage , User %>
             	<li class="list_column off"><%= link_to I18n.translate('users.title'), users_path %></li>
+							<% elsif @user_session.signed_in? %>
+		          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
 							<% else %>
-		          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(current_user_id) %></li>
+			          <li class="list_column off"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
 							<% end %>
             <li class="list_column on"><%= link_to 'Item', '#' %>
               <ul class="column_nav">
@@ -119,7 +123,9 @@
             <li class="_across"><%= link_to I18n.translate('home.about.title'), home_about_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.contact.title'), home_contact_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.news.title'), home_news_path %></li>
-            <li class="_across"><%= link_to I18n.translate('home.site_map.title'), home_site_map_path %></li>
+						<% if @user_session.signed_in? %>
+							<li class="_across"><%= link_to I18n.translate('home.site_map.title'), home_site_map_path %></li>
+						<% end %>
             <li class="_across"><%= link_to I18n.translate('home.status.title'), home_status_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.help.title'), home_help_path %></li>
           </ul>
@@ -131,7 +137,6 @@
 
 	<div><%= debug(params) if Rails.env.development? %></div>
 	<div><%= session.inspect if Rails.env.development? && !session.nil? %></div>
-
 
 </body>
 </html>

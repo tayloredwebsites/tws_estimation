@@ -29,6 +29,15 @@ FactoryGirl.define do
     password              'test'
     password_confirmation 'test'
   end
+  factory :user_full_create_attr, :class => User do
+    first_name      'Test'
+    last_name       'User'
+    email     'email@example.com'
+    username  'TestUser'
+    roles     DEFAULT_ROLE.join(' ')
+    password              'test'
+    password_confirmation 'test'
+  end
   factory :user_update_password_attr, :class => User do
     email     'email@example.com'
     username              'TestUser'
@@ -37,6 +46,9 @@ FactoryGirl.define do
     password_confirmation 'new_pass'
   end
   
+  factory :user_admin_attr, :class => User do
+    roles           'all_guests maint_users'
+  end
   factory :user_safe_attr, :class => User do
     first_name      'Test'
     last_name       'User'
@@ -62,6 +74,22 @@ FactoryGirl.define do
     password              'testr'
     password_confirmation 'testr'
   end
+  factory :reg_user_full_create_attr, :class => User do
+    first_name      'Regular'
+    last_name       'User'
+    email     'reguser@example.com'
+    username  'RegUser'
+    roles     'all_guests maint_users'
+    password              'testr'
+    password_confirmation 'testr'
+  end
+  factory :reg_user_update_password_attr, :class => User do
+    email     'reguser@example.com'
+    username  'RegUser'
+    old_password          'testr'
+    password              'new_pass'
+    password_confirmation 'new_pass'
+  end
     
   factory :admin_user_min_attr, :class => User do
     email     'admin@example.com'
@@ -72,6 +100,22 @@ FactoryGirl.define do
     username  'AdminUser'
     password              'testa'
     password_confirmation 'testa'
+  end
+  factory :admin_user_full_create_attr, :class => User do
+    first_name      'Admin'
+    last_name       'User'
+    email     'admin@example.com'
+    username  'AdminUser'
+    roles     'all_admins all_guests'
+    password              'testa'
+    password_confirmation 'testa'
+  end
+  factory :admin_user_update_password_attr, :class => User do
+    email     'admin@example.com'
+    username  'AdminUser'
+    old_password          'testa'
+    password              'new_pass'
+    password_confirmation 'new_pass'
   end
   
 end

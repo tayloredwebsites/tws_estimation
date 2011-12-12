@@ -78,6 +78,7 @@ end
 module UserTestHelper
   # signin capability for controller tests
   def session_signin(username, password)
+    Rails.logger.debug("T UserTestHelper.session_signin")
     session[:current_user_id] = 0
     @user_session = UserSession.new (session)
     @user_session.sign_in(username, password)
@@ -85,10 +86,15 @@ module UserTestHelper
       session[:current_user_id] = @user_session.current_user_id
       session[:time_last_accessed] = @user_session.time_last_accessed
     end
+    Rails.logger.debug("T UserTestHelper.session_signin - done")
     return @user_session
   end
-  def get_session
-    session.dup
+  def session_signout()
+    Rails.logger.debug("T UserTestHelper.session_signout")
+    session[:current_user_id] = 0
+    @user_session = UserSession.new (session)
+    Rails.logger.debug("T UserTestHelper.session_signin - done")
+    return @user_session
   end
   
 end
