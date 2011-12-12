@@ -6,8 +6,6 @@ class Ability
 
     user ||= User.new # all_guests user
     
-    # can :manage, :all    # remove all role checks for testing
-    
     Rails.logger.debug("* Ability - initialize - current user:#{user.full_name}, with roles:#{user.roles.inspect.to_s}")
     if user.has_role? 'all_admins'
       can :manage, :all
@@ -38,6 +36,8 @@ class Ability
       # lockdown of self update of roles in code (this only filters records that can be updated)
     end
 
+    can :manage, :all    # remove all role checks for testing
+    
     # if user.has_role? 'estim_users'
     #       can :selfread, User, :id => user.id
     #   can :selfupdate, User, :id => user.id
