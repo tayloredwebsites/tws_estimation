@@ -1,25 +1,12 @@
 require 'spec_helper'
-require 'capybara_spec_helper'
 
 describe 'Integration Tests To Do- ' do
 
 
   context 'User Administration - ' do
-    it 'should allow the users to edit their own information'
-    it 'should allow the admins to edit their any user\'s information' 
-    it 'should not allow deactivate unless signed in as admin'
-    it 'should not allow reactivate unless signed in as admin'
-    it 'should not allow delete unless signed in as admin, has been deactivated, and table ok for deletes without cleanup'
-    it 'should allow the users to view their own information' # see users_controller_spec.rb
-    it 'should not allow users to view other users information' # to do in users_controller_spec.rb
-    it 'should allow users limited access to modify or delete their own information' # to do in users_controller_spec.rb
-    it 'should have an admin namespaced controller for User Maintenance'
-    it 'should not allow a regular user (per application) to access the user maintenance controller (and actions)'
-    it 'should not allow a regular user to assign a user to a role'
-    it 'should allow users with the admin role (per application) to create a user'
-    it 'should allow users with the admin role (per application) to access the user maintenance controller (and actions)'
-    it 'should not allow a regular user to create a user'
     it 'should list all users (by application or all?)'
+    it 'should limit access to each system based upon the user roles'
+    it 'should have multiple systems allowed in the app_config'
   end
 
   context 'Miscellaneous items to do' do

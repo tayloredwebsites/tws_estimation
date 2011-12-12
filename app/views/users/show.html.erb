@@ -41,11 +41,11 @@
   </div>
   <div class="field">
     <span class="label"><%= I18n.translate('users.field_name.deactivated') %></span>
-    <span class="value" id="user_deactivated"><%= I18n.is_deactivated_or_not(@user.deactivated) %></span>
+    <span class="value" id="user_deactivated"><%= I18n.is_deactivated_or_not(@user.deactivated?) %></span>
   </div>
 </div>
 
 
-<%= link_to I18n.translate('users.edit.title'), edit_user_path(@user) %>
- | <%= link_to I18n.translate('users.index.title'), users_path %>
- | <%= link_to I18n.translate('users.new.title'), new_user_path %>
+<%= link_to I18n.translate('users.edit.action'), edit_user_path(@user) %>
+ | <%= link_to I18n.translate('users.index.action'), users_path if can? :manage, User %>
+ | <%= link_to I18n.translate('users.new.action'), new_user_path if can? :manage, User %>

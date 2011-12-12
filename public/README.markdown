@@ -18,15 +18,16 @@ Philosophy / Approaches:
 5. Error displays are built into the layouts and standardized field display styles.
 	>Active record errors will automatically display appropriately in the views, at the field or base levels.
 6. All text displayed to the user has been internationalized using locales (config/locales/en.rb).
-7. I have some controller based parameter checking (I will re-factor after the next phase of the project).
-
-Next Step - Role Based Authentication:
-
-1. Authentication will allow the application to control access to actions based upon the user's rights (multiple roles can be assigned to a user).
+7. Role Based Authentication has been coded in the Model (multiple roles can be assigned to a user).
 	>For performance purposes, roles are stored in a single string field in the users table.
 	>Uses the  [CanCan](https://github.com/ryanb/cancan) authorization library.
-2. Role base authentication will have a default role for all users that are not logged in.
-3. This application will be used to provide access to a number of different systems.
+2. Role base Authentication has a default role for all users that are not logged in.
+ 
+
+Next Steps.
+
+1. Role Based Authentication will be coded into the Views and tested in the integration tests next
+2. This application will be used to provide access to a number of different systems.
 	>I am using a shared database to simplify the inter-system communications.
 	>Authentication, Authorization and common data will be most easily available to each system.
 	>Hopefully this can be modularized by putting this code into gems or engines.

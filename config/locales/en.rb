@@ -5,8 +5,44 @@
     :config => {
       :company_name => 'Taylored Web Sites',
       :company_email => 'tayloredwebsites@me.com',
-      :app_name => 'User Auth Base Application',
+      :app_name => 'TWS Rails Startup App',
       :app => 'tws_auth'
+    },
+    :systems => {
+      :all => {
+        :abbreviation => 'All',
+        :full_name => 'All Systems',
+        :actual => 'false'
+      },
+      :maint => {
+        :abbreviation => 'Maint',
+        :full_name =>'Application Maintenance',
+        :actual => 'true'
+      },
+      :estim => {
+        :abbreviation => 'Estim',
+        :full_name => 'Estimation',
+        :actual => 'true'
+      },
+      :prevail => {
+        :abbreviation => 'Prevail',
+        :full_name =>'Prevailing wages',
+        :actual => 'true'
+      }
+    },
+    :roles => {
+      :guests => {
+        :abbreviation => 'Guest',
+        :full_name => 'Guest'
+      },
+      :users => {
+        :abbreviation => 'User',
+        :full_name => 'User'
+      },
+      :admins     => {
+        :abbreviation => 'Admin',
+        :full_name => 'Administrator'
+      }
     },
     :warning => {
       :sure? => 'Are you sure?',
@@ -27,7 +63,11 @@
       :invalid_call => 'invalid call to %{method}',
       :invalid_method_argument => 'Method %{method} has invalid argument %{argument}',
       :missing_msg => "Missing %{msg}",
-      :obj_does_not_exist => '%{obj} user does not exist'
+      :obj_does_not_exist => "%{obj} user does not exist",
+      :cannot_method_your_obj => "Cannot %{method} your own %{obj}",
+      :access_denied_msg => "Access Denied! %{msg}",
+      :active_record_error_msg => "Active Record Error! %{msg}",
+      :msg => "%{msg}"
     },
     :error_messages => {
       :is_active => 'is an active record.',
@@ -64,8 +104,6 @@
       :destroy => 'Destroy',
       :delete => 'Delete'
     },
-    :company_name => 'Controlled Air',
-    :app_name => 'Controlled Air Systems',
     # :index_title => 'List', # use :view_action.list or :users.index.title
     # :edit_title => 'Edit', # use :view_action.edit or :users.edit.title
     # :new_title => 'New', # use :view_action.new or :users.new.title
@@ -107,29 +145,34 @@
     :users => {
       :title => 'Users',
       :index => {
+        :action => "List Users",
         :title => "List Users",
         :header => "List of all users"
       },
       :edit => {
+        :action => "Edit User",
         :title => "Edit User",
         :header => "Edit a user"
       },
       :new => {
+        :action => "New User",
         :title => "New User",
         :header => "Create a new User"
       },
       :show => {
+        :action => "View User",
         :title => "View User",
         :header => "View a user"
       },
       :edit_password => {
+        :action => "Edit Password",
         :title => "Edit Password",
         :header => "Edit your User Password "
       },
       :reset_password => {
+        :action => "Reset Password",
         :title => "Reset Password",
-        :header => "Reset your User Password",
-        :action => "Reset Password"
+        :header => "Reset your User Password"
       },
       :field_name => {
         :id => 'ID',
@@ -153,12 +196,17 @@
         :password_confirmation => 'Confirmation',
         :deactivated => 'Deactivated'
       },
-        :messages => {
-        :session_timeout => 'Your session has timed out'
+      :messages => {
+        :session_timeout => 'Your session has timed out',
+        :invalid_role => "Invalid role %{role}"
       }
     }, # end users
     :users_sessions => {
       :title => 'User Sessions',
+      :index => {
+        :title => "Main Menu",
+        :header => "Main Menu"
+      },
       :signin => {
         :title => "Sign In",
         :header => "Sign In",
