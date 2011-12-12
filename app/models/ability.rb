@@ -36,7 +36,7 @@ class Ability
       # lockdown of self update of roles in code (this only filters records that can be updated)
     end
 
-    can :manage, :all    # remove all role checks for testing
+    # can :manage, :all    # remove all role checks for testing
     
     # if user.has_role? 'estim_users'
     #       can :selfread, User, :id => user.id
