@@ -14,5 +14,8 @@ describe UsersController do
     it 'should have multiple subsystems allowed in the app_config'
   end
   
+  context 'deactivated users finds and lists should be available as scoped'
+  context 'role based limitations to fields in tables (see USER_SELF_NO_UPDATE_FIELDS for cloning)'
+  
 end
   

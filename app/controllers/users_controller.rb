@@ -80,15 +80,17 @@ class UsersController< SecureApplicationController
     # Rails.logger.debug("* UsersController - update - User.accessible_by(ability):#{User.accessible_by(ability).inspect.to_s}") # see if returns the records the user can access
     # Rails.logger.debug("* UsersController - update - ''.to_sql:#{User.accessible_by(ability).to_sql}") # ee what the generated SQL looks like
     # # end debugging cancan authorize!
-    Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
+    # Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
     authorize! :update, @user   # authorize from CanCan::ControllerAdditions
-    Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
+    # Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
     working_params = params[:user].clone
-    Rails.logger.debug("* UsersController - update - params[:user]=#{working_params.inspect.to_s}")
+    # Rails.logger.debug("* UsersController - update - params[:user]=#{working_params.inspect.to_s}")
     # is this a self update?
-    Rails.logger.debug("* UsersController - update - self update?:#{current_user.id == params[:id]}")
-    if current_user.id == params[:id]
-      working_params.delete_if{|key,value| !USER_SELF_NO_UPDATE_FIELDS.index(key).nil?} 
+    Rails.logger.debug("* UsersController - update - self update?#{current_user.id.to_s} == #{params[:id]} => #{current_user.id.to_s == params[:id].to_s}")
+    if current_user.id.to_s == params[:id].to_s
+      # if user admin( user has one of USER_SELF_UPDATE_ROLES), let them update all of their fields
+      # otherwise only let them update the USER_SELF_NO_UPDATE_FIELDS.
+      working_params.delete_if{|key,value| !USER_SELF_NO_UPDATE_FIELDS.index(key).nil?} if (current_user.roles.split(' ') & USER_SELF_UPDATE_ROLES).size == 0
       Rails.logger.debug("* UsersController - update - updated user params:#{working_params}, sizes:#{params[:user].size} ==? #{working_params.size} ")
       if params[:user].size != working_params.size
         err = I18n.translate('errors.cannot_method_your_obj', :method => params[:action], :obj => USER_SELF_NO_UPDATE_FIELDS.join(' or ').to_s) 

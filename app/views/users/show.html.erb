@@ -5,16 +5,7 @@
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
-<% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error")%> total errors: </h2>
-      <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-<% end %>
+<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @user, :sys_errors => @errors  } %>
 
 <p id="notice"><%= notice %></p>
 

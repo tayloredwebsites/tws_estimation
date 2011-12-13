@@ -46,7 +46,7 @@ FactoryGirl.define do
     password_confirmation 'new_pass'
   end
   
-  factory :user_admin_attr, :class => User do
+  factory :user_roles_attr, :class => User do
     roles           'all_guests maint_users'
   end
   factory :user_safe_attr, :class => User do

@@ -67,6 +67,8 @@
       :cannot_method_your_obj => "Cannot %{method} your own %{obj}",
       :access_denied_msg => "Access Denied! %{msg}",
       :active_record_error_msg => "Active Record Error! %{msg}",
+      :fix_following_errors => "Please fix the following errors and save.",
+      :note_errors_below => "Note the errors on specific fields below.",
       :msg => "%{msg}"
     },
     :error_messages => {
