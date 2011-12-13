@@ -195,6 +195,132 @@ describe 'Users Integration Tests' do
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated?.should be_false
     end
+    
+    it 'should be able to create a user with no errors displayed' do
+      @num_users = User.count
+      visit new_user_path()
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      # save_and_open_page
+      within(".new_user") do
+        page.fill_in 'user_username', :with => 'me'
+        page.fill_in 'user_email', :with => 'my.email@example.com'
+        page.fill_in 'user_first_name', :with => 'first'
+        page.fill_in 'user_last_name', :with => 'last'
+        page.fill_in 'user_password', :with => 'password'
+        page.fill_in 'user_password_confirmation', :with => 'password'
+        find('input#user_submit').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
+      page.should_not have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
+      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      @num_users.should == User.count - 1
+    end
+    it 'should notify user when trying to create a user with an invalid email address' do
+      @num_users = User.count
+      visit new_user_path()
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      # save_and_open_page
+      within(".new_user") do
+        page.fill_in 'user_username', :with => 'me'
+        page.fill_in 'user_email', :with => 'bad_email'
+        page.fill_in 'user_first_name', :with => 'first'
+        page.fill_in 'user_last_name', :with => 'last'
+        page.fill_in 'user_password', :with => 'password'
+        page.fill_in 'user_password_confirmation', :with => 'password'
+        find('input#user_submit').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
+      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      @num_users.should == User.count
+    end
+    it 'should notify user when trying to create a user without a username' do
+      @num_users = User.count
+      visit new_user_path()
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      # save_and_open_page
+      within(".new_user") do
+        page.fill_in 'user_username', :with => ''
+        page.fill_in 'user_email', :with => 'bad_email'
+        page.fill_in 'user_first_name', :with => 'first'
+        page.fill_in 'user_last_name', :with => 'last'
+        page.fill_in 'user_password', :with => 'password'
+        page.fill_in 'user_password_confirmation', :with => 'password'
+        find('input#user_submit').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_username"]')
+      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      @num_users.should == User.count
+    end
+    it 'should notify user when trying to create a user without a password' do
+      @num_users = User.count
+      visit new_user_path()
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      # save_and_open_page
+      within(".new_user") do
+        page.fill_in 'user_username', :with => 'me'
+        page.fill_in 'user_email', :with => 'bad_email'
+        page.fill_in 'user_first_name', :with => 'first'
+        page.fill_in 'user_last_name', :with => 'last'
+        page.fill_in 'user_password', :with => ''
+        page.fill_in 'user_password_confirmation', :with => ''
+        find('input#user_submit').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
+      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      @num_users.should == User.count
+    end
+    it 'should notify user when trying to create a user with mismatched passwords' do
+      @num_users = User.count
+      visit new_user_path()
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      # save_and_open_page
+      within(".new_user") do
+        page.fill_in 'user_username', :with => 'me'
+        page.fill_in 'user_email', :with => 'bad_email'
+        page.fill_in 'user_first_name', :with => 'first'
+        page.fill_in 'user_last_name', :with => 'last'
+        page.fill_in 'user_password', :with => 'xxx'
+        page.fill_in 'user_password_confirmation', :with => 'yyy'
+        find('input#user_submit').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password_confirmation"]')
+      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      @num_users.should == User.count
+    end
   
   end
 
@@ -366,14 +492,14 @@ describe 'Users Roles Tests - ' do
       visit edit_user_path (@user1.id)
       # save_and_open_page
       VALID_ROLES.each do |role|
-        find(:xpath, '//form[@class="edit_user"]/div/div/label', :text => Role.new(role).sys_name ).should be_true
+        page.should have_selector(:xpath, '//form[@class="edit_user"]/div/div/label', :text => Role.new(role).sys_name )
       end
     end
     it 'should list all of the valid roles by system using i18n' do
       visit edit_user_path (@user1.id)
       # save_and_open_page
       VALID_ROLES.each do |role|
-        find(:xpath, '//form[@class="edit_user"]/div/div/span/label', :text => Role.new(role).role_name ).should be_true
+        page.should have_selector(:xpath, '//form[@class="edit_user"]/div/div/span/label', :text => Role.new(role).role_name )
       end
     end
     it 'should show all of the users authorized roles as checked, switch checked status, confirm db update' do
@@ -439,6 +565,31 @@ describe 'Users Roles Tests - ' do
         end
       end
     end
+    it 'should see user roles as editable checkboxes for self' do
+      visit edit_user_path (@reg.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      VALID_ROLES.each do |role|
+        page.should have_selector(:xpath, '//form[@class="edit_user"]/div/div/label', :text => Role.new(role).sys_name )
+      end
+      VALID_ROLES.each do |role|
+        page.should have_selector(:xpath, '//form[@class="edit_user"]/div/div/span/label', :text => Role.new(role).role_name )
+      end
+    end
+    it 'should see deactivated select box for self' do
+      visit edit_user_path (@admin.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      # user_deactivated
+      page.should have_selector(:xpath, '//form[@class="edit_user"]//select[@id="user_deactivated"]')
+    end
+    it 'should see deactivated select box for others' do
+      visit edit_user_path (@reg.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      # user_deactivated
+      page.should have_selector(:xpath, '//form[@class="edit_user"]//select[@id="user_deactivated"]')
+    end
   end
   context 'Regular user logged in - ' do
     before(:each) do
@@ -502,6 +653,61 @@ describe 'Users Roles Tests - ' do
       visit edit_user_path (@reg.id)
       find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
       page.should_not have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.new.action'))
+    end
+    it 'should not see user roles as editable checkboxes for self' do
+      visit edit_user_path (@reg.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      VALID_ROLES.each do |role|
+        page.should_not have_selector(:xpath, '//form[@class="edit_user"]/div/div/label', :text => Role.new(role).sys_name )
+      end
+      VALID_ROLES.each do |role|
+        page.should_not have_selector(:xpath, '//form[@class="edit_user"]/div/div/span/label', :text => Role.new(role).role_name )
+      end
+    end
+    it 'should not see deactivated select box for self' do
+      visit edit_user_path (@reg.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      # user_deactivated
+      page.should_not have_selector(:xpath, '//form[@class="edit_user"]//select[@id="user_deactivated"]')
+    end
+    it 'should have invalid update show errors at top of page and on invalid field' do
+      visit edit_user_path (@reg.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      within(".edit_user") do
+        page.fill_in 'user_email', :with => 'bad_email'
+        find('input#user_submit').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
+      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      @updated_user = User.find(@reg.id)
+      @updated_user.email.should_not =~ /bad_email/
+    end
+    it 'should have valid update show no errors' do
+      visit edit_user_path (@reg.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      within(".edit_user") do
+        page.fill_in 'user_email', :with => 'valid.email@example.com'
+        find('input#user_submit').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      page.should_not have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="valid.email@example.com"]')
+      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ 
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @reg.username )}$/
+      @updated_user = User.find(@reg.id)
+      @updated_user.email.should =~ /valid.email@example.com/
     end
   end
 

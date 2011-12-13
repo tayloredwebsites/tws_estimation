@@ -1,19 +1,15 @@
-<div id="error_explanation">
-<% if @user_session.current_user.nil? %>
-	<strong>Error! - Not logged in</strong>
-<% else %>
-	<% if @user_session.current_user.errors.size > 0 %>
-	    <strong><%= pluralize(@user_session.current_user.errors.count, "Error") %>:</strong>
-	    <p>Please fix the following errors and save.</p>
-		<% if @user_session.current_user.errors.size - @session.current_user.errors[:base].size > 0 %>
-		<p>Note the errors on specific fields below.</p>
+<% if active_obj.errors.size > 0 %>
+	<div id="error_explanation">
+		<strong><%= pluralize(active_obj.errors.count, "Error") %>:</strong>
+		<p><%= I18n.translate('errors.fix_following_errors') %></p>
+		<% if active_obj.errors.size - active_obj.errors[:base].size > 0 %>
+		<p><%= I18n.translate('errors.note_errors_below') %></p>
 		<% end %>
-	    <ul>
-	    <% @user_session.current_user.errors[:base].each do |msg| %>
-	      <li><%= msg %></li>
-	    <% end %>
-	    </ul>
-	<% end %>
+		<ul>
+		<% active_obj.errors[:base].each do |msg| %>
+		 <li><%= msg %></li>
+		<% end %>
+		</ul>
+	</div>
 <% end %>
-</div>
 

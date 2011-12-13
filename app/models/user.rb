@@ -213,6 +213,17 @@ class User < ActiveRecord::Base
     self.roles = validate_assigned_roles
   end
   
+  def can_field_be_edited?(field_name, current_user)
+    # if current_user is not this user, then OK
+    return true if current_user.id.to_s != self.id.to_s
+    # if not one of the no self update fields, then OK
+    return true if USER_SELF_NO_UPDATE_FIELDS.index(field_name).nil?
+    # if current_user has one of the self update roles, then OK
+    return true if (current_user.roles.split(' ') & USER_SELF_UPDATE_ROLES).size > 0
+    # otherwise return false
+    return false
+  end
+  
   def update_attributes(params)
     # Rails.logger.debug("* User - update_attributes - params=#{params.inspect.to_s}")
 	  Rails.logger.error("* UserRoles - update_attributes - roles is an array !!!") if params[:roles].instance_of?(Array)

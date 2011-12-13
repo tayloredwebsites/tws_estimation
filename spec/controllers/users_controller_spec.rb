@@ -461,8 +461,8 @@ describe UsersController do
       response.should render_template('users/show')
       assigns(:user).should eq(@me)
     end
-    it 'should not be able to PUT update user roles (not be allowed to assign roles)' do
-      put :update, :id => @me.id, :user => (FactoryGirl.attributes_for(:reg_user_min_create_attr)).merge(FactoryGirl.attributes_for(:user_admin_attr))
+    it 'should not be able to PUT update user roles (not be allowed to assign roles) for self' do
+      put :update, :id => @me.id, :user => (FactoryGirl.attributes_for(:reg_user_min_create_attr)).merge(FactoryGirl.attributes_for(:user_roles_attr))
       response.should render_template('users/edit')
     end
     it 'should be able to GET show self' do
