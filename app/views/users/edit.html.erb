@@ -20,5 +20,7 @@
 <% end %>
 
 <%= link_to I18n.translate('users.show.action'), user_path(@user.id) %>
- | <%= link_to I18n.translate('users.index.action'), users_path if can? :manage, User %>
- | <%= link_to I18n.translate('users.new.action'), new_user_path if can? :manage, User %>
+<% if can? :manage, User %>
+ | <%= link_to I18n.translate('users.index.action'), users_path %>
+ | <%= link_to I18n.translate('users.new.action'), new_user_path %>
+<% end %>

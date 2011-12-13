@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe 'Integration Tests To Do- ' do
-
-
+  
+  context 'dont display fields in show or edit unless @user.can_field_be_edited?()'
+  
   context 'User Administration - ' do
     it 'should list all users (by application or all?)'
     it 'should limit access to each system based upon the user roles'
