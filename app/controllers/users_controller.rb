@@ -1,5 +1,10 @@
 class UsersController< SecureApplicationController
 
+  def initialize
+    @systemc = 'maint'
+    super
+  end
+  
   before_filter do |controller|
     # self.load_session
     # logger.debug('Sessions Controller filter = '+%w{ index show new create edit update destroy deactivate reactivate }.index(params[:action]).to_s)

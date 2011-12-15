@@ -340,6 +340,29 @@ describe User do
     
   end
 
+
+  context 'should properly test can_see_system?' do
+    before(:each) do
+      @reg = FactoryGirl.create(:reg_user_min_create_attr)
+    end
+    
+    it 'should always see the see the system of the role, and not others' do
+      VALID_ROLES.each do |role|
+        this_role = Role.new(role)
+        @reg.update_attributes({:roles => role})
+        @reg.has_role?(role).should be_true
+        Rails.logger.debug("T user_spec can_see_system? - role:#{role}, #{@reg.can_see_system?(this_role.sys_id)}")
+        @reg.can_see_system?(this_role.sys_id).should be_true
+        APPLICATION_SYSTEMS.each do |system|
+          if system != this_role.sys_id && this_role.sys_id != 'all'
+            Rails.logger.debug("T user_spec can_see_system? - role:#{role}, system:#{system} #{@reg.can_see_system?(system)}")
+            @reg.can_see_system?(system).should be_false
+          end
+        end
+      end
+    end
+    
+  end
 end
 
 # == Schema Information

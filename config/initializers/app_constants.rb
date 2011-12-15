@@ -7,7 +7,7 @@
 # each role has layout: (application_name/all)_(role_name/guest)
 APPLICATION_SYSTEMS = %w{ maint estim prevail }
 VALID_ROLES = %w{ all_guests all_admins maint_users maint_admins estim_users estim_admins prevail_users prevail_admins }
-DEFAULT_ROLE = %w{ all_guests }
+DEFAULT_ROLE = %w{}
 USER_SELF_NO_UPDATE_FIELDS = %w{ roles deactivated }  # fields that normal users cannot update for themself
 USER_SELF_UPDATE_ROLES = %w{ all_admins maint_admins }  # users with these roles can update 'no update' fields regardless of USER_SELF_NO_UPDATE_FIELDS
 
