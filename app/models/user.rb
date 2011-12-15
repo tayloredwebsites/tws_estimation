@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   
   def initialize(*args)
     # init_user_roles([])
+    @system = 'maint'
     super(*args)
     load_deactivated
   end
@@ -224,6 +225,11 @@ class User < ActiveRecord::Base
     return false
   end
   
+  def can_see_system?(system)
+    matched_roles = self.roles.split(' ').delete_if{|r| (r.index(system+'_').nil? && r.index('all_').nil?)}
+    return matched_roles.size > 0
+  end
+    
   def update_attributes(params)
     # Rails.logger.debug("* User - update_attributes - params=#{params.inspect.to_s}")
 	  Rails.logger.error("* UserRoles - update_attributes - roles is an array !!!") if params[:roles].instance_of?(Array)

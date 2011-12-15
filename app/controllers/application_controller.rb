@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   after_filter :save_user_session
   
   def initialize
+    Rails.logger.debug("* ApplicationController.initialize before super - systemc:#{@systemc.to_s}")
     super
     @user_session = UserSession.new
     @errors = Array.new
