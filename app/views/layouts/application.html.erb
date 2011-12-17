@@ -16,26 +16,28 @@
             <%= link_to image_tag("../../images/header/header_logo.png", :alt => "Home"), root_path %>
           </div>
           <div id="header_tagline">
-            <h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('config.company_name') %></h2>
+            <!-- h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('config.company_name') %></h2 -->
             <h2 id="header_tagline_app_name" class="nowrap"><%= I18n.translate('config.app_name') %></h2>
-            <h3 id="header_tagline_page_title"><%= I18n.translate('.title', :scope => @page_scope) %></h3>
+            <h3 id="header_tagline_system_header"><%= I18n.translate('systems.'+cur_system) %></h3>
+            <h4 id="header_tagline_page_header"><%= I18n.translate('.header', :scope => @page_scope) %></h4>
           </div>
         </div><!-- end header_logo_left -->
-        <div id="header_logo_right" class="width_200">
-          <div class="fields_25_75 thin_border padding_5">
+        <div id="header_logo_right">
+          <div class="fields_40_60 thin_border padding_5">
             <div class="field">
-              <span class="label"><%= I18n.translate('view_labels.phone') %></span>
-              <span class="value"></span>
+              <span class="label"><%= I18n.translate('view_labels.company_name') %></span>
+              <span class="value"><%= I18n.translate('config.company_name') %></span>
             </div>
             <div class="field">
               <span class="label"><%= I18n.translate('view_labels.email') %></span>
-              <span class="value"><%= mail_to I18n.translate('config.company_email'), I18n.translate('config.company_name') %></span>
+              <span class="value"><%= mail_to I18n.translate('config.company_email'), I18n.translate('config.company_email') %></span>
             </div>
           </div>
         </div><!-- end header_logo_right -->
       </div><!-- end header_logo_bar -->
       <div id="header_bottom_bar">
         <ul id="header_nav_bar">
+          <li class="_6_across"><%= link_to I18n.translate('home.index.title'), home_index_path %></li>
 					<% if can? :manage, User %>
           	<li class="_6_across"><%= link_to I18n.translate('users.title'), users_path %></li>
 					<% elsif @user_session.signed_in? %>
@@ -43,7 +45,6 @@
 					<% else %>
 	          <li class="_6_across"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
 					<% end %>
-          <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
@@ -70,13 +71,17 @@
 						<% end %>
           </div>
          <ul class="module_body column_nav">
-					<% if can? :manage , User %>
-            	<li class="list_column off"><%= link_to I18n.translate('users.title'), users_path %></li>
-							<% elsif @user_session.signed_in? %>
-		          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
-							<% else %>
-			          <li class="list_column off"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
-							<% end %>
+           <li class="list_column off"><%= link_to I18n.translate('home.index.title'), home_index_path %></li>
+						<% if can? :manage , User %>
+	           	<li class="list_column off"><%= link_to I18n.translate('users.index.title'), users_path %></li>
+						<% elsif @user_session.signed_in? %>
+	          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
+						<% else %>
+		          <li class="list_column off"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
+						<% end %>
+						<% if cur_user.can_see_system?('estim')%>
+            	<li class="list_column off"><%= link_to I18n.translate('systems.estim'), '#' %></li>
+						<% end %>
             <li class="list_column on"><%= link_to 'Item', '#' %>
               <ul class="column_nav">
                 <li class="list_column off"><%= link_to 'Sub Item', '#' %></li>

@@ -2,9 +2,10 @@ class UsersController< SecureApplicationController
 
   def initialize
     @systemc = 'maint'
+    Rails.logger.debug("* UsersController.initialize before super - systemc:#{@systemc.to_s}")
     super
   end
-  
+
   before_filter do |controller|
     # self.load_session
     # logger.debug('Sessions Controller filter = '+%w{ index show new create edit update destroy deactivate reactivate }.index(params[:action]).to_s)
@@ -216,32 +217,32 @@ class UsersController< SecureApplicationController
     end
   end
   
-  def reset_password
-    Rails.logger.debug("* UsersController - reset_password - authorize")
-    @user = User.find(:first, :conditions => ['email = ? OR username = ?', params[:user][:email].to_s, params[:user][:username].to_s ] )
-    authorize! :reset_password, @user   # authorize from CanCan::ControllerAdditions
-    Rails.logger.debug('users_controller.reset_password - email='+ params[:user][:email].to_s+', username='+params[:user][:username].to_s)
-    if @user.nil?
-      notify_error( I18n.translate('errors.cannot_find_obj', :obj => @model.class.name) )
-      redirect_to(home_errors_path)
-    else
-      @user.reset_password
-      # must remove search parameters so that they are not used to update the record
-      params[:user].delete(:email)
-      params[:user].delete(:username)
-      logger.debug('before update_attributes - params[:user]:'+params[:user].to_s)
-      if @user.update_attributes(params[:user])
-        notify_success( I18n.translate('errors.success_method_obj_name',
-          :method => params[:action],
-          :obj => @model.class.name,
-          :name => @user.username )
-        )
-        render :action => 'show'
-      else
-        logger.debug('reset_password errors='+@user.errors.to_s)
-        redirect_to(home_errors_path)
-      end
-    end
-  end
+#  def reset_password
+#     Rails.logger.debug("* UsersController.reset_password - params:#{params.inspect.to_s}")
+#     @user = User.find(:first, :conditions => ['email = ? OR username = ?', params[:user][:email].to_s, params[:user][:username].to_s ] )
+#     authorize! :reset_password, @user   # authorize from CanCan::ControllerAdditions
+#     Rails.logger.debug('users_controller.reset_password - email='+ params[:user][:email].to_s+', username='+params[:user][:username].to_s)
+#     if @user.nil?
+#       notify_error( I18n.translate('errors.cannot_find_obj', :obj => @model.class.name) )
+#       redirect_to(home_errors_path)
+#     else
+#       @user.reset_password
+#       # must remove search parameters so that they are not used to update the record
+#       params[:user].delete(:email)
+#       params[:user].delete(:username)
+#       logger.debug('before update_attributes - params[:user]:'+params[:user].to_s)
+#       if @user.update_attributes(params[:user])
+#         notify_success( I18n.translate('errors.success_method_obj_name',
+#           :method => params[:action],
+#           :obj => @model.class.name,
+#           :name => @user.username )
+#         )
+#         render :action => 'show'
+#       else
+#         logger.debug('reset_password errors='+@user.errors.to_s)
+#         redirect_to(home_errors_path)
+#       end
+#     end
+#   end
 
 end

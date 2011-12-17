@@ -8,7 +8,7 @@ TwsAuth::Application.routes.draw do
   end
   match '/signin', :to => 'users_sessions#signin'
   match '/signout', :to => 'users_sessions#signout'
-  match '/reset_password', :to => 'users_sessions#reset_password'
+#   match '/reset_password', :to => 'users#reset_password'
 
   resources :users do
     # match 'deactivate'  # route:      user_deactivate        /users/:user_id/deactivate(.:format) {:action=>"deactivate", :controller=>"users"}
@@ -18,7 +18,7 @@ TwsAuth::Application.routes.draw do
       put 'reactivate'      # route:              reactivate_user PUT    /users/:id/reactivate(.:format)      {:action=>"reactivate", :controller=>"users"}
       get 'edit_password'   # route:           edit_password_user GET    /users/:id/edit_password(.:format)   {:action=>"edit_password", :controller=>"users"}
       put 'update_password' # route:         update_password_user PUT    /users/:id/update_password(.:format) {:action=>"update_password", :controller=>"users"}
-      put 'reset_password'  # route:          reset_password_user PUT    /users/:id/reset_password(.:format)          {:action=>"reset_password", :controller=>"users"}
+    #   put 'reset_password'  # route:          reset_password_user PUT    /users/:id/reset_password(.:format)          {:action=>"reset_password", :controller=>"users"}
     end
   end
 

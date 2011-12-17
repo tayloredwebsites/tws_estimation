@@ -9,26 +9,11 @@
       :app => 'tws_estimation'  # not used so far
     },
     :systems => {
-      :all => {
-        :abbreviation => 'All',
-        :full_name => 'All Systems',
-        :actual => 'false'
-      },
-      :maint => {
-        :abbreviation => 'Maint',
-        :full_name =>'Application Maintenance',
-        :actual => 'true'
-      },
-      :estim => {
-        :abbreviation => 'Estim',
-        :full_name => 'Estimation',
-        :actual => 'true'
-      },
-      :prevail => {
-        :abbreviation => 'Prevail',
-        :full_name =>'Prevailing wages',
-        :actual => 'true'
-      }
+      :all => 'All Systems',
+      :home => 'Home System',
+      :maint => 'Systems Maintenance',
+      :estim => 'Estimation',
+      :prevail => 'Prevailing Wages'
     },
     :roles => {
       :guests => {
@@ -91,7 +76,8 @@
     :view_labels => {
       :phone => 'Phone:',
       :email => 'eMail:',
-      :welcome_user => 'Welcome %{user}'
+      :welcome_user => 'Welcome %{user}',
+      :company_name => 'Company Name:'
     },
     :view_action => {
       :list => 'List',
@@ -111,9 +97,11 @@
     # :new_title => 'New', # use :view_action.new or :users.new.title
     # :show_title => 'View', # use :view_action.show or :users.show.title
     :home => {
+      :title => 'Home',
+      :system => 'home',
       :index => {
         :title => "Home",
-        :header => "Controlled Air Systems"
+        :header => "Home Page"
       },
       :about => {
         :title => "About",
@@ -141,11 +129,12 @@
       },
       :errors => {
         :title => "Errors",
-        :header => "Errors page (unrecoverable errors)"
+        :header => "Errors page - Unrecoverable errors"
       }
     }, # end home
     :users => {
       :title => 'Users',
+      :system => 'maint',
       :index => {
         :action => "List Users",
         :title => "List Users",
@@ -205,6 +194,7 @@
     }, # end users
     :users_sessions => {
       :title => 'User Sessions',
+      :system => 'maint',
       :index => {
         :title => "Main Menu",
         :header => "Main Menu"
