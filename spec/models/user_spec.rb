@@ -353,10 +353,16 @@ describe User do
         @reg.has_role?(role).should be_true
         Rails.logger.debug("T user_spec can_see_system? - role:#{role}, #{@reg.can_see_system?(this_role.sys_id)}")
         @reg.can_see_system?(this_role.sys_id).should be_true
-        APPLICATION_SYSTEMS.each do |system|
-          if system != this_role.sys_id && this_role.sys_id != 'all'
-            Rails.logger.debug("T user_spec can_see_system? - role:#{role}, system:#{system} #{@reg.can_see_system?(system)}")
-            @reg.can_see_system?(system).should be_false
+        APPLICATION_SYSTEMS.each do |system_id, system|
+          Rails.logger.debug("T user_spec can_see_system? - system:#{system.inspect.to_s}")
+          # if system != this_role.sys_id && this_role.sys_id != 'all'
+          #   Rails.logger.debug("T user_spec can_see_system? - role:#{role}, system:#{system} #{@reg.can_see_system?(system)}")
+          #   @reg.can_see_system?(system).should be_false
+          # end
+          sysid = system_id.to_s
+          if sysid != this_role.sys_id && this_role.sys_id != 'all'
+            Rails.logger.debug("T user_spec can_see_system? - role:#{role}, system:#{sysid} #{@reg.can_see_system?(sysid)}")
+            @reg.can_see_system?(sysid).should be_false
           end
         end
       end

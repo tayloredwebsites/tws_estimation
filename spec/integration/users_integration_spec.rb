@@ -9,13 +9,13 @@ describe 'Users Integration Tests' do
       @user1 = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
       visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
       # should fill in the login form to login
       page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
       page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
       find(:xpath, '//input[@id="user_session_submit"]').click
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
         /#{I18n.translate('view_labels.welcome_user', :user => @me.full_name) }/
       visit home_index_path
@@ -23,7 +23,8 @@ describe 'Users Integration Tests' do
   
     it 'should GET show the active user as not deactivated' do
       visit user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       find(:xpath, '//*[@id="user_deactivated"]').text.should_not =~ /\A\s*\z/
       find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     end
@@ -31,7 +32,7 @@ describe 'Users Integration Tests' do
     it 'should show the deactivated field in edit' do
       visit edit_user_path (@user1.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       find(:xpath, '//*[@id="user_deactivated"]').text.should_not =~ /\A\s*\z/
       find(:xpath, '//*[@id="user_deactivated"]').value.should =~ /\Afalse\z/
       find(:xpath, '//*[@id="user_deactivated"]/option[@selected]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -45,7 +46,7 @@ describe 'Users Integration Tests' do
       User.count.should > 1
       visit users_path()
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.index.header')}$/
       find(:xpath, "//tr[@id=\"user_#{@user1.id}\"]/td[@class=\"user_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       find(:xpath, "(//tr[@id=\"user_#{@user1.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.deactivate')}\z/
       find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]/td[@class=\"user_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
@@ -61,7 +62,7 @@ describe 'Users Integration Tests' do
       @num_users = User.count
       visit edit_user_path (@user1.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       find(:xpath, '//*[@id="user_deactivated"]').text.should_not =~ /\A\s*\z/
       find(:xpath, '//*[@id="user_deactivated"]').value.should =~ /\Atrue\z/
       within(".edit_user") do
@@ -70,9 +71,9 @@ describe 'Users Integration Tests' do
       end
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('users.edit.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @updated_user.username )}$/
       User.count.should == (@num_users)
@@ -86,7 +87,7 @@ describe 'Users Integration Tests' do
       @num_users = User.count
       visit edit_user_path (@user1.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       find(:xpath, '//*[@id="user_deactivated"]').text.should_not =~ /\A\s*\z/
       find(:xpath, '//*[@id="user_deactivated"]').value.should =~ /\Afalse\z/
       find(:xpath, '//*[@id="user_deactivated"]/option[@selected]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -96,7 +97,7 @@ describe 'Users Integration Tests' do
       end
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       User.count.should == (@num_users)
@@ -114,9 +115,9 @@ describe 'Users Integration Tests' do
       @num_users.should > 1
       visit users_path()
       # save_and_open_page
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.index.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('users.index.header')}$/
       find('a', :text => I18n.translate('users.new.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('users.new.header')}$/
     end
   
     it "should have a working View user link on the index page" do
@@ -128,9 +129,9 @@ describe 'Users Integration Tests' do
       @num_users.should > 1
       visit users_path()
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.index.header')}$/
       find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]//a", :text => "#{I18n.translate('view_action.show')}").click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('users.show.header')}$/
     end
   
     it "should have a working Edit user link on the index page" do
@@ -142,9 +143,9 @@ describe 'Users Integration Tests' do
       @num_users.should > 1
       visit users_path()
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.index.header')}$/
       find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]//a", :text => "#{I18n.translate('view_action.edit')}").click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('users.edit.header')}$/
     end
     
     it 'should allow a user to be deactivated from the index page' do
@@ -156,13 +157,13 @@ describe 'Users Integration Tests' do
       @num_users.should > 1
       visit users_path()
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.index.header')}$/
       find(:xpath, "//tr[@id=\"user_#{@user1.id}\"]/td[@class=\"user_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       find(:xpath, "(//tr[@id=\"user_#{@user1.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.deactivate')}\z/
       find(:xpath, "//tr[@id=\"user_#{@user1.id}\"]//a", :text => I18n.translate('view_action.deactivate') ).click
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'deactivate', :obj => @model.class.name, :name => @user1.username )}$/
       User.count.should == (@num_users)
@@ -180,14 +181,14 @@ describe 'Users Integration Tests' do
       @num_users.should > 1
       visit users_path()
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.index.header')}$/
       find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]/td[@class=\"user_deactivated\"]").text.should =~ /\A#{I18n.translate('view_field_value.deactivated')}\z/
       find(:xpath, "(//tr[@id=\"user_#{@user_deact.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.reactivate')}\z/
       # click on reactivate button of deactivated user
       find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]//a", :text => I18n.translate('view_action.reactivate') ).click
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'reactivate', :obj => @model.class.name, :name => @user_deact.username )}$/
       User.count.should == (@num_users)
@@ -199,8 +200,8 @@ describe 'Users Integration Tests' do
     it 'should be able to create a user with no errors displayed' do
       @num_users = User.count
       visit new_user_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       # save_and_open_page
       within(".new_user") do
         page.fill_in 'user_username', :with => 'me'
@@ -213,7 +214,7 @@ describe 'Users Integration Tests' do
       end
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
       page.should_not have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
@@ -224,8 +225,8 @@ describe 'Users Integration Tests' do
     it 'should notify user when trying to create a user with an invalid email address' do
       @num_users = User.count
       visit new_user_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       # save_and_open_page
       within(".new_user") do
         page.fill_in 'user_username', :with => 'me'
@@ -238,7 +239,7 @@ describe 'Users Integration Tests' do
       end
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
@@ -249,8 +250,8 @@ describe 'Users Integration Tests' do
     it 'should notify user when trying to create a user without a username' do
       @num_users = User.count
       visit new_user_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       # save_and_open_page
       within(".new_user") do
         page.fill_in 'user_username', :with => ''
@@ -263,7 +264,7 @@ describe 'Users Integration Tests' do
       end
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_username"]')
@@ -274,8 +275,8 @@ describe 'Users Integration Tests' do
     it 'should notify user when trying to create a user without a password' do
       @num_users = User.count
       visit new_user_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       # save_and_open_page
       within(".new_user") do
         page.fill_in 'user_username', :with => 'me'
@@ -288,7 +289,7 @@ describe 'Users Integration Tests' do
       end
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
@@ -299,8 +300,8 @@ describe 'Users Integration Tests' do
     it 'should notify user when trying to create a user with mismatched passwords' do
       @num_users = User.count
       visit new_user_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       # save_and_open_page
       within(".new_user") do
         page.fill_in 'user_username', :with => 'me'
@@ -313,7 +314,7 @@ describe 'Users Integration Tests' do
       end
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password_confirmation"]')
@@ -340,7 +341,7 @@ describe 'Users Sessions Integration Tests' do
 
     it 'should show the title and login fields of the login page - ' do
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
       find(:xpath, '//input[@id="user_session_username"]').should_not be_nil
       find(:xpath, '//input[@id="user_session_password"]').should_not be_nil
       find(:xpath, '//input[@id="user_session_submit"]').should_not be_nil
@@ -349,7 +350,7 @@ describe 'Users Sessions Integration Tests' do
     it 'login with invalid credentials - should send the user to the Login page (Session New page)' do
       # save_and_open_page
       # should be on login page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
       # should fill in the login form to login
       page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:user_full_create_attr)[:username] )
       page.fill_in('user_session[password]', :with => 'invalidpwd' )
@@ -357,7 +358,7 @@ describe 'Users Sessions Integration Tests' do
       find(:xpath, '//input[@id="user_session_submit"]').click
       # save_and_open_page
       # should be on the Session Create page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
       # it should display an error to the user
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
         /^#{I18n.translate('users_sessions.signin.title') }$/
@@ -373,7 +374,7 @@ describe 'Users Sessions Integration Tests' do
       find(:xpath, '//input[@id="user_session_submit"]').click
       # save_and_open_page
       # should be on the Session Create page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
         /#{I18n.translate('view_labels.welcome_user', :user => @user1.full_name) }/
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
@@ -389,7 +390,7 @@ describe 'Users Sessions Integration Tests' do
       page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:user_full_create_attr)[:password] )
       find(:xpath, '//input[@id="user_session_submit"]').click
       # should be on the Session Create page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       # click the signout link
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a', :text => I18n.translate('users_sessions.signout.action')).click
       # save_and_open_page  
@@ -421,71 +422,71 @@ describe 'Users Roles Tests - ' do
       page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
       find(:xpath, '//input[@id="user_session_submit"]').click
       # should be on the Session Create page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       # save_and_open_page
     end
     it 'should see the Show User page for self' do
       visit user_path (@admin.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
     end
     it 'should see the Show User page for other' do
       visit user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
     end
     it 'should see the Edit User page for self' do
       visit edit_user_path (@admin.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
     end
     it 'should see the Edit User page for other' do
       visit edit_user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
     end
     it 'should see the List User page (index)' do
       visit users_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.index.header')}$/
     end
     it 'should see the New User page (create)' do
       visit new_user_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.new.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
     end
     it 'should see the Edit User link in the Show User page for self' do
       visit user_path (@admin.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.edit.action'))
     end
     it 'should see the Edit User link in the Show User page for others' do
       visit user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.edit.action'))
     end
     it 'should see the Show User link in the Edit User page for self' do
       visit edit_user_path (@admin.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       page.should have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.show.action'))
     end
     it 'should see the Show User link in the Edit User page for others' do
       visit edit_user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       page.should have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.show.action'))
     end
     it 'should see the List Users link in the Show User page for self' do
       visit user_path (@admin.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.index.action'))
     end
     it 'should see the List Users link in the Show User page for others' do
       visit user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.index.action'))
     end
     it 'should see the New User link in the Show User page for self' do
       visit user_path (@admin.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.new.action'))
     end
     it 'should see the New User link in the Show User page for others' do
       visit user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.new.action'))
     end
     it 'should list all of the systems in VALID_ROLES (app_constant.rb) using I18n' do
@@ -568,7 +569,7 @@ describe 'Users Roles Tests - ' do
     it 'should see user roles as editable checkboxes for self' do
       visit edit_user_path (@reg.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       VALID_ROLES.each do |role|
         page.should have_selector(:xpath, '//form[@class="edit_user"]/div/div/label', :text => Role.new(role).sys_name )
       end
@@ -579,14 +580,14 @@ describe 'Users Roles Tests - ' do
     it 'should see deactivated select box for self' do
       visit edit_user_path (@admin.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       # user_deactivated
       page.should have_selector(:xpath, '//form[@class="edit_user"]//select[@id="user_deactivated"]')
     end
     it 'should see deactivated select box for others' do
       visit edit_user_path (@reg.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       # user_deactivated
       page.should have_selector(:xpath, '//form[@class="edit_user"]//select[@id="user_deactivated"]')
     end
@@ -598,66 +599,66 @@ describe 'Users Roles Tests - ' do
       page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
       find(:xpath, '//input[@id="user_session_submit"]').click
       # should be on the Session Create page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       # save_and_open_page
     end
     it 'should see the Show User page for self' do
       visit user_path (@reg.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
     end
     it 'should not see the Show User page for other' do
       visit user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('users.show.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('home.errors.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.show.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
     end
     it 'should see the Edit User page for self' do
       visit edit_user_path (@reg.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
     end
     it 'should not see the Edit User page for other' do
       visit edit_user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('users.edit.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('home.errors.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
     end
     it 'should not see the List User page (index) - sees home errors page' do
       visit users_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('users.index.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('home.errors.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.index.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
     end
     it 'should not see the New User page (create) - sees home errors page' do
       visit new_user_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('users.new.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('home.errors.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
     end
     it 'should see the Edit User link in the Show User page for self' do
       visit user_path (@reg.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.edit.action'))
     end
     it 'should not see the List Users link in the Show User page for self' do
       visit user_path (@reg.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.index.action'))
     end
     it 'should not see the New User link in the Show User page for self' do
       visit user_path (@reg.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.new.action'))
     end
     it 'should not see the List Users link in the Edit User page for self' do
       visit edit_user_path (@reg.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.index.action'))
     end
     it 'should not see the New User link in the Edit User page for self' do
       visit edit_user_path (@reg.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="content_body"]//a', :text => I18n.translate('users.new.action'))
     end
     it 'should not see user roles as editable checkboxes for self' do
       visit edit_user_path (@reg.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       VALID_ROLES.each do |role|
         page.should_not have_selector(:xpath, '//form[@class="edit_user"]/div/div/label', :text => Role.new(role).sys_name )
       end
@@ -668,21 +669,21 @@ describe 'Users Roles Tests - ' do
     it 'should not see deactivated select box for self' do
       visit edit_user_path (@reg.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       # user_deactivated
       page.should_not have_selector(:xpath, '//form[@class="edit_user"]//select[@id="user_deactivated"]')
     end
     it 'should have invalid update show errors at top of page and on invalid field' do
       visit edit_user_path (@reg.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       within(".edit_user") do
         page.fill_in 'user_email', :with => 'bad_email'
         find('input#user_submit').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
@@ -694,14 +695,14 @@ describe 'Users Roles Tests - ' do
     it 'should have valid update show no errors' do
       visit edit_user_path (@reg.id)
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.edit.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       within(".edit_user") do
         page.fill_in 'user_email', :with => 'valid.email@example.com'
         find('input#user_submit').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users.show.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       page.should_not have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="valid.email@example.com"]')
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ 
@@ -716,27 +717,27 @@ describe 'Users Roles Tests - ' do
     end
     it 'should not see the Show User page' do
       visit user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('users.show.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.show.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
     end
     it 'should not see the Edit User page' do
       visit edit_user_path (@user1.id)
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('users.edit.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
     end
     it 'should not see the List User page (index) - sees home errors page' do
       visit users_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('users.index.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.index.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
     end
     it 'should not see the New User page (create) - sees home errors page' do
       visit new_user_path()
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('users.new.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should_not =~ /^#{I18n.translate('home.errors.title')}$/
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
     end
   end
 
@@ -751,26 +752,32 @@ describe 'Users layouts Tests - ' do
     it 'should find the title with exactly correct content' do		# capybara find
       find('title').text.should =~ /^#{I18n.translate('config.company_name')} - #{I18n.translate('config.app_name')} - #{I18n.translate('home.index.title')}$/
     end
-    it 'should find exactly matching company name' do		# capybara find
-      find('#header_tagline_company_name').text.should =~ /^#{I18n.translate('config.company_name')}$/
-    end
+    # it 'should find exactly matching company name' do		# capybara find
+    #   find('#header_tagline_company_name').text.should =~ /^#{I18n.translate('config.company_name')}$/
+    # end
     it 'should find exactly matching app name' do		# capybara find
       find('#header_tagline_app_name').text.should =~ /^#{I18n.translate('config.app_name')}$/
     end
-    it 'should not find all whitespace in the page title' do		# capybara find
-      find('#header_tagline_page_title').text.should_not =~ /\A\s*\z/
+    it 'should not find all whitespace in the System title' do
+      find('#header_tagline_system_header').text.should_not =~ /\A\s*\z/
     end
-    it 'should find exactly matching page title from from app_config' do		# capybara find
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.index.title')}$/
+    it 'should find exactly matching System title' do
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
     end
-    it 'should not find all whitespace in the non-layout content' do		# capybara find
+    it 'should not find all whitespace in the page title' do
+      find('#header_tagline_page_header').text.should_not =~ /\A\s*\z/
+    end
+    it 'should find exactly matching page title' do
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
+    end
+    it 'should not find all whitespace in the non-layout content' do
       find('div#content_body').text.should_not =~ /\A\s*\z/
     end
     it 'should have eMail in the upper left header' do
       find('div#header_logo_right').should have_content(I18n.translate('view_labels.email'))
     end
-    it 'should have a help item in the top nav bar 6th item' do
-      find('ul#header_nav_bar').find('li[6]/a').text.should =~ /\A#{I18n.translate('home.help.title')}\z/
+    it 'should have a help item in the top nav bar' do
+      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('home.help.title') )
     end
     it 'should not have Welcome in a left module header' do
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should_not =~
@@ -798,47 +805,47 @@ describe 'Users layouts Tests - ' do
       find('div#footer_status').find('p.alert').text.should =~ /\A\s*\z/
     end
     it "should start at the Home page" do
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.index.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
     end
     it 'should go to help page when top nav help link is clicked' do
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.index.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
       find('ul#header_nav_bar').find('a', :text => I18n.translate('home.help.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.help.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.help.header')}$/
     end
     it 'should go to help page when left nav help link is clicked' do
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.index.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
       find('div#left_content').find('a', :text => I18n.translate('home.help.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.help.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.help.header')}$/
     end
     it 'should go to the home page when the logo is clicked' do
       # first go to help page
       find('ul#header_nav_bar').find('a', :text => I18n.translate('home.help.title')).click
       # confirm at help page
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.help.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.help.header')}$/
       # click on logo
       find(:xpath, "//img[@alt=\"#{I18n.translate('home.index.title')}\"]/parent::a").click
       # confirm at home page
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.index.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
     end
     it 'should go to the About page when the footer about link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.about.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.about.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.about.header')}$/
     end		
     it 'should go to the Contact page when the footer contact link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.contact.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.contact.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.contact.header')}$/
     end	
     it 'should go to the News page when the footer news link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.news.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.news.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.news.header')}$/
     end			
     it 'should go to the Status page when the footer status link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.status.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.status.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.status.header')}$/
     end	
     it 'should go to the Help page when the footer help link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.help.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.help.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.help.header')}$/
     end	
 
   end
@@ -848,7 +855,7 @@ describe 'Users layouts Tests - ' do
       visit home_index_path
     end
     it 'should be on the home index page' do
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.index.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
       find('div.module_header/a', :text => I18n.translate('users_sessions.signin.action'))
     end
     it 'should not see user links' do
@@ -865,13 +872,13 @@ describe 'Users layouts Tests - ' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
       visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
       # should fill in the login form to login
       page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username] )
       page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
       find(:xpath, '//input[@id="user_session_submit"]').click
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       visit home_index_path
     end
     it 'should have a user item in the top nav bar' do
@@ -883,17 +890,17 @@ describe 'Users layouts Tests - ' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
       visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
       # should fill in the login form to login
       page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
       page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
       find(:xpath, '//input[@id="user_session_submit"]').click
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       visit home_index_path
     end
     it 'should have a user item in the top nav bar 1st item' do
-      find('ul#header_nav_bar').find('li[1]/a').text.should =~ /\A#{I18n.translate('users.title')}\z/
+      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users.title') )
     end
     it 'should have a Users link in the left nav bar' do
       find('div#left_content').find('a', :text => I18n.translate('users.title'))
@@ -915,24 +922,24 @@ describe 'Users Layouts Links Tests - ' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
       visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
       # should fill in the login form to login
       page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username] )
       page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
       find(:xpath, '//input[@id="user_session_submit"]').click
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       visit home_index_path
     end
     it 'should go to Users index page when user clicks top nav Users link' do
       visit home_index_path
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.index.title')}$/
-      find('ul#header_nav_bar').find('li[1]/a', :text => I18n.translate('users.show.title')).click
-      find('#header_tagline_page_title').text.should_not =~ /^#{I18n.translate('users.index.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
+      find('ul#header_nav_bar//a', :text => I18n.translate('users.show.title')).click
+      find('#header_tagline_page_header').text.should_not =~ /^#{I18n.translate('users.index.header')}$/
     end
     it 'should go to the Site map page when the footer site map link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.site_map.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
     end			
   end
 
@@ -940,26 +947,131 @@ describe 'Users Layouts Links Tests - ' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
       visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
       # should fill in the login form to login
       page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
       page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
       find(:xpath, '//input[@id="user_session_submit"]').click
       # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       visit home_index_path
     end
     it 'should go to Users index page when user clicks top nav Users link' do
       visit home_index_path
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.index.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
       find('ul#header_nav_bar').find('a', :text => I18n.translate('users.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('users.index.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('users.index.header')}$/
     end
     it 'should go to the Site map page when the footer site map link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
-      find('#header_tagline_page_title').text.should =~ /^#{I18n.translate('home.site_map.title')}$/
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
     end			
 
   end
 
+end
+
+describe 'Systems Tests' do
+
+  context 'Logged Out user systems' do
+    it 'should have home system for home page' do
+      visit home_index_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+    end
+    it 'should have home system for errors page' do
+      visit home_errors_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
+    end
+    it 'should see limited maint menu items' do
+    #  visit reset_password_path
+    #  find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      visit signin_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.maint')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
+    end
+    it 'should not see estim menu items (does not have estim_user role)' do
+      visit home_index_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+      page.should_not have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('systems.estim'))
+    end
+  end
+  context 'Regular user systems' do
+    before(:each) do
+      @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
+      visit signin_path
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
+      # should fill in the login form to login
+      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username] )
+      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
+      find(:xpath, '//input[@id="user_session_submit"]').click
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
+      visit home_index_path
+    end
+    it 'should have home system for home page' do
+      visit home_index_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+    end
+    it 'should have home system for errors page' do
+      visit home_errors_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
+    end
+    it 'should have maint system for user pages' do
+      visit user_path(@me.id)
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.maint')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
+    end
+    it 'should see maint menu items (has maint_user role)' do
+      visit home_index_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+      page.should have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('users.show.title'))
+    end
+    it 'should see estim menu items (has estim_user role)' do
+      visit home_index_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+      page.should have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('systems.estim'))
+    end
+  end
+  context 'Administrator user systems' do
+    before(:each) do
+      @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
+      visit signin_path
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
+      # should fill in the login form to login
+      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
+      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
+      find(:xpath, '//input[@id="user_session_submit"]').click
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
+      visit home_index_path
+    end
+    it 'should have home system for home page' do
+      visit home_index_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+    end
+    it 'should have home system for errors page' do
+      visit home_errors_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
+    end
+    it 'should have maint system for user pages' do
+      visit user_path(@me.id)
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.maint')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
+    end
+    it 'should see maint menu admin items' do
+      visit home_index_path
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.home')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+      page.should have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('users.index.title'))
+    end
+  end
 end

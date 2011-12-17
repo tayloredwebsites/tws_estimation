@@ -41,4 +41,9 @@ module ApplicationHelper
     @user_session.get_app_session
   end
       
+  def cur_system
+    Rails.logger.debug("* ApplicationHelper.cur_system - @systemc:#{@systemc}")
+    @systemc
+  end
+    
 end

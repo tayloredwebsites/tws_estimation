@@ -2,9 +2,10 @@ class UsersSessionsController < SecureApplicationController
 
   def initialize
     @systemc = 'maint'
+    Rails.logger.debug("* UsersSessionsController.initialize before super - systemc:#{@systemc.to_s}")
     super
   end
-  
+
   before_filter do |controller|
     # self.load_session
     logger.debug('Sessions Controller filter = '+%w{ signout }.index(params[:action]).to_s)
