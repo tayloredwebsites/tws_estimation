@@ -14,7 +14,7 @@ module CommonMethods
     elsif !DB_FALSE_VALUES.index(field_value.to_s).nil?
       return false
     else
-      Rails.logger.error("*Error ApplicationHelper - db_true_value?(#{field_value}) has unmatched value!")
+      Rails.logger.error("*Error ApplicationHelper - db_true_value?(#{field_value.inspect.to_s}) has unmatched value!")
       return false
     end
   end

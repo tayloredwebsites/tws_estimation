@@ -18,7 +18,7 @@
           <div id="header_tagline">
             <!-- h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('config.company_name') %></h2 -->
             <h2 id="header_tagline_app_name" class="nowrap"><%= I18n.translate('config.app_name') %></h2>
-            <h3 id="header_tagline_system_header"><%= I18n.translate('systems.'+cur_system) %></h3>
+            <h3 id="header_tagline_system_header"><%= I18n.translate('systems.'+cur_system+'.full_name') %></h3>
             <h4 id="header_tagline_page_header"><%= I18n.translate('.header', :scope => @page_scope) %></h4>
           </div>
         </div><!-- end header_logo_left -->
@@ -79,8 +79,11 @@
 						<% else %>
 		          <li class="list_column off"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
 						<% end %>
+						<% if cur_user.can_see_system?('maint')%>
+            	<li class="list_column off"><%= link_to I18n.translate('systems.maint.full_name'), '#' %></li>
+						<% end %>
 						<% if cur_user.can_see_system?('estim')%>
-            	<li class="list_column off"><%= link_to I18n.translate('systems.estim'), '#' %></li>
+            	<li class="list_column off"><%= link_to I18n.translate('systems.estim.full_name'), '#' %></li>
 						<% end %>
             <li class="list_column on"><%= link_to 'Item', '#' %>
               <ul class="column_nav">
