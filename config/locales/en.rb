@@ -5,29 +5,33 @@
     :config => {
       :company_name => 'Taylored Web Sites',
       :company_email => 'tayloredwebsites@me.com',
-      :app_name => 'TWS Rails Startup App',
-      :app => 'tws_auth'
+      :app_name => 'Estimate Systems and Component Costs',
+      :app => 'tws_estimation'  # not used so far
     },
     :systems => {
       :all => {
         :abbreviation => 'All',
-        :full_name => 'All Systems',
-        :actual => 'false'
+        :full_name => 'All Systems'
+      },
+      :home => {
+        :abbreviation => 'Home',
+        :full_name => 'Home'
+      },
+      :guest => {
+        :abbreviation => 'Guest-Home',
+        :full_name => 'Guest-Home'
       },
       :maint => {
-        :abbreviation => 'Maint',
-        :full_name =>'Application Maintenance',
-        :actual => 'true'
+        :abbreviation => 'Maint.',
+        :full_name => 'System Maintenance'
       },
       :estim => {
-        :abbreviation => 'Estim',
-        :full_name => 'Estimation',
-        :actual => 'true'
+        :abbreviation => 'Estimation',
+        :full_name => 'Estimation System'
       },
       :prevail => {
         :abbreviation => 'Prevail',
-        :full_name =>'Prevailing wages',
-        :actual => 'true'
+        :full_name => 'Prevailing Wages'
       }
     },
     :roles => {
@@ -65,7 +69,7 @@
       :missing_msg => "Missing %{msg}",
       :obj_does_not_exist => "%{obj} user does not exist",
       :cannot_method_your_obj => "Cannot %{method} your own %{obj}",
-      :access_denied_msg => "Access Denied! %{msg}",
+      :access_denied_msg => "Access Denied! You have restrictions on doing a %{method} of %{obj}",
       :active_record_error_msg => "Active Record Error! %{msg}",
       :fix_following_errors => "Please fix the following errors and save.",
       :note_errors_below => "Note the errors on specific fields below.",
@@ -74,6 +78,7 @@
     :error_messages => {
       :is_active => 'is an active record.',
       :is_deactivated => 'is a deactivated record.',
+      :you_are_deactivated => 'you are deactivated.',
       :got_error => 'got an error.',
       :missing_password => 'missing password',
       :password_mismatch => 'passwords mismatched',
@@ -91,7 +96,8 @@
     :view_labels => {
       :phone => 'Phone:',
       :email => 'eMail:',
-      :welcome_user => 'Welcome %{user}'
+      :welcome_user => 'Welcome %{user}',
+      :company_name => 'Company Name:'
     },
     :view_action => {
       :list => 'List',
@@ -104,16 +110,20 @@
       :deactivate => 'Deactivate',
       :reactivate => 'Reactivate',
       :destroy => 'Destroy',
-      :delete => 'Delete'
+      :delete => 'Delete',
+      :show_deactivated => 'Show Deactivated',
+      :hide_deactivated => 'Hide Deactivated'
     },
     # :index_title => 'List', # use :view_action.list or :users.index.title
     # :edit_title => 'Edit', # use :view_action.edit or :users.edit.title
     # :new_title => 'New', # use :view_action.new or :users.new.title
     # :show_title => 'View', # use :view_action.show or :users.show.title
     :home => {
+      :title => 'Home',
+      :system => 'home',
       :index => {
         :title => "Home",
-        :header => "Controlled Air Systems"
+        :header => "Home Page"
       },
       :about => {
         :title => "About",
@@ -141,11 +151,12 @@
       },
       :errors => {
         :title => "Errors",
-        :header => "Errors page (unrecoverable errors)"
+        :header => "Errors page - Unrecoverable errors"
       }
     }, # end home
     :users => {
       :title => 'Users',
+      :system => 'maint',
       :index => {
         :action => "List Users",
         :title => "List Users",
@@ -205,6 +216,7 @@
     }, # end users
     :users_sessions => {
       :title => 'User Sessions',
+      :system => 'maint',
       :index => {
         :title => "Main Menu",
         :header => "Main Menu"

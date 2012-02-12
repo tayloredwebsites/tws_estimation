@@ -114,19 +114,19 @@ describe 'Home Integration Tests - ' do
         visit signin_path
         # save_and_open_page
         # should be on login page
-        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.signin.title')}$/
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
         # should fill in the login form to login
         page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:user_min_create_attr)[:username] )
         page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:user_min_create_attr)[:password] )
         find(:xpath, '//input[@id="user_session_submit"]').click
         # should be on the Session Create page
-        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('users_sessions.index.title')}$/
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
         find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
           /#{I18n.translate('view_labels.welcome_user', :user => @user1.full_name) }/
         #save_and_open_page
         visit home_site_map_path
         #save_and_open_page
-        find(:xpath, '//*[@id="header_tagline_page_title"]').text.should =~ /^#{I18n.translate('home.site_map.title')}$/
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
         find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
         find('div#content_body').find('div.field[1]/span.value').text.should =~ /\AUpdate me in app\/views\/home\/site_map.html.erb\z/
       end

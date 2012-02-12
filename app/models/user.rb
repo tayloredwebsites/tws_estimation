@@ -16,52 +16,38 @@ class User < ActiveRecord::Base
       :uniqueness => true,
       :format => {:with => Regexp.new(VALID_EMAIL_EXPR) }
    
-  before_save :validate_save, :validate_assigned_roles
+  before_save :validate_save
+  # before_create :validate_save
+  # after_find :validate_save
   
-  #before_update_password :validate_password
+  # before_update_password :validate_password
   # after_find :load_assigned_roles
-  after_find :load_deactivated
-  
-  scope :deactivated, where(:deactivated => DB_TRUE)
-  scope :active, where(:deactivated => DB_FALSE)
+  # after_find :validate_deactivated
   
   def initialize(*args)
     # init_user_roles([])
+    @system = 'maint'
     super(*args)
-    load_deactivated
   end
   
   def self.guest
-    # logger.debug("* User - self.guest")
+    # Rails.logger.debug("* User - self.guest")
     @user = self.new
     @user.id = 0
     @user.username = 'Guest'
     @user.first_name = 'Guest'
-    # logger.debug("* User - self.guest - about to call @user.init_user_roles([])")
     @user.roles =  DEFAULT_ROLE.join(' ')
-    # logger.debug("* User - self.guest done")
+    Rails.logger.debug("* User.guest - roles: #{@user.roles}")
     return @user
   end
 
-  # def new(*params)
-  #   Rails.logger.debug("* User - new - params #{params.inspect.to_s}")
-  #   super(*params)
-  # end
-  # 
-  # def self.create(*params)
-  #   Rails.logger.debug("* User - self.create - *params #{params.inspect.to_s}")
-  #   Rails.logger.debug("* User - self.create - self #{self.inspect.to_s}")
-  #   super(*params)
-  # end
-  # 
-  # def self.create!(*params)
-  #   Rails.logger.debug("* User - self.create! - *params #{params.inspect.to_s}")
-  #   Rails.logger.debug("* User - self.create! - self #{self.inspect.to_s}")
-  #   super(*params)
-  # end
+  def new(*params)
+    Rails.logger.debug("* User.new - params #{params.inspect.to_s}")
+    super(*params)
+  end
   
   def create
-    Rails.logger.debug("* User - create - self #{self.inspect.to_s}")
+    # Rails.logger.debug("* User - create - self #{self.inspect.to_s}")
     Rails.logger.debug ("* User - create - create has errors") if !errors.empty?
     validate_password
     # Rails.logger.debug("* User - create - call validate_assigned_roles")
@@ -70,7 +56,7 @@ class User < ActiveRecord::Base
   end
   
   def save
-    # logger.debug("* User - save")
+    # Rails.logger.debug("* User.save")
     Rails.logger.debug ("save has errors:#{errors.inspect.to_s}") if !errors.empty?
     self.validate_password
     self.validate_assigned_roles
@@ -148,8 +134,8 @@ class User < ActiveRecord::Base
     elsif self.deactivated == DB_FALSE
       return false
     else
-      Rails.logger.error("*Error User - invalid value for deactivated:#{self.deactivated.to_s}")
-      return load_deactivated
+      Rails.logger.warn("! User.deactivated? - invalid value for deactivated:#{self.deactivated.inspect.to_s}")
+      return validate_deactivated
     end
   end
   
@@ -162,26 +148,37 @@ class User < ActiveRecord::Base
   end
 
   # class level valid_password to check password against user in database
-  def self.valid_password? (username, password, password_confirmation=nil)
-    auth_user = find_by_username(username) if !username.nil?
+  def self.valid_password? (username, password_in, password_confirmation=nil)
+    #Rails.logger.debug("* User.valid_password? - username:#{username.inspect.to_s}")
+    # Rails.logger.debug("* User.valid_password? - password:#{password_in.inspect.to_s}")
+    password_confirmation = password_in if password_confirmation==nil
+    # auth_user = User.where("username = ?", username) if !username.nil?
+    auth_user = (username.nil?) ? nil : User.find_by_username(username)
     if auth_user.nil?
       Rails.logger.debug('* User.valid_password? - username not found')
+      # errors.add(:password, I18n.translate('error_messages.invalid_password') ) # no errors object because this is a class method
       return nil
     else
-      # Rails.logger.debug('* User.valid_password? - username matched:'+auth_user.username.to_s)
-      auth_user.password = auth_user.password_confirmation = password
-      auth_user.password_confirmation = password_confirmation if !password_confirmation.nil?
-      auth_user.validate_password
-      # Rails.logger.debug('* User.valid_password? - auth_user.errors.count='+auth_user.errors.count.to_s)
-      return (auth_user.errors.count == 0 ? auth_user : nil)
+      # Rails.logger.debug('* User.valid_password? - auth_user:'+auth_user.inspect.to_s)
+      if auth_user.has_password?(password_in)
+        return auth_user
+      else
+        # errors.add(:password, I18n.translate('error_messages.invalid_password') ) # no errors object because this is a class method
+        return nil
+      end
     end
   end
   
   # instance level password check against current user
   def has_password? (password_in, password_confirmation=nil)
     if !password_confirmation.nil? && password_in != password_confirmation
+      Rails.logger.debug("* User.has_password? - #{I18n.translate('error_messages.password_mismatch')}")
+      errors.add(:password_confirmation, I18n.translate('error_messages.password_mismatch') )
       false
     elsif self.encrypted_password != encrypt(password_in)
+      Rails.logger.debug("* User.has_password? - #{I18n.translate('error_messages.invalid_password')}")
+      # Rails.logger.debug("* User.has_password? - #{password_in.inspect.to_s}")
+      errors.add(:password, I18n.translate('error_messages.invalid_password') )
       false
     else
       true
@@ -206,10 +203,10 @@ class User < ActiveRecord::Base
   
   # value parameter should be the roles string
   def validate_roles(value)
-    Rails.logger.debug("* User - validate_roles - roles:#{value.inspect.to_s}")
+    #Rails.logger.debug("* User - validate_roles - roles:#{value.inspect.to_s}")
     init_user_roles(value)
-    Rails.logger.debug("* User - validate_roles - roles after init_user_roles - value:#{value.inspect.to_s}")
-    Rails.logger.debug("* User - validate_roles - roles after init_user_roles - self.roles:#{self.roles.inspect.to_s}")
+    #Rails.logger.debug("* User - validate_roles - roles after init_user_roles - value:#{value.inspect.to_s}")
+    #Rails.logger.debug("* User - validate_roles - roles after init_user_roles - self.roles:#{self.roles.inspect.to_s}")
     self.roles = validate_assigned_roles
   end
   
@@ -224,6 +221,13 @@ class User < ActiveRecord::Base
     return false
   end
   
+  # does this user have this system in any of its roles?
+  def can_see_system?(system)
+    matched_roles = self.roles.split(' ').delete_if{|r| (r.index(system.to_s+'_').nil? && r.index('all_').nil?)}
+    #Rails.logger.debug("* User.can_see_system? - system:#{system}, roles:#{self.roles}, matched_role:#{matched_roles}")
+    return matched_roles.size > 0
+  end
+    
   def update_attributes(params)
     # Rails.logger.debug("* User - update_attributes - params=#{params.inspect.to_s}")
 	  Rails.logger.error("* UserRoles - update_attributes - roles is an array !!!") if params[:roles].instance_of?(Array)
@@ -298,16 +302,23 @@ class User < ActiveRecord::Base
     return name
   end
   
-  
-  private
- 
   # validation before save method is called !!
   # if passing in password, validate it before save (validate if password is not blank)
   def validate_save
+    self.validate_assigned_roles
+    self.validate_deactivated
     self.validate_password
     encrypt_password if errors.count == 0
   end
     
+  def validate_deactivated
+    Rails.logger.debug("* User.validate_deactivated:#{deactivated.inspect.to_s}") if self.deactivated != db_value_true?(self.deactivated)
+    self.deactivated = db_value_true?(self.deactivated)
+  end
+    
+  
+  private
+ 
   # see if password passed in matches the encryped password
   def has_matching_password?
     if self.password.blank? || self.encrypted_password.blank?
@@ -338,16 +349,6 @@ class User < ActiveRecord::Base
     encrypt_hash("#{Time.now.utc}.str[1,8]")
   end
   
-  def load_deactivated
-    if db_value_true?(self.deactivated)
-      self.deactivated = DB_TRUE
-      return true
-    else
-      self.deactivated = DB_FALSE
-      return false
-    end
-  end
-    
 end
 
 # == Schema Information

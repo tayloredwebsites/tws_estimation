@@ -87,7 +87,7 @@ module UserRoles
 	end
 	
 	def validate_assigned_roles
-    Rails.logger.debug("* UserRoles - validate_assigned_roles - roles:#{self.roles.inspect.to_s}")
+    # Rails.logger.debug("* UserRoles - validate_assigned_roles - roles:#{self.roles.inspect.to_s}")
     validated_roles = []
 	  DEFAULT_ROLE.each do |role|
       validated_roles << role
@@ -102,7 +102,7 @@ module UserRoles
         errors.add(:roles, I18n.translate('users.messages.invalid_role', :role => role.to_s) )
       end
     end
-    Rails.logger.debug("* UserRoles - validate_assigned_roles - validated_roles:#{validated_roles.inspect.to_s}")
+    # Rails.logger.debug("* UserRoles - validate_assigned_roles - validated_roles:#{validated_roles.inspect.to_s}")
     self.roles = validated_roles.join(' ')
 	end
 	

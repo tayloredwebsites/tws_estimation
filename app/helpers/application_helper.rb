@@ -1,23 +1,5 @@
 module ApplicationHelper
 
-  # # page title method to place title from page into layout file
-  # def page_title (pg_title)
-  #   content_for(:page_title) {
-  #     (pg_title.nil?) ? "" : pg_title
-  #   }
-  # end
-  # 
-  # def view_errors_on(obj, field)
-  #   out_string = ''
-  #   if obj.errors[field].size > 0
-  #     obj.errors[field].each do |msg|
-  #       if out_string != '' then out_string += ', ' end
-  #       out_string += msg
-  #     end
-  #   end
-  #   out_string
-  # end
-  
   def cur_user_full_name
     @user_session.current_user_full_name
   end
@@ -27,8 +9,8 @@ module ApplicationHelper
   end
   
   def cur_user
-    Rails.logger.debug("* ApplicationHelper - cur_user - session: #{@user_session.inspect.to_s}")
-    Rails.logger.debug("* ApplicationHelper - cur_user - cur_user: #{@user_session.current_user.inspect.to_s}")
+    #Rails.logger.debug("* ApplicationHelper - cur_user - session: #{@user_session.inspect.to_s}")
+    #Rails.logger.debug("* ApplicationHelper - cur_user - cur_user: #{@user_session.current_user.inspect.to_s}")
     @user_session.current_user
   end
   
@@ -37,8 +19,30 @@ module ApplicationHelper
     @user_session = UserSession.new (session)
   end
     
-  def get_app_session
-    @user_session.get_app_session
+  def get_session_info
+    @user_session.get_session_info
   end
       
+  def cur_system
+    Rails.logger.debug("* ApplicationHelper.cur_system - @systemc:#{@systemc}")
+    @systemc
+  end
+  
+  def session_info(key)
+    @user_session.info(key.to_sym)
+  end
+  
+  def show_deactivated?
+    Rails.logger.debug("* ApplicationHelper.show_deactivated? info(show_deactivated):#{@user_session.info(:show_deactivated).inspect}")
+    @user_session.info(:show_deactivated) == DB_TRUE
+  end
+  def dont_show_deactivated
+    @user_session.set_info(:show_deactivated, DB_FALSE)
+    Rails.logger.debug("* ApplicationHelper.dont_show_deactivated info(show_deactivated):#{@user_session.info(:show_deactivated).inspect}")
+  end
+  def show_deactivated
+    @user_session.set_info(:show_deactivated, DB_TRUE)
+    Rails.logger.debug("* ApplicationHelper.show_deactivated info(show_deactivated):#{@user_session.info(:show_deactivated).inspect}")
+  end
+  
 end

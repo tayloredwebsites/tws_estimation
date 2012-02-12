@@ -134,6 +134,18 @@ describe UsersSessionsController do
         assigns(:user_session).current_user.has_role?(role).should be_true
       end
     end
+    it 'should not allow a user to sign in if deactivated' do
+      @me = User.create!(FactoryGirl.attributes_for(:user_min_create_attr).merge({:deactivated => true}))
+      post :create, :user_session => FactoryGirl.attributes_for(:user_session)
+      response.should_not redirect_to(:controller => 'users_sessions', :action => 'index')
+      response.should redirect_to('/signin')
+    end
+    it 'should allow a user to sign in if not deactivated' do
+      @me = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
+      post :create, :user_session => FactoryGirl.attributes_for(:user_session)
+      response.should redirect_to(:controller => 'users_sessions', :action => 'index')
+      response.should_not redirect_to('/signin')
+    end
 
   end
 
@@ -141,9 +153,19 @@ describe UsersSessionsController do
   context 'logged in user -' do
     
     before(:each) do
-      FactoryGirl.create(:user_min_create_attr)
-      post :create, :user_session => FactoryGirl.attributes_for(:user_session)
-      response.should redirect_to(:controller => 'users_sessions', :action => 'index')
+      @me = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
+      @my_session = session_signin(FactoryGirl.attributes_for(:user_min_create_attr)[:username], FactoryGirl.attributes_for(:user_min_create_attr)[:password])
+      @my_session.signed_in?.should be_true
+      @my_session.current_user.has_role?('guest_users').should be_true
+      #post :create, :user_session => FactoryGirl.attributes_for(:user_session)
+      #response.should redirect_to(:controller => 'users_sessions', :action => 'index')
+      Rails.logger.debug("T user #{assigns(:user_session).current_user_id} is logged in")
+    end
+    
+    it 'should be allowed to user home page' do
+      visit('/home/index')
+      response.should be_success
+      response.code.should be == '200'
     end
     
     it 'should be able to do the signout action' do
@@ -157,6 +179,12 @@ describe UsersSessionsController do
       response.should be_success
     end
     
+    it 'should load all session info default values into the user session info' do
+      SESSION_INFO_DEFAULTS.each do |key, value|
+        Rails.logger.debug("T SESSION_INFO_DEFAULTS:#{key.to_s} => #{value}")
+        @my_session.info(key).should == value
+      end
+    end
   end
 
 end
