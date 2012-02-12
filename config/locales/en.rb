@@ -9,11 +9,30 @@
       :app => 'tws_estimation'  # not used so far
     },
     :systems => {
-      :all => 'All Systems',
-      :home => 'Home System',
-      :maint => 'Systems Maintenance',
-      :estim => 'Estimation',
-      :prevail => 'Prevailing Wages'
+      :all => {
+        :abbreviation => 'All',
+        :full_name => 'All Systems'
+      },
+      :home => {
+        :abbreviation => 'Home',
+        :full_name => 'Home'
+      },
+      :guest => {
+        :abbreviation => 'Guest-Home',
+        :full_name => 'Guest-Home'
+      },
+      :maint => {
+        :abbreviation => 'Maint.',
+        :full_name => 'System Maintenance'
+      },
+      :estim => {
+        :abbreviation => 'Estimation',
+        :full_name => 'Estimation System'
+      },
+      :prevail => {
+        :abbreviation => 'Prevail',
+        :full_name => 'Prevailing Wages'
+      }
     },
     :roles => {
       :guests => {
@@ -50,7 +69,7 @@
       :missing_msg => "Missing %{msg}",
       :obj_does_not_exist => "%{obj} user does not exist",
       :cannot_method_your_obj => "Cannot %{method} your own %{obj}",
-      :access_denied_msg => "Access Denied! %{msg}",
+      :access_denied_msg => "Access Denied! You have restrictions on doing a %{method} of %{obj}",
       :active_record_error_msg => "Active Record Error! %{msg}",
       :fix_following_errors => "Please fix the following errors and save.",
       :note_errors_below => "Note the errors on specific fields below.",
@@ -59,6 +78,7 @@
     :error_messages => {
       :is_active => 'is an active record.',
       :is_deactivated => 'is a deactivated record.',
+      :you_are_deactivated => 'you are deactivated.',
       :got_error => 'got an error.',
       :missing_password => 'missing password',
       :password_mismatch => 'passwords mismatched',
@@ -90,7 +110,9 @@
       :deactivate => 'Deactivate',
       :reactivate => 'Reactivate',
       :destroy => 'Destroy',
-      :delete => 'Delete'
+      :delete => 'Delete',
+      :show_deactivated => 'Show Deactivated',
+      :hide_deactivated => 'Hide Deactivated'
     },
     # :index_title => 'List', # use :view_action.list or :users.index.title
     # :edit_title => 'Edit', # use :view_action.edit or :users.edit.title

@@ -71,6 +71,13 @@ describe UserSession do
       @user_session.signed_in?.should be_false
     end
     
+    
+    it 'should not be able to set invalid values into session (per VALID_SESSION_INFO in app_constants.rb)' do
+      @user_session = UserSession.new({:invalid_key => 'invalid value', :current_user_id => 99999})
+      @user_session.info(:invalid_key).should be_nil
+      @user_session.info(:current_user_id).should == 99999
+    end
+
   end
   
   

@@ -40,7 +40,7 @@
 		</div>
 	<% end %>
 
-	<% if @user.can_field_be_edited?('deactivated', cur_user) %>
+	<% if @user.can_field_be_edited?('deactivated', cur_user) && can?(:deactivate, @user) %>
 	 	<div class="field">
 	   <%= f.label :deactivated, I18n.translate('users.field_name.deactivated'), :class => 'label' %>
 	   <span class="value"><%= select( "user", "deactivated", [ [I18n.is_deactivated_or_not(true), true], [I18n.is_deactivated_or_not(false), false] ], {:selected => @user.deactivated?} ) %></span>
