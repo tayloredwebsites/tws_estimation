@@ -66,55 +66,55 @@ describe UsersController do
       response.should redirect_to(:controller => 'users_sessions', :action => 'signin')
     end
     
-    it 'should be able to navigate to the PUT reset_password page with username and email' do
-      user = FactoryGirl.create(:reg_user_min_create_attr)
-      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
-      put :reset_password, :id => user.id, :user =>{
-        :username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username],
-        :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]
-      }
-      response.should_not redirect_to('/home/errors')
-      response.should render_template("show")
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).username.should == 'RegUser'
-    end
-    it 'should be able to navigate to the PUT reset_password page with just username' do
-      user = FactoryGirl.create(:reg_user_min_create_attr)
-      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
-      put :reset_password, :id => user.id, :user =>{
-       :username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username],
-       :email => ''
-      }
-      response.should_not redirect_to('/home/errors')
-      response.should render_template("show")
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).username.should == 'RegUser'
-    end
-    it 'should be able to navigate to the PUT reset_password page with just email' do
-      user = FactoryGirl.create(:reg_user_min_create_attr)
-      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
-      put :reset_password, :id => user.id, :user =>{
-        :username => '',
-        :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]
-      }
-      response.should_not redirect_to('/home/errors')
-      response.should render_template("show")
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).username.should == 'RegUser'
-    end
-    it 'should not be able to navigate to the PUT reset_password page unless there is a username or email' do
-      user = FactoryGirl.create(:reg_user_min_create_attr)
-      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
-      put :reset_password, :id => user.id, :user =>{
-        :username => '',
-        :email => ''
-      }
-      response.should redirect_to('/home/errors') # not to login - want user to see errors, not try to login
-      response.should_not render_template("show")
-    end
+    #it 'should be able to navigate to the PUT reset_password page with username and email' do
+    #  user = FactoryGirl.create(:reg_user_min_create_attr)
+    #  #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+    #  put :reset_password, :id => user.id, :user =>{
+    #    :username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username],
+    #    :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]
+    #  }
+    #  response.should_not redirect_to('/home/errors')
+    #  response.should render_template("show")
+    #  assigns(:user).should_not be_nil
+    #  assigns(:user).should be_a(User)
+    #  assigns(:user).username.should == 'RegUser'
+    #end
+    #it 'should be able to navigate to the PUT reset_password page with just username' do
+    #  user = FactoryGirl.create(:reg_user_min_create_attr)
+    #  #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+    #  put :reset_password, :id => user.id, :user =>{
+    #   :username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username],
+    #   :email => ''
+    #  }
+    #  response.should_not redirect_to('/home/errors')
+    #  response.should render_template("show")
+    #  assigns(:user).should_not be_nil
+    #  assigns(:user).should be_a(User)
+    #  assigns(:user).username.should == 'RegUser'
+    #end
+    #it 'should be able to navigate to the PUT reset_password page with just email' do
+    #  user = FactoryGirl.create(:reg_user_min_create_attr)
+    #  #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+    #  put :reset_password, :id => user.id, :user =>{
+    #    :username => '',
+    #    :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]
+    #  }
+    #  response.should_not redirect_to('/home/errors')
+    #  response.should render_template("show")
+    #  assigns(:user).should_not be_nil
+    #  assigns(:user).should be_a(User)
+    #  assigns(:user).username.should == 'RegUser'
+    #end
+    #it 'should not be able to navigate to the PUT reset_password page unless there is a username or email' do
+    #  user = FactoryGirl.create(:reg_user_min_create_attr)
+    #  #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
+    #  put :reset_password, :id => user.id, :user =>{
+    #    :username => '',
+    #    :email => ''
+    #  }
+    #  response.should redirect_to('/home/errors') # not to login - want user to see errors, not try to login
+    #  response.should_not render_template("show")
+    #end
                         
   end
   
@@ -139,15 +139,21 @@ describe UsersController do
       @updated_user.deactivated?.should be_true
     end
     it 'should give an error when PUT deactivating a deactivated user' do
+      get :index, :show_deactivated => "true" # set show deactivated session flag so we can see the user we deactivate
+      Rails.logger.debug("T* create :user_min_create_attr")
       @user1 = FactoryGirl.create(:user_min_create_attr)
+      Rails.logger.debug("T* deactivated? should be false")
       @user1.deactivated?.should be_false
+      Rails.logger.debug("T* deactivate")
       @user1.deactivate
       @user1.errors.count.should be == 0
       @updated_user = User.find(@user1.id)
+      Rails.logger.debug("T* deactivated? should be true")
       @updated_user.deactivated?.should be_true
+      Rails.logger.debug("T* put deactivate #{@user1.id.inspect.to_s}")
       put :deactivate, :id => @user1.id
-      response.should be_success
-      response.code.should be == '200'
+      #response.should be_success
+      #response.code.should be == '200'
       assigns(:user).errors.count.should be > 0
       assigns(:user).errors[:base][0].should == I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') )
       assigns(:user).errors[:deactivated][0].should == I18n.translate('error_messages.is_deactivated')
@@ -157,6 +163,7 @@ describe UsersController do
       response.should render_template("edit")
     end
     it 'should be able to PUT reactivate a deactivated user' do
+      get :index, :show_deactivated => "true" # set show deactivated session flag so we can see the user we deactivate
       @user1 = FactoryGirl.create(:user_min_create_attr)
       @user1.deactivated?.should be_false
       @user1.deactivate
@@ -174,6 +181,7 @@ describe UsersController do
       @updated_user.deactivated?.should be_false
     end
     it 'should give an error when reactivating a active user' do
+      get :index, :show_deactivated => "true" # set show deactivated session flag so we can see deactivated users
       @user1 = FactoryGirl.create(:user_min_create_attr)
       @user1.deactivated?.should be_false
       put :reactivate, :id => @user1.id
@@ -342,7 +350,19 @@ describe UsersController do
       assigns(:user).should eq(user)
       User.count.should == @user_count + 1
     end
-    it 'should be able to DELETE destroy a deactivated user' do
+    it 'should not be able to DELETE destroy a deactivated user if show_deactivated is false' do
+      get :index, :show_deactivated => "false" # set show deactivated session flag so we can see deactivated users
+      user = FactoryGirl.create(:user_min_create_attr)
+      user.deactivate
+      user.errors.count.should == 0
+      @user_count = User.count
+      delete :destroy, :id => user.id
+      #response.should render_template('/index')
+      response.should redirect_to(:controller => 'home', :action => 'errors')
+      @user_count.should == User.count
+    end
+    it 'should be able to DELETE destroy a deactivated user if show_deactivated is true' do
+      get :index, :show_deactivated => "true" # set show deactivated session flag so we can see deactivated users
       user = FactoryGirl.create(:user_min_create_attr)
       user.deactivate
       user.errors.count.should == 0
@@ -355,7 +375,37 @@ describe UsersController do
       get :show, :id => 0
       response.should redirect_to(:controller => 'home', :action => 'errors')
     end
-    
+    it 'should be able to set and clear the show_deactivated flag (user count should be reflected)' do
+      user = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
+      user.deactivate
+      user.errors.count.should == 0
+      User.count.should == 2
+      get :index  # confirm that default startup is to not show deactivated
+      response.should be_success
+      response.should render_template('/index')
+      assigns(:users).size.should  == 1
+      User.count.should == 2
+      get :index, :show_deactivated => DB_TRUE.to_s
+      response.should be_success
+      response.should render_template('/index')
+      User.count.should == 2
+      assigns(:users).size.should  == 2
+      get :index  # run again to confirm the show_deactivated sticks
+      response.should be_success
+      response.should render_template('/index')
+      User.count.should == 2
+      assigns(:users).size.should  == 2
+      get :index, :show_deactivated => DB_FALSE.to_s
+      response.should be_success
+      response.should render_template('/index')
+      User.count.should == 2
+      assigns(:users).size.should  == 1
+      get :index  # run again to confirm the show_deactivated sticks
+      response.should be_success
+      response.should render_template('/index')
+      User.count.should == 2
+      assigns(:users).size.should  == 1
+    end
   end
 
   
@@ -470,57 +520,6 @@ describe UsersController do
       response.should be_success
       response.should render_template('users/show')
       assigns(:user).should eq(@me)
-    end
-    
-    it 'should be able to navigate to the PUT reset_password page with username and email' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
-      put :reset_password, :id => user.id, :user =>{
-        :username => FactoryGirl.attributes_for(:user_min_create_attr)[:username],
-        :email => FactoryGirl.attributes_for(:user_min_create_attr)[:email]
-      }
-      response.should_not redirect_to('/home/errors')
-      response.should render_template("show")
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).username.should == 'TestUser'
-    end
-    it 'should be able to navigate to the PUT reset_password page with just username' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
-      put :reset_password, :id => user.id, :user =>{
-        :username => FactoryGirl.attributes_for(:user_min_create_attr)[:username],
-        :email => ''
-      }
-      response.should_not redirect_to('/home/errors')
-      response.should render_template("show")
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).username.should == 'TestUser'
-    end
-    it 'should be able to navigate to the PUT reset_password page with just email' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
-      put :reset_password, :id => user.id, :user =>{
-        :username => '',
-        :email => FactoryGirl.attributes_for(:user_min_create_attr)[:email]
-      }
-      response.should_not redirect_to('/home/errors')
-      response.should render_template("show")
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).username.should == 'TestUser'
-    end
-    it 'should not be able to navigate to the PUT reset_password page unless there is a username or email' do
-      user = FactoryGirl.create(:user_min_create_attr)
-      #put :reset_password, :id => user.id, :user =>{:username => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:username], :email => FactoryGirl.attributes_for(:reg_user_min_create_attr)[:email]}
-      put :reset_password, :id => user.id, :user =>{
-        :username => '',
-        :email => ''
-      }
-      assigns(:user).should be_nil
-      response.should redirect_to('/home/errors') # not to login - want user to see errors, not try to login
-      response.should_not render_template("show")
     end
     
     context 'should allow the users to view their own information' do
@@ -690,6 +689,57 @@ describe UsersController do
     
   end
   
+  context 'redirect back testing' do
+    before(:each) do
+      @me = FactoryGirl.create(:admin_user_full_create_attr)
+    end
+    it 'should redirect user back to get action after forced signin on get action' do
+      get :show, :id => @me.id
+      response.should_not be_success
+      response.code.should be == '302'
+      response.should be_redirect
+      response.should redirect_to(:action=>"signin", :controller=>"users_sessions")
+      assigns(:user_session).should_not be_nil
+      assigns(:user_session).current_user_id.should == 0
+      assigns(:user_session).get_session_info[:original_uri].should == "/users/1"
+      # cannot test more than this, because we are testing with two different controllers.
+    end
+    it 'should redirect user back to home page after forced signin on put action' do
+      put :deactivate, :id => @me.id
+      response.should_not be_success
+      response.code.should be == '302'
+      response.should be_redirect
+      response.should redirect_to(:action=>"signin", :controller=>"users_sessions")
+      assigns(:user_session).should_not be_nil
+      assigns(:user_session).current_user_id.should == 0
+      assigns(:user_session).get_session_info[:original_uri].should == "/home/index"
+      # cannot test more than this, because we are testing with two different controllers.
+    end
+    it 'should redirect user back to home page after forced signin on post action' do
+      post :create, :user => FactoryGirl.attributes_for(:reg_user_min_create_attr)
+      response.should_not be_success
+      response.code.should be == '302'
+      response.should be_redirect
+      response.should redirect_to(:action=>"signin", :controller=>"users_sessions")
+      assigns(:user_session).should_not be_nil
+      assigns(:user_session).current_user_id.should == 0
+      assigns(:user_session).get_session_info[:original_uri].should == "/home/index"
+      # cannot test more than this, because we are testing with two different controllers.
+    end
+    it 'should redirect user back to home page after forced signin on delete action' do
+      user = FactoryGirl.create(:reg_user_min_create_attr)
+      delete :destroy, :id => user.id
+      response.should_not be_success
+      response.code.should be == '302'
+      response.should be_redirect
+      response.should redirect_to(:action=>"signin", :controller=>"users_sessions")
+      assigns(:user_session).should_not be_nil
+      assigns(:user_session).current_user_id.should == 0
+      assigns(:user_session).get_session_info[:original_uri].should == "/home/index"
+      # cannot test more than this, because we are testing with two different controllers.
+    end
+  end
+  
   describe "routing" do
     it "routes to #index" do
       { :get => '/users' }.should route_to("users#index")
@@ -724,8 +774,8 @@ describe UsersController do
     it "routes to #destroy" do
       { :put => '/users/1/update_password' }.should route_to("users#update_password", :id => "1")
     end
-    it "routes to #destroy" do
-      { :put => '/users/1/reset_password' }.should route_to("users#reset_password", :id => "1")
-    end
+    #it "routes to #destroy" do
+    #  { :put => '/users/1/reset_password' }.should route_to("users#reset_password", :id => "1")
+    #end
   end
 end

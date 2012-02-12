@@ -10,17 +10,21 @@ class Ability
     if user.has_role? 'all_admins'
       can :manage, :all
       can :deactivate, :all
+      cannot :deactivate, User, :id => user.id
       can :reactivate, :all
       can :reset_password, User
       can :edit_password, User
     end
-    if user.has_role? 'all_guests'
+    # if user.has_role? 'all_guests'
+    #let all users do these
       can :reset_password, User
       can :errors, User
-    end
+      can :manage, UserSession
+    #end
     if user.has_role? 'maint_admins'
       can :manage, User
       can :deactivate, User
+      cannot :deactivate, User, :id => user.id
       can :reactivate, User
       can :reset_password, User
       can :edit_password, User

@@ -294,6 +294,11 @@ describe User do
       user.errors.count.should > 0
       User.count.should == @user_count
     end
+    
+    it 'should have deactivated set to DB_FALSE or DB_TRUE (during create, ... see logger.debug)' do
+      @user1.deactivated?.should be_false
+      @user1.deactivated.should == DB_FALSE
+    end
 
   end
   
@@ -340,6 +345,40 @@ describe User do
     
   end
 
+
+  context 'should properly test can_see_system?' do
+    before(:each) do
+      @reg = FactoryGirl.create(:reg_user_min_create_attr)
+    end
+    
+    it 'should always see the see the system of the role, and not others' do
+      # loop through all valid roles
+      VALID_ROLES.each do |role|
+        this_role = Role.new(role)
+        # assign this role to this user
+        @reg.update_attributes({:roles => role})
+        @reg.has_role?(role).should be_true
+        # Rails.logger.debug("T user_spec can_see_system? - role:#{role}, system:#{this_role.sys_id}, #{@reg.can_see_system?(this_role.sys_id)}")
+        @reg.can_see_system?(this_role.sys_id).should be_true
+        # loop through all valid systems
+        APPLICATION_SYSTEMS.each do |system_id, system|
+          # Rails.logger.debug("T user_spec can_see_system? check - role:#{role}, system:#{system_id}")
+          sysid = system_id.to_s
+          # make sure it cannot see a (non default role) system different from its current (unless all system)
+          if !DEFAULT_ROLE.split(' ').index(role).nil? && sysid != this_role.sys_id && this_role.sys_id != 'all'
+            # Rails.logger.debug("T user_spec can_see_system? - cant see others - role:#{role}, system:#{sysid} - #{@reg.can_see_system?(sysid)}")
+            @reg.can_see_system?(sysid).should be_false
+          end
+          # it system for this role is all, make sure it can see all systems
+          if this_role.sys_id == 'all'
+            # Rails.logger.debug("T user_spec can_see_system? - all seeing all - role:#{role}, system:#{sysid} - #{@reg.can_see_system?(sysid)}")
+            @reg.can_see_system?(sysid).should be_true
+          end
+        end
+      end
+    end
+    
+  end
 end
 
 # == Schema Information

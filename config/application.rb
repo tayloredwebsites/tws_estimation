@@ -14,8 +14,9 @@ module TwsAuth
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
-    config.autoload_paths += %W(#{config.root}/lib/)
-    config.autoload_paths += %W(#{config.root}/lib/**/)
+    # http://stackoverflow.com/questions/1073076/rails-lib-modules-and
+    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -46,30 +47,5 @@ module TwsAuth
     # config.cache_store = :file_store, Rails.root.join('tmp', 'cachedir') #"/path/to/cache/directory"
   end
 end
-
-
-###########################
-# Internationalize Configs
-###########################
-
-module I18n
-  class << self
-    def is_true_or_false(true_false_value)
-      if (true_false_value == true)
-        I18n.translate('view_field_value.true')
-      else
-        I18n.translate('view_field_value.false')
-      end
-    end
-    def is_deactivated_or_not(true_false_value)
-      if (true_false_value == true)
-        I18n.translate('view_field_value.deactivated')
-      else
-        I18n.translate('view_field_value.reactivated')
-      end
-    end
-  end
-end
-
 
 
