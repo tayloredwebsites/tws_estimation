@@ -1,9 +1,15 @@
 require 'spec_helper'
 
+# users_integration_spec.rb
+describe 'Systems Tests' do
+  context 'Regular user systems' do
+      it 'should see the maintenance menu sub items if currently in that system'
+      it 'should see the estimation menu sub items if currently in that system'
+    end
+  end
+end
+
 describe 'Integration Tests To Do- ' do
-  
-  context 'dont display fields in show or edit unless @user.can_field_be_edited?()'
-  
   context 'User Administration - ' do
     it 'should list all users (by application or all?)'
     it 'should limit access to each system based upon the user roles'
