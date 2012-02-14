@@ -1,3 +1,5 @@
+# users_integration_spec.rb
+
 require 'spec_helper'
 include UserTestHelper
 include ApplicationHelper
@@ -1074,8 +1076,8 @@ describe 'Systems Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
       page.should have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('systems.estim.full_name'))
     end
-    it 'should see the maintenance menu sub items if currently in that system'
-    it 'should see the estimation menu sub items if currently in that system'
+    # it 'should see the maintenance menu sub items if currently in that system'
+    # it 'should see the estimation menu sub items if currently in that system'
   end
   context 'Administrator user systems' do
     before(:each) do
