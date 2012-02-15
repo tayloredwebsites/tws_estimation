@@ -13,13 +13,13 @@
         :abbreviation => 'All',
         :full_name => 'All Systems'
       },
-      :home => {
+#      :home => {
+#        :abbreviation => 'Home',
+#        :full_name => 'Home'
+#      },
+      :guest => {
         :abbreviation => 'Home',
         :full_name => 'Home'
-      },
-      :guest => {
-        :abbreviation => 'Guest-Home',
-        :full_name => 'Guest-Home'
       },
       :maint => {
         :abbreviation => 'Maint.',
@@ -35,10 +35,10 @@
       }
     },
     :roles => {
-      :guests => {
-        :abbreviation => 'Guest',
-        :full_name => 'Guest'
-      },
+#      :guests => {
+#        :abbreviation => 'Guest',
+#        :full_name => 'Guest'
+#      },
       :users => {
         :abbreviation => 'User',
         :full_name => 'User'
