@@ -25,7 +25,7 @@ DB_VALUES = {
 # each role has layout: (application_name/all)_(role_name/guest)
 APPLICATION_SYSTEMS = {
   :all => {:id => 'all', :actual => 'false', :type => 'system'},
-  :home => {:id => 'home', :actual => 'true', :type => 'shared'},
+#  :home => {:id => 'home', :actual => 'true', :type => 'shared'},
   :guest => {:id => 'guest', :actual => 'true', :type => 'shared'},
   :maint => {:id => 'maint', :actual => 'true', :type => 'shared'},
   :estim => {:id => 'estim', :actual => 'true', :type => 'shared'},
