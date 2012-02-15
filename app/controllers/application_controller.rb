@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 	layout "application"
   
   include ApplicationHelper
-  include CommonMethods
+  include Application::CommonMethods
   
   before_filter :load_user_session
   after_filter :save_user_session

@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   
-  include UserRoles
-  include CommonMethods
-  include Deactivated
+  include Models::UserRoles
+  include Application::CommonMethods
+  include Models::Deactivated
   
   attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password, :roles
   attr_accessor :password, :old_password

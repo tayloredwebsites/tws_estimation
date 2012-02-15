@@ -1,4 +1,4 @@
-module Deactivated
+module Models::Deactivated
   # module to add deactivated field to a model
   
   # unnecessary

@@ -26,7 +26,7 @@ describe User do
         if DEFAULT_ROLE.index(role).nil?
           Rails.logger.debug("T user_roles_spec - role:#{role.to_s}")
           @user.has_role?(role).should be_false 
-          UserRoles.is_valid_role?(role).should be_true
+          Models::UserRoles.is_valid_role?(role).should be_true
           @user.add_role(role)
           @user.has_role?(role).should be_true
           @user.remove_role(role)
