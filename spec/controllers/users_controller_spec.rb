@@ -351,11 +351,13 @@ describe UsersController do
       User.count.should == @user_count + 1
     end
     it 'should not be able to DELETE destroy a deactivated user if show_deactivated is false' do
+      Rails.logger.debug("T users_controller_spec Test destroy show deactivated false - Index")
       get :index, :show_deactivated => "false" # set show deactivated session flag so we can see deactivated users
       user = FactoryGirl.create(:user_min_create_attr)
       user.deactivate
       user.errors.count.should == 0
       @user_count = User.count
+      Rails.logger.debug("T users_controller_spec Test destroy show deactivated false - Destroy")
       delete :destroy, :id => user.id
       #response.should render_template('/index')
       response.should redirect_to(:controller => 'home', :action => 'errors')

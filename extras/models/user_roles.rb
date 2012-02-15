@@ -1,4 +1,4 @@
-module UserRoles
+module Models::UserRoles
   # module for the user class
 
   # roles_in parameter should be the roles string

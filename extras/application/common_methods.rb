@@ -1,4 +1,4 @@
-module CommonMethods
+module Application::CommonMethods
   
   ######################################################
   # common methods to be available across application
