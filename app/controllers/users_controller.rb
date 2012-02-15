@@ -85,12 +85,6 @@ class UsersController< SecureApplicationController
     # Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
     @user = @users_scoped.find(params[:id])
     if (!@user.nil?)
-      # # debugging cancan authorize! # note cannot prevent self update of roles by cancan - it only filters records available
-      # ability = Ability.new(@user)
-      # Rails.logger.debug("* UsersController - update - ability.can?(:update, @user):#{ability.can?(:update, @user)}") # see if user can access the user
-      # Rails.logger.debug("* UsersController - update - User.accessible_by(ability):#{User.accessible_by(ability).inspect.to_s}") # see if returns the records the user can access
-      # Rails.logger.debug("* UsersController - update - ''.to_sql:#{User.accessible_by(ability).to_sql}") # ee what the generated SQL looks like
-      # # end debugging cancan authorize!
       # Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
       authorize! :update, @user   # authorize from CanCan::ControllerAdditions
       # Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")

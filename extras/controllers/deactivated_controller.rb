@@ -1,9 +1,6 @@
 module Controllers::DeactivatedController
   # module to add deactivated field to a controller
   
-  # constant to see if this module is loaded
-  DEACTIVATED_MODULE = true;
-  
   # unnecessary
   def initialize(*args)
     Rails.logger.debug("* .DeactivatedController.initialize args:#{args.inspect.to_s}")

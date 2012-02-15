@@ -1,6 +1,12 @@
 module Models::Deactivated
   # module to add deactivated field to a model
   
+  # check to see if this module is loaded
+  # if (defined? @model.deactivated_module) will be true if this module is included
+  def deactivated_module
+    true
+  end
+  
   # unnecessary
   def initialize(*args)
     # Rails.logger.debug("* .Deactivated.initialize args:#{args.inspect.to_s}")
