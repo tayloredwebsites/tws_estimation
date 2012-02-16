@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   
   include Models::UserRoles
   include Application::CommonMethods
+  include Models::CommonMethods
   include Models::Deactivated
   
   attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password, :roles
@@ -299,6 +300,7 @@ class User < ActiveRecord::Base
   
 end
 
+
 # == Schema Information
 #
 # Table name: users
@@ -313,5 +315,6 @@ end
 #  password_salt      :string(255)
 #  created_at         :datetime
 #  updated_at         :datetime
+#  deactivated        :boolean
 #
 
