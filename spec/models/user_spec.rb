@@ -20,10 +20,6 @@ describe User do
     it "should not create user when created with no attributes" do
       @num_users = User.count
       user = User.create()
-      user.should be_instance_of(User)
-      user.username.should be_nil
-      user.id.should be_nil
-      user.errors.count.should > 0
       User.count.should == (@num_users)
     end
     
@@ -260,7 +256,7 @@ describe User do
           # Rails.logger.debug("T user_spec can_see_system? check - role:#{role}, system:#{system_id}")
           sysid = system_id.to_s
           # make sure it cannot see a (non default role) system different from its current (unless all system)
-          if !DEFAULT_ROLE.split(' ').index(role).nil? && sysid != this_role.sys_id && this_role.sys_id != 'all'
+          if !DEFAULT_ROLES.split(' ').index(role).nil? && sysid != this_role.sys_id && this_role.sys_id != 'all'
             # Rails.logger.debug("T user_spec can_see_system? - cant see others - role:#{role}, system:#{sysid} - #{@reg.can_see_system?(sysid)}")
             @reg.can_see_system?(sysid).should be_false
           end

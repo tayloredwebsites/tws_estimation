@@ -65,43 +65,43 @@
 						<% if @user_session.signed_in? %>
 							<%= I18n.translate('view_labels.welcome_user', :user => @user_session.current_user_full_name) %>
 							<br/>
-							<%= link_to I18n.translate('users_sessions.signout.action'), signout_path  %>
+							<%= link_to content_tag(:span, I18n.translate('users_sessions.signout.action')), signout_path  %>
 					  <% else %>
-							<%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %>
+							<%= link_to content_tag(:span, I18n.translate('users_sessions.signin.action')), signin_path  %>
 						<% end %>
           </div>
          <ul class="module_body column_nav">
-           <li class="list_column off"><%= link_to I18n.translate('home.index.title'), home_index_path %></li>
+           <li class="list_column off"><%= link_to content_tag(:span, I18n.translate('home.index.title')), home_index_path %></li>
 						<% if can? :manage , User %>
-	           	<li class="list_column off"><%= link_to I18n.translate('users.index.title'), users_path %></li>
+	           	<li class="list_column off"><%= link_to content_tag(:span, I18n.translate('users.index.title')), users_path %></li>
 						<% elsif @user_session.signed_in? %>
-	          	<li class="list_column off"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
+	          	<li class="list_column off"><%= link_to content_tag(:span, I18n.translate('users.show.title')), user_path(cur_user_id) %></li>
 						<% else %>
-		          <li class="list_column off"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
+		          <li class="list_column off"><%= link_to content_tag(:span, I18n.translate('users_sessions.signin.action')), signin_path  %></li>
 						<% end %>
 						<% if cur_user.can_see_system?('maint')%>
-            	<li class="list_column off"><%= link_to I18n.translate('systems.maint.full_name'), '#' %></li>
+            	<li class="list_column off"><%= link_to content_tag(:span, I18n.translate('systems.maint.full_name')), '#' %></li>
 						<% end %>
 						<% if cur_user.can_see_system?('estim')%>
-            	<li class="list_column off"><%= link_to I18n.translate('systems.estim.full_name'), '#' %></li>
+            	<li class="list_column off"><%= link_to content_tag(:span, I18n.translate('systems.estim.full_name')), '#' %></li>
 						<% end %>
-            <li class="list_column on"><%= link_to 'Item', '#' %>
+            <li class="list_column on"><%= link_to content_tag(:span, 'Item'), '#' %>
               <ul class="column_nav">
-                <li class="list_column off"><%= link_to 'Sub Item', '#' %></li>
-                <li class="list_column off"><%= link_to 'Sub Item', '#' %></li>
-                <li class="list_column on"><%= link_to 'Sub Item', '#' %>
+                <li class="list_column off"><%= link_to content_tag(:span, 'Sub Item'), '#' %></li>
+                <li class="list_column off"><%= link_to content_tag(:span, 'Sub Item'), '#' %></li>
+                <li class="list_column on"><%= link_to content_tag(:span, 'Sub Item'), '#' %>
                   <ul class="column_nav">
-                    <li class="list_column off"><%= link_to 'Sub Sub Item', '#' %></li>
-                    <li class="list_column on"><%= link_to 'Sub Sub Item', '#' %></li>
-                    <li class="list_column off"><%= link_to 'Sub Sub Item', '#' %></li>
+                    <li class="list_column off"><%= link_to content_tag(:span, 'Sub Sub Item'), '#' %></li>
+                    <li class="list_column on"><%= link_to content_tag(:span, 'Sub Sub Item'), '#' %></li>
+                    <li class="list_column off"><%= link_to content_tag(:span, 'Sub Sub Item'), '#' %></li>
                   </ul>
                 </li>
-                <li class="list_column off"><%= link_to 'Sub Item', '#' %></li>
+                <li class="list_column off"><%= link_to content_tag(:span, 'Sub Item'), '#' %></li>
               </ul>
             </li>
-            <li class="list_column off"><%= link_to 'Item', '#' %></li>
-            <li class="list_column off"><%= link_to 'Item', '#' %></li>
-            <li class="list_column off"><%= link_to I18n.translate('home.help.title'), home_help_path %></li>
+            <li class="list_column off"><%= link_to content_tag(:span, 'Item'), '#' %></li>
+            <li class="list_column off"><%= link_to content_tag(:span, 'Item'), '#' %></li>
+            <li class="list_column off"><%= link_to content_tag(:span, I18n.translate('home.help.title')), home_help_path %></li>
           </ul>
         </div><!-- end block_module -->
 

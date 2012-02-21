@@ -1,8 +1,9 @@
 # users_integration_spec.rb
 
 require 'spec_helper'
-include UserTestHelper
+include UserIntegrationHelper
 include ApplicationHelper
+
 
 describe 'Users Integration Tests' do
 
@@ -12,12 +13,7 @@ describe 'Users Integration Tests' do
       @user1 = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
       visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # save_and_open_page
+      helper_admin_signin
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
         /#{I18n.translate('view_labels.welcome_user', :user => @me.full_name) }/
@@ -125,7 +121,7 @@ describe 'Users Integration Tests' do
       # save_and_open_page
       within(".new_user") do
         page.fill_in 'user_username', :with => ''
-        page.fill_in 'user_email', :with => 'bad_email'
+        page.fill_in 'user_email', :with => 'my.email@example.com'
         page.fill_in 'user_first_name', :with => 'first'
         page.fill_in 'user_last_name', :with => 'last'
         page.fill_in 'user_password', :with => 'password'
@@ -150,7 +146,7 @@ describe 'Users Integration Tests' do
       # save_and_open_page
       within(".new_user") do
         page.fill_in 'user_username', :with => 'me'
-        page.fill_in 'user_email', :with => 'bad_email'
+        page.fill_in 'user_email', :with => 'my.email@example.com'
         page.fill_in 'user_first_name', :with => 'first'
         page.fill_in 'user_last_name', :with => 'last'
         page.fill_in 'user_password', :with => ''
@@ -175,11 +171,11 @@ describe 'Users Integration Tests' do
       # save_and_open_page
       within(".new_user") do
         page.fill_in 'user_username', :with => 'me'
-        page.fill_in 'user_email', :with => 'bad_email'
+        page.fill_in 'user_email', :with => 'my.email@example.com'
         page.fill_in 'user_first_name', :with => 'first'
         page.fill_in 'user_last_name', :with => 'last'
         page.fill_in 'user_password', :with => 'xxx'
-        page.fill_in 'user_password_confirmation', :with => 'yyy'
+        page.fill_in 'user_password_confirmation', :with => 'yyyzzz'
         find('input#user_submit').click
       end
       # save_and_open_page
@@ -187,7 +183,8 @@ describe 'Users Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
-      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password_confirmation"]')
+      # page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password_confirmation"]')
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
       find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       @num_users.should == User.count
@@ -236,13 +233,7 @@ describe 'Users Sessions Integration Tests' do
   context 'Admin user logged in - visit signin path - ' do
 
     before(:each) do
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # save_and_open_page
-      Rails.logger.debug("T users_integration_spec Admin user logged in before - done")
+      helper_admin_signin
     end
     
     it 'login with valid credentials - should send the user to the Logged In page (Session Create page)' do
@@ -287,13 +278,7 @@ describe 'Users Roles Tests - ' do
   
   context 'Admin user logged in - ' do
     before(:each) do
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # should be on the Session Create page
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
-      # save_and_open_page
+      helper_admin_signin
     end
     it 'should see the Show User page for self' do
       visit user_path (@admin.id)
@@ -384,7 +369,7 @@ describe 'Users Roles Tests - ' do
       VALID_ROLES.each do |role|
         if work_roles.split(' ').index(role).nil?
           Rails.logger.debug("T users_integration_spec - role #{role} not in user roles")
-          Rails.logger.error("T-Error users_integration_spec - Error - roles not matching default") if !DEFAULT_ROLE.index('role').nil?
+          Rails.logger.error("T-Error users_integration_spec - Error - roles not matching default") if !DEFAULT_ROLES.index('role').nil?
           find(:xpath, "//form[@class=\"edit_user\"]/div/div/span/span/input[@value=\"#{role}\"]" ).checked?.should_not == 'checked'
           find(:xpath, "//form[@class=\"edit_user\"]/div/div/span/span/input[@value=\"#{role}\"]" ).checked?.should be_nil
           check("user_roles_#{role}")
@@ -406,7 +391,7 @@ describe 'Users Roles Tests - ' do
       VALID_ROLES.each do |role|
         if work_roles.split(' ').index(role).nil?
           Rails.logger.debug("T users_integration_spec - role #{role} not in user roles")
-          Rails.logger.error("T-Error users_integration_spec - Error - roles not matching default") if !DEFAULT_ROLE.index('role').nil?
+          Rails.logger.error("T-Error users_integration_spec - Error - roles not matching default") if !DEFAULT_ROLES.index('role').nil?
           find(:xpath, "//form[@class=\"edit_user\"]/div/div/span/span/input[@value=\"#{role}\"]" ).checked?.should_not == 'checked'
           find(:xpath, "//form[@class=\"edit_user\"]/div/div/span/span/input[@value=\"#{role}\"]" ).checked?.should be_nil
           check("user_roles_#{role}")
@@ -428,7 +413,7 @@ describe 'Users Roles Tests - ' do
       VALID_ROLES.each do |role|
         if work_roles.split(' ').index(role).nil?
           Rails.logger.debug("T users_integration_spec - role #{role} not in user roles")
-          Rails.logger.error("T-Error users_integration_spec - Error - roles not matching default") if !DEFAULT_ROLE.index('role').nil?
+          Rails.logger.error("T-Error users_integration_spec - Error - roles not matching default") if !DEFAULT_ROLES.index('role').nil?
           find(:xpath, "//form[@class=\"edit_user\"]/div/div/span/span/input[@value=\"#{role}\"]" ).checked?.should_not == 'checked'
           find(:xpath, "//form[@class=\"edit_user\"]/div/div/span/span/input[@value=\"#{role}\"]" ).checked?.should be_nil
         else
@@ -451,13 +436,7 @@ describe 'Users Roles Tests - ' do
   end
   context 'Regular user logged in - ' do
     before(:each) do
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # should be on the Session Create page
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
-      # save_and_open_page
+      helper_reg_signin
     end
     it 'should see the Show User page for self' do
       visit user_path (@reg.id)
@@ -631,12 +610,7 @@ describe 'Systems Tests' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
       visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # save_and_open_page
+      helper_reg_signin
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       visit home_index_path
       Rails.logger.debug("T System Tests - Regular user systems - before each is done.")
@@ -678,35 +652,53 @@ describe 'Systems Tests' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
       visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # save_and_open_page
+      helper_admin_signin
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       visit home_index_path
     end
     it 'should have home system for home page' do
       visit home_index_path
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.guest.full_name')}$/
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+      helper_user_on_page?('systems.guest.full_name', 'home.index.header', @me.full_name)
     end
     it 'should have home system for errors page' do
       visit home_errors_path
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.guest.full_name')}$/
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
+      helper_user_on_page?('systems.guest.full_name', 'home.errors.header', @me.full_name)
     end
     it 'should have maint system for user pages' do
       visit user_path(@me.id)
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.maint.full_name')}$/
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
+      helper_user_on_page?('systems.maint.full_name', 'users.show.header', @me.full_name)
     end
     it 'should see maint menu admin items' do
       visit home_index_path
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.guest.full_name')}$/
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+      helper_user_on_page?('systems.guest.full_name', 'home.index.header', @me.full_name)
       page.should have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('users.index.title'))
     end
   end
+
+  context 'redirect back testing' do
+    before(:each) do
+      @user1 = FactoryGirl.create(:user_full_create_attr)
+      @admin = FactoryGirl.create(:admin_user_full_create_attr)
+    end
+
+    it 'should redirect user back to get action after forced signin on get action' do
+      visit new_user_path()
+      # should be redirect to signin page
+      helper_admin_signin
+      # should be signed in, and redirected to the original page 
+      # save_and_open_page
+      helper_user_on_page?('systems.maint.full_name', 'users.new.header', @admin.full_name)
+    end
+    it 'should not signout a user after just signing in due to redirect back coding' do
+      visit signout_path()
+      # should be redirect to signin page
+      helper_admin_signin
+      # should be signed in, and redirected to the original page 
+      # save_and_open_page
+      helper_user_on_page?('systems.guest.full_name', 'users_sessions.index.header', @admin.full_name)
+    end
+    
+  end
+  
+
 end

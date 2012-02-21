@@ -34,7 +34,7 @@ FactoryGirl.define do
     last_name       'User'
     email     'email@example.com'
     username  'TestUser'
-    roles     DEFAULT_ROLE.join(' ')
+    roles     DEFAULT_ROLES.join(' ')
     password              'test'
     password_confirmation 'test'
   end
@@ -79,7 +79,7 @@ FactoryGirl.define do
     last_name       'User'
     email     'reguser@example.com'
     username  'RegUser'
-    roles     DEFAULT_ROLE.join(' ')+' maint_users estim_users'
+    roles     DEFAULT_ROLES.join(' ')+' maint_users estim_users'
     password              'testr'
     password_confirmation 'testr'
   end
@@ -106,7 +106,7 @@ FactoryGirl.define do
     last_name       'User'
     email     'admin@example.com'
     username  'AdminUser'
-    roles     DEFAULT_ROLE.join(' ')+' all_admins'
+    roles     DEFAULT_ROLES.join(' ')+' all_admins'
     password              'testa'
     password_confirmation 'testa'
   end

@@ -100,7 +100,7 @@ describe UsersSessionsController do
       response.should render_template("/signin")
       assigns(:user_session).should_not be_nil
       # should have default roles
-      DEFAULT_ROLE.each do |role|
+      DEFAULT_ROLES.each do |role|
         assigns(:user_session).current_user.has_role?(role).should be_true
       end
       #assigns(:user_session).current_user.should_not be_nil
@@ -130,7 +130,7 @@ describe UsersSessionsController do
       #assigns(:user_session).current_user.should_not be_nil
       assigns(:user_session).current_user_id.should == 0
       # should have default roles
-      DEFAULT_ROLE.each do |role|
+      DEFAULT_ROLES.each do |role|
         assigns(:user_session).current_user.has_role?(role).should be_true
       end
     end

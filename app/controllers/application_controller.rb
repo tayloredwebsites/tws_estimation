@@ -116,13 +116,13 @@ class ApplicationController < ActionController::Base
     Rails.logger.debug("* ApplicationController.redirect_away - req_method:#{req_method}")
     if req_method.upcase == 'GET'
       session[:original_uri] = request.fullpath()
-      @user_session.set_info(:original_uri, request.fullpath())
+      # @user_session.set_info(:original_uri, request.fullpath())
       redirect_to(*params)
     else
       Rails.logger.warn("* ApplicationController.redirect_away - not a GET, cannot redirect, goes to home")
-      notify_warning("Sorry, will not be able to redirect back to GET #{request.fullpath}")
+      notify_warning("Login Session Timeout - Sorry, will lose your place:#{request.fullpath} (not a GET)")
       session[:original_uri] = home_index_path
-      @user_session.set_info(:original_uri, home_index_path)
+      # @user_session.set_info(:original_uri, home_index_path)
       redirect_to(*params)
     end
   end
@@ -130,10 +130,10 @@ class ApplicationController < ActionController::Base
   # returns the person to either the original url from a redirect_away or to a default url
   # http://ethilien.net/archives/better-redirects-in-rails/
   def redirect_back(*params)
-    Rails.logger.debug("* ApplicationController.redirect_back - params:#{params.inspect.to_s}")
+    # Rails.logger.debug("* ApplicationController.redirect_back - params:#{params.inspect.to_s}, original uri:#{session[:original_uri]}")
     uri = session[:original_uri]
     session[:original_uri] = nil
-    if uri
+    if uri && DONT_REDIRECT_BACK_URI.index(uri).nil?
       Rails.logger.debug("* ApplicationController - redirect_to uri:#{uri}")
       redirect_to uri
     else
