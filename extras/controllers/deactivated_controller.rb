@@ -3,33 +3,24 @@ module Controllers::DeactivatedController
   
   # unnecessary
   def initialize(*args)
-    Rails.logger.debug("* .DeactivatedController.initialize args:#{args.inspect.to_s}")
+    # Rails.logger.debug("* .DeactivatedController.initialize args:#{args.inspect.to_s}")
     super(*args)
-  end
-  
-  # Possible to add before filters to base class for this module
-  # not used - prefer to call get_scoped_users from class before filter for readability
-  def self.included(base)
-    Rails.logger.debug("* .DeactivatedController.self.included - base class name:#{base.name}")
-    # base.before_filter do |controller|
-    # end
-    
   end
 
   # update current scope chain with deactivation scope
   def get_scope(users_scope)
     if show_deactivated?
-      Rails.logger.debug("* Controllers::DeactivatedController.get_scope show_deactivated == true")
+      # Rails.logger.debug("* Controllers::DeactivatedController.get_scope show_deactivated == true")
       return users_scope
     else
-      Rails.logger.debug("* Controllers::DeactivatedController.get_scope show_deactivated == false")
+      # Rails.logger.debug("* Controllers::DeactivatedController.get_scope show_deactivated == false")
       return users_scope.where("deactivated = ? or deactivated IS NULL", false)
     end
   end
   
   # GET /users/:id/deactivate
   def deactivate
-    Rails.logger.debug("* UsersController - deactivate - authorize")
+    # Rails.logger.debug("* UsersController - deactivate - authorize")
     @user = @users_scoped.find(params[:id])
     if (!@user.nil?)
       authorize! :deactivate, @user   # authorize from CanCan::ControllerAdditions
@@ -56,7 +47,7 @@ module Controllers::DeactivatedController
   
   # GET /users/:id/reactivate
   def reactivate
-    Rails.logger.debug("* UsersController - reactivate - authorize")
+    # Rails.logger.debug("* UsersController - reactivate - authorize")
     @user = @users_scoped.find(params[:id])
     if (!@user.nil?)
       authorize! :reactivate, @user   # authorize from CanCan::ControllerAdditions

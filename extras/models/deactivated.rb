@@ -1,33 +1,24 @@
 module Models::Deactivated
+  extend ActiveSupport::Concern
+  
+  # module for the user class
   # module to add deactivated field to a model
   
+  included do
+    before_save :validate_deactivated
+  end
+
   # check to see if this module is loaded
   # if (defined? @model.deactivated_module) will be true if this module is included
   def deactivated_module
     true
   end
   
-  # unnecessary
-  def initialize(*args)
-    # Rails.logger.debug("* .Deactivated.initialize args:#{args.inspect.to_s}")
-    super(*args)
-  end
-  
-  # Invalid attempt to add before filters to base class for this module
-  #def self.included(base)
-  #  Rails.logger.debug("* .Deactivated.self.included - base:#{base.name}")
-  #  base.before_save :validate_deactivated
-  #end
-
-  # parent class validate_save method must call super for this to happen
-  def validate_save
-    # Rails.logger.debug("* .Deactivate.validate_save")
-    self.validate_deactivated
-  end
-    
   def validate_deactivated
-    # Rails.logger.debug("* User.validate_deactivated:#{deactivated.inspect.to_s}") if self.deactivated != db_value_true?(self.deactivated)
+    # Rails.logger.debug("* User.validate_deactivated:#{deactivated.inspect.to_s}")
     self.deactivated = db_value_true?(self.deactivated)
+    # Rails.logger.debug("* User.validate_deactivated done => #{deactivated.inspect.to_s}")
+    return true # always update
   end
     
   # method to deactivate record
@@ -65,13 +56,15 @@ module Models::Deactivated
   end
   
   def deactivated?
+    # Rails.logger.debug("* Models::Deactivated.deactivated? self.deactivated:#{self.deactivated.inspect.to_s}")
     if self.deactivated == DB_TRUE
       return true
     elsif self.deactivated == DB_FALSE
       return false
     else
       Rails.logger.warn("! User.deactivated? - invalid value for deactivated:#{self.deactivated.inspect.to_s}")
-      return validate_deactivated
+      validate_deactivated
+      return self.deactivated == DB_TRUE
     end
   end
   

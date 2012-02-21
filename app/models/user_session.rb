@@ -90,7 +90,7 @@ class UserSession
   
   def set_info(key,value)
     if !(VALID_SESSION_INFO.index(key.to_s).nil?)
-      #R ails.logger.debug("* UserSession.set_info key,value:#{key.inspect.to_s}/#{value.inspect.to_s}")
+      # Rails.logger.debug("* UserSession.set_info key,value:#{key.inspect.to_s}/#{value.inspect.to_s}")
       @session_info[key.to_sym]=value
     else
       Rails.logger.warn("* UserSession.set_info - attempt to set session variable to invalid key: #{key.to_s}")
@@ -116,12 +116,17 @@ class UserSession
     # Rails.logger.debug('* UserSession.sign_in -username:'+username.to_s+', password:'+password.to_s)
     user =  User.valid_password?(username, password)
     if user.nil?
-      # Rails.logger.debug('* UserSession - sign_in - not a valid username:'+username.to_s+', password:'+password.to_s)
+      # Rails.logger.debug('* UserSession.sign_in - not a valid username:'+username.to_s+', password:'+password.to_s)
       init
     elsif user.deactivated?
       # Rails.logger.debug('* UserSession.sign_in - valid sign_in - deactivated user:'+user.inspect.to_s)
       init
-			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'login', :msg => I18n.translate('error_messages.you_are_deactivated') ) )
+      errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'login', :msg => I18n.translate('error_messages.you_are_deactivated') ) )
+    elsif user.errors.size > 0
+      # Rails.logger.debug("* UserSession.signin - errors:#{errors.inspect.to_s}")
+      user.errors.each do |attr, msg|
+        errors.add(:base, msg)
+      end
     else
       @sign_in_time = Time.now
       @time_last_accessed = @sign_in_time

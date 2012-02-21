@@ -14,4 +14,5 @@ describe 'Miscellaneous items to do - ' do
     it 'should have a copy of the user deactivation tests for no deactivation modules'
     it 'should have a copy of the user deactivation tests for with deactivation modules'
   end
+  it 'should give a warning to the user on problems with roles - want to update and still notify user'
 end

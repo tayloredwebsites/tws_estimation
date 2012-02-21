@@ -15,17 +15,17 @@ class UsersController< SecureApplicationController
     #Rails.logger.debug("* UsersController.before_filter @user_session:#{@user_session.inspect.to_s}")
     Rails.logger.debug("* UsersController.before_filter @user_session.info('show_deactivated'):#{@user_session.info('show_deactivated').inspect.to_s}")
     @users_scoped = get_scope(User.scoped)
-    Rails.logger.debug("* UsersController.before_filter for #{params[:action]} show_deactivated? = #{show_deactivated?}")
-    Rails.logger.debug("* UsersController.before_filter for #{params[:action]} @users_scoped = #{@users_scoped.all}")
+    # Rails.logger.debug("* UsersController.before_filter @users_scoped:#{@users_scoped.inspect.to_s}")
   end
   
   # chain current scope with any modules that have set scope (e.g. DeactivatedController)
   def get_scope(cur_scope)
+    # Rails.logger.debug("* UsersController.get_scope defined?(super):#{defined?(super).inspect.to_s}")
     if defined?(super)
-      Rails.logger.debug("* UsersController.get_scope super scope=#{super(cur_scope).all} ")
+      # Rails.logger.debug("* UsersController.get_scope super")
       return super(cur_scope)
     else
-      Rails.logger.debug("* UsersController.get_scope no super scope=#{cur_scope.all} ")
+      # Rails.logger.debug("* UsersController.get_scope no super")
       return cur_scope
     end
   end
@@ -48,66 +48,45 @@ class UsersController< SecureApplicationController
 
   # GET /users/new
   def new
-    @user = User.new
+    @user = User.new(params[:user])
     authorize! :new, @user   # authorize from CanCan::ControllerAdditions
   end
 
   # GET /users/1/edit
   def edit
     @user = @users_scoped.find(params[:id])
-    Rails.logger.debug("* UsersController - edit - @user:(#{@user.inspect.to_s})")
-    #Rails.logger.debug("* UsersController - edit - ability.can?(:edit, @user):#{Ability.new(@user).can?(:edit, @user)}") # see if user can access the user
-    #Rails.logger.debug("* UsersController - edit - current_user.id:#{current_user.id.to_s} ==? @user.id:#{@user.id.to_s} => #{current_user.id.to_s == @user.id.to_s}")
+    Rails.logger.debug("* UsersController.edit - @user:(#{@user.inspect.to_s})")
+    #Rails.logger.debug("* UsersController.edit - ability.can?(:edit, @user):#{Ability.new(@user).can?(:edit, @user)}") # see if user can access the user
     authorize! :edit, @user   # authorize from CanCan::ControllerAdditions
   end
 
   def create
-    Rails.logger.debug("* UsersController - create - user:(#{params[:user].inspect.to_s})")
+    # Rails.logger.debug("* UsersController.create - user:(#{params[:user].inspect.to_s})")
+    authorize! :create, @model   # authorize from CanCan::ControllerAdditions
+    # Rails.logger.debug("* UsersController.new call to User.new(#{params[:user]})")
     @user = User.new(params[:user])
-    if (!@user.nil?)
-      authorize! :create, @user   # authorize from CanCan::ControllerAdditions
-      #Rails.logger.debug("* UsersController - create - save")
-      @user.save
-      # @user = User.create!(params[:user])
-      if @user.errors.count == 0
-        render :action => 'show'
-      else
-        render :action => "new"
-      end
+    # Rails.logger.debug("* UsersController.new call done - @user:#{@user.inspect.to_s}")
+    @user.save
+    # Rails.logger.debug("* UsersController.save call done - @user:#{@user.inspect.to_s}")
+    if @user.errors.count == 0
+      render :action => 'show'
     else
-      Rails.logger.error("E Attempt to #{params[:action]} #{@model.class.name}.id:#{params[:id]} when not in scope")
+      render :action => "new"
     end
   end
 
   # PUT /users/1
   def update
-    Rails.logger.debug("* UsersController - update - authorize")
-    # Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
+    Rails.logger.debug("* UsersController.update - params[:user]=#{params[:user].inspect.to_s}")
     @user = @users_scoped.find(params[:id])
     if (!@user.nil?)
-      # Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
+      # Rails.logger.debug("* UsersController.update - found user:#{@user.inspect.to_s}")
       authorize! :update, @user   # authorize from CanCan::ControllerAdditions
-      # Rails.logger.debug("* UsersController - update - params[:user]=#{params[:user].inspect.to_s}")
-      working_params = params[:user].clone
-      # Rails.logger.debug("* UsersController - update - params[:user]=#{working_params.inspect.to_s}")
-      # is this a self update?
-      Rails.logger.debug("* UsersController - update - self update?#{current_user.id.to_s} == #{params[:id]} => #{current_user.id.to_s == params[:id].to_s}")
-      if current_user.id.to_s == params[:id].to_s
-        # if user admin( user has one of USER_SELF_UPDATE_ROLES), let them update all of their fields
-        # otherwise only let them update the USER_SELF_NO_UPDATE_FIELDS.
-        working_params.delete_if{|key,value| !USER_SELF_NO_UPDATE_FIELDS.index(key).nil?} if (current_user.roles.split(' ') & USER_SELF_UPDATE_ROLES).size == 0
-        #Rails.logger.debug("* UsersController - update - updated user params:#{working_params}, sizes:#{params[:user].size} ==? #{working_params.size} ")
-        if params[:user].size != working_params.size
-          err = I18n.translate('errors.cannot_method_your_obj', :method => params[:action], :obj => USER_SELF_NO_UPDATE_FIELDS.join(' or ').to_s) 
-          @user.errors.add(:roles, err)
-          #Rails.logger.debug("* UsersController - update error - #{err}")
-        end
-      end
-      if working_params[:roles].instance_of?(Array)
-        #Rails.logger.debug("* UsersController - update - roles is an array:#{working_params[:roles]}")
-        working_params[:roles] = working_params[:roles].join(' ')
-      end
-      @user.update_attributes(working_params)
+      Rails.logger.debug("* UsersController.update - self update?#{current_user.id.to_s} == #{params[:id]} => #{current_user.id.to_s == params[:id].to_s}")
+      valid_user_params = self.validate_self_update()
+      Rails.logger.debug("* UsersController.update - valid_user_params:#{valid_user_params.inspect.to_s}")
+      @user.update_attributes(valid_user_params)
+      # Rails.logger.debug("* UsersController.update - user after update attributes:#{@user.inspect.to_s}")
       if @user.errors.count == 0
         notify_success( I18n.translate('errors.success_method_obj_name',
           :method => params[:action],
@@ -121,6 +100,25 @@ class UsersController< SecureApplicationController
     else
       Rails.logger.error("E Attempt to #{params[:action]} #{@model.class.name}.id:#{params[:id]} when not in scope")
     end
+  end
+  
+  def validate_self_update
+    Rails.logger.debug("* UsersController.validate_self_update started - test:#{current_user.id.to_s == params[:id].to_s}")
+    working_params = params[:user].clone
+    if current_user.id.to_s == params[:id].to_s
+      # if user admin( user has one of USER_SELF_UPDATE_ROLES), let them update all of their fields
+      # otherwise only let them update the USER_SELF_NO_UPDATE_FIELDS.
+      # to do # split out roles code into user_roles.rb
+      working_params.delete_if{|key,value| !USER_SELF_NO_UPDATE_FIELDS.index(key).nil?} if (current_user.roles.split(' ') & USER_SELF_UPDATE_ROLES).size == 0
+      #Rails.logger.debug("* UsersController - update - updated user params:#{working_params}, sizes:#{params[:user].size} ==? #{working_params.size} ")
+      if params[:user].size != working_params.size
+        err = I18n.translate('errors.cannot_method_your_obj', :method => params[:action], :obj => USER_SELF_NO_UPDATE_FIELDS.join(' or ').to_s) 
+        @user.errors.add(:roles, err)
+        #Rails.logger.debug("* UsersController - update error - #{err}")
+      end
+    end
+    Rails.logger.debug("* UsersController.validate_self_update done")
+    return working_params
   end
 
   # DELETE /users/:id
