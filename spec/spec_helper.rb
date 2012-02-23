@@ -98,3 +98,33 @@ module UserTestHelper
   end
   
 end
+module UserIntegrationHelper
+  # common steps in integration tests
+  def helper_admin_signin
+    # visit signin_path
+    # confirm we are on the signin page
+    find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
+    # should fill in the login form to login
+    page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
+    page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
+    find(:xpath, '//input[@id="user_session_submit"]').click
+    # save_and_open_page
+  end
+  def helper_reg_signin
+    # visit signin_path
+    # confirm we are on the signin page
+    find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
+    # should fill in the login form to login
+    page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username] )
+    page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
+    find(:xpath, '//input[@id="user_session_submit"]').click
+    # save_and_open_page
+  end
+  def helper_user_on_page?(sys_header_arg, page_header_arg, user_full_name)
+    find('#header_tagline_system_header').text.should =~ /^#{I18n.translate(sys_header_arg)}$/ if !sys_header_arg.nil?
+    find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate(page_header_arg)}$/ if !page_header_arg.nil?
+    find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
+      /#{I18n.translate('view_labels.welcome_user', :user => user_full_name) }/ if !user_full_name.nil?
+  end
+  
+end

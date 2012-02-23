@@ -5,17 +5,19 @@ include ApplicationHelper
 
 describe UsersController do
 
-  before(:each) do
-    clear_session
-  end
-  
   context 'Role based authorization - systems access -  ' do
     it 'should limit access to systems by roles'
     it 'should have multiple subsystems allowed in the app_config'
   end
   
-  context 'deactivated users finds and lists should be available as scoped'
-  context 'role based limitations to fields in tables (see USER_SELF_NO_UPDATE_FIELDS for cloning)'
+  context 'implement reset password code'do
+    it 'should use email notifications of reset password'
+    it 'should ensure that email addresses are sent and confirmed in user create'
+  end
+  context 'implement register user' do
+    it 'should use email notifications of new user'
+    it 'should ensure that email addresses are sent and confirmed in register user'
+  end
   
 end
-  
+
