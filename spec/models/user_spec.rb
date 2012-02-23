@@ -35,22 +35,18 @@ describe User do
     
     it "should not create user when created without password" do
       @num_users = User.count
-      user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).delete(:password))
+      user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).reject{|key,val| key == :password} )
+      # user.should be_nil
       user.should be_instance_of(User)
-      user.username.should == nil
-      user.password.should be_nil
-      user.id.should be_nil
       user.errors.count.should > 0
       User.count.should == (@num_users)
     end
     
     it "should not create user when created without password_confirmation" do
       @num_users = User.count
-      user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).delete(:password_confirmation))
+      user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).reject{|key,val| key == :password_confirmation} )
+      # user.should be_nil
       user.should be_instance_of(User)
-      user.username.should == nil
-      user.password_confirmation.should be_nil
-      user.id.should be_nil
       user.errors.count.should > 0
       User.count.should == (@num_users)
     end

@@ -12,11 +12,7 @@ describe 'Users Integration Tests' do
       @model = User.new
       @user1 = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
-      visit signin_path
-      helper_admin_signin
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
-      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
-        /#{I18n.translate('view_labels.welcome_user', :user => @me.full_name) }/
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T users_integration_spec Admin user logged in before - done")
     end
@@ -76,7 +72,7 @@ describe 'Users Integration Tests' do
         page.fill_in 'user_last_name', :with => 'last'
         page.fill_in 'user_password', :with => 'password'
         page.fill_in 'user_password_confirmation', :with => 'password'
-        find('input#user_submit').click
+        find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
@@ -101,7 +97,7 @@ describe 'Users Integration Tests' do
         page.fill_in 'user_last_name', :with => 'last'
         page.fill_in 'user_password', :with => 'password'
         page.fill_in 'user_password_confirmation', :with => 'password'
-        find('input#user_submit').click
+        find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
@@ -126,7 +122,7 @@ describe 'Users Integration Tests' do
         page.fill_in 'user_last_name', :with => 'last'
         page.fill_in 'user_password', :with => 'password'
         page.fill_in 'user_password_confirmation', :with => 'password'
-        find('input#user_submit').click
+        find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
@@ -151,7 +147,7 @@ describe 'Users Integration Tests' do
         page.fill_in 'user_last_name', :with => 'last'
         page.fill_in 'user_password', :with => ''
         page.fill_in 'user_password_confirmation', :with => ''
-        find('input#user_submit').click
+        find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
@@ -176,7 +172,7 @@ describe 'Users Integration Tests' do
         page.fill_in 'user_last_name', :with => 'last'
         page.fill_in 'user_password', :with => 'xxx'
         page.fill_in 'user_password_confirmation', :with => 'yyyzzz'
-        find('input#user_submit').click
+        find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
@@ -210,7 +206,7 @@ describe 'Users Sessions Integration Tests' do
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
     find(:xpath, '//input[@id="user_session_username"]').should_not be_nil
     find(:xpath, '//input[@id="user_session_password"]').should_not be_nil
-    find(:xpath, '//input[@id="user_session_submit"]').should_not be_nil
+    find(:xpath, '//form[@action="/users_sessions"]//input[@type="submit"]').click
   end
 
   it 'login with invalid credentials - should send the user to the Login page (Session New page)' do
@@ -218,7 +214,7 @@ describe 'Users Sessions Integration Tests' do
     page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:user_full_create_attr)[:username] )
     page.fill_in('user_session[password]', :with => 'invalidpwd' )
     # save_and_open_page
-    find(:xpath, '//input[@id="user_session_submit"]').click
+    find(:xpath, '//form[@action="/users_sessions"]//input[@type="submit"]').click
     # save_and_open_page
     # should be on the Session Create page
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
@@ -233,7 +229,7 @@ describe 'Users Sessions Integration Tests' do
   context 'Admin user logged in - visit signin path - ' do
 
     before(:each) do
-      helper_admin_signin
+      helper_signin_form_submit(:admin_user_full_create_attr)
     end
     
     it 'login with valid credentials - should send the user to the Logged In page (Session Create page)' do
@@ -278,7 +274,7 @@ describe 'Users Roles Tests - ' do
   
   context 'Admin user logged in - ' do
     before(:each) do
-      helper_admin_signin
+      helper_signin_form_submit(:admin_user_full_create_attr)
     end
     it 'should see the Show User page for self' do
       visit user_path (@admin.id)
@@ -381,7 +377,7 @@ describe 'Users Roles Tests - ' do
           find(:xpath, "//form[@class=\"edit_user\"]/div/div/span/span/input[@value=\"#{role}\"]" ).checked?.should_not == 'checked'
         end
       end
-      find(:xpath, '//input[@id="user_submit"]').click
+      find(:xpath, '//form[@class="edit_user"]//input[@type="submit"]').click
       @updated_user = User.find(@user1.id)
       work_roles = @updated_user.roles.clone
       Rails.logger.debug("T users_integration_spec - user roles = #{work_roles}")
@@ -403,7 +399,7 @@ describe 'Users Roles Tests - ' do
           find(:xpath, "//form[@class=\"edit_user\"]/div/div/span/span/input[@value=\"#{role}\"]" ).checked?.should_not == 'checked'
         end
       end
-      find(:xpath, '//input[@id="user_submit"]').click  # update unchecking
+      find(:xpath, '//form[@class="edit_user"]//input[@type="submit"]').click  # update unchecking
       @updated_user = User.find(@user1.id)
       work_roles = @updated_user.roles.clone
       Rails.logger.debug("T users_integration_spec - user roles = #{work_roles}")
@@ -436,7 +432,7 @@ describe 'Users Roles Tests - ' do
   end
   context 'Regular user logged in - ' do
     before(:each) do
-      helper_reg_signin
+      helper_signin(:reg_user_full_create_attr, @reg.full_name)
     end
     it 'should see the Show User page for self' do
       visit user_path (@reg.id)
@@ -515,7 +511,7 @@ describe 'Users Roles Tests - ' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       within(".edit_user") do
         page.fill_in 'user_email', :with => 'bad_email'
-        find('input#user_submit').click
+        find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
@@ -534,7 +530,7 @@ describe 'Users Roles Tests - ' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       within(".edit_user") do
         page.fill_in 'user_email', :with => 'valid.email@example.com'
-        find('input#user_submit').click
+        find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
@@ -609,9 +605,7 @@ describe 'Systems Tests' do
   context 'Regular user systems' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
-      visit signin_path
-      helper_reg_signin
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
+      helper_signin(:reg_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T System Tests - Regular user systems - before each is done.")
     end
@@ -651,9 +645,7 @@ describe 'Systems Tests' do
   context 'Administrator user systems' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
-      visit signin_path
-      helper_admin_signin
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
     end
     it 'should have home system for home page' do
@@ -684,7 +676,7 @@ describe 'Systems Tests' do
     it 'should redirect user back to get action after forced signin on get action' do
       visit new_user_path()
       # should be redirect to signin page
-      helper_admin_signin
+      helper_signin_form_submit(:admin_user_full_create_attr)
       # should be signed in, and redirected to the original page 
       # save_and_open_page
       helper_user_on_page?('systems.maint.full_name', 'users.new.header', @admin.full_name)
@@ -692,7 +684,7 @@ describe 'Systems Tests' do
     it 'should not signout a user after just signing in due to redirect back coding' do
       visit signout_path()
       # should be redirect to signin page
-      helper_admin_signin
+      helper_signin_form_submit(:admin_user_full_create_attr)
       # should be signed in, and redirected to the original page 
       # save_and_open_page
       helper_user_on_page?('systems.guest.full_name', 'users_sessions.index.header', @admin.full_name)

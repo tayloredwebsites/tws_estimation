@@ -100,24 +100,19 @@ module UserTestHelper
 end
 module UserIntegrationHelper
   # common steps in integration tests
-  def helper_admin_signin
-    # visit signin_path
-    # confirm we are on the signin page
-    find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-    # should fill in the login form to login
-    page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
-    page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-    find(:xpath, '//input[@id="user_session_submit"]').click
-    # save_and_open_page
+  def helper_signin(factory_arg, user_full_name)
+    visit signin_path
+    helper_signin_form_submit(factory_arg)
+    helper_user_on_page?('systems.guest.full_name', 'users_sessions.index.header', user_full_name)
   end
-  def helper_reg_signin
+  def helper_signin_form_submit(factory_arg)
     # visit signin_path
     # confirm we are on the signin page
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
     # should fill in the login form to login
-    page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username] )
-    page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
-    find(:xpath, '//input[@id="user_session_submit"]').click
+    page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(factory_arg.to_sym)[:username] )
+    page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(factory_arg.to_sym)[:password] )
+    find(:xpath, '//form[@action="/users_sessions"]//input[@type="submit"]').click
     # save_and_open_page
   end
   def helper_user_on_page?(sys_header_arg, page_header_arg, user_full_name)
