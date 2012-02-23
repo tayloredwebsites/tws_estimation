@@ -104,7 +104,7 @@ class UsersController< SecureApplicationController
   
   def validate_self_update
     Rails.logger.debug("* UsersController.validate_self_update started - test:#{current_user.id.to_s == params[:id].to_s}")
-    working_params = params[:user].clone
+    working_params = params[:user].dup
     if current_user.id.to_s == params[:id].to_s
       # if user admin( user has one of USER_SELF_UPDATE_ROLES), let them update all of their fields
       # otherwise only let them update the USER_SELF_NO_UPDATE_FIELDS.

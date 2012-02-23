@@ -358,7 +358,7 @@ describe 'Users Roles Tests - ' do
       # visit ("/users/#{@user1.id}/edit?show_deactivated=true")
       visit edit_user_path (@user1.id)
       # save_and_open_page  # starting roles (default roles checked)
-      work_roles = @user1.roles.clone
+      work_roles = @user1.roles.dup
       Rails.logger.debug("T users_integration_spec - user roles = #{work_roles}")
       # save_and_open_page
       # switch status of roles checkbox status (note starting out with only default roles checked)
@@ -379,7 +379,7 @@ describe 'Users Roles Tests - ' do
       end
       find(:xpath, '//form[@class="edit_user"]//input[@type="submit"]').click
       @updated_user = User.find(@user1.id)
-      work_roles = @updated_user.roles.clone
+      work_roles = @updated_user.roles.dup
       Rails.logger.debug("T users_integration_spec - user roles = #{work_roles}")
       visit edit_user_path (@updated_user.id)
       # save_and_open_page  # after roles unchecked (default roles checked)
@@ -401,7 +401,7 @@ describe 'Users Roles Tests - ' do
       end
       find(:xpath, '//form[@class="edit_user"]//input[@type="submit"]').click  # update unchecking
       @updated_user = User.find(@user1.id)
-      work_roles = @updated_user.roles.clone
+      work_roles = @updated_user.roles.dup
       Rails.logger.debug("T users_integration_spec - user roles = #{work_roles}")
       visit edit_user_path (@updated_user.id)
       # save_and_open_page  # after roles reset (default roles checked)

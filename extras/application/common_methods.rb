@@ -25,7 +25,7 @@ module Application::CommonMethods
     if item.nil?
       return []
     elsif item.instance_of?(Array)
-      return item.clone()
+      return item.dup()
     elsif item.instance_of?(String)
       return item.split(' ')
     else
