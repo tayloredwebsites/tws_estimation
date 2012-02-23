@@ -36,9 +36,12 @@ class UsersSessionsController < SecureApplicationController
     @user_session.sign_in(params[:user_session][:username], params[:user_session][:password])
     #Rails.logger.debug("* UsersSessionController.create @user_session = #{@user_session.inspect.to_s}")
     #Rails.logger.debug("* UsersSessionController.create session = #{session.inspect.to_s}")
+    @user_session.errors.each do |attr, msg|
+      # Rails.logger.debug("* UsersSessionController.create error:#{msg}")
+      notify_error(msg)
+    end
+    # Rails.logger.debug("* UsersSessionController.create @user_session.signed_in?:#{@user_session.signed_in?}")
     if @user_session.signed_in?
-      # is this necessary?
-      # session[:current_user_id] = @user_session.current_user_id
       Rails.logger.debug("* UsersSessionsController.create - redirect_back(users_sessions#index)")
       redirect_back(:controller => 'users_sessions', :action => 'index')
     else

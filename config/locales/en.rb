@@ -13,13 +13,13 @@
         :abbreviation => 'All',
         :full_name => 'All Systems'
       },
-      :home => {
+#      :home => {
+#        :abbreviation => 'Home',
+#        :full_name => 'Home'
+#      },
+      :guest => {
         :abbreviation => 'Home',
         :full_name => 'Home'
-      },
-      :guest => {
-        :abbreviation => 'Guest-Home',
-        :full_name => 'Guest-Home'
       },
       :maint => {
         :abbreviation => 'Maint.',
@@ -35,10 +35,10 @@
       }
     },
     :roles => {
-      :guests => {
-        :abbreviation => 'Guest',
-        :full_name => 'Guest'
-      },
+#      :guests => {
+#        :abbreviation => 'Guest',
+#        :full_name => 'Guest'
+#      },
       :users => {
         :abbreviation => 'User',
         :full_name => 'User'
@@ -73,7 +73,9 @@
       :active_record_error_msg => "Active Record Error! %{msg}",
       :fix_following_errors => "Please fix the following errors and save.",
       :note_errors_below => "Note the errors on specific fields below.",
-      :msg => "%{msg}"
+      :msg => "%{msg}",
+      :error_obj_msg => "Error! %{obj} %{msg}",
+      :system_error_invalid_role => "System Error! - User assigned an invalid role of %{role}"
     },
     :error_messages => {
       :is_active => 'is an active record.',
@@ -84,7 +86,8 @@
       :password_mismatch => 'passwords mismatched',
       :no_password_update => 'cannot update password here',
       :invalid_password => 'invalid username or password',
-      :check_email => 'check your email for next step'
+      :check_email => 'check your email for next step',
+      :is_not_string => 'is not a string'
     },
     :view_field_value => {
       :true => 'truly',
@@ -211,7 +214,7 @@
       },
       :messages => {
         :session_timeout => 'Your session has timed out',
-        :invalid_role => "Invalid role %{role}"
+        :invalid_role => "Invalid role %{role} has been removed"
       }
     }, # end users
     :users_sessions => {

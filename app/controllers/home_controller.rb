@@ -1,8 +1,11 @@
 class HomeController < SecureApplicationController
-
-  # 
-  # after_filter :save_session
-  # 
+  
+  def initialize
+    # Home controller will be the guest system controller.
+    @systemc = 'guest'
+    Rails.logger.debug("* UsersController.initialize before super - systemc:#{@systemc.to_s}")
+    super
+  end
 	
   before_filter do |controller|
     # self.load_session
@@ -12,13 +15,28 @@ class HomeController < SecureApplicationController
     @errors = Array.new
   end
     
-  def index
+  def about
+  end
+
+  def contact
+  end
+
+  def errors
   end
 
   def help
   end
-  
+
+  def index
+  end
+
+  def news
+  end
+
   def site_map
+  end
+
+  def status
   end
 
 end
