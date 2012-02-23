@@ -85,7 +85,7 @@
       :missing_password => 'missing password',
       :password_mismatch => 'passwords mismatched',
       :no_password_update => 'cannot update password here',
-      :invalid_password => 'invalid username or password',
+      :invalid_password => 'invalid username or password, try AdminUser/test or TestUser/test',
       :check_email => 'check your email for next step',
       :is_not_string => 'is not a string'
     },
@@ -249,6 +249,6 @@
       :messages => {
         :session_timeout => 'Your session has timed out'
       }
-    } # end users
+    } # end users_sessions
   } # end en
 } #end localizations
