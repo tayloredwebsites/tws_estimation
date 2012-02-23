@@ -269,6 +269,7 @@ describe User do
 end
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -281,8 +282,8 @@ end
 #  username           :string(255)
 #  encrypted_password :string(255)
 #  password_salt      :string(255)
-#  created_at         :datetime
-#  updated_at         :datetime
+#  created_at         :datetime        not null
+#  updated_at         :datetime        not null
 #  deactivated        :boolean
 #
 

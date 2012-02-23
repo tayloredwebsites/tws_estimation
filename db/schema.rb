@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(:version => 20120125031800) do
     t.string   "username"
     t.string   "encrypted_password"
     t.string   "password_salt"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.boolean  "deactivated"
   end
 
