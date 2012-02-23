@@ -1,7 +1,7 @@
 # layout_integration_spec.rb
 
 require 'spec_helper'
-include UserTestHelper
+include UserIntegrationHelper
 include ApplicationHelper
 
 describe 'Users layouts Tests - ' do
@@ -132,14 +132,7 @@ describe 'Users layouts Tests - ' do
   context ' - Layout (Logged in Regular User) - ' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
-      visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
+      helper_signin(:reg_user_full_create_attr, @me.full_name)
       visit home_index_path
     end
     it 'should have a user item in the top nav bar' do
@@ -150,14 +143,7 @@ describe 'Users layouts Tests - ' do
   context ' - Layout (Logged in Admin User) - ' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
-      visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
     end
     it 'should have a user item in the top nav bar 1st item' do
@@ -182,14 +168,7 @@ describe 'Users Layouts Links Tests - ' do
     
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
-      visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
+      helper_signin(:reg_user_full_create_attr, @me.full_name)
       visit home_index_path
     end
     it 'should go to Users index page when user clicks top nav Users link' do
@@ -207,14 +186,7 @@ describe 'Users Layouts Links Tests - ' do
   context ' - Layout Links (Logged in Admin User) - ' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
-      visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
     end
     it 'should go to Users index page when user clicks top nav Users link' do

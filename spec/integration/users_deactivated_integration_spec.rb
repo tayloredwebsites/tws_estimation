@@ -1,7 +1,7 @@
 # users_integration_spec.rb
 
 require 'spec_helper'
-include UserTestHelper
+include UserIntegrationHelper
 include ApplicationHelper
 
 describe 'Users Integration Tests' do
@@ -11,16 +11,7 @@ describe 'Users Integration Tests' do
       @model = User.new
       @user1 = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
-      visit signin_path
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-      # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
-      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
-        /#{I18n.translate('view_labels.welcome_user', :user => @me.full_name) }/
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T users_integration_spec Admin user logged in before - done")
     end
@@ -71,7 +62,7 @@ describe 'Users Integration Tests' do
       find(:xpath, '//*[@id="user_deactivated"]').value.should =~ /\Atrue\z/
       within(".edit_user") do
         select I18n.translate('view_field_value.active'), :from => 'user_deactivated'
-        find('input#user_submit').click
+        find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
@@ -97,7 +88,7 @@ describe 'Users Integration Tests' do
       find(:xpath, '//*[@id="user_deactivated"]/option[@selected]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       within(".edit_user") do
         select I18n.translate('view_field_value.deactivated'), :from => 'user_deactivated'
-        find('input#user_submit').click
+        find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
@@ -208,7 +199,7 @@ describe 'Users Sessions Integration Tests' do
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
     find(:xpath, '//input[@id="user_session_username"]').should_not be_nil
     find(:xpath, '//input[@id="user_session_password"]').should_not be_nil
-    find(:xpath, '//input[@id="user_session_submit"]').should_not be_nil
+    find(:xpath, '//form[@action="/users_sessions"]//input[@type="submit"]').click
   end
 
   it 'login with invalid credentials - should send the user to the Login page (Session New page)' do
@@ -216,7 +207,7 @@ describe 'Users Sessions Integration Tests' do
     page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:user_full_create_attr)[:username] )
     page.fill_in('user_session[password]', :with => 'invalidpwd' )
     # save_and_open_page
-    find(:xpath, '//input[@id="user_session_submit"]').click
+    find(:xpath, '//form[@action="/users_sessions"]//input[@type="submit"]').click
     # save_and_open_page
     # should be on the Session Create page
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
@@ -235,7 +226,7 @@ describe 'Users Sessions Integration Tests' do
       # should fill in the login form to login
       page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
       page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
+      find(:xpath, '//form[@action="/users_sessions"]//input[@type="submit"]').click
       # save_and_open_page
       Rails.logger.debug("T users_integration_spec Admin user logged in before - done")
     end
@@ -277,17 +268,12 @@ describe 'Users Roles Tests - ' do
     @admin = FactoryGirl.create(:admin_user_full_create_attr)
     @reg = FactoryGirl.create(:reg_user_full_create_attr)
     @model = User.new
-    visit signin_path
   end
   
   context 'Admin user logged in - ' do
     before(:each) do
       # should fill in the login form to login
-      page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username] )
-      page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password] )
-      find(:xpath, '//input[@id="user_session_submit"]').click
-      # should be on the Session Create page
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
+      helper_signin(:admin_user_full_create_attr, @admin.full_name)
       # save_and_open_page
     end
     it 'should not see deactivated select box for self' do

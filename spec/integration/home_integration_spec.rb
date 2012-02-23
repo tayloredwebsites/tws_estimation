@@ -1,5 +1,5 @@
 require 'spec_helper'
-# require 'capybara_spec_helper'
+include UserIntegrationHelper
 
 describe 'Home Integration Tests - ' do
 
@@ -111,19 +111,7 @@ describe 'Home Integration Tests - ' do
       it 'should go to the site_map page' do		# capybara find
         @user1 = FactoryGirl.create(:user_min_create_attr)
         @model = User.new
-        visit signin_path
-        # save_and_open_page
-        # should be on login page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-        # should fill in the login form to login
-        page.fill_in("user_session[username]", :with => FactoryGirl.attributes_for(:user_min_create_attr)[:username] )
-        page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(:user_min_create_attr)[:password] )
-        find(:xpath, '//input[@id="user_session_submit"]').click
-        # should be on the Session Create page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
-        find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
-          /#{I18n.translate('view_labels.welcome_user', :user => @user1.full_name) }/
-        #save_and_open_page
+        helper_signin(:user_min_create_attr, @user1.full_name)
         visit home_site_map_path
         #save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
