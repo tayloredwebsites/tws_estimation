@@ -1,4 +1,4 @@
-# Authorization and Authentication by Application and Roles startup application
+# Estimation of systems/component costs
 
 This is a startup application by [Taylored Web Sites](http://www.tayloredwebsites.com).
 
@@ -23,14 +23,11 @@ Philosophy / Approaches:
 	* Uses the  [CanCan](https://github.com/ryanb/cancan) authorization library.
 	* Role base Authentication has a default role for all users that are not logged in.
 	* Administrators are able to maintain user roles, users are not allowed to modify their own roles.
-	* Role can specify the role a user has within each (or all) system.
-	* To this end, each role will specify the application that it corresponds with.
-
-Applications that will be developed from this will:
-
-* This application will be used to provide access to a number of different systems.
-* I will be using a shared database to simplify the inter-system communications.
-* Authentication, Authorization and common data will be most easily available to each system.
+8. Designed for multiple sub-applications
+	* This application will be used to provide access to a number of different sub-applications.
+	* A shared database will be used to simplify the inter-sub-application communications.
+	* Role based authorization can specify the role a user has within each (or all) sub-application.
+	* To this end, each role will specify the sub-application that it corresponds with.
 
 
 

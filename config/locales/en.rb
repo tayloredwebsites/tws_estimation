@@ -5,7 +5,7 @@
     :config => {
       :company_name => 'Taylored Web Sites',
       :company_email => 'tayloredwebsites@me.com',
-      :app_name => 'Estimate Systems and Component Costs',
+      :app_name => 'Estimation of systems/component costs',
       :app => 'tws_estimation'  # not used so far
     },
     :systems => {
