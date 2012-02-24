@@ -5,8 +5,8 @@
     :config => {
       :company_name => 'Taylored Web Sites',
       :company_email => 'tayloredwebsites@me.com',
-      :app_name => 'Estimate Systems and Component Costs',
-      :app => 'tws_estimation'  # not used so far
+      :app_name => 'Authorization and Authentication by Roles startup application',
+      :app => 'tws_auth'  # not used so far
     },
     :systems => {
       :all => {
