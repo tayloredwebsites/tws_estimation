@@ -11,16 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120301234322) do
-
-  create_table "defaults", :force => true do |t|
-    t.string   "store",                                      :default => "",    :null => false
-    t.string   "name",                                       :default => "",    :null => false
-    t.decimal  "value",       :precision => 19, :scale => 4, :default => 0.0,   :null => false
-    t.boolean  "deactivated",                                :default => false, :null => false
-    t.datetime "created_at",                                                    :null => false
-    t.datetime "updated_at",                                                    :null => false
-  end
+ActiveRecord::Schema.define(:version => 20120125031800) do
 
   create_table "users", :force => true do |t|
     t.string   "first_name"
