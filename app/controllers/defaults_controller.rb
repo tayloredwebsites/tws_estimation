@@ -1,0 +1,2 @@
+class DefaultsController < ApplicationController
+end
