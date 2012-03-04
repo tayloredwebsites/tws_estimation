@@ -118,7 +118,7 @@ describe 'Users Integration Tests' do
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
-        /^#{I18n.translate('errors.success_method_obj_name', :method => 'deactivate', :obj => @model.class.name, :name => @user1.username )}$/
+        /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => @model.class.name, :id => @user1.id )}$/
       User.count.should == (@num_users)
       find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
       @updated_user = User.find(@user1.id)
@@ -143,7 +143,7 @@ describe 'Users Integration Tests' do
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
-        /^#{I18n.translate('errors.success_method_obj_name', :method => 'reactivate', :obj => @model.class.name, :name => @user_deact.username )}$/
+        /^#{I18n.translate('errors.success_method_obj_id', :method => 'reactivate', :obj => @model.class.name, :id => @user_deact.id )}$/
       User.count.should == (@num_users)
       find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       @updated_user = User.find(@user1.id)

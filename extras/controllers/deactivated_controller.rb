@@ -8,64 +8,68 @@ module Controllers::DeactivatedController
   end
 
   # update current scope chain with deactivation scope
-  def get_scope(users_scope)
-    if show_deactivated?
-      # Rails.logger.debug("* Controllers::DeactivatedController.get_scope show_deactivated == true")
-      return users_scope
-    else
-      # Rails.logger.debug("* Controllers::DeactivatedController.get_scope show_deactivated == false")
-      return users_scope.where("deactivated = ? or deactivated IS NULL", false)
-    end
+  def get_scope(cur_scope)
+    Rails.logger.debug ("* Controllers::DeactivatedController.get_scope - cur_scope in: #{cur_scope}, show_deactivated?: #{show_deactivated?}")
+    return (show_deactivated?) ? cur_scope : cur_scope.where("deactivated = ? or deactivated IS NULL", false)
   end
   
-  # GET /users/:id/deactivate
+  # GET /(controller)/:id/deactivate
   def deactivate
-    # Rails.logger.debug("* UsersController - deactivate - authorize")
-    @user = @users_scoped.find(params[:id])
-    if (!@user.nil?)
-      authorize! :deactivate, @user   # authorize from CanCan::ControllerAdditions
-      if @user.deactivate
-        notify_success( I18n.translate('errors.success_method_obj_name',
+    Rails.logger.debug("* Controllers::DeactivatedController.deactivate - call get_scope")
+    # item = @scoped_list.find(params[:id])
+    item = get_scope(nil).find(params[:id])
+    if (!item.nil?)
+      authorize! :deactivate, item   # authorize from CanCan::ControllerAdditions
+      if item.deactivate
+        notify_success( I18n.translate('errors.success_method_obj_id',
           :method => params[:action],
-          :obj => @model.class.name,
-          :name => @user.username )
+          :obj => item.class.name,
+          :id => item.id )
         )
-        render :action => 'show', :id => @user.id
+        Rails.logger.debug("* Controllers::DeactivatedController - deactivate - return instance variable #{'@'+@model.class.name.downcase}")
+        self.instance_variable_set('@'+@model.class.name.downcase, item)
+        render :action => 'show', :id => item.id
       else
-      	if @user.errors[:base].count > 0
-      	  notify_error( @user.errors[:base][0] )
+      	if item.errors[:base].count > 0
+      	  notify_error( item.errors[:base][0] )
       	else
-      	  notify_error("Error deactivating user #{@user.username}")
+      	  notify_error("Error deactivating #{item.class.name} #{item.id}")
       	end
-        # @user.errors.add(:base, "error deactivating User")
-        render :action => 'edit', :id => @user.id
+        # @user.errors.add(:base, "error deactivating item")
+        Rails.logger.debug("* Controllers::DeactivatedController - deactivate - return instance variable #{'@'+@model.class.name.downcase}")
+        self.instance_variable_set('@'+@model.class.name.downcase, item)
+        render :action => 'edit', :id => item.id
       end
     else
-      Rails.logger.error("E Attempt to #{params[:action]} #{@model.class.name}.id:#{params[:id]} when not in scope")
+      Rails.logger.error("E Attempt to #{params[:action]} #{item.class.name}.id:#{params[:id]} when not in scope")
     end
   end
   
-  # GET /users/:id/reactivate
+  # GET /(controller)/:id/reactivate
   def reactivate
-    # Rails.logger.debug("* UsersController - reactivate - authorize")
-    @user = @users_scoped.find(params[:id])
-    if (!@user.nil?)
-      authorize! :reactivate, @user   # authorize from CanCan::ControllerAdditions
-      if @user.reactivate
-        notify_success( I18n.translate('errors.success_method_obj_name',
+    # item = @scoped_list.find(params[:id])
+    item = get_scope(nil).find(params[:id])
+    if (!item.nil?)
+      authorize! :reactivate, item   # authorize from CanCan::ControllerAdditions
+      if item.reactivate
+        notify_success( I18n.translate('errors.success_method_obj_id',
           :method => params[:action],
-          :obj => @model.class.name,
-          :name => @user.username )
+          :obj => item.class.name,
+          :id => item.id )
         )
-        render :action => 'show', :id => @user.id
+        Rails.logger.debug("* Controllers::DeactivatedController - reactivate - return instance variable #{'@'+@model.class.name.downcase}")
+        self.instance_variable_set('@'+@model.class.name.downcase, item)
+        render :action => 'show', :id => item.id
       else
-      	if @user.errors[:base].count > 0
-      	  notify_error( @user.errors[:base][0] )
+      	if item.errors[:base].count > 0
+      	  notify_error( item.errors[:base][0] )
       	else
-          notify_error("Error reactivating user #{@user.username}")
+          notify_error("Error reactivating #{item.class.name} #{item.id}")
         end
-        # @user.errors.add(:base, "error reactivating User")
-        render :action => 'edit', :id => @user.id
+        # @user.errors.add(:base, "error reactivating item")
+        Rails.logger.debug("* Controllers::DeactivatedController - reactivate - return instance variable #{'@'+@model.class.name.downcase}")
+        self.instance_variable_set('@'+@model.class.name.downcase, item)
+        render :action => 'edit', :id => item.id
       end
     else
       Rails.logger.error("E Attempt to #{params[:action]} #{@model.class.name}.id:#{params[:id]} when not in scope")

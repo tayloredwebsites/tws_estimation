@@ -20,14 +20,9 @@ class UsersController< SecureApplicationController
   
   # chain current scope with any modules that have set scope (e.g. DeactivatedController)
   def get_scope(cur_scope)
-    # Rails.logger.debug("* UsersController.get_scope defined?(super):#{defined?(super).inspect.to_s}")
-    if defined?(super)
-      # Rails.logger.debug("* UsersController.get_scope super")
-      return super(cur_scope)
-    else
-      # Rails.logger.debug("* UsersController.get_scope no super")
-      return cur_scope
-    end
+    # Rails.logger.debug ("* UsersController.get_scope - cur_scope in: #{cur_scope}, show_deactivated?: #{show_deactivated?}")
+    cur_scope = User.scoped if (cur_scope.nil?)
+    return (defined?(super)) ? super(cur_scope) : cur_scope
   end
     
   # GET /users

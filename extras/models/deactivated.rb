@@ -1,6 +1,8 @@
 module Models::Deactivated
   extend ActiveSupport::Concern
   
+  include Application::CommonMethods
+
   # module for the user class
   # module to add deactivated field to a model
   

@@ -18,8 +18,8 @@
 #        :full_name => 'Home'
 #      },
       :guest => {
-        :abbreviation => 'Home',
-        :full_name => 'Home'
+        :abbreviation => 'Common',
+        :full_name => 'Common'
       },
       :maint => {
         :abbreviation => 'Maint.',
@@ -213,8 +213,8 @@
         :deactivated => 'Deactivated'
       },
       :messages => {
-        :session_timeout => 'Your session has timed out',
-        :invalid_role => "Invalid role %{role} has been removed"
+      #  :session_timeout => 'Your session has timed out',
+      #  :invalid_role => "Invalid role %{role} has been removed"
       }
     }, # end users
     :users_sessions => {
@@ -249,6 +249,46 @@
       :messages => {
         :session_timeout => 'Your session has timed out'
       }
-    } # end users_sessions
+    }, # end users_sessions
+    :defaults => {
+      :title => 'Default Values',
+      :system => 'maint',
+      :index => {
+        :action => "List Default Values",
+        :title => "List Installations Default Values",
+        :header => "List of all Default Values"
+      },
+      :edit => {
+        :action => "Edit Default Value",
+        :title => "Edit Default Value",
+        :header => "Edit a Default Value"
+      },
+      :new => {
+        :action => "New Default Value",
+        :title => "New Default Value",
+        :header => "Create a new User"
+      },
+      :show => {
+        :action => "View Default Value",
+        :title => "View Default Value",
+        :header => "View a Default Value"
+      },
+      :field_name => {
+        :id => 'ID',
+        :store => 'Value Store',
+        :name => 'Name',
+        :value => 'Value',
+        :deactivated => 'Deactivated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :store => 'Store',
+        :name => 'Name',
+        :value => 'Value',
+        :deactivated => 'Deactivated'
+      },
+      :messages => {
+      }
+    } # end defaults
   } # end en
 } #end localizations

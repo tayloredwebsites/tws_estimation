@@ -1,0 +1,36 @@
+<%
+  @page_scope = 'defaults.show'
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @default, :sys_errors => @errors  } %>
+
+<p id="notice"><%= notice %></p>
+
+
+<div class="fields_20_80">
+  <div class="field">
+    <span class="label"><%= I18n.translate('defaults.field_name.store') %></span>
+    <span class="value" id="default_store"><%= @default.store %></span>
+  </div>
+  <div class="field">
+    <span class="label"><%= I18n.translate('defaults.field_name.name') %></span>
+    <span class="value" id="default_name"><%= @default.name %></span>
+  </div>
+  <div class="field">
+    <span class="label"><%= I18n.translate('defaults.field_name.value') %></span>
+    <span class="value" id="default_value"><%= @default.value %></span>
+  </div>
+<% if (defined? @model.deactivated_module) %>
+  <div class="field">
+    <span class="label"><%= I18n.translate('defaults.field_name.deactivated') %></span>
+    <span class="value" id="default_deactivated"><%= I18n.is_deactivated_or_not(@default.deactivated?) %></span>
+  </div>
+<% end %>
+</div>
+
+
+<%= link_to I18n.translate('defaults.edit.action'), edit_default_path(@default) %>
+ | <%= link_to I18n.translate('defaults.index.action'), defaults_path if can? :manage, @default %>
+ | <%= link_to I18n.translate('defaults.new.action'), new_default_path if can? :manage, @default %>
