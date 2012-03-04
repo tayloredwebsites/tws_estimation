@@ -15,4 +15,6 @@ describe 'Miscellaneous items to do - ' do
     it 'should have a copy of the user deactivation tests for with deactivation modules'
   end
   it 'should give a warning to the user on problems with roles - want to update and still notify user'
+  it 'should confirm that Role.sys_id and Role.sys_name correspond with app_constants.rb - APPLICATION_SYSTEMS'
+  it 'should have dropdown for selection of Defaults - Value Store name, with add new Value Store name option'
 end

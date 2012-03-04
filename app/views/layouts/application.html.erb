@@ -79,28 +79,22 @@
 						<% else %>
 		          <li class="list_column off"><%= link_to content_tag(:span, I18n.translate('users_sessions.signin.action')), signin_path  %></li>
 						<% end %>
-						<% if cur_user.can_see_system?('maint')%>
-            	<li class="list_column off"><%= link_to content_tag(:span, I18n.translate('systems.maint.full_name')), '#' %></li>
-						<% end %>
-						<% if cur_user.can_see_system?('estim')%>
-            	<li class="list_column off"><%= link_to content_tag(:span, I18n.translate('systems.estim.full_name')), '#' %></li>
-						<% end %>
-            <li class="list_column on"><%= link_to content_tag(:span, 'Item'), '#' %>
-              <ul class="column_nav">
-                <li class="list_column off"><%= link_to content_tag(:span, 'Sub Item'), '#' %></li>
-                <li class="list_column off"><%= link_to content_tag(:span, 'Sub Item'), '#' %></li>
-                <li class="list_column on"><%= link_to content_tag(:span, 'Sub Item'), '#' %>
-                  <ul class="column_nav">
-                    <li class="list_column off"><%= link_to content_tag(:span, 'Sub Sub Item'), '#' %></li>
-                    <li class="list_column on"><%= link_to content_tag(:span, 'Sub Sub Item'), '#' %></li>
-                    <li class="list_column off"><%= link_to content_tag(:span, 'Sub Sub Item'), '#' %></li>
-                  </ul>
-                </li>
-                <li class="list_column off"><%= link_to content_tag(:span, 'Sub Item'), '#' %></li>
-              </ul>
-            </li>
-            <li class="list_column off"><%= link_to content_tag(:span, 'Item'), '#' %></li>
-            <li class="list_column off"><%= link_to content_tag(:span, 'Item'), '#' %></li>
+						<% APPLICATION_SYSTEMS.each do |sys_name, system| %>
+							<%  	if cur_user.can_see_system?(system[:id].to_s) %>
+								<li id="lnav_<%= system[:id].to_s %>" class="list_column on"><%= content_tag(:span, I18n.translate("systems.#{system[:id].to_s}.full_name")) %>
+									<% if system[:resources].size > 0 %>
+		              	<ul class="column_nav">
+										<% system[:resources].each do |resource|
+											if can? :read , resource.to_s
+										%>
+		                	<li class="list_column off"><%= link_to content_tag(:span, I18n.translate("#{resource.to_s}.title") ), "/#{resource.to_s}" %></li>
+											<% end # end  can? :read , resource.to_s
+											end # end system[:resources].each %>
+                  	</ul>
+									<% end # end if system[:resources].size > 0 %>
+								</li>
+							<% end # if cur_user.can_see_system? %>
+						<% end # APPLICATION_SYSTEMS.each %>
             <li class="list_column off"><%= link_to content_tag(:span, I18n.translate('home.help.title')), home_help_path %></li>
           </ul>
         </div><!-- end block_module -->
