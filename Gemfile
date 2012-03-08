@@ -10,6 +10,8 @@ gem 'pg'
 
 gem 'cancan'
 
+gem 'foreigner'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 

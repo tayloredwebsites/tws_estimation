@@ -161,11 +161,39 @@ describe 'Users Layouts Links Tests - ' do
   context ' - Layout Links (Guest users - not logged in) - ' do
     before(:each) do
       visit home_index_path
+      @me = User.guest
+    end
+    it 'should only see guest system in the left nav' do
+      # save_and_open_page
+      APPLICATION_SYSTEMS.each do | sys_name, system |
+        if @me.can_see_system?(system[:id].to_s)
+          page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+        else
+          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+        end
+      end
+    end
+    it 'should only see the resources a guest can see and can? :read' do
+      # save_and_open_page
+      APPLICATION_SYSTEMS.each do | sys_name, system |
+        if @me.can_see_system?(system[:id].to_s)
+          # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+          system[:resources].each do | res |
+            ability = Ability.new(@me)
+            if ability.can?(:read, res)
+              Rails.logger.debug("T layout_integration_spec guest should see resource #{res}")
+              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+            else
+              Rails.logger.debug("T layout_integration_spec guest should not see resource #{res}")
+              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+            end
+          end
+        end
+      end
     end
   end
 
-  context ' - Layout Links (Logged in Regular User) - ' do
-    
+  context ' - Layout Links (Logged in Regular User) - ' do    
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
       helper_signin(:reg_user_full_create_attr, @me.full_name)
@@ -181,6 +209,34 @@ describe 'Users Layouts Links Tests - ' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
     end			
+    it 'should list all authorized systems in the left nav' do
+      # save_and_open_page
+      APPLICATION_SYSTEMS.each do | sys_name, system |
+        if @me.can_see_system?(system[:id].to_s)
+          page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+        else
+          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+        end
+      end
+    end
+    it 'should list all of the resources per system that the item can see and can? :read' do
+      # save_and_open_page
+      APPLICATION_SYSTEMS.each do | sys_name, system |
+        if @me.can_see_system?(system[:id].to_s)
+          # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+          system[:resources].each do | res |
+            ability = Ability.new(@me)
+            if ability.can?(:read, res)
+              Rails.logger.debug("T layout_integration_spec guest should see resource #{res}")
+              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+            else
+              Rails.logger.debug("T layout_integration_spec guest should not see resource #{res}")
+              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+            end
+          end
+        end
+      end
+    end
   end
 
   context ' - Layout Links (Logged in Admin User) - ' do
@@ -199,7 +255,34 @@ describe 'Users Layouts Links Tests - ' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
     end			
-
+    it 'should list all the systems the item can see in the left nav' do
+      # save_and_open_page
+      APPLICATION_SYSTEMS.each do | sys_name, system |
+        if @me.can_see_system?(system[:id].to_s)
+          page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+        else
+          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+        end
+      end
+    end
+    it 'should list all of the resources per system that the item can see and can? :read' do
+      # save_and_open_page
+      APPLICATION_SYSTEMS.each do | sys_name, system |
+        if @me.can_see_system?(system[:id].to_s)
+          # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+          system[:resources].each do | res |
+            ability = Ability.new(@me)
+            if ability.can?(:read, res)
+              Rails.logger.debug("T layout_integration_spec guest should see resource #{res}")
+              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+            else
+              Rails.logger.debug("T layout_integration_spec guest should not see resource #{res}")
+              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+            end
+          end
+        end
+      end
+    end
   end
 
 end
