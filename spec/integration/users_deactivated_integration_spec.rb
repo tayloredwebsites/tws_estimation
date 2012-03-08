@@ -33,7 +33,7 @@ describe 'Users Integration Tests' do
       find(:xpath, '//*[@id="user_deactivated"]/option[@selected]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     end
   
-    it 'controller should list users with deactivate/reactivate action/link/button depending upon status' do
+    it 'should list users with deactivate/reactivate action/link/button depending upon status' do
       # UserTestHelper.user_safe_attributes.each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end

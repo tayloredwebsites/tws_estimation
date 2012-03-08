@@ -17,4 +17,8 @@ describe 'Miscellaneous items to do - ' do
   it 'should give a warning to the user on problems with roles - want to update and still notify user'
   it 'should confirm that Role.sys_id and Role.sys_name correspond with app_constants.rb - APPLICATION_SYSTEMS'
   it 'should have dropdown for selection of Defaults - Value Store name, with add new Value Store name option'
+  it 'should add audit trail to the defaults table for tws_auth app for audit trail example'
+  it 'should let cancan authorize resources for the home controller.  Base Model? Guest Model? '
+  it 'should not need the @model to be created in each controller?'
+  it 'should have controllers not attempt to create records that are already there, but deactivated.'
 end

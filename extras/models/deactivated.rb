@@ -56,15 +56,43 @@ module Models::Deactivated
   	end
     return true
   end
+
+  # method to destroy a record, only if it is already deactivated
+  def destroy
+    ret_val = error_if_exists('destroy')
+    # Rails.logger.debug ("* Models::Deactivated.destroy - destroy error check ret_val: #{ret_val}")
+    super if ret_val
+    return ret_val
+  end
+
+  # method to delete a record, only if it is already deactivated
+  def delete
+    ret_val = error_if_exists('delete')
+    super if ret_val
+    return ret_val
+  end
   
+  def error_if_exists(method)
+    # Rails.logger.debug("* Models::Deactivated.error_if_exists self.deactivated:#{active?}")
+  	if active?
+			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => method, :msg => I18n.translate('error_messages.is_active') ) )
+			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
+			return false
+		else
+		  return true
+  	end
+  end
+
   def deactivated?
     # Rails.logger.debug("* Models::Deactivated.deactivated? self.deactivated:#{self.deactivated.inspect.to_s}")
     if self.deactivated == DB_TRUE
+      # Rails.logger.debug("* Models::Deactivated.deactivated? self.deactivated == DB_TRUE")
       return true
     elsif self.deactivated == DB_FALSE
+      # Rails.logger.debug("* Models::Deactivated.deactivated? self.deactivated == DB_FALSE")
       return false
     else
-      Rails.logger.warn("! User.deactivated? - invalid value for deactivated:#{self.deactivated.inspect.to_s}")
+      # Rails.logger.warn("! User.deactivated? - invalid value for deactivated:#{self.deactivated.inspect.to_s}")
       validate_deactivated
       return self.deactivated == DB_TRUE
     end

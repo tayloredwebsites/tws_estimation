@@ -9,6 +9,6 @@ class Default < ActiveRecord::Base
       :presence => true
   validates :name,
       :presence => true,
-      :uniqueness => true
+      :uniqueness => {:scope => :store}
     
 end
