@@ -33,6 +33,5 @@ module Application::CommonMethods
     end
   end
   
-    
 end
 

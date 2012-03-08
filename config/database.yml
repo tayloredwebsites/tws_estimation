@@ -37,3 +37,12 @@ production:
     password: synapse
     host: localhost
     port: 5432
+
+legacy:
+    adapter: postgresql
+    database: EstimationMigration
+    username: RoR
+    password: synapse
+    host: localhost
+    port: 5432
+    

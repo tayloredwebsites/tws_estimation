@@ -1,0 +1,67 @@
+<%
+  @page_scope = 'defaults.index'
+%>
+
+<div><%= I18n.translate('header', :scope => @page_scope) %></div>
+
+<table cellspacing="0">
+  <tr>
+    <th><%= I18n.translate('defaults.field_name_short.id') %></th>
+    <th><%= I18n.translate('defaults.field_name_short.store') %></th>
+    <th><%= I18n.translate('defaults.field_name_short.name') %></th>
+    <th><%= I18n.translate('defaults.field_name_short.value') %></th>
+		<% if (defined? @model.deactivated_module) %>
+			<% if show_deactivated? %>
+		    <th><%= I18n.translate('defaults.field_name_short.deactivated') %></th>
+		    <th colspan="4"><%= link_to I18n.translate('view_action.hide_deactivated'), defaults_path('show_deactivated' => DB_FALSE.to_s) %></th>
+			<% else %>
+	    	<th colspan="3"><%= link_to I18n.translate('view_action.show_deactivated'), defaults_path('show_deactivated' => DB_TRUE.to_s) %></th>
+			<% end %>
+		<% else %>
+  		<th colspan="2">&nbsp;</th>
+		<% end %>
+  </tr>
+
+<%
+@defaults.each do |default|
+	# only show deactivated default if deactivated module installed, and show deactivated is set.
+	# try to dry this up
+	if (defined? @model.deactivated_module)
+		if show_deactivated?
+			show_row = true
+		elsif default.deactivated?
+			show_row = false
+		else
+			show_row = true
+		end
+	else
+		show_row = true
+	end
+	if show_row
+%>
+		<%= tag :tr, options = {:id => "default_#{default.id}", :class => "#{cycle('odd', 'even')}"}, open = true %>
+	    <td class="default_id"><%= default.id %></td>
+	    <td class="default_store"><%= default.store %></td>
+	    <td class="default_name"><%= default.name %></td>
+	    <td class="default_value"><%= default.value %></td>
+			<% if (defined? @model.deactivated_module) && show_deactivated? %>
+	    	<td class="default_deactivated"><%= I18n.is_deactivated_or_not(default.deactivated?) %></td>
+			<% end %>
+	    <td><%= link_to I18n.translate('view_action.view'), default %></td>
+	    <td><%= link_to I18n.translate('view_action.edit'), edit_default_path(default) %></td>
+			<% if (defined? @model.deactivated_module) && can?(:deactivate, default) %>
+				<% if default.deactivated? %>
+				 	<td><%= link_to I18n.translate('view_action.reactivate'), reactivate_default_path(default.id), :method => :put, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.reactivate'), :name => default.name+"?") %></td>
+				 	<td><%= link_to I18n.translate('view_action.delete'), default, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.delete'), :name => default.name+"?"), :method => :delete  %></td>
+				<% else %>
+				 	<td><%= link_to I18n.translate('view_action.deactivate'), deactivate_default_path(default.id), :method => :put, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.deactivate'), :name => default.name+"?") %></td>
+				<% end %>
+			<% end %>
+	  </tr>
+<%
+	end
+end
+%>
+</table>
+
+<%= link_to I18n.translate('defaults.new.action'), new_default_path %>

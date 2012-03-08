@@ -29,5 +29,3 @@ Philosophy / Approaches:
 	* Role based authorization can specify the role a user has within each (or all) sub-application.
 	* To this end, each role will specify the sub-application that it corresponds with.
 
-
-
