@@ -4,7 +4,7 @@ class Ability
 	
   def initialize(user)  #, session)
 
-    user ||= User.new # all_guests user
+    user ||= User.new
     
     Rails.logger.debug("* Ability - initialize - current user:#{user.full_name}, with roles:#{user.roles.inspect.to_s}")
     if user.has_role? 'all_admins'

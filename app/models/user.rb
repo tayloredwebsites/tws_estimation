@@ -58,36 +58,6 @@ class User < ActiveRecord::Base
     super if errors.empty? && self.id != 0  # don't save the guest user
   end
   
-  # method to delete a record, only if it is already deactivated
-  def delete
-  	if active?
-      # errors.add(:deactivated, "cannot delete active record")
-			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'delete', :msg => I18n.translate('error_messages.is_active') ) )
-			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
-			return false
-  	end
-  	if errors.empty?
-			super # call parent to delete record
-  	end
-  end
-
-  # method to destroy a record, only if it is already deactivated
-  def destroy
-    # Rails.logger.debug("* User - destroy - deactivated.nil? = #{self.deactivated.nil?}")
-    # Rails.logger.debug("* User - destroy - deactivated = #{self.deactivated.to_s}")
-  	if active?
-  	  Rails.logger.debug("* User - destroy - cannot destroy active user")
-      # errors.add(:deactivated, "cannot destroy active record")
-			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'destroy', :msg => I18n.translate('error_messages.is_active') ) )
-			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
-			return false
-			#raise "Error - cannot destroy active record"
-  	end
-  	if errors.empty?
-			super # call parent to destroy record
-  	end
-  end
-
 
   # class level valid_password to check password against user in database
   def self.valid_password? (username, password_in, password_confirmation=nil)
