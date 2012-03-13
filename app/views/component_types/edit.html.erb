@@ -19,7 +19,7 @@
 	
 <% end %>
 
-<%= link_to I18n.translate('component_types.show.action'), default_path(@component_type.id) %>
+<%= link_to I18n.translate('component_types.show.action'), component_type_path(@component_type.id) %>
 <% if can? :manage, @component_type %>
  | <%= link_to I18n.translate('component_types.index.action'), component_types_path %>
  | <%= link_to I18n.translate('component_types.new.action'), new_component_type_path %>
