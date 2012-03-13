@@ -1,0 +1,26 @@
+<%
+  @page_scope = 'component_types.edit'
+	@deactivated_module = defined?(ComponentType.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= form_for [@component_type], :action => 'update', do |f| %>
+
+	<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @component_type, :sys_errors => @errors  } %>
+
+	<div class="fields_20_80">
+		<%= render :partial => 'form', :locals => { :f => f } %>
+	</div>
+
+	<div class="actions">
+		<%= f.submit I18n.translate('view_action.update') %>
+	</div>
+	
+<% end %>
+
+<%= link_to I18n.translate('component_types.show.action'), default_path(@component_type.id) %>
+<% if can? :manage, @component_type %>
+ | <%= link_to I18n.translate('component_types.index.action'), component_types_path %>
+ | <%= link_to I18n.translate('component_types.new.action'), new_component_type_path %>
+<% end %>
