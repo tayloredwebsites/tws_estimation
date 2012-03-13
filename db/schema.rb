@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120301234322) do
+ActiveRecord::Schema.define(:version => 20120310161816) do
+
+  create_table "component_types", :force => true do |t|
+    t.string   "description", :default => "",   :null => false
+    t.integer  "sort_order",  :default => 0,     :null => false
+    t.boolean  "has_costs",   :default => true,  :null => false
+    t.boolean  "has_hours",   :default => false, :null => false
+    t.boolean  "has_vendor",  :default => false, :null => false
+    t.boolean  "has_misc",    :default => false, :null => false
+    t.boolean  "no_entry",    :default => false, :null => false
+    t.boolean  "deactivated", :default => false, :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
+  add_index "component_types", ["description"], :name => "index_component_types_on_description", :unique => true
 
   create_table "defaults", :force => true do |t|
     t.string   "store",                                      :default => "",    :null => false

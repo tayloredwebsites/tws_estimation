@@ -51,7 +51,8 @@
     :warning => {
       :sure? => 'Are you sure?',
       :sure_action? => 'Are you sure you want to %{action}?',
-      :sure_action_name? => 'Are you sure you want to %{action} %{name}?'
+      :sure_action_name? => 'Are you sure you want to %{action} %{name}?',
+      :sure_action_id? => 'Are you sure you want to %{action} item with ID: %{id}?'
     },
     :errors => {
       :cannot_find_obj => "Cannot find %{obj}",
@@ -285,6 +286,65 @@
         :store => 'Store',
         :name => 'Name',
         :value => 'Value',
+        :deactivated => 'Deactivated'
+      },
+      :messages => {
+      }
+    }, # end defaults
+    :component_types => {
+      :title => 'Component Types',
+      :system => 'maint',
+      :index => {
+        :action => "List Component Types",
+        :title => "List Estimation Component Types",
+        :header => "List of all Estimation Component Types"
+      },
+      :edit => {
+        :action => "Edit Component Type",
+        :title => "Edit Component Type",
+        :header => "Edit a Component Type"
+      },
+      :new => {
+        :action => "New Component Type",
+        :title => "New Component Type",
+        :header => "Create a Component Type"
+      },
+      :show => {
+        :action => "View Component Type",
+        :title => "View Component Type",
+        :header => "View a Component Type"
+      },
+      :field_name => {
+        :id => 'ID',
+        :description => 'Description',
+        :sort_order => 'Sort Order',
+        :has_costs => 'Has Costs',
+        :has_hours => 'Has Hours',
+        :has_vendor => 'Has Vendor',
+        :has_misc => 'Has Misc',
+        :no_entry => 'No Entry',
+        :deactivated => 'Deactivated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :description => 'Description',
+        :sort_order => 'Sort',
+        :has_costs => 'Costs?',
+        :has_hours => 'Hours?',
+        :has_vendor => 'Vendor?',
+        :has_misc => 'Misc?',
+        :no_entry => 'No Entry',
+        :deactivated => 'Deact.'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table)',
+        :description => 'Description',
+        :sort_order => 'Sort Order',
+        :has_costs => 'Has Costs',
+        :has_hours => 'Has Hours',
+        :has_vendor => 'Has Vendor (Keep track of vendor. Unused.)',
+        :has_misc => 'Has Misc (Has Misc costs ??)',
+        :no_entry => 'No Entry (Used for calculated fields.)',
         :deactivated => 'Deactivated'
       },
       :messages => {

@@ -43,6 +43,14 @@ module TwsAuth
     # set up cache store to memory
     # config.cache_store = :memory_store  #, :size => 64.megabytes
     # config.cache_store = :file_store, Rails.root.join('tmp', 'cachedir') #"/path/to/cache/directory"
+    
+    # customizing the scaffold generators
+    config.generators do |g|
+      g.orm                 :active_record
+      g.template_engine     :erb
+      g.test_framework      :rspec, :fixture => true, :views => false
+      g.fixture_replacement :factory_girl, :dir => "spec/factories"
+    end
   end
 end
 

@@ -86,7 +86,7 @@ module UserTestHelper
       session[:current_user_id] = @user_session.current_user_id
       session[:time_last_accessed] = @user_session.time_last_accessed
     end
-    Rails.logger.debug("T UserTestHelper.session_signin - done")
+    Rails.logger.debug("T UserTestHelper.session_signin - done - signed_in?: #{@user_session.signed_in?}")
     return @user_session
   end
   def session_signout()

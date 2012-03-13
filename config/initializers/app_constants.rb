@@ -28,7 +28,7 @@ APPLICATION_SYSTEMS = {
 #  :all => {:id => 'all', :actual => 'false', :type => 'system', :resources => ['Home', 'User', 'Default']},
 #  :home => {:id => 'home', :actual => 'true', :type => 'shared'},
   :guest => {:id => 'guest', :actual => 'true', :type => 'shared', :resources => [:home]},
-  :maint => {:id => 'maint', :actual => 'true', :type => 'shared', :resources => [:users, :defaults]},
+  :maint => {:id => 'maint', :actual => 'true', :type => 'shared', :resources => [:users, :defaults, :component_types]},
   :estim => {:id => 'estim', :actual => 'true', :type => 'shared', :resources => []},
   :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :resources => []}
 }
