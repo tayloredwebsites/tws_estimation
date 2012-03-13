@@ -1,5 +1,12 @@
 TwsAuth::Application.routes.draw do
 
+  resources :component_types do
+    member do
+      put 'deactivate'      # route:   deactivate_component_type PUT    /component_types/:id/deactivate(.:format) component_types#deactivate
+      put 'reactivate'      # route:   reactivate_component_type PUT    /component_types/:id/reactivate(.:format) component_types#reactivate
+    end
+  end
+
   resources :users_sessions, :only => ['index', 'create'] do
     member do
       get 'signin'          # route:         signin_users_session GET    /users_sessions/:id/signin(.:format)         {:action=>"signin", :controller=>"users_sessions"}
@@ -24,8 +31,8 @@ TwsAuth::Application.routes.draw do
   
   resources :defaults do
     member do
-      put 'deactivate'      # route:              deactivate_user PUT    /users/:id/deactivate(.:format)      {:action=>"deactivate", :controller=>"users"}
-      put 'reactivate'      # route:              reactivate_user PUT    /users/:id/reactivate(.:format)      {:action=>"reactivate", :controller=>"users"}
+      put 'deactivate'      # route:   deactivate_default PUT    /defaults/:id/deactivate(.:format)    defaults#deactivate
+      put 'reactivate'      # route:   reactivate_default PUT    /defaults/:id/reactivate(.:format)    defaults#reactivate
     end
   end
 
