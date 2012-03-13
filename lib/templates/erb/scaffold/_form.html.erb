@@ -1,0 +1,7 @@
+
+<% attributes.each do |attribute| -%>
+  <div class="field">
+    <%%= f.label :<%= attribute.name %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
+    <span class="value"><%%= f.<%= attribute.field_type %> :<%= attribute.name %> %></span>
+  </div>
+<% end -%>
