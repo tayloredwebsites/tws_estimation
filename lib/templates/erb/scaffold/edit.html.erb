@@ -1,0 +1,30 @@
+<%%
+  @page_scope = 'component_type.edit'
+	@deactivated_module = defined?(<%= human_name %>.new.deactivated_module)
+%>
+
+<h4><%%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<h1>Editing <%= singular_table_name %></h1>
+<%%= form_for [@<%= singular_table_name %>], :action => 'update', do |f| %>
+
+	<%%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @<%= singular_table_name %>, :sys_errors => @errors  } %>
+
+	<div class="fields_20_80">
+		<%%= render :partial => 'form', :locals => { :f => f } %>
+	</div>
+
+	<div class="actions">
+		<%%= f.submit I18n.translate('view_action.update') %>
+	</div>
+	
+<% end %>
+
+<%%= link_to 'Show', @<%= singular_table_name %> %> |
+<%%= link_to 'Back', <%= index_helper %>_path %>
+
+<%%= link_to I18n.translate('<%= singular_table_name %>.show.action'), default_path(@<%= singular_table_name %>.id) %>
+<%% if can? :manage, @<%= singular_table_name %> %>
+ | <%= link_to I18n.translate('<%= singular_table_name %>.index.action'), <%= plural_table_name %>_path %>
+ | <%= link_to I18n.translate('<%= singular_table_name %>.new.action'), new_<%= singular_table_name %>_path %>
+<%% end %>
