@@ -239,7 +239,7 @@ describe 'ComponentTypes Integration Tests' do
         # select I18n.translate('view_field_value.deactivated'), :from => 'component_type_deactivated'
         find(:xpath, '//input[@type="submit"]').click
       end
-      save_and_open_page
+      # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
@@ -300,7 +300,7 @@ describe 'ComponentTypes Integration Tests' do
       @item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_types).merge({:deactivated => DB_TRUE}))
       ComponentType.count.should > 1
       # get component_types_path
-      # response.status.should be(302)
+      # response.status.should be(200)
       visit component_types_path()
       page.driver.status_code.should be 200
       # save_and_open_page

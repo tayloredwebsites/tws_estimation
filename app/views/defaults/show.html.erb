@@ -1,5 +1,6 @@
 <%
   @page_scope = 'defaults.show'
+	@deactivated_module = defined?(ComponentType.new.deactivated_module)
 %>
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
@@ -22,7 +23,7 @@
     <span class="label"><%= I18n.translate('defaults.field_name.value') %></span>
     <span class="value" id="default_value"><%= @default.value %></span>
   </div>
-<% if (defined? @model.deactivated_module) %>
+<% if @deactivated_module %>
   <div class="field">
     <span class="label"><%= I18n.translate('defaults.field_name.deactivated') %></span>
     <span class="value" id="default_deactivated"><%= I18n.is_deactivated_or_not(@default.deactivated?) %></span>

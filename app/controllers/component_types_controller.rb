@@ -11,7 +11,6 @@ class ComponentTypesController < SecureApplicationController
   end
 
   before_filter do |controller|
-    # no actions require authentication (so far)
     self.authenticate_user # always authenticate user   if (%w{ index show }.index(params[:action]).nil?)
     # @model = ComponentType.new
   end
@@ -26,7 +25,6 @@ class ComponentTypesController < SecureApplicationController
   # GET /component_types
   def index
     @component_types = get_scope().order('description ASC')
-    
   end
 
   # GET /component_types/:id

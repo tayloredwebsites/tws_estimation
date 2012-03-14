@@ -1,5 +1,6 @@
 <%
   @page_scope = 'defaults.new'
+	@deactivated_module = defined?(ComponentType.new.deactivated_module)
 %>
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>

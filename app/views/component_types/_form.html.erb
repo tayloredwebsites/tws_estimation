@@ -51,7 +51,7 @@
 			<%= f.label "no_entry_false", "false", :class => 'span_after_label' %>
 		</span>
   </div>
-	<% if (@deactivated_module) %>
+	<% if @deactivated_module && can?(:deactivate, @default) %>
 	  <div class="field">
 	    <%= f.label :deactivated, I18n.translate('component_types.field_name.deactivated'), :class => 'label' %>
 	    <span class="value">

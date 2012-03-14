@@ -11,11 +11,8 @@ class DefaultsController < SecureApplicationController
   end
 
   before_filter do |controller|
-    # no actions require authentication (so far)
-    # self.authenticate_user if (%w{ reset_password }.index(params[:action]).nil?)
-    @model = Default.new
-    @defaults_scoped = get_scope(Default.scoped)
-    # Rails.logger.debug("* DefaultsController.before_filter @defaults_scoped:#{@defaults_scoped.inspect.to_s}")
+    self.authenticate_user # always authenticate user   if (%w{ index show }.index(params[:action]).nil?)
+    # @model = ComponentType.new
   end
 
   # chain current scope with any modules that have set scope (e.g. DeactivatedController)
@@ -27,11 +24,10 @@ class DefaultsController < SecureApplicationController
 
   # GET /defaults
   def index
-    # @defaults = Default.all
     @defaults = get_scope().order('store ASC, name ASC')
   end
 
-  # GET /defaults/1
+  # GET /defaults/:id
   def show
     @default = get_scope().find(params[:id])
   end
@@ -41,7 +37,7 @@ class DefaultsController < SecureApplicationController
     @default = Default.new
   end
 
-  # GET /defaults/#/edit
+  # GET /defaults/:id/edit
   def edit
     @default = get_scope().find(params[:id])
   end
@@ -57,12 +53,12 @@ class DefaultsController < SecureApplicationController
     end
   end
 
-  # PUT /defaults/#
+  # PUT /defaults/:id
   def update
     super # call to parent (e.g. Controllers::DeactivatedController)
   end
 
-  # DELETE /defaults/#
+  # DELETE /defaults/:id
   def destroy
     super # call to parent (e.g. Controllers::DeactivatedController)
   end

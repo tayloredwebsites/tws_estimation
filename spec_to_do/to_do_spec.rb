@@ -21,4 +21,5 @@ describe 'Miscellaneous items to do - ' do
   it 'should let cancan authorize resources for the home controller.  Base Model? Guest Model? '
   it 'should not need the @model to be created in each controller?'
   it 'should have controllers not attempt to create records that are already there, but deactivated.'
+  it 'should have cancan tests either in controller or integration specs'
 end
