@@ -5,28 +5,27 @@
 
 <div><%= I18n.translate('header', :scope => @page_scope) %></div>
 
-
-	<table cellspacing="0">
-	  <tr>
-	    <th><%= I18n.translate('component_types.field_name_short.id') %></th>
-	    <th><%= I18n.translate('component_types.field_name_short.description') %></th>
-	    <th><%= I18n.translate('component_types.field_name_short.sort_order') %></th>
-	    <th><%= I18n.translate('component_types.field_name_short.has_costs') %></th>
-	    <th><%= I18n.translate('component_types.field_name_short.has_hours') %></th>
-	    <th><%= I18n.translate('component_types.field_name_short.has_vendor') %></th>
-	    <th><%= I18n.translate('component_types.field_name_short.has_misc') %></th>
-	    <th><%= I18n.translate('component_types.field_name_short.no_entry') %></th>
-			<% if (@deactivated_module) %>
-				<% if show_deactivated? %>
-			    <th><%= I18n.translate('component_types.field_name_short.deactivated') %></th>
-			    <th colspan="4"><%= link_to I18n.translate('view_action.hide_deactivated'), component_types_path('show_deactivated' => DB_FALSE.to_s) %></th>
-				<% else %>
-		    	<th colspan="3"><%= link_to I18n.translate('view_action.show_deactivated'), component_types_path('show_deactivated' => DB_TRUE.to_s) %></th>
-				<% end %>
+<table cellspacing="0">
+  <tr>
+    <th><%= I18n.translate('component_types.field_name_short.id') %></th>
+    <th><%= I18n.translate('component_types.field_name_short.description') %></th>
+    <th><%= I18n.translate('component_types.field_name_short.sort_order') %></th>
+    <th><%= I18n.translate('component_types.field_name_short.has_costs') %></th>
+    <th><%= I18n.translate('component_types.field_name_short.has_hours') %></th>
+    <th><%= I18n.translate('component_types.field_name_short.has_vendor') %></th>
+    <th><%= I18n.translate('component_types.field_name_short.has_misc') %></th>
+    <th><%= I18n.translate('component_types.field_name_short.no_entry') %></th>
+		<% if (@deactivated_module) %>
+			<% if show_deactivated? %>
+		    <th><%= I18n.translate('component_types.field_name_short.deactivated') %></th>
+		    <th colspan="4"><%= link_to I18n.translate('view_action.hide_deactivated'), component_types_path('show_deactivated' => DB_FALSE.to_s) %></th>
 			<% else %>
-	  		<th colspan="2">&nbsp;</th>
+	    	<th colspan="3"><%= link_to I18n.translate('view_action.show_deactivated'), component_types_path('show_deactivated' => DB_TRUE.to_s) %></th>
 			<% end %>
-	  </tr>
+		<% else %>
+  		<th colspan="2">&nbsp;</th>
+		<% end %>
+  </tr>
 
 
 <%

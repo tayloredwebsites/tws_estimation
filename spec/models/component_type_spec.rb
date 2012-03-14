@@ -3,17 +3,17 @@ require 'spec_helper'
 describe ComponentType do
   context 'it should have crud actions available and working' do
     it "should raise an error create user with no attributes" do
-      num_component_types = ComponentType.count
+      num_items = ComponentType.count
       lambda {ComponentType.create!()}.should raise_error(ActiveRecord::RecordInvalid)
-      ComponentType.count.should == num_component_types
+      ComponentType.count.should == num_items
     end    
     it "should not create user when created with no attributes" do
-      num_component_types = ComponentType.count
-      component_type = ComponentType.create()
-      ComponentType.count.should == num_component_types
+      num_items = ComponentType.count
+      item = ComponentType.create()
+      ComponentType.count.should == num_items
     end    
     it 'should create user when created with the minimum_attributes' do
-      num_component_types = ComponentType.count
+      num_items = ComponentType.count
       attribs = FactoryGirl.attributes_for(:component_types_min)
       item1 = ComponentType.create(attribs)
       item1.should be_instance_of(ComponentType)
@@ -24,10 +24,10 @@ describe ComponentType do
       end
       item1.id.should_not be_nil
       item1.errors.count.should == 0
-      ComponentType.count.should == num_component_types + 1
+      ComponentType.count.should == num_items + 1
     end   
     it 'should not create component_types when created missing one of the minimum_attributes' do
-      num_component_types = ComponentType.count
+      num_items = ComponentType.count
       attribs = FactoryGirl.attributes_for(:component_types_min)
       attribs.each do | atrkey, atrval |
         Rails.logger.debug("T component_type_spec component_types_min - try to create item without key:#{atrkey}")
@@ -43,18 +43,18 @@ describe ComponentType do
         item1.send(atrkey).should == ''
         item1.id.should be_nil
         item1.errors.count.should > 0
-        ComponentType.count.should == num_component_types
+        ComponentType.count.should == num_items
       end
       
     end   
   end
   context 'it should have deactivated actions available and working' do
     it 'should be able to deactivate an active record' do
-      num_component_types = ComponentType.count
+      num_items = ComponentType.count
       attribs = FactoryGirl.attributes_for(:component_types)
       item1 = ComponentType.create(attribs)
       item1.deactivated.should be_false
-      ComponentType.count.should == num_component_types + 1
+      ComponentType.count.should == num_items + 1
       item1.deactivate
       item1.deactivated.should be_true
       item_found = ComponentType.find(item1.id)
@@ -62,7 +62,7 @@ describe ComponentType do
       item_found.deactivated.should be_true     
     end
     it 'should not be able to deactivate a deactivated record' do
-      num_component_types = ComponentType.count
+      num_items = ComponentType.count
       attribs = FactoryGirl.attributes_for(:component_types)
       item1 = ComponentType.create(attribs)
       item1.deactivated.should be_false
@@ -79,7 +79,7 @@ describe ComponentType do
       item_found2.deactivated.should be_true 
     end
     it 'should be able to reactivate a deactivated record' do
-      num_component_types = ComponentType.count
+      num_items = ComponentType.count
       attribs = FactoryGirl.attributes_for(:component_types)
       item1 = ComponentType.create(attribs)
       item1.deactivated.should be_false
@@ -96,7 +96,7 @@ describe ComponentType do
       item_found2.deactivated.should be_false
     end
     it 'should not be able to reactivate an active record' do
-      num_component_types = ComponentType.count
+      num_items = ComponentType.count
       attribs = FactoryGirl.attributes_for(:component_types)
       item1 = ComponentType.create(attribs)
       item1.deactivated.should be_false
@@ -109,7 +109,7 @@ describe ComponentType do
       item_found.deactivated.should be_false 
     end
     it 'should be able to destroy a deactivated record' do
-      num_component_types = ComponentType.count
+      num_items = ComponentType.count
       attribs = FactoryGirl.attributes_for(:component_types)
       item1 = ComponentType.create(attribs)
       item1.deactivated.should be_false
@@ -122,7 +122,7 @@ describe ComponentType do
       lambda{ComponentType.find(item1.id)}.should raise_error(ActiveRecord::RecordNotFound)
     end
     it 'should not be able to destroy an active record' do
-      num_component_types = ComponentType.count
+      num_items = ComponentType.count
       attribs = FactoryGirl.attributes_for(:component_types)
       item1 = ComponentType.create(attribs)
       item1.deactivated.should be_false

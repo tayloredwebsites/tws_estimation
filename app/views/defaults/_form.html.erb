@@ -11,9 +11,14 @@
     <span class="value"><%= f.text_field :value %></span>
   </div>
 
-	<% if (defined? @default.deactivated_module) && can?(:deactivate, @default) %>
+	<% if @deactivated_module && can?(:deactivate, @default) %>
 	 	<div class="field">
-	   <%= f.label :deactivated, I18n.translate('defaults.field_name.deactivated'), :class => 'label' %>
-	   <span class="value"><%= select( "default", "deactivated", [ [I18n.is_deactivated_or_not(true), true], [I18n.is_deactivated_or_not(false), false] ], {:selected => @default.deactivated?} ) %></span>
+	  	<%= f.label :deactivated, I18n.translate('defaults.field_name.deactivated'), :class => 'label' %>
+	    <span class="value">
+				<%= f.radio_button :deactivated, true %>
+				<%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
+				<%= f.radio_button :deactivated, false %>
+				<%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
+			</span>
 		</div>
 	<% end %>
