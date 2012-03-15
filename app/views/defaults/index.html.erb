@@ -1,6 +1,6 @@
 <%
   @page_scope = 'defaults.index'
-	@deactivated_module = defined?(ComponentType.new.deactivated_module)
+	@deactivated_module = defined?(Default.new.deactivated_module)
 %>
 
 <div><%= I18n.translate('header', :scope => @page_scope) %></div>
