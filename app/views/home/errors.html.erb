@@ -1,14 +1,17 @@
 <%
   @page_scope = 'home.errors'
-  #page_title I18n.translate('title', :scope => @page_scope)
 %>
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
-<div class="fields_10_90">
-<% @errors.each do |err| %>
-  <div class="field">
-    <span class="label">Error:</span>
-    <span class="value"><%= err %></span>
-  </div>
-<% end %>
+<div class="fields_10_90 error">
+<%
+ 	if (!@errors.nil? && @errors.is_a?(Array) && @errors.size > 0)
+		@errors.each do |err| %>
+		  <div class="field">
+		    <span class="label">Error:</span>
+		    <span class="value"><%= err %></span>
+		  </div>
+<%
+		end
+	end %>
 </div>

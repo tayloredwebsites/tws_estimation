@@ -6,6 +6,8 @@ TwsAuth::Application.routes.draw do
       put 'reactivate'      # route:   reactivate_component_type PUT    /component_types/:id/reactivate(.:format) component_types#reactivate
     end
   end
+  match "component_types/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "component_types/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
 
   resources :users_sessions, :only => ['index', 'create'] do
     member do
@@ -28,6 +30,9 @@ TwsAuth::Application.routes.draw do
     #   put 'reset_password'  # route:          reset_password_user PUT    /users/:id/reset_password(.:format)          {:action=>"reset_password", :controller=>"users"}
     end
   end
+  match "users/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "users/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "users/:id/update_password", :via => :get, :to => 'home#errors', :status => 405
   
   resources :defaults do
     member do
@@ -35,6 +40,8 @@ TwsAuth::Application.routes.draw do
       put 'reactivate'      # route:   reactivate_default PUT    /defaults/:id/reactivate(.:format)    defaults#reactivate
     end
   end
+  match "defaults/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "defaults/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
 
   # routes for home controller
   get "home/index"	        # route:           home_index GET    /home/index(.:format)                {:controller=>"home", :action=>"index"}

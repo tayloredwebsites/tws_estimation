@@ -22,6 +22,23 @@ class HomeController < SecureApplicationController
   end
 
   def errors
+    if params["status"] == 405
+      @errors << "Cannot perform this action (#{request.headers["PATH_INFO"]}) with this method (#{request.headers["REQUEST_METHOD"]}).  Is Javascript turned off?"
+    end
+    if !session[:errors].nil?
+      errs = session[:errors]
+      if errs.is_a(Array)
+        errs.each do | desc |
+          @errors << desc
+        end
+      elsif errs.is_a(Hash)
+        errs.each do | key, val |
+          @errors << "#{key.to_s} has an error of #{val.to_s}"
+        end
+      elsif errs.is_a(String)
+        @errors << errs
+      end
+    end
   end
 
   def help

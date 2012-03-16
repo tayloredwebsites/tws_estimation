@@ -109,6 +109,7 @@
 .warning {color:#f00;}
 .alert {color:#f00;font-size:larger;}
 .notice {color:#f00;}
+.script_notice {color:#f00;}
 #error_explanation {border:1px solid #f00;color:#f00;padding:5px 10px;}
 #error_explanation ul {margin:5px 15px;padding:0px;}
 #error_explanation li {margin:0;padding:0;}

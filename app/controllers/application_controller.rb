@@ -159,7 +159,6 @@ class ApplicationController < ActionController::Base
   
   def user_notify(message)
     flash[:notice] = message
-    @errors.push(message)
   end
 
 end

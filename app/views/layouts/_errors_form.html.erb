@@ -1,4 +1,10 @@
-<% if active_obj.errors.size > 0 %>
+<%
+	tot_errors = active_obj.errors.size
+	if (!@errors.nil? && @errors.is_a?(Array) && @errors.size > 0)
+		tot_errors += @errors.size
+	end
+	
+	if tot_errors > 0 %>
 	<div id="error_explanation">
 		<strong><%= pluralize(active_obj.errors.count, "Error") %>:</strong>
 		<p><%= I18n.translate('errors.fix_following_errors') %></p>
@@ -9,6 +15,13 @@
 		<% active_obj.errors[:base].each do |msg| %>
 		 <li><%= msg %></li>
 		<% end %>
+<%
+			if !@errors.nil? && @errors.is_a?(Array)
+				@errors.each do |err| %>
+				  <li><%= err %></li>
+<%
+				end
+			end %>
 		</ul>
 	</div>
 <% end %>

@@ -41,6 +41,33 @@ describe DefaultsController do
       response.should render_template("show")
       Default.count.should == (@num_items+1)
     end
+    it "should create an item with the minimum valid parameters" do
+      @num_items = Default.count
+      min_attr = FactoryGirl.attributes_for(:defaults_min)
+      post :create, :default => min_attr
+      assigns(:default).should_not be_nil
+      assigns(:default).should be_a(Default)
+      assigns(:default).should be_instance_of(Default) 
+      assigns(:default).should be_persisted
+      min_attr.each  do |key, value|
+        Rails.logger.debug("T defaults_controller_spec minimum - match on:#{key.to_s}")
+        assigns(:default).send(key.to_sym).should eq(min_attr[key.to_sym])
+      end
+      response.should render_template("show")
+      Default.count.should == (@num_items+1)
+    end
+    it 'should not create an item missing any one of the minimum_attributes' do
+      FactoryGirl.attributes_for(:defaults_min).each do |key, value|
+        test_attributes = FactoryGirl.attributes_for(:defaults_min)
+        test_attributes.delete(key)
+        # confirm we have a reduced size set of attributes
+        FactoryGirl.attributes_for(:defaults_min).size.should == (test_attributes.size+1)
+        @num_items = Default.count
+        post :create, :default => test_attributes
+        response.should render_template("new")
+        Default.count.should == (@num_items)
+      end
+    end
     it 'should be able to GET edit an item' do
       item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
       get :edit, :id => item1.id.to_s

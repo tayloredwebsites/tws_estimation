@@ -38,6 +38,28 @@ describe 'Defaults Integration Tests' do
       find(:xpath, '//*[@id="default_value"]').text.should =~ /\A123.45\z/  # be new value
       num_items.should == Default.count - 1
     end
+    it 'should notify user when trying to create a user missing required fields' do
+      item1 = Default.create!(FactoryGirl.attributes_for(:defaults_min))
+      # dont do this if min size == 0
+      Rails.logger.debug("T defaults_integration_spec #{FactoryGirl.attributes_for(:defaults_min).size}")
+      if FactoryGirl.attributes_for(:defaults_min).size > 0
+        num_items = Default.count
+        visit new_default_path()
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.new.header')}$/
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+        # save_and_open_page      
+        within(".new_default") do
+          find(:xpath, '//input[@type="submit"]').click
+        end
+        # save_and_open_page
+        page.driver.status_code.should be 200
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.new.header')}$/
+        page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+        find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
+        page.should have_selector(:xpath, '//span[@class="field_with_errors"]')
+        num_items.should == Default.count
+      end
+    end
     it 'should be able to edit and update an item' do
       all_attribs = FactoryGirl.attributes_for(:defaults_accessible)
       item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
