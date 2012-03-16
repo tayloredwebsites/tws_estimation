@@ -49,7 +49,7 @@ class DefaultsController < SecureApplicationController
       # redirect_to @default, notice: 'Default was successfully created.'
       render :action => 'show'
     else
-      render :action => "edit"
+      render :action => "new"
     end
   end
 

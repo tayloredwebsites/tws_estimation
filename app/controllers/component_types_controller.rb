@@ -49,7 +49,7 @@ class ComponentTypesController < SecureApplicationController
       # redirect_to @component_type, notice: 'Component type was successfully created.'
       render :action => 'show'
     else
-      render :action => "edit"
+      render :action => "new"
     end
   end
 

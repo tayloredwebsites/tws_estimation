@@ -41,6 +41,33 @@ describe ComponentTypesController do
       response.should render_template("show")
       ComponentType.count.should == (@num_items+1)
     end
+    it "should create an item with the minimum valid parameters" do
+      @num_items = ComponentType.count
+      min_attr = FactoryGirl.attributes_for(:component_types_min)
+      post :create, :component_type => min_attr
+      assigns(:component_type).should_not be_nil
+      assigns(:component_type).should be_a(ComponentType)
+      assigns(:component_type).should be_instance_of(ComponentType) 
+      assigns(:component_type).should be_persisted
+      min_attr.each  do |key, value|
+        Rails.logger.debug("T component_types_controller_spec minimum - match on:#{key.to_s}")
+        assigns(:component_type).send(key.to_sym).should eq(min_attr[key.to_sym])
+      end
+      response.should render_template("show")
+      ComponentType.count.should == (@num_items+1)
+    end
+    it 'should not create an item missing any one of the minimum_attributes' do
+      FactoryGirl.attributes_for(:component_types_min).each do |key, value|
+        test_attributes = FactoryGirl.attributes_for(:component_types_min)
+        test_attributes.delete(key)
+        # confirm we have a reduced size set of attributes
+        FactoryGirl.attributes_for(:component_types_min).size.should == (test_attributes.size+1)
+        @num_items = ComponentType.count
+        post :create, :component_type => test_attributes
+        response.should render_template("new")
+        ComponentType.count.should == (@num_items)
+      end
+    end
     it 'should be able to GET edit an item' do
       item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
       get :edit, :id => item1.id.to_s
