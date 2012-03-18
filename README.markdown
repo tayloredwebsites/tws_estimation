@@ -1,23 +1,23 @@
-# Estimation of systems/component costs
+# Estimation of systems/component costs #
 
 This is a startup application by [Taylored Web Sites](http://www.tayloredwebsites.com).
 
-Estimation System:
+## Estimation System: ##
 
-It is assumed that what is being estimated can be broken down into a number of systems, each of which is made up of components:
+__It is assumed that what is being estimated can be broken down into a number of systems, each of which is made up of components:__
 
 * Components have particular kinds of costs associated with them, which are managed by "Component Types".
 * Systems have particular sets of Components associated with them, which are managed "System Components".
 * Estimates are a combination of Systems (with their corresponding Components), plus an "Overhead System".
 
-People who have maintenance privileges can enter the base set of items used to create an Estimate:
+__People who have maintenance privileges can enter the base set of items used to create an Estimate:__
 
 * Components Types (Description, sort order, has costs, has hours, etc.)
 * Components (Component Type, Description)
 * Systems (Description, sort order, required)
 * System Components (Description, required)
 
-General Philosophy / Approaches:
+## General Philosophy / Approaches: ##
 
 1. Readability and Documentation goes before DRY (don't repeat yourself).
 	* Still working on what this means in detail, but functionality should not be hidden / obfuscated.
@@ -44,7 +44,7 @@ General Philosophy / Approaches:
 	* Role based authorization can specify the role a user has within each (or all) sub-application.
 	* To this end, each role will specify the sub-application that it corresponds with.
 
-Future Features:
+### Future Features: ###
 
 * An audit trail of transactions will be available for some tables, utilizing the Deactivation feature.
 * Reset Password feature
