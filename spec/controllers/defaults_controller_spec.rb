@@ -121,11 +121,7 @@ describe DefaultsController do
       put :deactivate, :id => item1.id
       response.should be_success
       response.code.should be == '200'
-      response.should render_template("show")
-      assigns(:default).should_not be_nil
-      assigns(:default).should be_a(Default)
-      assigns(:default).deactivated.should == true
-      assigns(:default).should be_persisted
+      response.should render_template("index")
       updated_item = Default.find(item1.id)
       updated_item.should_not be_nil
       updated_item.deactivated?.should be_true

@@ -5,7 +5,7 @@ class ComponentTypesController < SecureApplicationController
   
   def initialize
     # this is within the maintenance sub-application
-    @systemc = 'maint'
+    @systemc = 'estim'
     Rails.logger.debug("* ComponentTypesController.initialize - @systemc:#{@systemc}")
     super
   end

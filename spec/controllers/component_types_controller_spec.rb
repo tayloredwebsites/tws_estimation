@@ -121,11 +121,7 @@ describe ComponentTypesController do
       put :deactivate, :id => item1.id
       response.should be_success
       response.code.should be == '200'
-      response.should render_template("show")
-      assigns(:component_type).should_not be_nil
-      assigns(:component_type).should be_a(ComponentType)
-      assigns(:component_type).deactivated.should == true
-      assigns(:component_type).should be_persisted
+      response.should render_template("index")
       updated_item = ComponentType.find(item1.id)
       updated_item.should_not be_nil
       updated_item.deactivated?.should be_true

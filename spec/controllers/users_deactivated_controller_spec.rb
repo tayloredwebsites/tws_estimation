@@ -44,7 +44,7 @@ describe UsersController do
       response.should be_success
       response.code.should be == '200'
       response.should_not redirect_to(:controller => 'home', :action => 'errors')
-      response.should render_template("show")
+      response.should render_template("index")
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated?.should be_true
     end

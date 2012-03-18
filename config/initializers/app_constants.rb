@@ -27,10 +27,21 @@ DB_VALUES = {
 APPLICATION_SYSTEMS = {
 #  :all => {:id => 'all', :actual => 'false', :type => 'system', :resources => ['Home', 'User', 'Default']},
 #  :home => {:id => 'home', :actual => 'true', :type => 'shared'},
-  :guest => {:id => 'guest', :actual => 'true', :type => 'shared', :resources => [:home]},
-  :maint => {:id => 'maint', :actual => 'true', :type => 'shared', :resources => [:users, :defaults, :component_types]},
-  :estim => {:id => 'estim', :actual => 'true', :type => 'shared', :resources => []},
-  :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :resources => []}
+  :guest => {:id => 'guest', :actual => 'true', :type => 'shared', :menu_items => {
+    :home => {:class_name => "UserSession", :action => :index, :start_uri => "/"},
+    :user_signin => {:class_name => "UserSession", :action => :sign_in, :start_uri => "/signin"},
+    :user_signout => {:class_name => "UserSession", :action => :sign_out, :start_uri => "/signout"}
+  } },
+  :maint => {:id => 'maint', :actual => 'true', :type => 'shared', :menu_items => {
+    :users => {:class_name => "User", :action => :index, :start_uri => "/users"}
+  } },
+  :estim => {:id => 'estim', :actual => 'true', :type => 'shared', :menu_items => {
+    :defaults => {:class_name => "Default", :action => :index, :start_uri => "/defaults"},
+    :component_types => {:class_name => "ComponentType", :action => :index, :start_uri => "/component_types"}
+  } },
+  :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :menu_items => {
+    
+  } }
 }
 
 VALID_ROLES = %w{ guest_users all_admins maint_users maint_admins estim_users estim_admins prevail_users prevail_admins }
