@@ -299,11 +299,10 @@ describe 'Defaults Integration Tests' do
       find(:xpath, "//tr[@id=\"default_#{item1.id}\"]//a", :text => I18n.translate('view_action.deactivate') ).click
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.show.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.index.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => item1.class.name, :id => item1.id )}$/
       Default.count.should == (@num_items)
-      find(:xpath, '//*[@id="default_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
       @updated_item = Default.find(item1.id)
       @updated_item.deactivated?.should be_true
     end

@@ -26,6 +26,15 @@ class UsersSessionsController < SecureApplicationController
   #   super
   # end
   # 
+  
+  def index
+    # if session[:current_user_id] == nil
+    #   render :action => 'signin'
+    # else
+    #   render :action => 'signout'
+    # end
+  end
+  
   def signin
     # self.clear_session
   end

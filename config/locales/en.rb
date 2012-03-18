@@ -2,6 +2,7 @@
 # localization file using ruby hash method (instead of yaml).
 {
   :en => {
+    # general user displays
     :config => {
       :company_name => 'Taylored Web Sites',
       :company_email => 'tayloredwebsites@me.com',
@@ -11,34 +12,41 @@
     :systems => {
       :all => {
         :abbreviation => 'All',
-        :full_name => 'All Systems'
+        :full_name => 'All Systems',
+        :menu_items => {} # not used
       },
-#      :home => {
-#        :abbreviation => 'Home',
-#        :full_name => 'Home'
-#      },
       :guest => {
         :abbreviation => 'Common',
-        :full_name => 'Common'
+        :full_name => 'Common',
+        :menu_items => {
+          :home => 'Home Page',
+          :user_signin => 'Sign In',
+          :user_signout => 'Sign Out'
+        }
       },
       :maint => {
         :abbreviation => 'Maint.',
-        :full_name => 'System Maintenance'
+        :full_name => 'System Maintenance',
+        :menu_items => {
+          :users => 'Users'
+        }
       },
       :estim => {
         :abbreviation => 'Estimation',
-        :full_name => 'Estimation System'
+        :full_name => 'Estimation System',
+        :menu_items => {
+          :defaults => 'Defaults',
+          :component_types => 'Component Types'
+        }
       },
       :prevail => {
         :abbreviation => 'Prevail',
-        :full_name => 'Prevailing Wages'
+        :full_name => 'Prevailing Wages',
+        :menu_items => {
+        }
       }
     },
     :roles => {
-#      :guests => {
-#        :abbreviation => 'Guest',
-#        :full_name => 'Guest'
-#      },
       :users => {
         :abbreviation => 'User',
         :full_name => 'User'
@@ -118,10 +126,8 @@
       :show_deactivated => 'Show Deactivated',
       :hide_deactivated => 'Hide Deactivated'
     },
-    # :index_title => 'List', # use :view_action.list or :users.index.title
-    # :edit_title => 'Edit', # use :view_action.edit or :users.edit.title
-    # :new_title => 'New', # use :view_action.new or :users.new.title
-    # :show_title => 'View', # use :view_action.show or :users.show.title
+    # Resources Display Strings
+    # Home pseudo Resource
     :home => {
       :title => 'Home',
       :system => 'home',
@@ -157,7 +163,8 @@
         :title => "Errors",
         :header => "Errors page - Unrecoverable errors"
       }
-    }, # end home
+    }, # end Home pseudo Resource
+    # User Resource
     :users => {
       :title => 'Users',
       :system => 'maint',
@@ -217,7 +224,8 @@
       #  :session_timeout => 'Your session has timed out',
       #  :invalid_role => "Invalid role %{role} has been removed"
       }
-    }, # end users
+    }, # end User Resource
+    # UsersSessionResource
     :users_sessions => {
       :title => 'User Sessions',
       :system => 'maint',
@@ -250,7 +258,8 @@
       :messages => {
         :session_timeout => 'Your session has timed out'
       }
-    }, # end users_sessions
+    }, # end UsersSession Resource
+    # Default Resource
     :defaults => {
       :title => 'Default Values',
       :system => 'maint',
@@ -290,7 +299,8 @@
       },
       :messages => {
       }
-    }, # end defaults
+    }, # end Default Resource
+    # ComponentType Resource
     :component_types => {
       :title => 'Component Types',
       :system => 'maint',
@@ -349,6 +359,6 @@
       },
       :messages => {
       }
-    } # end defaults
+    } # end ComponentType Resource
   } # end en
 } #end localizations

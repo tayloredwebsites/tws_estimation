@@ -41,8 +41,10 @@ module Controllers::DeactivatedController
           :id => item.id )
         )
         Rails.logger.debug("* Controllers::DeactivatedController.deactivate - return instance variable #{'@'+item.class.name.underscore}")
-        self.instance_variable_set('@'+item.class.name.underscore, item)
-        render :action => 'show', :id => item.id
+        self.instance_variable_set('@'+item.class.name.underscore.pluralize, get_scope() )
+        # render :action => 'show', :id => item.id
+        # don't show deactivated item (edit button no good if show_deactivated false), better to show item gone
+        render :action => 'index'
       else
       	if item.errors[:base].count > 0
       	  notify_error( item.errors[:base][0] )

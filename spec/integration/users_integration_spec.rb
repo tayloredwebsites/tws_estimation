@@ -624,21 +624,6 @@ describe 'Systems Tests' do
       find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.maint.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
     end
-    it 'should see maint menu item (has maint_user role)' do
-      visit home_index_path
-      # save_and_open_page
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.guest.full_name')}$/
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
-      page.should have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('users.show.title'))
-      page.should have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('systems.maint.full_name'))
-    end
-    it 'should see estim menu item (has estim_user role)' do
-      visit home_index_path
-      # save_and_open_page
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.guest.full_name')}$/
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
-      page.should have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('systems.estim.full_name'))
-    end
     # it 'should see the maintenance menu sub items if currently in that system'
     # it 'should see the estimation menu sub items if currently in that system'
   end
@@ -659,11 +644,6 @@ describe 'Systems Tests' do
     it 'should have maint system for user pages' do
       visit user_path(@me.id)
       helper_user_on_page?('systems.maint.full_name', 'users.show.header', @me.full_name)
-    end
-    it 'should see maint menu admin items' do
-      visit home_index_path
-      helper_user_on_page?('systems.guest.full_name', 'home.index.header', @me.full_name)
-      page.should have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('users.index.title'))
     end
   end
 

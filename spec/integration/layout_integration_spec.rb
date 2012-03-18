@@ -173,19 +173,20 @@ describe 'Users Layouts Links Tests - ' do
         end
       end
     end
-    it 'should only see the resources a guest can see and can? :read' do
+    it 'should only see the resources a guest can see and can? see' do
       # save_and_open_page
       APPLICATION_SYSTEMS.each do | sys_name, system |
         if @me.can_see_system?(system[:id].to_s)
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
-          system[:resources].each do | res |
+          system[:menu_items].each do | menu_key, menu_val |
             ability = Ability.new(@me)
-            if ability.can?(:read, res)
-              Rails.logger.debug("T layout_integration_spec guest should see resource #{res}")
-              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+            Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
+            if ability.can?(menu_val[:action].to_sym, menu_val[:class_name].to_s.constantize)
+              Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
             else
-              Rails.logger.debug("T layout_integration_spec guest should not see resource #{res}")
-              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+              Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
             end
           end
         end
@@ -219,19 +220,20 @@ describe 'Users Layouts Links Tests - ' do
         end
       end
     end
-    it 'should list all of the resources per system that the item can see and can? :read' do
+    it 'should list all of the resources per system that the item can see and can? see' do
       # save_and_open_page
       APPLICATION_SYSTEMS.each do | sys_name, system |
         if @me.can_see_system?(system[:id].to_s)
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
-          system[:resources].each do | res |
+          system[:menu_items].each do | menu_key, menu_val |
             ability = Ability.new(@me)
-            if ability.can?(:read, res)
-              Rails.logger.debug("T layout_integration_spec guest should see resource #{res}")
-              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+            Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
+            if ability.can?(menu_val[:action].to_sym, menu_val[:class_name].to_s.constantize)
+              Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
             else
-              Rails.logger.debug("T layout_integration_spec guest should not see resource #{res}")
-              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+              Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
             end
           end
         end
@@ -270,14 +272,15 @@ describe 'Users Layouts Links Tests - ' do
       APPLICATION_SYSTEMS.each do | sys_name, system |
         if @me.can_see_system?(system[:id].to_s)
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
-          system[:resources].each do | res |
+          system[:menu_items].each do | menu_key, menu_val |
             ability = Ability.new(@me)
-            if ability.can?(:read, res)
-              Rails.logger.debug("T layout_integration_spec guest should see resource #{res}")
-              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+            Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
+            if ability.can?(menu_val[:action].to_sym, menu_val[:class_name].to_s.constantize)
+              Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
             else
-              Rails.logger.debug("T layout_integration_spec guest should not see resource #{res}")
-              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{res.to_s}\"]")
+              Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
             end
           end
         end
