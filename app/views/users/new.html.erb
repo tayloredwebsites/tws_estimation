@@ -5,7 +5,7 @@
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
-<%= form_for [@user], :action => 'create', do |f| %>
+<%= form_for(@user, :action => 'create') do |f| %>
 
 	<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @user, :sys_errors => @errors  } %>
 	<div class="fields_20_80">

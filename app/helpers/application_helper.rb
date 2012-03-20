@@ -33,16 +33,16 @@ module ApplicationHelper
   end
   
   def show_deactivated?
-    Rails.logger.debug("* ApplicationHelper.show_deactivated? info(show_deactivated):#{@user_session.info(:show_deactivated).inspect}")
     @user_session.info(:show_deactivated) == DB_TRUE
+    # Rails.logger.debug("* ApplicationHelper.show_deactivated? info(show_deactivated):#{@user_session.info(:show_deactivated).inspect}")
   end
   def dont_show_deactivated
     @user_session.set_info(:show_deactivated, DB_FALSE)
-    Rails.logger.debug("* ApplicationHelper.dont_show_deactivated info(show_deactivated):#{@user_session.info(:show_deactivated).inspect}")
+    # Rails.logger.debug("* ApplicationHelper.dont_show_deactivated info(show_deactivated):#{@user_session.info(:show_deactivated).inspect}")
   end
   def show_deactivated
     @user_session.set_info(:show_deactivated, DB_TRUE)
-    Rails.logger.debug("* ApplicationHelper.show_deactivated info(show_deactivated):#{@user_session.info(:show_deactivated).inspect}")
+    # Rails.logger.debug("* ApplicationHelper.show_deactivated info(show_deactivated):#{@user_session.info(:show_deactivated).inspect}")
   end
   
 end
