@@ -14,7 +14,7 @@
 ActiveRecord::Schema.define(:version => 20120310161816) do
 
   create_table "component_types", :force => true do |t|
-    t.string   "description", :default => "",   :null => false
+    t.string   "description", :default => "",    :null => false
     t.integer  "sort_order",  :default => 0,     :null => false
     t.boolean  "has_costs",   :default => true,  :null => false
     t.boolean  "has_hours",   :default => false, :null => false

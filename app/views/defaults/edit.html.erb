@@ -5,7 +5,7 @@
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
-<%= form_for [@default], :action => 'update', do |f| %>
+<%= form_for(@default, :action => 'update') do |f| %>
 
 	<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @default, :sys_errors => @errors  } %>
 

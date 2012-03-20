@@ -9,7 +9,7 @@ class UserSession
   # http://stackoverflow.com/questions/5407940/named-parameters-in-ruby-structs
   # changed instance_of? to is_a? because session inherits from Hash (is not an instance of Hash)
   def initialize *args
-    #Rails.logger.debug ("* UserSession.initialize")
+    Rails.logger.debug ("* UserSession.initialize - args #{args.inspect.to_s}")
     if args.length == 0
       # ok - no errors, create empty session
       self.init
@@ -26,7 +26,7 @@ class UserSession
       Rails.logger.debug("* UserSession.initialize one arg - @app_session: #{@app_session.inspect.to_s}")
       self.load_user_session
     end
-    super *args
+    # super (args)
     #Rails.logger.debug ("* UserSession.initialize done")
   end
 
