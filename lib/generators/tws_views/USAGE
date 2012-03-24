@@ -1,0 +1,7 @@
+Description:
+    This will generate views for a resource that integrates with the tws_auth configuration
+
+Example:
+    rails generate tws_views MyModel
+
+    This will create views in the app/views/MyModel/ directory

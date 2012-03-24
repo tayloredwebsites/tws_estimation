@@ -1,0 +1,24 @@
+
+<% attributes.each do |attribute| -%>
+  <div class="field">
+    <%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
+<%
+	if attribute.instance_variable_get("@type").to_s == 'boolean'
+%>
+	<span class="value">
+		<%%= f.radio_button :<%= attribute.name %>, true %>
+		<%%= f.label "<%= attribute.name %>_true", "true", :class => 'span_after_label' %>
+		<%%= f.radio_button :<%= attribute.name %>, false %>
+		<%%= f.label "<%= attribute.name %>_false", "false", :class => 'span_after_label' %>
+	</span>
+<%
+	else
+%>
+    <span class="value"><%%= f.<%= attribute.field_type %> :<%= attribute.name %> %></span>
+<%
+	end # end attribute.instance_variable_get
+%>
+  </div>
+<%
+end # end attributes.each
+-%>
