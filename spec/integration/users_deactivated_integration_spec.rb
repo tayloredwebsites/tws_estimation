@@ -116,7 +116,7 @@ describe 'Users Integration Tests' do
       find(:xpath, "//tr[@id=\"user_#{@user1.id}\"]//a", :text => I18n.translate('view_action.deactivate') ).click
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.index.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => @model.class.name, :id => @user1.id )}$/
       User.count.should == (@num_users)

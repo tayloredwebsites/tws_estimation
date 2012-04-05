@@ -175,7 +175,7 @@
     {overflow:auto;}
   .field {padding:3px 0;overflow:hidden;}
   /* .field label, .field .label, .field .left_value */
-  .field .label, .field .left_value
+  .field .label, .field .left_value, .field .label_spacer
     {float:left;display:inline;text-align:right;padding-right:3px;overflow:hidden;}
   .field .value, .field .right_label
     {float:left;display:inline;text-align:left;padding-left:3px;overflow:hidden;}
@@ -183,38 +183,42 @@
     {content: ':';margin-left:5px;font-weight:900;}
   .field .span_after_label:after
     {content: '';margin-left:10px;}
+  .field .label_after:before
+    {content: '\0020';margin-right:5px;}
+  .field .label_after:after
+    {content: '\0020';margin-right:10px;}
   /* .fields_10_90 label, .fields_10_90 .label, .fields_10_90 .left_value */
-  .fields_10_90 .label, .fields_10_90 .left_value
+  .fields_10_90 .label, .fields_10_90 .label_spacer, .fields_10_90 .left_value
     {width:9%;margin-right:-9%;}
   .fields_10_90 .value, .fields_10_90 .right_label
     {width:89%;margin-left:9%;}
   /* .fields_20_80 label, .fields_20_80 .label, .fields_20_80 .left_value */
-  .fields_20_80 .label, .fields_20_80 .left_value
+  .fields_20_80 .label, .fields_20_80 .label_spacer, .fields_20_80 .left_value
     {width:19%;margin-right:-19%;}
   .fields_20_80 .value, .fields_20_80 .right_label
     {width:79%;margin-left:19%;}
   /* .fields_25_75 label, .fields_25_75 .label, .fields_25_75 .left_value */
-  .fields_25_75 .label, .fields_25_75 .left_value
+  .fields_25_75 .label, .fields_25_75 .label_spacer, .fields_25_75 .left_value
     {width:24%;margin-right:-24%;}
   .fields_25_75 .value, .fields_25_75 .right_label
     {width:74%;margin-left:24%;}
   /* .fields_50_50 label, .fields_50_50 .label, .fields_50_50 .left_value */
-  .fields_50_50 .label, .fields_50_50 .left_value
+  .fields_50_50 .label, .fields_50_50 .label_spacer, .fields_50_50 .left_value
     {width:49%;margin-right:-49%;}
   .fields_50_50 .value, .fields_50_50 .right_label
     {width:49%;margin-left:49%;}
   /* .fields_30_70 label, .fields_30_70 .label, .fields_30_70 .left_value */
-  .fields_30_70 .label, .fields_30_70 .left_value
+  .fields_30_70 .label, .fields_30_70 .label_spacer, .fields_30_70 .left_value
     {width:29%;margin-right:-29%;}
   .fields_30_70 .value, .fields_30_70 .right_label
     {width:69%;margin-left:29%;}
   /* .fields_40_60 label, .fields_40_60 .label, .fields_40_60 .left_value */
-  .fields_40_60 .label, .fields_40_60 .left_value
+  .fields_40_60 .label, .fields_40_60 .label_spacer, .fields_40_60 .left_value
     {width:39%;margin-right:-39%;}
   .fields_40_60 .value, .fields_40_60 .right_label
     {width:59%;margin-left:39%;}
   /* .fields_80_20 label, .fields_80_20 .label, .fields_80_20 .left_value */
-  .fields_80_20 .label, .fields_80_20 .left_value
+  .fields_80_20 .label, .fields_80_20 .label_spacer, .fields_80_20 .left_value
     {width:79%;margin-right:-79%;}
   .fields_80_20 .value, .fields_80_20 .right_label
     {width:19%;margin-left:79%;}

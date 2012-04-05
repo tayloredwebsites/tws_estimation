@@ -15,6 +15,10 @@ class DefaultsController < SecureApplicationController
     # @model = ComponentType.new
   end
 
+  def self.list(scope = nil)
+    list_scope = (scope.nil?) ? self.new.get_scope() : scope
+  end
+
   # chain current scope with any modules that have set scope (e.g. DeactivatedController)
   def get_scope(cur_scope = nil)
     # Rails.logger.debug ("* UsersController.get_scope - cur_scope in: #{cur_scope.inspect.to_s}, show_deactivated?: #{show_deactivated?}")

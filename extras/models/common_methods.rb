@@ -12,5 +12,15 @@ module Models::CommonMethods
       super
     # end
   end
+  
+  # html save display of field
+  def show_field(field_name)
+    if (defined? @model.deactivated_module)
+      html_escape( ''+('*' if !self.deactivated?)+(self.send(field_name.to_sym).to_s) )
+    else
+      html_escape( ''+(self.send(field_name.to_sym).to_s) )
+    end
+  end
+
     
 end

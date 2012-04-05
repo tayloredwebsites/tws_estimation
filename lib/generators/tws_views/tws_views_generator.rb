@@ -18,6 +18,10 @@ class TwsViewsGenerator < Rails::Generators::NamedBase
   
   # argument :attributes, :type => :array, :default => ['description:string', 'calc_only:boolean', 'deactivated:boolean', 'component_type_id:integer', 'default_id:integer'], :banner => "field:type field:type"
   # argument :attributes, :type => :array, :default => public_get_attributes, :banner => "field:type field:type"
+  
+  # access to validators through @model._validators
+  # access to accessible attributes through @model._accessible_attributes and @model.._protected_attributes
+  #    @model._accessible_attributes[:default].each { |attrib| puts attrib }
 
   
   def initialize(*args, &block)
@@ -33,11 +37,28 @@ class TwsViewsGenerator < Rails::Generators::NamedBase
       end
     else
       # Rails.logger.debug("G Load attributes from #{file_name.capitalize.constantize.columns.map.inspect.to_s}")
-      attributes = file_name.capitalize.constantize.columns.map do |c|
-        attrib = Rails::Generators::GeneratedAttribute.new(c.name, c.type)
-        # attrib_pair = "#{c.name}:#{c.type}"
-        Rails.logger.debug("G attrib = #{attrib.inspect.to_s}")
-        @attributes << attrib
+      my_model = file_name.capitalize.constantize
+      # my_model_instance = my_model.new
+      attributes = my_model.columns.map do |c|
+        foreign_key_field =  c.name.gsub(/_id/, '')
+        if foreign_key_field != c.name
+          attrib = Rails::Generators::GeneratedAttribute.new(c.name, 'reference')
+          # attrib_pair = "#{c.name}:#{c.type}"
+          Rails.logger.debug("G automatically generate field #{attrib.name.to_s}:#{attrib.type.to_s}")
+          @attributes << attrib # if (my_model._accessible_attributes[:default].include?(attrib)
+          # Field name of format xxxxx_id, indicating a foreign key.  Let see if we can display the class for it.
+          # Rails.logger.debug("* G TwsViewsGenerator.initialize - c.name = #{c.name}, foreign_key_field = #{foreign_key_field}")
+          foreign_key_name = foreign_key_field.underscore   # .camelize
+          # Rails.logger.debug("* G TwsViewsGenerator.initialize - foreign_key_name = #{foreign_key_name}")
+          fk_attrib = Rails::Generators::GeneratedAttribute.new(foreign_key_name, 'association')
+          Rails.logger.debug("G automatically generate field #{foreign_key_name}:#{fk_attrib.type.to_s}")
+          @attributes << fk_attrib
+        else
+          attrib = Rails::Generators::GeneratedAttribute.new(c.name, c.type)
+          # attrib_pair = "#{c.name}:#{c.type}"
+          Rails.logger.debug("G automatically generate field #{attrib.name.to_s}:#{attrib.type.to_s}")
+          @attributes << attrib # if (my_model._accessible_attributes[:default].include?(attrib)
+        end
       end
     end
   end
