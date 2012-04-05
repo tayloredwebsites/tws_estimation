@@ -14,7 +14,7 @@ describe Default do
     end    
     it 'should create user when created with the minimum_attributes' do
       num_items = Default.count
-      attribs = FactoryGirl.attributes_for(:defaults_min)
+      attribs = FactoryGirl.attributes_for(:default_min)
       item1 = Default.create(attribs)
       item1.should be_instance_of(Default)
       # loop through all of the attributes used to create this item to see if in created item
@@ -28,7 +28,7 @@ describe Default do
     end   
     it 'should not create user when created missing one of the minimum_attributes' do
       num_items = Default.count
-      attribs = FactoryGirl.attributes_for(:defaults_min)
+      attribs = FactoryGirl.attributes_for(:default_min)
       attribs.each do | atrkey, atrval |
         Rails.logger.debug("T default_spec defaults_min - try to create item without key:#{atrkey}")
         attribs_missing = attribs.reject{|itekey, iteval| itekey == atrkey}
@@ -51,7 +51,7 @@ describe Default do
   context 'it should have deactivated actions available and working' do
     it 'should be able to deactivate an active record' do
       num_items = Default.count
-      attribs = FactoryGirl.attributes_for(:defaults)
+      attribs = FactoryGirl.attributes_for(:default)
       item1 = Default.create(attribs)
       item1.deactivated.should be_false
       Default.count.should == num_items + 1
@@ -63,7 +63,7 @@ describe Default do
     end
     it 'should not be able to deactivate a deactivated record' do
       num_items = Default.count
-      attribs = FactoryGirl.attributes_for(:defaults)
+      attribs = FactoryGirl.attributes_for(:default)
       item1 = Default.create(attribs)
       item1.deactivated.should be_false
       item1.deactivate
@@ -80,7 +80,7 @@ describe Default do
     end
     it 'should be able to reactivate a deactivated record' do
       num_items = Default.count
-      attribs = FactoryGirl.attributes_for(:defaults)
+      attribs = FactoryGirl.attributes_for(:default)
       item1 = Default.create(attribs)
       item1.deactivated.should be_false
       item1.deactivate
@@ -97,7 +97,7 @@ describe Default do
     end
     it 'should not be able to reactivate an active record' do
       num_items = Default.count
-      attribs = FactoryGirl.attributes_for(:defaults)
+      attribs = FactoryGirl.attributes_for(:default)
       item1 = Default.create(attribs)
       item1.deactivated.should be_false
       item1.errors.count.should == 0
@@ -110,7 +110,7 @@ describe Default do
     end
     it 'should be able to destroy a deactivated record' do
       num_items = Default.count
-      attribs = FactoryGirl.attributes_for(:defaults)
+      attribs = FactoryGirl.attributes_for(:default)
       item1 = Default.create(attribs)
       item1.deactivated.should be_false
       item1.deactivate
@@ -123,7 +123,7 @@ describe Default do
     end
     it 'should not be able to destroy an active record' do
       num_items = Default.count
-      attribs = FactoryGirl.attributes_for(:defaults)
+      attribs = FactoryGirl.attributes_for(:default)
       item1 = Default.create(attribs)
       item1.deactivated.should be_false
       item1.errors.count.should == 0

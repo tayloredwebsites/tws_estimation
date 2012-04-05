@@ -11,7 +11,8 @@ module Controllers::DeactivatedController
   def get_scope(cur_scope)
     # nust have scope here, from the controller child call to super inside get_scope
     Rails.logger.debug ("* Controllers::DeactivatedController.get_scope - cur_scope in: #{cur_scope}, show_deactivated?: #{show_deactivated?}")
-    return (show_deactivated?) ? cur_scope : cur_scope.where("deactivated = ? or deactivated IS NULL", false)
+    Rails.logger.debug ("* Controllers::DeactivatedController.get_scope - controller name: #{self.controller_name}")
+    return (show_deactivated?) ? cur_scope : cur_scope.where("#{self.controller_name}.deactivated = ? or #{self.controller_name}.deactivated IS NULL", false)
   end
   
   # attempt to get model class name corresponding to this controller from the 1) scope, 2) @model instance or 3) from controller name
@@ -40,11 +41,14 @@ module Controllers::DeactivatedController
           :obj => item.class.name,
           :id => item.id )
         )
+        Rails.logger.debug("* Controllers::DeactivatedController.deactivate - deactivated? = #{item.deactivated?}")
         Rails.logger.debug("* Controllers::DeactivatedController.deactivate - return instance variable #{'@'+item.class.name.underscore}")
-        self.instance_variable_set('@'+item.class.name.underscore.pluralize, get_scope() )
-        # render :action => 'show', :id => item.id
-        # don't show deactivated item (edit button no good if show_deactivated false), better to show item gone
-        render :action => 'index'
+        # self.instance_variable_set('@'+item.class.name.underscore.pluralize, get_scope() )
+        self.instance_variable_set('@'+item.class.name.underscore, item)
+        render :action => 'show', :id => item.id
+        # self.instance_variable_set('@'+item.class.name.underscore.pluralize, get_scope() )
+        # # don't show deactivated item (edit button no good if show_deactivated false), better to show item gone
+        # redirect_to components_path
       else
       	if item.errors[:base].count > 0
       	  notify_error( item.errors[:base][0] )

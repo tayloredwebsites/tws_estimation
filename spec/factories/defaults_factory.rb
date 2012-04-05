@@ -6,16 +6,16 @@ FactoryGirl.define do
   sequence :default_value do |n|
     BigDecimal.new("#{n}+.1")
   end 
-  factory :defaults, :class => Default do
+  factory :default, :class => Default do
     store       'Test Store'
     name        {Factory.next(:default_name)}
     value       {Factory.next(:default_value)}
   end
-  factory :defaults_min, :class => Default do
+  factory :default_min, :class => Default do
     store       'Test Store'
     name        {Factory.next(:default_name)}
   end    
-  factory :defaults_accessible, :class => Default do
+  factory :default_accessible, :class => Default do
     store         'Test Store Changed'
     name          {Factory.next(:default_name)}
     value         {Factory.next(:default_value)}

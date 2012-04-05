@@ -16,9 +16,9 @@ describe DefaultsController do
     
     it 'should be able to GET the index page and see all items' do
       # user = FactoryGirl.create(:user_min_create_attr)
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
-      item2 = Default.create!(FactoryGirl.attributes_for(:defaults))
-      item3 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
+      item2 = Default.create!(FactoryGirl.attributes_for(:default))
+      item3 = Default.create!(FactoryGirl.attributes_for(:default))
       get :index
       response.should be_success
       response.should render_template('/index')
@@ -32,8 +32,8 @@ describe DefaultsController do
     end
     it "should create an item using POST" do
       @num_items = Default.count
-      new_attributes = FactoryGirl.attributes_for(:defaults)
-      post :create, :default => new_attributes
+      new_attributes = FactoryGirl.attributes_for(:default)
+      post :create, (:default) => new_attributes
       assigns(:default).should_not be_nil
       assigns(:default).should be_instance_of(Default) 
       assigns(:default).should be_persisted
@@ -43,7 +43,7 @@ describe DefaultsController do
     end
     it "should create an item with the minimum valid parameters" do
       @num_items = Default.count
-      min_attr = FactoryGirl.attributes_for(:defaults_min)
+      min_attr = FactoryGirl.attributes_for(:default_min)
       post :create, :default => min_attr
       assigns(:default).should_not be_nil
       assigns(:default).should be_a(Default)
@@ -57,11 +57,11 @@ describe DefaultsController do
       Default.count.should == (@num_items+1)
     end
     it 'should not create an item missing any one of the minimum_attributes' do
-      FactoryGirl.attributes_for(:defaults_min).each do |key, value|
-        test_attributes = FactoryGirl.attributes_for(:defaults_min)
+      FactoryGirl.attributes_for(:default_min).each do |key, value|
+        test_attributes = FactoryGirl.attributes_for(:default_min)
         test_attributes.delete(key)
         # confirm we have a reduced size set of attributes
-        FactoryGirl.attributes_for(:defaults_min).size.should == (test_attributes.size+1)
+        FactoryGirl.attributes_for(:default_min).size.should == (test_attributes.size+1)
         @num_items = Default.count
         post :create, :default => test_attributes
         response.should render_template("new")
@@ -69,7 +69,7 @@ describe DefaultsController do
       end
     end
     it 'should be able to GET edit an item' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       get :edit, :id => item1.id.to_s
       response.should be_success
       response.should render_template('/edit')
@@ -79,8 +79,8 @@ describe DefaultsController do
       assigns(:default).should eq(item1)
     end
     it 'should be able to PUT update an item' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
-      put :update, :id => item1.id, :default => FactoryGirl.attributes_for(:defaults).merge({:value => 99.999})
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
+      put :update, :id => item1.id, :default => FactoryGirl.attributes_for(:default).merge({:value => 99.999})
       assigns(:default).should_not be_nil
       assigns(:default).should be_a(Default)
       assigns(:default).value.should == 99.999
@@ -91,7 +91,7 @@ describe DefaultsController do
       response.should render_template("show")
     end
     it 'should be able to GET show an item' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       get :show, :id => item1.id.to_s
       response.should be_success
       response.should render_template('/show')
@@ -116,19 +116,19 @@ describe DefaultsController do
     end
     
     it 'should be able to PUT deactivate an active item' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
       put :deactivate, :id => item1.id
       response.should be_success
       response.code.should be == '200'
-      response.should render_template("index")
+      response.should render_template("show")
       updated_item = Default.find(item1.id)
       updated_item.should_not be_nil
       updated_item.deactivated?.should be_true
     end
     it 'should give an error when PUT deactivating a deactivated user' do
       get :index, :show_deactivated => "true" # set show deactivated session flag so we can see the item we deactivate
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
       item1.deactivate
       item1.errors.count.should be == 0
@@ -148,7 +148,7 @@ describe DefaultsController do
     end
     it 'should be able to PUT reactivate a deactivated user' do
       get :index, :show_deactivated => "true" # set show deactivated session flag so we can see the item we deactivate
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
       item1.deactivate
       item1.errors.count.should be == 0
@@ -169,7 +169,7 @@ describe DefaultsController do
     end
     it 'should give an error when reactivating a active user' do
       get :index, :show_deactivated => "true" # set show deactivated session flag so we can see the item we deactivate
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
       put :reactivate, :id => item1.id
       response.should be_success
@@ -184,7 +184,7 @@ describe DefaultsController do
     end
     it 'should not be able to DELETE destroy an active user' do
       item_count = Default.count
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       Default.count.should == item_count + 1
       item1.deactivated?.should be_false
       delete :destroy, :id => item1.id
@@ -196,7 +196,7 @@ describe DefaultsController do
     end
     it 'should not be able to DELETE destroy a deactivated user if show_deactivated is false' do
       get :index, :show_deactivated => "false" # set show deactivated session flag so we cannot see deactivated items
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item_count = Default.count
       Default.count.should == 1
       item1.deactivate
@@ -208,7 +208,7 @@ describe DefaultsController do
     end
     it 'should be able to DELETE destroy a deactivated user if show_deactivated is true' do
       get :index, :show_deactivated => "true" # set show deactivated session flag so we can see deactivated items
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item_count = Default.count
       Default.count.should == 1
       item1.deactivate
@@ -219,9 +219,9 @@ describe DefaultsController do
       item_count.should == Default.count+1
     end
     it 'should be able to set and clear the show_deactivated flag (item count should be reflected)' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.errors.count.should == 0
-      item2 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item2 = Default.create!(FactoryGirl.attributes_for(:default))
       item2.errors.count.should == 0
       item1.deactivate
       item1.errors.count.should == 0

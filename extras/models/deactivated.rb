@@ -63,6 +63,10 @@ module Models::Deactivated
     # Rails.logger.debug ("* Models::Deactivated.destroy - destroy error check ret_val: #{ret_val}")
     super if ret_val
     return ret_val
+  rescue ActiveRecord::InvalidForeignKey => e
+    if errors
+      errors.add(:base, I18n.translate('errors.error_dependencies' ) )
+    end
   end
 
   # method to delete a record, only if it is already deactivated
@@ -104,6 +108,22 @@ module Models::Deactivated
   
   def active?
     return !deactivated?
+  end
+  
+  def nil_to_s
+    deactivated_indication
+  end
+  
+  def field_nil_to_s
+    deactivated_indication
+  end
+
+  def desc
+    deactivated_indication
+  end
+  
+  def deactivated_indication
+    (self.deactivated?) ? 'x ' : ''
   end
 
 end

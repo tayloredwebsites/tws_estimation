@@ -39,10 +39,10 @@ describe 'Defaults Integration Tests' do
       num_items.should == Default.count - 1
     end
     it 'should notify user when trying to create a user missing required fields' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults_min))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default_min))
       # dont do this if min size == 0
-      Rails.logger.debug("T defaults_integration_spec #{FactoryGirl.attributes_for(:defaults_min).size}")
-      if FactoryGirl.attributes_for(:defaults_min).size > 0
+      Rails.logger.debug("T defaults_integration_spec #{FactoryGirl.attributes_for(:default_min).size}")
+      if FactoryGirl.attributes_for(:default_min).size > 0
         num_items = Default.count
         visit new_default_path()
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.new.header')}$/
@@ -61,8 +61,8 @@ describe 'Defaults Integration Tests' do
       end
     end
     it 'should be able to edit and update an item' do
-      all_attribs = FactoryGirl.attributes_for(:defaults_accessible)
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      all_attribs = FactoryGirl.attributes_for(:default_accessible)
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
       visit edit_default_path (item1.id)
       # save_and_open_page
@@ -115,7 +115,7 @@ describe 'Defaults Integration Tests' do
       end
     end
     it 'should be able to show an item' do
-      all_attribs = FactoryGirl.attributes_for(:defaults_accessible)
+      all_attribs = FactoryGirl.attributes_for(:default_accessible)
       item1 = Default.create!(all_attribs)
       item1.deactivated?.should be_true
       # visit default_path (item1.id)
@@ -143,8 +143,8 @@ describe 'Defaults Integration Tests' do
   end
   context 'it should have deactivated actions available and working' do
     it 'should be able to list all items when show_deactivated is set' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
-      item_deact = Default.create!(FactoryGirl.attributes_for(:defaults).merge({:deactivated => DB_TRUE.to_s}))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
+      item_deact = Default.create!(FactoryGirl.attributes_for(:default).merge({:deactivated => DB_TRUE.to_s}))
       visit defaults_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.index.header')}$/
@@ -157,9 +157,9 @@ describe 'Defaults Integration Tests' do
       find(:xpath, "//tr[@id=\"default_#{item_deact.id}\"]/td/a[@data-method=\"delete\"]").text.should =~ /\A#{I18n.translate('view_action.delete')}\z/
     end
     it 'should be able to list only active items when show_deactivated is off' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
-      item_deact = Default.create!(FactoryGirl.attributes_for(:defaults).merge({:deactivated => DB_TRUE.to_s}))
+      item_deact = Default.create!(FactoryGirl.attributes_for(:default).merge({:deactivated => DB_TRUE.to_s}))
       visit defaults_path(:show_deactivated => DB_FALSE.to_s) # dont show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.index.header')}$/
@@ -167,7 +167,7 @@ describe 'Defaults Integration Tests' do
       page.should_not have_selector(:xpath, "//tr[@id=\"default_#{item_deact.id}\"]")
     end
     it 'should not see deactivate option on a deactivated item' do
-      item_deact = Default.create!(FactoryGirl.attributes_for(:defaults).merge({:deactivated => DB_TRUE.to_s}))
+      item_deact = Default.create!(FactoryGirl.attributes_for(:default).merge({:deactivated => DB_TRUE.to_s}))
       visit defaults_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.index.header')}$/
@@ -176,7 +176,7 @@ describe 'Defaults Integration Tests' do
       find(:xpath, "//tr[@id=\"default_#{item_deact.id}\"]").should_not have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
     end
     it 'should not see reactivate option on an active item' do
-      item_active = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item_active = Default.create!(FactoryGirl.attributes_for(:default))
       visit defaults_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.index.header')}$/
@@ -185,7 +185,7 @@ describe 'Defaults Integration Tests' do
       find(:xpath, "//tr[@id=\"default_#{item_active.id}\"]").should have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
     end
     it 'should not see delete on an active item' do
-      item_active = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item_active = Default.create!(FactoryGirl.attributes_for(:default))
       visit defaults_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.index.header')}$/
@@ -193,7 +193,7 @@ describe 'Defaults Integration Tests' do
       find(:xpath, "//tr[@id=\"default_#{item_active.id}\"]").should_not have_selector(:xpath, "//a[@data-method=\"delete\"]")
     end
     it 'should see delete on a deactivated item' do
-      item_deact = Default.create!(FactoryGirl.attributes_for(:defaults).merge({:deactivated => DB_TRUE.to_s}))
+      item_deact = Default.create!(FactoryGirl.attributes_for(:default).merge({:deactivated => DB_TRUE.to_s}))
       visit defaults_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.index.header')}$/
@@ -201,7 +201,7 @@ describe 'Defaults Integration Tests' do
       find(:xpath, "//tr[@id=\"default_#{item_deact.id}\"]").should have_selector(:xpath, "//a[@data-method=\"delete\"]")
     end
     it 'should GET show the active item as not deactivated' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
       visit default_path (item1.id)
       # save_and_open_page
@@ -210,7 +210,7 @@ describe 'Defaults Integration Tests' do
       find(:xpath, '//*[@id="default_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     end
     it 'should see the deactivated field in edit' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
       visit edit_default_path (item1.id)
       # save_and_open_page
@@ -219,9 +219,9 @@ describe 'Defaults Integration Tests' do
       page.should have_selector(:xpath, "//*[@id=\"default_deactivated_false\" and @checked]")
     end
     it 'controller should list items with deactivate/reactivate action/link/button depending upon status' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
-      @item_deact = Default.create!(FactoryGirl.attributes_for(:defaults).merge({:deactivated => DB_TRUE.to_s}))
+      @item_deact = Default.create!(FactoryGirl.attributes_for(:default).merge({:deactivated => DB_TRUE.to_s}))
       Default.count.should > 1
       visit defaults_path(:show_deactivated => DB_TRUE.to_s) # need to show deactivated records for this test
       # save_and_open_page
@@ -233,7 +233,7 @@ describe 'Defaults Integration Tests' do
       find(:xpath, "//tr[@id=\"default_#{@item_deact.id}\"]/td/a[@data-method=\"delete\"]").text.should =~ /\A#{I18n.translate('view_action.delete')}\z/
     end
     it 'Update action should allow a change from deactivated to active' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
       item1.deactivate
       @updated_item = Default.find(item1.id)
@@ -262,7 +262,7 @@ describe 'Defaults Integration Tests' do
       @updated_item.deactivated?.should be_false
     end
     it 'Update action should allow a change from active to deactivated' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
       @num_items = Default.count
       visit edit_default_path (item1.id)
@@ -286,9 +286,9 @@ describe 'Defaults Integration Tests' do
       @updated_item.deactivated?.should be_true
     end
     it 'should allow a item to be deactivated from the index page' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
-      @item_deact = Default.create!(FactoryGirl.attributes_for(:defaults).merge({:deactivated => DB_TRUE}))
+      @item_deact = Default.create!(FactoryGirl.attributes_for(:default).merge({:deactivated => DB_TRUE}))
       @num_items = Default.count
       @num_items.should > 1
       visit defaults_path(:show_deactivated => DB_TRUE.to_s)
@@ -299,7 +299,7 @@ describe 'Defaults Integration Tests' do
       find(:xpath, "//tr[@id=\"default_#{item1.id}\"]//a", :text => I18n.translate('view_action.deactivate') ).click
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.index.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => item1.class.name, :id => item1.id )}$/
       Default.count.should == (@num_items)
@@ -307,9 +307,9 @@ describe 'Defaults Integration Tests' do
       @updated_item.deactivated?.should be_true
     end
     it 'should allow a item to be reactivated from the index page' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
-      @item_deact = Default.create!(FactoryGirl.attributes_for(:defaults).merge({:deactivated => DB_TRUE}))
+      @item_deact = Default.create!(FactoryGirl.attributes_for(:default).merge({:deactivated => DB_TRUE}))
       @num_items = Default.count
       @num_items.should > 1
       visit defaults_path(:show_deactivated => DB_TRUE.to_s)
@@ -330,9 +330,9 @@ describe 'Defaults Integration Tests' do
       @updated_item.deactivated?.should be_false
     end    
     it 'should not list deactivated items by default' do
-      item1 = Default.create!(FactoryGirl.attributes_for(:defaults))
+      item1 = Default.create!(FactoryGirl.attributes_for(:default))
       item1.deactivated?.should be_false
-      @item_deact = Default.create!(FactoryGirl.attributes_for(:defaults).merge({:deactivated => DB_TRUE}))
+      @item_deact = Default.create!(FactoryGirl.attributes_for(:default).merge({:deactivated => DB_TRUE}))
       Default.count.should > 1
       # get defaults_path
       # response.status.should be(200)
