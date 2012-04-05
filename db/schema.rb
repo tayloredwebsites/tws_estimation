@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120310161816) do
+ActiveRecord::Schema.define(:version => 20120322153916) do
 
   create_table "component_types", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -27,6 +27,18 @@ ActiveRecord::Schema.define(:version => 20120310161816) do
   end
 
   add_index "component_types", ["description"], :name => "index_component_types_on_description", :unique => true
+
+  create_table "components", :force => true do |t|
+    t.integer  "component_type_id",                    :null => false
+    t.string   "description",       :default => "",    :null => false
+    t.integer  "default_id"
+    t.boolean  "calc_only",         :default => false, :null => false
+    t.boolean  "deactivated",       :default => false, :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
+
+  add_index "components", ["component_type_id", "description"], :name => "index_components_on_component_type_id_and_description", :unique => true
 
   create_table "defaults", :force => true do |t|
     t.string   "store",                                      :default => "",    :null => false
@@ -49,5 +61,8 @@ ActiveRecord::Schema.define(:version => 20120310161816) do
     t.datetime "updated_at",         :null => false
     t.boolean  "deactivated"
   end
+
+  add_foreign_key "components", "component_types", :name => "components_component_type_id_fk"
+  add_foreign_key "components", "defaults", :name => "components_default_id_fk"
 
 end

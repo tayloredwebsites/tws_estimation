@@ -37,7 +37,8 @@ APPLICATION_SYSTEMS = {
   } },
   :estim => {:id => 'estim', :actual => 'true', :type => 'shared', :menu_items => {
     :defaults => {:class_name => "Default", :action => :index, :start_uri => "/defaults"},
-    :component_types => {:class_name => "ComponentType", :action => :index, :start_uri => "/component_types"}
+    :component_types => {:class_name => "ComponentType", :action => :index, :start_uri => "/component_types"},
+    :components => {:class_name => "Component", :action => :index, :start_uri => "/components/menu"}
   } },
   :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :menu_items => {
     

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ComponentType do
+describe Component do
   context 'it should have crud actions available and working' do
     it "should raise an error create user with no attributes" do
       num_items = ComponentType.count
@@ -133,6 +133,29 @@ describe ComponentType do
       item_found = ComponentType.find(item1.id)
       item_found.should_not be_nil
       item_found.deactivated.should be_false 
+    end
+  end
+  context 'it should be associated with component_types' do
+    before (:each) do
+      @parent = FactoryGirl.create(:component_type)
+      @default = FactoryGirl.create(:default)
+    end
+    it 'should not allow destroy of parent if there are items' do
+      FactoryGirl.create(:component_min_create, component_type: @parent)
+      FactoryGirl.create(:component_create, component_type: @parent, default: @default)
+      @parent.components.length.should == 2
+      num_parent = ComponentType.count
+      @parent.deactivate()
+      @parent.destroy()
+      @parent.errors.count.should > 0
+      ComponentType.count.should == num_parent
+    end
+    it 'should allow destroy of component_type if there are no items' do
+      num_parent = ComponentType.count
+      @parent.deactivate()
+      @parent.destroy()
+      @parent.errors.count.should == 0
+      ComponentType.count.should == num_parent - 1
     end
   end
 end

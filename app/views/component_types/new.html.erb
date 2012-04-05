@@ -9,7 +9,7 @@
 
 	<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @component_type, :sys_errors => @errors  } %>
 	<div class="fields_20_80">
-		<%= render :partial => 'form', :locals => { :f => f } %>
+		<%= render :partial => 'component_types/form', :locals => { :f => f } %>
 	</div>
 	<div class="actions">
 		<%= f.submit I18n.translate('view_action.create') %>

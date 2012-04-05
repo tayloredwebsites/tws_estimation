@@ -10,7 +10,7 @@
 	<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @component_type, :sys_errors => @errors  } %>
 
 	<div class="fields_20_80">
-		<%= render :partial => 'form', :locals => { :f => f } %>
+		<%= render :partial => 'component_types/form', :locals => { :f => f } %>
 	</div>
 
 	<div class="actions">
@@ -24,3 +24,10 @@
  | <%= link_to I18n.translate('component_types.index.action'), component_types_path %>
  | <%= link_to I18n.translate('component_types.new.action'), new_component_type_path %>
 <% end %>
+
+
+<br><hr><br>
+
+<h3><%= html_escape @component_type.nil_to_s %></h3>
+<%= render :partial => 'components/list' %>
+
