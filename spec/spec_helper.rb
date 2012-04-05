@@ -121,5 +121,17 @@ module UserIntegrationHelper
     find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
       /#{I18n.translate('view_labels.welcome_user', :user => user_full_name) }/ if !user_full_name.nil?
   end
+  def helper_load_defaults
+    default1 = Default.create!(FactoryGirl.attributes_for(:default))
+    default2 = Default.create!(FactoryGirl.attributes_for(:default))
+    @defaults = [default1, default2]
+    @default = default2
+  end
+  def helper_load_component_types
+    component_type1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
+    component_type2 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
+    @component_types = [component_type1, component_type2]
+    @component_type = component_type2
+  end
   
 end

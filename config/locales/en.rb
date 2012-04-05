@@ -36,7 +36,7 @@
         :full_name => 'Estimation System',
         :menu_items => {
           :defaults => 'Defaults',
-          :component_types => 'Component Types'
+          :component_types => 'Components'
         }
       },
       :prevail => {
@@ -83,8 +83,10 @@
       :fix_following_errors => "Please fix the following errors and save.",
       :note_errors_below => "Note the errors on specific fields below.",
       :msg => "%{msg}",
+      :error_msg => "Error! %{msg}",
       :error_obj_msg => "Error! %{obj} %{msg}",
-      :system_error_invalid_role => "System Error! - User assigned an invalid role of %{role}"
+      :system_error_invalid_role => "System Error! - User assigned an invalid role of %{role}",
+      :error_dependencies => "Error! cannot delete, this object has dependent items."
     },
     :error_messages => {
       :is_active => 'is an active record.',
@@ -359,6 +361,81 @@
       },
       :messages => {
       }
-    } # end ComponentType Resource
+    }, # end ComponentType Resource
+    # Component Resource
+    :components => {
+      :title => 'Components',
+      :system => 'maint',
+      :menu => {
+        :action => "Components Menu",
+        :title => "Estimation Components Maintenance Menu",
+        :header => "Estimation Components Maintenance Menu"
+      },
+      :index => {
+        :action => "List Components by Type",
+        :title => "List Estimation Components by Component Type",
+        :header => "List of all Estimation Components by Component Type",
+        :selected_header => "List of selected Components by Component Type"
+      },
+      :list => {
+        :action => "List Components",
+        :title => "List Estimation Components in Description Order",
+        :header => "List of all Estimation Components in Description Order",
+        :selected_header => "List of selected Components in Description Order"
+      },
+      :edit => {
+        :action => "Edit Component",
+        :title => "Edit Component",
+        :header => "Edit a Component"
+      },
+      :new => {
+        :action => "New Component",
+        :title => "New Component",
+        :header => "Create a Component"
+      },
+      :show => {
+        :action => "View Component",
+        :title => "View Component",
+        :header => "View a Component"
+      },
+      :field_name => {
+        :id => 'ID',
+        :component_type_id => 'Component Type ID',
+        :component_type => 'Component Type',
+        :description => 'Description',
+        :default_id => 'Default ID',
+        :default => 'Default Value',
+        :calc_only => 'Calculated using Default',
+        :deactivated => 'Deactivated',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :component_type_id => 'Comp. Type ID',
+        :component_type => 'Comp. Type',
+        :description => 'Desc.',
+        :default_id => 'Default ID',
+        :default => 'Default Value',
+        :calc_only => 'Calc. of Default',
+        :deactivated => 'Deactivated',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :component_type_id => 'ID of the Component Type this belongs to.',
+        :component_type => 'The Component Type this belongs to.',
+        :description => 'Description.',
+        :default_id => 'ID of the Default Value for this item.',
+        :default => 'The Default Value for this item.',
+        :calc_only => 'Calculated using Default Value (with no Value change allowed).',
+        :deactivated => 'Deactivated.',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
+    } # end Component Resource
   } # end en
 } #end localizations

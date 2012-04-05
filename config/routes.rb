@@ -1,9 +1,26 @@
 TwsAuth::Application.routes.draw do
 
-  resources :component_types do
+  get "components/menu"     # route:        components_menu GET    /components/menu(.:format)           components#menu
+  resources :components do
     member do
-      put 'deactivate'      # route:   deactivate_component_type PUT    /component_types/:id/deactivate(.:format) component_types#deactivate
-      put 'reactivate'      # route:   reactivate_component_type PUT    /component_types/:id/reactivate(.:format) component_types#reactivate
+      put 'deactivate'      # route:   deactivate_component PUT    /components/:id/deactivate(.:format) components#deactivate
+      put 'reactivate'      # route:   reactivate_component PUT    /components/:id/reactivate(.:format) components#reactivate
+    end
+    collection do
+      get 'list'            # route:        list_components GET    /components/list(.:format)           components#list
+    end
+  end
+  match "components/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "components/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
+
+  resources :component_types do
+    # resources :components # add routes like: component_type_components GET /component_types/:component_type_id/components(.:format) components#index
+    member do
+      put 'deactivate'      # route:    deactivate_component_type PUT    /component_types/:id/deactivate(.:format)    component_types#deactivate
+      put 'reactivate'      # route:    reactivate_component_type PUT    /component_types/:id/reactivate(.:format)    component_types#reactivate
+    end
+    collection do
+      get 'new_component'  # route: new_component_component_types GET    /component_types/new_component(.:format)  component_types#new_component
     end
   end
   match "component_types/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405

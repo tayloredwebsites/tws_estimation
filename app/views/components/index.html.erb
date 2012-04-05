@@ -1,0 +1,44 @@
+<%
+	@page_scope = 'components.index'
+	@deactivated_module = defined?(Component.new.deactivated_module)
+%>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+
+<!-- update this to have "parent_assoc" represent the name of the parent resource / association -->
+<table cellspacing="0">
+<%
+last_parent_assoc_id = 0
+parent_association = ""
+last_parent_association = ""
+@components.each do |item|
+		# only show deactivated item if deactivated module installed, and show deactivated is set.
+		( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
+	if show_row
+		parent_association = item.send('component_type')
+		# Rails.logger.debug("G index.html.erb parent_association = #{parent_association.inspect.to_s}")
+		if last_parent_assoc_id != parent_association.id
+%>
+			</table>
+			<%= link_to "New #{last_parent_association.nil_to_s} Component", new_component_component_type_path(last_parent_assoc_id, :component_type_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
+			<br>
+			<h3><%= link_to parent_association.nil_to_s, component_type_path(parent_association.id) %> (ComponentType)</h3>
+			<table cellspacing="0">
+			<%= render :partial => 'components/index_head' %>
+<%
+			last_parent_assoc_id = parent_association.id
+			last_parent_association = parent_association
+		end # break in parent_assoc_id
+%>
+	<%= render :partial => 'components/index_row', :locals => { :item => item } %>
+<% end # if show_row
+end # if table.each %>
+
+</table>
+
+<% if last_parent_assoc_id != 0 %>
+	<%= link_to "New #{last_parent_association.nil_to_s} Component", new_component_component_types_path(last_parent_assoc_id, :ComponentType_id => last_parent_assoc_id.to_s) %><br>
+<% end # if last_parent_assoc_id %>
+
+<br>
+<%= link_to 'New Component', new_component_path %>

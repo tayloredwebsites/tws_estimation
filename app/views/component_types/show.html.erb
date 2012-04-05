@@ -3,7 +3,7 @@
 	@deactivated_module = defined?(ComponentType.new.deactivated_module)
 %>
 
-<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+<h3><%= I18n.translate('header', :scope => @page_scope) %></h3>
 
 <%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @component_type, :sys_errors => @errors  } %>
 
@@ -47,7 +47,13 @@
 	<% end %>
 </div>
 
-
 <%= link_to I18n.translate('component_types.edit.action'), edit_component_type_path(@component_type) %>
  | <%= link_to I18n.translate('component_types.index.action'), component_types_path if can? :manage, @component_type %>
  | <%= link_to I18n.translate('component_types.new.action'), new_component_type_path if can? :manage, @component_type %>
+
+
+<br><hr><br>
+
+<h3><%= html_escape @component_type.nil_to_s %></h3>
+<%= render :partial => 'components/list' %>
+

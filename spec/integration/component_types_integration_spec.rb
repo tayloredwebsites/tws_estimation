@@ -33,10 +33,10 @@ describe 'ComponentTypes Integration Tests' do
       num_items.should == ComponentType.count - 1
     end
     it 'should notify user when trying to create a user missing required fields' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       # dont do this if min size == 0
-      Rails.logger.debug("T component_types_integration_spec #{FactoryGirl.attributes_for(:component_types_min).size}")
-      if FactoryGirl.attributes_for(:component_types_min).size > 0
+      Rails.logger.debug("T component_types_integration_spec #{FactoryGirl.attributes_for(:component_type_min).size}")
+      if FactoryGirl.attributes_for(:component_type_min).size > 0
         num_items = ComponentType.count
         visit new_component_type_path()
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.new.header')}$/
@@ -54,8 +54,8 @@ describe 'ComponentTypes Integration Tests' do
       end
     end
     it 'should be able to edit and update all of an items accessible fields' do
-      all_attribs = FactoryGirl.attributes_for(:component_types_accessible)
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      all_attribs = FactoryGirl.attributes_for(:component_type_accessible)
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
       visit edit_component_type_path (item1.id)
       # save_and_open_page
@@ -104,7 +104,7 @@ describe 'ComponentTypes Integration Tests' do
       end
     end
     it 'should be able to show all accessible fields of an item' do
-      all_attribs = FactoryGirl.attributes_for(:component_types_accessible)
+      all_attribs = FactoryGirl.attributes_for(:component_type_accessible)
       item1 = ComponentType.create!(all_attribs)
       item1.deactivated?.should == all_attribs[:deactivated]
       # visit (component_type_path, item1, :show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
@@ -129,8 +129,8 @@ describe 'ComponentTypes Integration Tests' do
   end
   context 'it should have deactivated actions available and working' do
     it 'should be able to list all items when show_deactivated is set' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
-      item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_types).merge({:deactivated => DB_TRUE.to_s}))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
+      item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge({:deactivated => DB_TRUE.to_s}))
       visit component_types_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.index.header')}$/
@@ -143,9 +143,9 @@ describe 'ComponentTypes Integration Tests' do
       find(:xpath, "//tr[@id=\"component_type_#{item_deact.id}\"]/td/a[@data-method=\"delete\"]").text.should =~ /\A#{I18n.translate('view_action.delete')}\z/
     end
     it 'should be able to list only active items when show_deactivated is off' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
-      item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_types).merge({:deactivated => DB_TRUE.to_s}))
+      item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge({:deactivated => DB_TRUE.to_s}))
       visit component_types_path(:show_deactivated => DB_FALSE.to_s) # dont show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.index.header')}$/
@@ -153,7 +153,7 @@ describe 'ComponentTypes Integration Tests' do
       page.should_not have_selector(:xpath, "//tr[@id=\"component_type_#{item_deact.id}\"]")
     end
     it 'should not see deactivate option on a deactivated item' do
-      item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_types).merge({:deactivated => DB_TRUE.to_s}))
+      item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge({:deactivated => DB_TRUE.to_s}))
       visit component_types_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.index.header')}$/
@@ -162,7 +162,7 @@ describe 'ComponentTypes Integration Tests' do
       find(:xpath, "//tr[@id=\"component_type_#{item_deact.id}\"]").should_not have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
     end
     it 'should not see reactivate option on an active item' do
-      item_active = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item_active = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       visit component_types_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.index.header')}$/
@@ -171,7 +171,7 @@ describe 'ComponentTypes Integration Tests' do
       find(:xpath, "//tr[@id=\"component_type_#{item_active.id}\"]").should have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
     end
     it 'should not see delete on an active item' do
-      item_active = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item_active = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       visit component_types_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.index.header')}$/
@@ -179,7 +179,7 @@ describe 'ComponentTypes Integration Tests' do
       find(:xpath, "//tr[@id=\"component_type_#{item_active.id}\"]").should_not have_selector(:xpath, "//a[@data-method=\"delete\"]")
     end
     it 'should see delete on a deactivated item' do
-      item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_types).merge({:deactivated => DB_TRUE.to_s}))
+      item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge({:deactivated => DB_TRUE.to_s}))
       visit component_types_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.index.header')}$/
@@ -187,7 +187,7 @@ describe 'ComponentTypes Integration Tests' do
       find(:xpath, "//tr[@id=\"component_type_#{item_deact.id}\"]").should have_selector(:xpath, "//a[@data-method=\"delete\"]")
     end
     it 'should GET show the active item as not deactivated' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
       visit component_type_path (item1.id)
       # save_and_open_page
@@ -196,7 +196,7 @@ describe 'ComponentTypes Integration Tests' do
       find(:xpath, '//*[@id="component_type_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     end
     it 'should see the deactivated field in edit' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
       visit edit_component_type_path (item1.id)
       # save_and_open_page
@@ -205,9 +205,9 @@ describe 'ComponentTypes Integration Tests' do
       page.should have_selector(:xpath, "//*[@id=\"component_type_deactivated_false\" and @checked]")
     end
     it 'controller should list items with deactivate/reactivate action/link/button depending upon status' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
-      @item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_types).merge({:deactivated => DB_TRUE.to_s}))
+      @item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge({:deactivated => DB_TRUE.to_s}))
       ComponentType.count.should > 1
       visit component_types_path(:show_deactivated => DB_TRUE.to_s) # need to show deactivated records for this test
       # save_and_open_page
@@ -219,7 +219,7 @@ describe 'ComponentTypes Integration Tests' do
       find(:xpath, "//tr[@id=\"component_type_#{@item_deact.id}\"]/td/a[@data-method=\"delete\"]").text.should =~ /\A#{I18n.translate('view_action.delete')}\z/
     end
     it 'Update action should allow a change from deactivated to active' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
       item1.deactivate
       @updated_item = ComponentType.find(item1.id)
@@ -247,7 +247,7 @@ describe 'ComponentTypes Integration Tests' do
       @updated_item.deactivated?.should be_false
     end
     it 'Update action should allow a change from active to deactivated' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
       @num_items = ComponentType.count
       visit edit_component_type_path (item1.id)
@@ -271,9 +271,9 @@ describe 'ComponentTypes Integration Tests' do
       @updated_item.deactivated?.should be_true
     end
     it 'should allow a item to be deactivated from the index page' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
-      @item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_types).merge({:deactivated => DB_TRUE}))
+      @item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge({:deactivated => DB_TRUE}))
       @num_items = ComponentType.count
       @num_items.should > 1
       visit component_types_path(:show_deactivated => DB_TRUE.to_s)
@@ -284,7 +284,7 @@ describe 'ComponentTypes Integration Tests' do
       find(:xpath, "//tr[@id=\"component_type_#{item1.id}\"]//a", :text => I18n.translate('view_action.deactivate') ).click
       # save_and_open_page
       page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.index.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.show.header')}$/
       find(:xpath, '//*[@id="header_status"]/p').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => item1.class.name, :id => item1.id )}$/
       ComponentType.count.should == (@num_items)
@@ -292,9 +292,9 @@ describe 'ComponentTypes Integration Tests' do
       @updated_item.deactivated?.should be_true
     end
     it 'should allow a item to be reactivated from the index page' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
-      @item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_types).merge({:deactivated => DB_TRUE}))
+      @item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge({:deactivated => DB_TRUE}))
       @num_items = ComponentType.count
       @num_items.should > 1
       visit component_types_path(:show_deactivated => DB_TRUE.to_s)
@@ -315,9 +315,9 @@ describe 'ComponentTypes Integration Tests' do
       @updated_item.deactivated?.should be_false
     end    
     it 'should not list deactivated items by component_type' do
-      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_types))
+      item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
-      @item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_types).merge({:deactivated => DB_TRUE}))
+      @item_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge({:deactivated => DB_TRUE}))
       ComponentType.count.should > 1
       # get component_types_path
       # response.status.should be(200)
