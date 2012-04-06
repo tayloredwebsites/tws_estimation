@@ -1,0 +1,7 @@
+<%%
+	@page_scope = '<%= plural_table_name %>.list'
+	@deactivated_module = defined?(<%= class_name %>.new.deactivated_module)
+%>
+<h4><%%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%%= render :partial => '<%= plural_table_name %>/list' %>
