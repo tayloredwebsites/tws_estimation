@@ -4,8 +4,8 @@ class ComponentTypesController < SecureApplicationController
   include Controllers::DeactivatedController
   
   def initialize
-    # this is within the maintenance sub-application
-    @systemc = 'estim'
+    # this is within the estimation maintenance sub-application
+    @systemc = 'estimmaint'
     Rails.logger.debug("* ComponentTypesController.initialize - @systemc:#{@systemc}")
     super
   end

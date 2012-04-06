@@ -31,13 +31,24 @@
           :users => 'Users'
         }
       },
-      :estim => {
+      :estimmaint => {
+        :abbreviation => 'Estimation Maintenance',
+        :full_name => 'Estimation Maintenance',
+        :menu_items => {
+          :defaults => 'Defaults',
+          :component_types => 'Component Types',
+          :components => 'Components',
+          :assemblies => 'Assemblies'
+        }
+      },
+      :estimuser => {
         :abbreviation => 'Estimation',
         :full_name => 'Estimation System',
         :menu_items => {
           :defaults => 'Defaults',
           :component_types => 'Component Types',
-          :components => 'Components'
+          :components => 'Components',
+          :assemblies => 'Assemblies'
         }
       },
       :prevail => {
@@ -438,6 +449,72 @@
       },
       :messages => {
       }
-    } # end Component Resource
+    }, # end Component Resource
+      # Assemblies Resource
+      :assemblies => {
+        :title => 'Assemblies',
+        :system => 'maint',
+        :menu => {
+          :action => "Assemblies Actions Menu",
+          :title => "Estimation Assemblies Action Menu",
+          :header => "Estimation Assemblies Action Menu"
+        },
+        :index => {
+          :action => "List Assemblies in Sort Order",
+          :title => "List Estimation Assemblies in Sort Order",
+          :header => "List of all Estimation Assemblies in Sort Order",
+          :selected_header => "List of selected Assemblies in Sort Order"
+        },
+        :list => {
+          :action => "List Assemblies by Description",
+          :title => "List Estimation Assemblies in Description Order",
+          :header => "List of all Estimation Assemblies in Description Order",
+          :selected_header => "List of selected Assemblies in Description Order"
+        },
+        :edit => {
+          :action => "Edit Assembly",
+          :title => "Edit Assembly",
+          :header => "Edit a Assembly"
+        },
+        :new => {
+          :action => "New Assembly",
+          :title => "New Assembly",
+          :header => "Create a Assembly"
+        },
+        :show => {
+          :action => "View Assembly",
+          :title => "View Assembly",
+          :header => "View a Assembly"
+        },
+        :field_name => {
+          :id => 'ID',
+          :description => 'Description',
+          :sort_order => 'Sort Order',
+          :required => 'Required?',
+          :deactivated => 'Deactivated?',
+          :created_at => 'Created',
+          :updated_at => 'Updated'
+        },
+        :field_name_short => {
+          :id => 'ID',
+          :description => 'Description',
+          :sort_order => 'Sort Order',
+          :required => 'Required?',
+          :deactivated => 'Deactivated?',
+          :created_at => 'Created',
+          :updated_at => 'Updated'
+        },
+        :field_name_tip => {
+          :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+          :description => 'Description.',
+          :sort_order => 'Sort Order',
+          :required => 'Is this field required?',
+          :deactivated => 'Deactivated.',
+          :created_at => 'Created at this Date and Time.',
+          :updated_at => 'Last Updated at this date and time.'
+        },
+        :messages => {
+        }
+      } # end Assembly Resource
   } # end en
 } #end localizations

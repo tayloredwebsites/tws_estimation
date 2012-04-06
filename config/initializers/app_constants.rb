@@ -36,13 +36,15 @@ APPLICATION_SYSTEMS = {
   :maint => {:id => 'maint', :actual => 'true', :type => 'shared', :menu_items => {
     :users => {:class_name => "User", :action => :index, :start_uri => "/users"}
   } },
-  :estim => {:id => 'estim', :actual => 'true', :type => 'shared', :menu_items => {
+  :estimmaint => {:id => 'estimmaint', :actual => 'true', :type => 'shared', :menu_items => {
     :defaults => {:class_name => "Default", :action => :index, :start_uri => "/defaults"},
     :component_types => {:class_name => "ComponentType", :action => :index, :start_uri => "/component_types"},
-    :components => {:class_name => "Component", :action => :index, :start_uri => "/components/menu"}
+    :components => {:class_name => "Component", :action => :index, :start_uri => "/components/menu"},
+    :assemblies => {:class_name => "Assembly", :action => :index, :start_uri => "/assemblies/menu"}
   } },
-  :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :menu_items => {
-    
+  :estimuser => {:id => 'estimuser', :actual => 'true', :type => 'external', :menu_items => {    
+  } },
+  :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :menu_items => {    
   } }
 }
 

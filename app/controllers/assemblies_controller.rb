@@ -1,4 +1,4 @@
-class ComponentsController < SecureApplicationController
+class AssembliesController < SecureApplicationController
 
   # allow records to be deactivated using extras/controllers/deactivated_controller.rb
   include Controllers::DeactivatedController
@@ -6,17 +6,17 @@ class ComponentsController < SecureApplicationController
   def initialize
     # this is within the estimation maintenance sub-application
     @systemc = 'estimmaint'
-    Rails.logger.debug("* ComponentController.initialize - @systemc:#{@systemc}")
+    Rails.logger.debug("* AssembliesController.initialize - @systemc:#{@systemc}")
     super
   end
 
   before_filter do |controller|
     self.authenticate_user # always authenticate user   if (%w{ index show }.index(params[:action]).nil?)
-    # Rails.logger.debug("* ComponentsController.before_filter called")
-    # @component_types = ComponentTypesController.new.get_scope().all
-    # Rails.logger.debug("* ComponentsController.before_filter - @component_types:#{@component_types.inspect.to_s}")
+    # Rails.logger.debug("* AssembliesController.before_filter called")
+    # @assembly_types = AssemblyTypesController.new.get_scope().all
+    # Rails.logger.debug("* AssembliesController.before_filter - @assembly_types:#{@assembly_types.inspect.to_s}")
     # @defaults = DefaultsController.new.get_scope().all
-    # Rails.logger.debug("* ComponentsController.before_filter - @defaults:#{@defaults.inspect.to_s}")
+    # Rails.logger.debug("* AssembliesController.before_filter - @defaults:#{@defaults.inspect.to_s}")
   end
   
   def self.list(scope = nil)
@@ -26,59 +26,59 @@ class ComponentsController < SecureApplicationController
   # chain current scope with any modules that have set scope (e.g. DeactivatedController)
   def get_scope(cur_scope = nil)
     # base default scope is set up here so that deactivated module can update this
-    cur_scope = Component.scoped if (cur_scope.nil?)
+    cur_scope = Assembly.scoped if (cur_scope.nil?)
     return (defined?(super)) ? super(cur_scope) : cur_scope
   end
 
-  # GET /components/menu
+  # GET /assemblies/menu
   def menu
   end
 
-  # GET /components
+  # GET /assemblies
   def index
-    @components = get_scope().joins(:component_type).order('component_types.sort_order, components.description')
+    @assemblies = get_scope().order('sort_order')
   end
 
-  # GET /components/list
+  # GET /assemblies/list
   def list
-    @components = get_scope().joins(:component_type).order('components.description')
+    @assemblies = get_scope().order('description')
   end
 
-  # GET /components/:id
+  # GET /assemblies/:id
   def show
-    @component = get_scope().find(params[:id])
+    @assembly = get_scope().find(params[:id])
   end
 
-  # GET /components/new
+  # GET /assemblies/new
   def new
-    Rails.logger.debug("* ComponentsController.new - params = #{params.inspect.to_s}")
-    @component = Component.new
+    Rails.logger.debug("* AssembliesController.new - params = #{params.inspect.to_s}")
+    @assembly = Assembly.new
   end
 
-  # GET /components/:id/edit
+  # GET /assemblies/:id/edit
   def edit
-    @component = get_scope().find(params[:id])
+    @assembly = get_scope().find(params[:id])
   end
 
-  # POST /components
+  # POST /assemblies
   def create
-    Rails.logger.debug("* ComponentsController.create - params = #{params.inspect.to_s}")
-    @component = Component.new(params[:component])
-    if @component.save
-      # redirect_to @component, notice: 'Component was successfully created.'
+    Rails.logger.debug("* AssembliesController.create - params = #{params.inspect.to_s}")
+    @assembly = Assembly.new(params[:assembly])
+    if @assembly.save
+      # redirect_to @assembly, notice: 'Assembly was successfully created.'
       render :action => 'show'
     else
       render :action => "new"
     end
   end
 
-  # PUT /components/:id
+  # PUT /assemblies/:id
   def update
     # updates are passed to the deactivated controller, as it knows how to handle deactivated records
     super # call to parent (e.g. Controllers::DeactivatedController)
   end
 
-  # DELETE /components/:id
+  # DELETE /assemblies/:id
   def destroy
     # destroys are passed to the deactivated controller, as it knows how to handle deactivated records
     super # call to parent (e.g. Controllers::DeactivatedController)
