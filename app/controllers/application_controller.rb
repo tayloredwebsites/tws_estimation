@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
     if !params.nil?
       Rails.logger.warn("* ApplicationController.rescue_from CanCan::AccessDenied - params:#{params.inspect.to_s}")
     end
-    notify_error(I18n.translate('errors.access_denied_msg', :method => params[:action], :obj => params[:controller].pluralize))
+    notify_error(I18n.translate('errors.access_denied_msg_obj', :method => params[:action], :obj => params[:controller].pluralize))
     # Rails.logger.debug("* ApplicationController.rescue_from CanCan::AccessDenied - guest can do this?:#{@guest_ability.can?(params[:action].to_sym, User.guest)}")
     if @user_session.signed_in?
       # if signed in already, go directly to error for this user.

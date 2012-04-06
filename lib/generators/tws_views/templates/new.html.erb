@@ -10,7 +10,7 @@
 	<%%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @<%= singular_table_name %>, :sys_errors => @errors  } %>
 
 	<div class="fields_20_80">
-		<%%= render :partial => 'form', :locals => { :f => f } %>
+		<%%= render :partial => '<%= plural_table_name %>/form', :locals => { :f => f } %>
 	</div>
 
 	<div class="actions">
