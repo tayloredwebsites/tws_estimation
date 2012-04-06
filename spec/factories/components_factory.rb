@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   sequence :component_description do |n|
-    "description_#{n}"
+    "Description#{n}"
   end
   factory :component_create, :class => Component do
     association :component_type, :factory => :component_type, :strategy => :build

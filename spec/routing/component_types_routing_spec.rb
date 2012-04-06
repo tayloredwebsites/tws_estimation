@@ -12,7 +12,7 @@ describe ComponentsController do
     end
 
     it "routes to #new_component" do
-      get("/component_types/new_component").should route_to("component_types#new_component")
+      get("/component_types/1/new_component").should route_to("component_types#new_component", :id => "1")
     end
 
     it "routes to #show" do
