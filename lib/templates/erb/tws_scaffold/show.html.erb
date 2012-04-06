@@ -11,13 +11,17 @@
 
 <%	attributes.each do |attribute|
 		if attribute.name == 'deactivated'
-			if (defined?(class_name.constantize.new.deactivated_module)) -%>
-	 <div class="field">
-	   <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.deactivated') %></span>
-	   <span class="value" id="<%= singular_table_name %>_deactivated"><%%= I18n.is_deactivated_or_not(@<%= singular_table_name %>.deactivated?) %></span>
-	 </div>
-<%      
-			end
+						Rails.logger.debug("G show.html.erb - deactivated field found - instance #{class_name.constantize.new.inspect.to_s}")
+						if (defined?(class_name.constantize.new.deactivated_module))
+							Rails.logger.debug("G show.html.erb - deactivated field processing")
+
+			-%>
+				 <div class="field">
+				   <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.deactivated') %></span>
+				   <span class="value" id="<%= singular_table_name %>_deactivated"><%%= I18n.is_deactivated_or_not(@<%= singular_table_name %>.deactivated?) %></span>
+				 </div>
+			<%      
+						end
 		else
 			if attribute.type.to_s == 'association'
 %>
@@ -28,13 +32,13 @@
 <% 		
 			elsif attribute.type.to_s == 'reference'
 				# ignore references (don't show id field for associations / foreign keys)
-			else
-%>
-	<div class="field">
-	  <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>') %></span>
-	  <span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %> %></span>
-	</div>
-<% 		
+						else
+			%>
+				<div class="field">
+				  <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>') %></span>
+				  <span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %> %></span>
+				</div>
+			<% 		
 			end # end if attribute.type
 		end # end attribute == deactivated
 	end # end attributes.each
