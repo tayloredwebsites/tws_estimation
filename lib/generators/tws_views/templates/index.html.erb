@@ -56,7 +56,7 @@ end # if table.each %>
 <%% if last_parent_assoc_id != 0 %>
 	<%%= link_to "New #{last_parent_association.nil_to_s} <%= class_name %>", new_<%= singular_table_name %>_<%= g_parent_assoc %>_path(last_parent_assoc_id, :<%= g_parent_assoc.camelize %>_id => last_parent_assoc_id.to_s) %><br>
 <%% end # if last_parent_assoc_id %>
-<% end # if have_association
-%>
 <br>
 <%%= link_to I18n.translate('<%= plural_table_name %>.new.action'), new_<%= singular_table_name %>_path %>
+<% end # if have_association
+%>
