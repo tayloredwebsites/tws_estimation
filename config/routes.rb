@@ -1,5 +1,18 @@
 TwsAuth::Application.routes.draw do
 
+  get "assemblies/menu"     # route:         assemblies_menu GET    /assemblies/menu(.:format)                   assemblies#menu
+  resources :assemblies do
+    member do
+      put 'deactivate'      # route:     deactivate_assembly PUT    /assemblies/:id/deactivate(.:format)         assemblies#deactivate
+      put 'reactivate'      # route:     reactivate_assembly PUT    /assemblies/:id/reactivate(.:format)         assemblies#reactivate
+    end
+    collection do
+      get 'list'            # route:         list_assemblies GET    /assemblies/list(.:format)                   assemblies#list
+    end
+  end
+  match "assemblies/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "assemblies/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
+
   get "components/menu"     # route:        components_menu GET    /components/menu(.:format)           components#menu
   resources :components do
     member do

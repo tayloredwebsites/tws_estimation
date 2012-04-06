@@ -9,4 +9,12 @@ module Legacy::LegacyClasses
     establish_connection :legacy
     self.table_name = 'component_types'
   end
+  class LegacyComponent < ActiveRecord::Base
+    establish_connection :legacy
+    self.table_name = 'components'
+  end
+  class LegacyAssembly < ActiveRecord::Base
+    establish_connection :legacy
+    self.table_name = 'assemblies'
+  end
 end

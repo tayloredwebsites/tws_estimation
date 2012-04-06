@@ -1,0 +1,8 @@
+<%
+	@page_scope = 'assemblies.index'
+	@deactivated_module = defined?(Assembly.new.deactivated_module)
+%>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+
+<%= render :partial => 'assemblies/list' %>

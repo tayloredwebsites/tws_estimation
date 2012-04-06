@@ -5,7 +5,7 @@ namespace :legacy do
   namespace :convert do
 
     desc 'import all legacy data'
-    task :all => [:setups, :defaults, :component_types ]
+    task :all => [:setups, :defaults, :component_types, :components, :assemblies ]
 
     task :setups => :environment
 
@@ -53,6 +53,54 @@ namespace :legacy do
           puts "Successfully migrated component_types table."
         rescue Exception => e
           puts "Error migrating component_types record #{old_component_type.id.to_s}, #{e.inspect.to_s}."
+        end
+      end
+      #ActiveRecord::Base.record_timestamps = true # turn timestamps back on
+    end
+    
+    desc 'import components table from legacy data'
+    task :components => :setups do
+      # untested.  recreated code
+      #ActiveRecord::Base.record_timestamps = false # turn off timestamps
+      include Legacy::LegacyClasses
+      # loop through the legacy records
+      LegacyComponent.all.each do |old_component|
+        begin
+          new_component = Component.new
+          new_component.attributes = {
+            :component_type_id => old_component.component_type_id,
+            :description => old_component.description,
+            :default_id => old_component.default_id,
+            :calc_only => old_component.calc_only,
+            :deactivated => old_component.deactivated
+          }
+          new_component.save!
+          puts "Successfully migrated Components table."
+        rescue Exception => e
+          puts "Error migrating Components record #{old_component.id.to_s}, #{e.inspect.to_s}."
+        end
+      end
+      #ActiveRecord::Base.record_timestamps = true # turn timestamps back on
+    end
+    
+    desc 'import assemblies table from legacy data'
+    task :assemblies => :setups do
+      #ActiveRecord::Base.record_timestamps = false # turn off timestamps
+      include Legacy::LegacyClasses
+      # loop through the legacy records
+      LegacyAssembly.all.each do |old_table|
+        begin
+          new_table = Assembly.new
+          new_table.attributes = {
+            :description => old_table.description,
+            :sort_order => old_table.sort_order,
+            :required => old_table.required,
+            :deactivated => old_table.deactivated
+          }
+          new_table.save!
+          puts "Successfully migrated Assemblies table."
+        rescue Exception => e
+          puts "Error migrating Assemblies record #{old_table.id.to_s}, #{e.inspect.to_s}."
         end
       end
       #ActiveRecord::Base.record_timestamps = true # turn timestamps back on
