@@ -1,4 +1,4 @@
--- 020_component_types.sql
+-- 030_components.sql
 
 
 SET client_encoding = 'UTF8';
