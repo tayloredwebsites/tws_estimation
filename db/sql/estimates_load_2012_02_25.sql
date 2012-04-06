@@ -265,23 +265,6 @@ CREATE TABLE systemcomponents (
 ALTER TABLE public.systemcomponents OWNER TO postgres;
 
 --
--- TOC entry 1521 (class 1259 OID 25786)
--- Dependencies: 1856 1857 1858 6
--- Name: systems; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE systems (
-    sys_id integer NOT NULL,
-    sys_sort_order integer NOT NULL,
-    sys_desc character varying(50) DEFAULT ''::character varying NOT NULL,
-    sys_required character(1) DEFAULT 'N'::bpchar NOT NULL,
-    sys_deleted character(1) DEFAULT 'N'::bpchar NOT NULL
-);
-
-
-ALTER TABLE public.systems OWNER TO postgres;
-
---
 -- TOC entry 1522 (class 1259 OID 25792)
 -- Dependencies: 1859 6
 -- Name: taxtypes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -1250,27 +1233,6 @@ INSERT INTO systemcomponents (sys_comp_id, sys_comp_comp_id, sys_comp_sys_id, sy
 INSERT INTO systemcomponents (sys_comp_id, sys_comp_comp_id, sys_comp_sys_id, sys_comp_desc, sys_comp_req, sys_comp_deleted) VALUES (477, 30, 13, NULL, 'N', 'N');
 INSERT INTO systemcomponents (sys_comp_id, sys_comp_comp_id, sys_comp_sys_id, sys_comp_desc, sys_comp_req, sys_comp_deleted) VALUES (478, 26, 13, NULL, 'N', 'N');
 INSERT INTO systemcomponents (sys_comp_id, sys_comp_comp_id, sys_comp_sys_id, sys_comp_desc, sys_comp_req, sys_comp_deleted) VALUES (479, 31, 13, NULL, 'N', 'N');
-
-
---
--- TOC entry 1986 (class 0 OID 25786)
--- Dependencies: 1521
--- Data for Name: systems; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (1, 90, 'Rooftop', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (2, 100, 'Split Systems', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (3, 110, 'VAV System', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (4, 60, 'Exhaust Fans/Ventilation', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (5, 30, 'Controls', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (6, 70, 'Furnace/Duct Furnace Unit Heater', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (7, 0, 'Make-up Air', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (8, 50, 'Ductless Split System', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (9, 20, 'Chiller', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (10, 40, 'Cooling Tower', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (11, 10, 'Boiler', 'N', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (12, 9999, 'Estimate Total', 'Y', 'N');
-INSERT INTO systems (sys_id, sys_sort_order, sys_desc, sys_required, sys_deleted) VALUES (13, 9998, 'Simplified', 'N', 'N');
 
 
 --

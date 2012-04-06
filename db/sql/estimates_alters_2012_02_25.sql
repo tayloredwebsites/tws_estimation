@@ -29,9 +29,6 @@ ALTER TABLE ONLY states
 ALTER TABLE ONLY systemcomponents
     ADD CONSTRAINT systemcomponents_pk_systemcomponents PRIMARY KEY (sys_comp_id);
 
-ALTER TABLE ONLY systems
-    ADD CONSTRAINT systems_pk_systems PRIMARY KEY (sys_id);
-
 ALTER TABLE ONLY taxtypes
     ADD CONSTRAINT taxtypes_pk_taxtypes PRIMARY KEY (tax_type_id);
 
@@ -61,8 +58,6 @@ CREATE UNIQUE INDEX jobs_ix_jobs ON jobs USING btree (job_name);
 CREATE UNIQUE INDEX states_ix_states ON states USING btree (state_code);
 
 CREATE UNIQUE INDEX states_ix_states_1 ON states USING btree (state_desc);
-
-CREATE UNIQUE INDEX systems_ix_systems ON systems USING btree (sys_desc);
 
 CREATE UNIQUE INDEX taxtypes_ix_taxtypes ON taxtypes USING btree (tax_type_desc);
 

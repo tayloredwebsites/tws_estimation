@@ -1,21 +1,21 @@
-# Estimation of systems/component costs #
+# Estimation of Module/Component costs #
 
-This is a startup application by [Taylored Web Sites](http://www.tayloredwebsites.com).
+This is an application by [Taylored Web Sites](http://www.tayloredwebsites.com).
 
 ## Estimation System: ##
 
-__It is assumed that what is being estimated can be broken down into a number of systems, each of which is made up of components:__
+__It is assumed that what is being estimated can be broken down into a number of modules, each of which is made up of components:__
 
 * Components have particular kinds of costs associated with them, which are managed by "Component Types".
-* Systems have particular sets of Components associated with them, which are managed "System Components".
-* Estimates are a combination of Systems (with their corresponding Components), plus an "Overhead System".
+* Modules have particular sets of Components associated with them, which are managed "Module Components".
+* Estimates are a combination of Modules (with their corresponding Components), plus an "Overhead Module".
 
 __People who have maintenance privileges can enter the base set of items used to create an Estimate:__
 
 * Components Types (Description, sort order, has costs, has hours, etc.)
 * Components (Component Type, Description)
-* Systems (Description, sort order, required)
-* System Components (Description, required)
+* Modules (Description, sort order, required)
+* Module Components (Description, required)
 
 ## General Philosophy / Approaches: ##
 
