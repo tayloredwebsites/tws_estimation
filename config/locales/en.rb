@@ -36,7 +36,8 @@
         :full_name => 'Estimation System',
         :menu_items => {
           :defaults => 'Defaults',
-          :component_types => 'Components'
+          :component_types => 'Component Types',
+          :components => 'Components'
         }
       },
       :prevail => {
@@ -78,6 +79,7 @@
       :missing_msg => "Missing %{msg}",
       :obj_does_not_exist => "%{obj} user does not exist",
       :cannot_method_your_obj => "Cannot %{method} your own %{obj}",
+      :access_denied_msg_obj => "Access Denied! You have restrictions on doing a %{method} of %{obj}",
       :access_denied_msg => "Access Denied! You have restrictions on doing a %{method} of %{obj}",
       :active_record_error_msg => "Active Record Error! %{msg}",
       :fix_following_errors => "Please fix the following errors and save.",
@@ -367,9 +369,9 @@
       :title => 'Components',
       :system => 'maint',
       :menu => {
-        :action => "Components Menu",
-        :title => "Estimation Components Maintenance Menu",
-        :header => "Estimation Components Maintenance Menu"
+        :action => "Components Actions Menu",
+        :title => "Estimation Components Action Menu",
+        :header => "Estimation Components Action Menu"
       },
       :index => {
         :action => "List Components by Type",
@@ -378,7 +380,7 @@
         :selected_header => "List of selected Components by Component Type"
       },
       :list => {
-        :action => "List Components",
+        :action => "List Components by Description",
         :title => "List Estimation Components in Description Order",
         :header => "List of all Estimation Components in Description Order",
         :selected_header => "List of selected Components in Description Order"

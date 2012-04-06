@@ -37,8 +37,8 @@ end # if table.each %>
 </table>
 
 <% if last_parent_assoc_id != 0 %>
-	<%= link_to "New #{last_parent_association.nil_to_s} Component", new_component_component_types_path(last_parent_assoc_id, :ComponentType_id => last_parent_assoc_id.to_s) %><br>
+	<%= link_to "New #{last_parent_association.nil_to_s} Component", new_component_component_type_path(last_parent_assoc_id, :ComponentType_id => last_parent_assoc_id.to_s) %><br>
 <% end # if last_parent_assoc_id %>
 
 <br>
-<%= link_to 'New Component', new_component_path %>
+<%= link_to I18n.translate('components.new.action'), new_component_path %>

@@ -18,9 +18,9 @@ TwsAuth::Application.routes.draw do
     member do
       put 'deactivate'      # route:    deactivate_component_type PUT    /component_types/:id/deactivate(.:format)    component_types#deactivate
       put 'reactivate'      # route:    reactivate_component_type PUT    /component_types/:id/reactivate(.:format)    component_types#reactivate
+      get 'new_component'   # route: new_component_component_type GET    /component_types/:id/new_component(.:format) component_types#new_component
     end
     collection do
-      get 'new_component'  # route: new_component_component_types GET    /component_types/new_component(.:format)  component_types#new_component
     end
   end
   match "component_types/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405

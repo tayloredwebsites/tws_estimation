@@ -155,6 +155,153 @@ describe 'Components Integration Tests' do
       end
     end
   end
+  
+  context 'component layouts - ' do
+    before(:each) do
+      @item1 = FactoryGirl.create(:component_min_create, component_type: @component_type, default: @default)
+    end
+    context 'should have index/list row links working' do
+      before(:each) do
+        visit components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+        page.should have_selector(:xpath, "//tr[@id=\"component_#{@item1.id}\"]/td/a", :text =>  I18n.translate('view_action.view') )
+        page.should have_selector(:xpath, "//tr[@id=\"component_#{@item1.id}\"]/td/a", :text =>  I18n.translate('view_action.edit') )
+      end
+      it 'has clickable show button' do
+        find(:xpath, "//tr[@id=\"component_#{@item1.id}\"]/td/a", :text =>  I18n.translate('view_action.view') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.show.header')}$/
+      end
+      it 'has clickable edit button' do
+        find(:xpath, "//tr[@id=\"component_#{@item1.id}\"]/td/a", :text =>  I18n.translate('view_action.edit') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.edit.header')}$/
+      end
+    end
+    context 'should have index parent links working' do
+      before(:each) do
+        visit components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+        page.should have_selector(:xpath, "//div[@id='content_body']/h3/a", :text => "#{@item1.component_type.nil_to_s}" )
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text =>  "New #{@item1.component_type.nil_to_s} Component" )
+      end
+      it 'has clickable parent view link' do
+        find(:xpath, "//div[@id='content_body']/h3/a", :text => "#{@item1.component_type.nil_to_s}" ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.show.header')}$/
+      end
+      it 'has clickable parent new child button' do
+        find(:xpath, "//div[@id='content_body']/a", :text =>  "New #{@item1.component_type.nil_to_s} Component" ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
+      end
+    end
+    context 'should have index links working' do
+      before(:each) do
+        visit components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('components.new.action') )
+      end
+      it 'has clickable create new link' do
+        find(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('components.new.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
+      end
+    end
+    context 'should have list links working' do
+      before(:each) do
+        visit list_components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.list.header')}$/
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.new.action') )
+      end
+      it 'has clickable create new link' do
+        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.new.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
+      end
+    end
+    context 'should have menu links working' do
+      before(:each) do
+        visit components_menu_path()
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.menu.header')}$/
+        page.should have_selector(:xpath, "//span[@id='index_action']/a", :text => I18n.translate('components.index.action') )
+        page.should have_selector(:xpath, "//span[@id='list_action']/a", :text => I18n.translate('components.list.action') )
+      end
+      it 'has clickable index link' do
+        find(:xpath, "//span[@id='index_action']/a", :text => I18n.translate('components.index.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+      end
+      it 'has clickable list link' do
+        find(:xpath, "//span[@id='list_action']/a", :text => I18n.translate('components.list.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.list.header')}$/
+      end
+    end
+    context 'should have new/create links working' do
+      before(:each) do
+        visit new_component_path()
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.index.action') )
+      end
+      it 'has clickable index link' do
+        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.index.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+      end
+    end
+    context 'should have edit/update links working' do
+      before(:each) do
+        visit edit_component_path(@item1.id)
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.edit.header')}$/
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('components.show.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.index.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.list.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.new.action') )
+      end
+      it 'has clickable show button' do
+        find(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('components.show.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.show.header')}$/
+      end
+      it 'has clickable index link' do
+        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.index.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+      end
+      it 'has clickable list link' do
+        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.list.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.list.header')}$/
+      end
+      it 'has clickable create new link' do
+        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.new.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
+      end
+    end
+    context 'should have show links working' do
+      before(:each) do
+        visit component_path(@item1.id)
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.show.header')}$/
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('components.edit.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.index.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.list.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.new.action') )
+      end
+      it 'has clickable edit button' do
+        find(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('components.edit.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.edit.header')}$/
+      end
+      it 'has clickable index link' do
+        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.index.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+      end
+      it 'has clickable list link' do
+        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.list.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.list.header')}$/
+      end
+      it 'has clickable create new link' do
+        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('components.new.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
+      end
+    end
+  end
   context 'it should have deactivated actions available and working' do
     it 'should be able to list all items when show_deactivated is set' do
       item1 = FactoryGirl.create(:component_min_create, component_type: @component_type, default: @default)

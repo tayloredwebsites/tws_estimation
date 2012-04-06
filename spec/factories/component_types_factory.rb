@@ -1,7 +1,7 @@
 FactoryGirl.define do
   
   sequence :component_type_description do |n|
-    "component_type_#{n}"
+    "ComponentType#{n}"
   end
   sequence :sort_order do |n|
     n*100
