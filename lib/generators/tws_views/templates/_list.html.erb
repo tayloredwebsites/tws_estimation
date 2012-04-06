@@ -14,4 +14,4 @@ end # if table.each %>
 
 <br />
 
-<%%= link_to 'New <%= class_name %>', new_<%= singular_table_name %>_path %>
+<%%= link_to I18n.translate('<%= plural_table_name %>.new.action'), new_<%= singular_table_name %>_path %>

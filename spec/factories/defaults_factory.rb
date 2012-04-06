@@ -1,7 +1,7 @@
 FactoryGirl.define do
   
   sequence :default_name do |n|
-    "default_name_#{n}"
+    "DefaultName#{n}"
   end
   sequence :default_value do |n|
     BigDecimal.new("#{n}+.1")

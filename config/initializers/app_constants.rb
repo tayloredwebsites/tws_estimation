@@ -24,6 +24,7 @@ DB_VALUES = {
 # Roles used for cancan implementation (to do) (see app/models/roles.rb, app/models/ability.rb)
 # each role has layout: (application_name/all)_(role_name/guest)
 # each resource is the available resources(model/controller) under that system with authorization by cancan - app/models/ability.rb
+# i18n translations of each menu_item is en.systems.{APPLICATION_SYSTEMS(key)}.menu_items.{menu_items(key)}
 APPLICATION_SYSTEMS = {
 #  :all => {:id => 'all', :actual => 'false', :type => 'system', :resources => ['Home', 'User', 'Default']},
 #  :home => {:id => 'home', :actual => 'true', :type => 'shared'},
