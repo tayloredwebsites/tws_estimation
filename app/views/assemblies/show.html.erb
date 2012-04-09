@@ -30,6 +30,13 @@
 	  <span class="value" id="assembly_required"><%= @assembly.required %></span>
 	</div>
 
+<% if (@deactivated_module) %>
+	 <div class="field">
+	   <span class="label"><%= I18n.translate('assemblies.field_name.deactivated') %></span>
+	   <span class="value" id="assembly_deactivated"><%= I18n.is_deactivated_or_not(@assembly.deactivated?) %></span>
+	 </div>
+<% end %>
+
 	<div class="field">
 	  <span class="label"><%= I18n.translate('assemblies.field_name.created_at') %></span>
 	  <span class="value" id="assembly_created_at"><%= @assembly.created_at %></span>

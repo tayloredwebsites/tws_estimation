@@ -7,7 +7,10 @@
     <th><%= I18n.translate('assemblies.field_name_short.sort_order') %></th>
 
     <th><%= I18n.translate('assemblies.field_name_short.required') %></th>
-<% if (@deactivated_module) %>
+<% if @deactivated_module && show_deactivated? %>
+	<th><%= I18n.translate('assemblies.field_name_short.deactivated') %></th>
+<% end %>
+<% if @deactivated_module %>
 	<% if show_deactivated? %>
     <th colspan="4"><%= link_to I18n.translate('view_action.hide_deactivated'), assemblies_path('show_deactivated' => DB_FALSE.to_s) %></th>
 	<% else %>
