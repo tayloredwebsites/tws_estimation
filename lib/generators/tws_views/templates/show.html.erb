@@ -11,13 +11,14 @@
 
 <%	attributes.each do |attribute|
 		if attribute.name == 'deactivated'
-			if (defined?(class_name.constantize.new.deactivated_module)) -%>
+%>
+<%% if (@deactivated_module) %>
 	 <div class="field">
 	   <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.deactivated') %></span>
 	   <span class="value" id="<%= singular_table_name %>_deactivated"><%%= I18n.is_deactivated_or_not(@<%= singular_table_name %>.deactivated?) %></span>
 	 </div>
+<%% end %>
 <%      
-			end
 		else
 			if attribute.type.to_s == 'association'
 %>
