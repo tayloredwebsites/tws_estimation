@@ -1,0 +1,87 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.0.5
+-- Dumped by pg_dump version 9.1.3
+-- Started on 2012-04-10 23:10:26 EDT
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 147 (class 1259 OID 285730)
+-- Dependencies: 1793 1794 1795 1796 1797 5
+-- Name: assemblies; Type: TABLE; Schema: public; Owner: _postgres; Tablespace: 
+--
+
+CREATE SEQUENCE assemblies_seq;
+
+CREATE TABLE assemblies (
+    id integer DEFAULT nextval('assemblies_seq'::regclass) NOT NULL,
+    description character varying(255) DEFAULT ''::character varying NOT NULL,
+    sort_order integer DEFAULT 0 NOT NULL,
+    required boolean DEFAULT false NOT NULL,
+    deactivated boolean DEFAULT false NOT NULL
+);
+
+
+-- ALTER TABLE public.assemblies OWNER TO _postgres;
+
+--
+-- TOC entry 1802 (class 0 OID 285730)
+-- Dependencies: 147
+-- Data for Name: assemblies; Type: TABLE DATA; Schema: public; Owner: _postgres
+--
+
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (1, 'Rooftop', 90, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (2, 'Split Systems', 100, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (3, 'VAV System', 110, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (4, 'Exhaust Fans/Ventilation', 60, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (5, 'Controls', 30, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (6, 'Furnace/Duct Furnace Unit Heater', 70, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (7, 'Make-up Air', 0, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (8, 'Ductless Split System', 50, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (9, 'Chiller', 20, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (10, 'Cooling Tower', 40, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (11, 'Boiler', 10, false, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (12, 'Estimate Total', 9999, true, false);
+INSERT INTO assemblies (id, description, sort_order, required, deactivated) VALUES (13, 'Simplified', 9998, false, false);
+
+
+--
+-- TOC entry 1799 (class 2606 OID 285742)
+-- Dependencies: 147 147
+-- Name: assemblies_ix_description; Type: CONSTRAINT; Schema: public; Owner: _postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY assemblies
+    ADD CONSTRAINT assemblies_ix_description UNIQUE (description);
+
+
+--
+-- TOC entry 1801 (class 2606 OID 285740)
+-- Dependencies: 147 147
+-- Name: assemblies_pk_assemblies; Type: CONSTRAINT; Schema: public; Owner: _postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY assemblies
+    ADD CONSTRAINT assemblies_pk_assemblies PRIMARY KEY (id);
+
+
+-- Completed on 2012-04-10 23:10:26 EDT
+
+--
+-- PostgreSQL database dump complete
+--
+
