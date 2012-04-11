@@ -10,12 +10,13 @@ SET search_path = public, pg_catalog;
 SET default_tablespace = '';
 SET default_with_oids = false;
 
+-- DROP TABLE COMPONENTS;
 
 CREATE TABLE components (
-    id integer NOT NULL PRIMARY KEY,
-    component_type_id integer NOT NULL REFERENCES,
+    id integer NOT NULL,
+    component_type_id integer NOT NULL,
     description character varying(255) DEFAULT ''::character varying NOT NULL,
-    lu_def_id integer,
+    defaults_id integer,
     apply_pct_mask integer DEFAULT 0 NOT NULL,
     calc_only boolean DEFAULT false NOT NULL,
     sort_priority character(1) DEFAULT 'M'::bpchar NOT NULL,
@@ -23,9 +24,9 @@ CREATE TABLE components (
 	updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	deactivated boolean
  );
-ALTER TABLE public.components OWNER TO RoR;
+-- ALTER TABLE public.components OWNER TO RoR;
 
-INSERT INTO components (id, component_type_id, description, defaults_id, apply_pct_mask, calc_only, sort_priority, comp_deleted) VALUES
+INSERT INTO components (id, component_type_id, description, defaults_id, apply_pct_mask, calc_only, sort_priority, deactivated) VALUES
 (1, 15, 'Overhead', 3, 11, false, 'M', false),
 (2, 15, 'Markup', 4, 7, false, 'M', false),
 (3, 15, 'Tax', NULL, 11, true, 'Y', false),
@@ -112,8 +113,8 @@ INSERT INTO components (id, component_type_id, description, defaults_id, apply_p
 (86, 15, 'Estimate', NULL, 0, true, 'Z', false);
 
 CREATE SEQUENCE components_seq;
-ALTER TABLE ONLY component
-	ALTER COLUMN id SET DEFAULT NEXTVAL('components_seq')
+ALTER TABLE ONLY components
+	ALTER COLUMN id SET DEFAULT NEXTVAL('components_seq'),
     ADD CONSTRAINT components_pk_components PRIMARY KEY (id),
     ADD CONSTRAINT components_ix_components_type_description UNIQUE(component_type_id, description),
     ADD CONSTRAINT components_fk_defaults FOREIGN KEY (defaults_id) REFERENCES defaults(id),

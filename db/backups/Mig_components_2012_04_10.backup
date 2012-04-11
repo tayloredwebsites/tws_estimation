@@ -1,0 +1,191 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.0.5
+-- Dumped by pg_dump version 9.1.3
+-- Started on 2012-04-10 23:08:40 EDT
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+CREATE SEQUENCE components_seq;
+--ALTER TABLE ONLY components
+--	ALTER COLUMN id SET DEFAULT NEXTVAL('components_seq'),
+--    ADD CONSTRAINT components_pk_components PRIMARY KEY (id),
+--    ADD CONSTRAINT components_ix_components_type_description UNIQUE(component_type_id, description),
+--    ADD CONSTRAINT components_fk_defaults FOREIGN KEY (defaults_id) REFERENCES defaults(id),
+--    ADD CONSTRAINT components_fk_component_types FOREIGN KEY (id) REFERENCES component_types(id);
+
+
+
+--
+-- TOC entry 145 (class 1259 OID 44892)
+-- Dependencies: 1793 1794 1795 1796 1797 1798 1799 1800 5
+-- Name: components; Type: TABLE; Schema: public; Owner: _postgres; Tablespace: 
+--
+
+CREATE TABLE components (
+    id integer DEFAULT nextval('components_seq'::regclass) NOT NULL,
+    component_type_id integer NOT NULL,
+    description character varying(255) DEFAULT ''::character varying NOT NULL,
+    default_id integer,
+    apply_pct_mask integer DEFAULT 0 NOT NULL,
+    calc_only boolean DEFAULT false NOT NULL,
+    sort_priority character(1) DEFAULT 'M'::bpchar NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    deactivated boolean DEFAULT false NOT NULL
+);
+
+
+--ALTER TABLE public.components OWNER TO _postgres;
+
+--
+-- TOC entry 1807 (class 0 OID 44892)
+-- Dependencies: 145
+-- Data for Name: components; Type: TABLE DATA; Schema: public; Owner: _postgres
+--
+
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (1, 15, 'Overhead', 3, 11, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (2, 15, 'Markup', 4, 7, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (3, 15, 'Tax', NULL, 11, true, 'Y', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (4, 12, 'Rooftop Equipment', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (28, 14, 'Rigging', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (30, 14, 'Roofer', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (32, 14, 'Balancer', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (34, 14, 'Control Wiring', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (36, 14, 'Core Boring', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (38, 12, 'Dunnage', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (40, 12, 'Refrigerant Piping', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (42, 12, 'Drain Piping', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (44, 12, 'Hangers', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (46, 12, 'Refrigerant', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (48, 13, 'Refrigerant Piping', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (50, 13, 'Leak Tst Evac & Chrg', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (52, 12, 'Annunciators', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (54, 12, 'Breeching', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (55, 12, 'Test Component', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', true);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (56, 16, 'Permits', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (58, 16, 'Other Misc.', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', true);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (59, 17, 'Risk Allowance', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (61, 12, 'Tower', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (63, 12, 'Pipe', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (65, 12, 'Glycol', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (67, 13, 'Other Labor', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', true);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (69, 14, 'Piping Subcontract', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (71, 14, 'Welder', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (73, 12, 'Other Material', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', true);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (75, 12, 'Pumps & Spec.', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (77, 13, 'Balancer', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (79, 12, 'Flue Insulation', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (81, 12, 'Make-Up Air Unit', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (83, 14, 'Demo Contractor', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (5, 12, 'Curb', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (6, 12, 'Economizer', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (7, 12, 'Controls', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (8, 12, 'Smoke Detectors', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (9, 14, 'Annunciators', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (10, 12, 'RGD''s', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (11, 12, 'Fire Dampers', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (12, 12, 'Smoke Dampers', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (13, 12, 'Exhaust Fans', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (14, 12, 'Starters', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (15, 12, 'Louvers', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (16, 12, 'Roof/Wall Caps', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (17, 12, 'Burgular Bars', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (18, 12, 'VFD''s', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (19, 13, 'Rigging', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (20, 13, 'Assembly', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (21, 13, 'Start & Test', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (22, 13, 'Install Controls', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (23, 13, 'Disconnect Service', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (24, 13, 'Reclaim Refrigerant', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (25, 13, 'Install Econo', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (26, 14, 'Sheetmetal', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (29, 14, 'Duct Insulation', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (31, 14, 'Steel', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (33, 14, 'Power Wiring', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (35, 14, 'Gas Piping', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (37, 12, 'Split System Equip', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (39, 12, 'Isolators', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (41, 12, 'Refrigerant Specialties', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (43, 12, 'Condensate Pump', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (45, 12, 'Pipe Insulation', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (47, 12, 'Drain Pan', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (49, 13, 'Pipe Drain', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (51, 14, 'Concrete Pad', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (53, 12, 'Boiler', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (57, 16, 'Stamps', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (60, 17, 'Vague Requirements Allowance', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (62, 12, 'Pumps', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (64, 12, 'Pipe Fittings', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (66, 12, 'Glycol Pump Start', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (68, 13, 'Fill System', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (70, 14, 'Pipe Insulation', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (72, 14, 'Other Subcontract', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', true);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (74, 12, 'Chiller', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (76, 12, 'Ductless Split System Eq.', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (78, 12, 'Heater / Furnace', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (80, 14, 'Flue Insulation Subcontract', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (82, 12, 'Roof / Wall Caps', NULL, 0, false, 'M', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', true);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (85, 15, 'Labor Cost', 1, 2, true, 'A', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+INSERT INTO components (id, component_type_id, description, default_id, apply_pct_mask, calc_only, sort_priority, created_at, updated_at, deactivated) VALUES (86, 15, 'Estimate', NULL, 0, true, 'Z', '2012-03-21 14:06:39.880843', '2012-03-21 14:06:39.880843', false);
+
+
+--
+-- TOC entry 1802 (class 2606 OID 44907)
+-- Dependencies: 145 145 145
+-- Name: components_ix_component_type_description; Type: CONSTRAINT; Schema: public; Owner: _postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY components
+    ADD CONSTRAINT components_ix_component_type_description UNIQUE (component_type_id, description);
+
+
+--
+-- TOC entry 1804 (class 2606 OID 44905)
+-- Dependencies: 145 145
+-- Name: components_pk_components; Type: CONSTRAINT; Schema: public; Owner: _postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY components
+    ADD CONSTRAINT components_pk_components PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1806 (class 2606 OID 44914)
+-- Dependencies: 143 145
+-- Name: components_fk_component_types; Type: FK CONSTRAINT; Schema: public; Owner: _postgres
+--
+
+ALTER TABLE ONLY components
+    ADD CONSTRAINT components_fk_component_types FOREIGN KEY (component_type_id) REFERENCES component_types(id);
+
+
+--
+-- TOC entry 1805 (class 2606 OID 44909)
+-- Dependencies: 145 144
+-- Name: components_fk_defaults; Type: FK CONSTRAINT; Schema: public; Owner: _postgres
+--
+
+ALTER TABLE ONLY components
+    ADD CONSTRAINT components_fk_defaults FOREIGN KEY (default_id) REFERENCES defaults(id);
+
+
+-- Completed on 2012-04-10 23:08:40 EDT
+
+--
+-- PostgreSQL database dump complete
+--
+
