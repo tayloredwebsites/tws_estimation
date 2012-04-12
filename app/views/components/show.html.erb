@@ -34,10 +34,13 @@
 	  <span class="label"><%= I18n.translate('components.field_name.calc_only') %></span>
 	  <span class="value" id="component_calc_only"><%= @component.calc_only %></span>
 	</div>
+
+<% if (@deactivated_module) %>
 	 <div class="field">
 	   <span class="label"><%= I18n.translate('components.field_name.deactivated') %></span>
 	   <span class="value" id="component_deactivated"><%= I18n.is_deactivated_or_not(@component.deactivated?) %></span>
 	 </div>
+<% end %>
 
 	<div class="field">
 	  <span class="label"><%= I18n.translate('components.field_name.created_at') %></span>

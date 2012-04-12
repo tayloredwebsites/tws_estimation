@@ -156,6 +156,40 @@ describe 'Assemblies Integration Tests' do
     before(:each) do
       @item1 = FactoryGirl.create(:assembly_min_create)
     end
+    context 'Header Show/Hide Deactivated links - ' do
+      it 'should send index page with correct show/hide link in table header' do
+        visit assemblies_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.index.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+        # hide deactivated records
+        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') ).click
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.index.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') )
+        # show deactivated records
+        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') ).click
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.index.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+      end
+      it 'should send list page with correct show/hide link in table header' do
+        visit list_assemblies_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.list.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+        # hide deactivated records
+        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') ).click
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.list.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') )
+        # show deactivated records
+        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') ).click
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.list.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+      end
+    end
     context 'should have index/list row links working' do
       before(:each) do
         visit assemblies_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
@@ -204,6 +238,7 @@ describe 'Assemblies Integration Tests' do
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.menu.header')}$/
         page.should have_selector(:xpath, "//span[@id='index_action']/a", :text => I18n.translate('assemblies.index.action') )
         page.should have_selector(:xpath, "//span[@id='list_action']/a", :text => I18n.translate('assemblies.list.action') )
+        page.should have_selector(:xpath, "//span[@id='new_action']/a", :text => I18n.translate('assemblies.new.action') )
       end
       it 'has clickable index link' do
         find(:xpath, "//span[@id='index_action']/a", :text => I18n.translate('assemblies.index.action') ).click
@@ -212,6 +247,10 @@ describe 'Assemblies Integration Tests' do
       it 'has clickable list link' do
         find(:xpath, "//span[@id='list_action']/a", :text => I18n.translate('assemblies.list.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.list.header')}$/
+      end
+      it 'has clickable create new link' do
+        find(:xpath, "//span[@id='new_action']/a", :text => I18n.translate('assemblies.new.action') ).click
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.new.header')}$/
       end
     end
     context 'should have new/create links working' do

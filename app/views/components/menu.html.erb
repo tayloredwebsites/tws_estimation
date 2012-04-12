@@ -14,15 +14,19 @@
 	  <span class="value"><h4><%= I18n.translate('action', :scope => @page_scope) %></h4></span>
 	</div>
 
-<% if can? :manage, Component %>
+<% if can? :manage, Assembly %>
 
 	<div class="field">
-	  <span class="label"><label for="index_action"><%= I18n.translate('index.action', :scope => @controller_scope) %></label></span>
-	  <span class="value" id="index_action"><%= link_to I18n.translate('index.action', :scope => @controller_scope), components_path %></span>
+		<span class="label"><label for="index_action"><%= I18n.translate('index.action', :scope => @controller_scope) %></span>
+		<span class="value" id="index_action"><%= link_to I18n.translate('index.action', :scope => @controller_scope), components_path %></span>
 	</div>
 	<div class="field">
-	  <span class="label"><label for="list_action"><%= I18n.translate('list.action', :scope => @controller_scope) %></label></span>
-	  <span class="value" id="list_action"><%= link_to I18n.translate('list.action', :scope => @controller_scope), list_components_path %></span>
+		<span class="label"><label for="list_action"><%= I18n.translate('list.action', :scope => @controller_scope) %></span>
+		<span class="value" id="list_action"><%= link_to I18n.translate('list.action', :scope => @controller_scope), list_components_path %></span>
+	</div>
+	<div class="field">
+		<span class="label"><label for="new_action"><%= I18n.translate('new.action', :scope => @controller_scope) %></span>
+		<span class="value" id="new_action"><%= link_to I18n.translate('new.action', :scope => @controller_scope), new_component_path %></span>
 	</div>
 
 <% else %>
