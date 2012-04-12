@@ -7,6 +7,14 @@ describe AssembliesController do
       get("/assemblies").should route_to("assemblies#index")
     end
 
+    it "routes to #menu" do
+      get("/assemblies/menu").should route_to("assemblies#menu")
+    end
+
+    it "routes to #list" do
+      get("/components/list").should route_to("components#list")
+    end
+
     it "routes to #new" do
       get("/assemblies/new").should route_to("assemblies#new")
     end

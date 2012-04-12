@@ -160,6 +160,40 @@ describe 'Components Integration Tests' do
     before(:each) do
       @item1 = FactoryGirl.create(:component_min_create, component_type: @component_type, default: @default)
     end
+    context 'Header Show/Hide Deactivated links - ' do
+      it 'should send index page with correct show/hide link in table header' do
+        visit components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+        # hide deactivated records
+        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') ).click
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') )
+        # show deactivated records
+        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') ).click
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+      end
+      it 'should send list page with correct show/hide link in table header' do
+        visit list_components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.list.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+        # hide deactivated records
+        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') ).click
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.list.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') )
+        # show deactivated records
+        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') ).click
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.list.header')}$/
+        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+      end
+    end
     context 'should have index/list row links working' do
       before(:each) do
         visit components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
