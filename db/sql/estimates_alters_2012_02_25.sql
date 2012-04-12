@@ -26,9 +26,6 @@ ALTER TABLE ONLY staterates
 ALTER TABLE ONLY states
     ADD CONSTRAINT states_pk_states PRIMARY KEY (state_id);
 
-ALTER TABLE ONLY systemcomponents
-    ADD CONSTRAINT systemcomponents_pk_systemcomponents PRIMARY KEY (sys_comp_id);
-
 ALTER TABLE ONLY taxtypes
     ADD CONSTRAINT taxtypes_pk_taxtypes PRIMARY KEY (tax_type_id);
 
@@ -129,12 +126,6 @@ ALTER TABLE ONLY staterates
 ALTER TABLE ONLY staterates
     ADD CONSTRAINT fk_staterates_taxtypes FOREIGN KEY (state_rate_tax_type_id) REFERENCES taxtypes(tax_type_id);
 
-ALTER TABLE ONLY systemcomponents
-    ADD CONSTRAINT fk_systemcomponents_components FOREIGN KEY (sys_comp_comp_id) REFERENCES components(comp_id);
-
-ALTER TABLE ONLY systemcomponents
-    ADD CONSTRAINT fk_systemcomponents_systems FOREIGN KEY (sys_comp_sys_id) REFERENCES systems(sys_id);
-
 ALTER TABLE ONLY vendorcomponents
     ADD CONSTRAINT fk_vendorcomponents_systemcomponents1 FOREIGN KEY (vend_comp_sys_comp_id) REFERENCES systemcomponents(sys_comp_id);
 
@@ -152,8 +143,3 @@ ALTER TABLE ONLY vendorsystems
 
 ALTER TABLE ONLY vendorcomponents
     ADD CONSTRAINT fk_vendorsystems_vendors1 FOREIGN KEY (vend_comp_vend_id) REFERENCES vendors(vend_id);
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
