@@ -30,6 +30,30 @@ class TwsViewsGenerator < Rails::Generators::NamedBase
     # -> http://stackoverflow.com/questions/6285312/how-to-get-at-generatedattribute-in-a-custom-controller-generator
     super
     @attributes = []
+    
+    # code to allow user to override the choice of the parent foreign key table
+    # e.g. rails generate tws_views ClassName ParentClassName:parent
+    @tws_views_parent_association = ''
+    @tws_views_child_association = file_name.underscore
+    parent_association = ''
+    child_association = ''
+    # Rails.logger.debug("G args: #{args.inspect.to_s}")
+    # Rails.logger.debug("G args[0]: #{args[0].inspect.to_s}")
+    if !args[0].nil? && args[0].is_a?(Array)
+      args[0].each do |arg|
+        attrib = arg.split(":")
+        if !arg.nil? && attrib.size > 0 && !attrib[1].nil?
+          if attrib[1].downcase == 'parent'
+            Rails.logger.debug("G parent is #{attrib[0].to_s}")
+            parent_association = attrib[0].to_s.underscore
+          elsif attrib[1].downcase == 'child'
+            Rails.logger.debug("G child is #{attrib[0].to_s}")
+            child_association = attrib[0].to_s.underscore
+          end
+        end
+      end
+    end
+    
     if attributes.size > 0
       Rails.logger.debug("G attributes: #{attributes.inspect.to_s}")
       attributes.each do |attribute|
@@ -37,7 +61,7 @@ class TwsViewsGenerator < Rails::Generators::NamedBase
       end
     else
       # Rails.logger.debug("G Load attributes from #{file_name.capitalize.constantize.columns.map.inspect.to_s}")
-      my_model = file_name.capitalize.constantize
+      my_model = file_name.camelize.constantize
       # my_model_instance = my_model.new
       attributes = my_model.columns.map do |c|
         foreign_key_field =  c.name.gsub(/_id/, '')
@@ -48,8 +72,15 @@ class TwsViewsGenerator < Rails::Generators::NamedBase
           @attributes << attrib # if (my_model._accessible_attributes[:default].include?(attrib)
           # Field name of format xxxxx_id, indicating a foreign key.  Let see if we can display the class for it.
           # Rails.logger.debug("* G TwsViewsGenerator.initialize - c.name = #{c.name}, foreign_key_field = #{foreign_key_field}")
-          foreign_key_name = foreign_key_field.underscore   # .camelize
+          foreign_key_name = foreign_key_field.underscore
           # Rails.logger.debug("* G TwsViewsGenerator.initialize - foreign_key_name = #{foreign_key_name}")
+          # set first association to parent by default
+          @tws_views_parent_association = foreign_key_name if @tws_views_parent_association.blank?
+          if foreign_key_name == parent_association
+            @tws_views_parent_association = foreign_key_name
+          elsif foreign_key_name == child_association
+            @tws_views_child_association = foreign_key_name
+          end
           fk_attrib = Rails::Generators::GeneratedAttribute.new(foreign_key_name, 'association')
           Rails.logger.debug("G automatically generate field #{foreign_key_name}:#{fk_attrib.type.to_s}")
           @attributes << fk_attrib
