@@ -1,0 +1,27 @@
+<%
+	@page_scope = 'assembly_components.edit'
+	@deactivated_module = defined?(AssemblyComponent.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= form_for(@assembly_component, :action => 'update') do |f| %>
+
+	<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @assembly_component, :sys_errors => @errors  } %>
+
+	<div class="fields_20_80">
+		<%= render :partial => 'form', :locals => { :f => f } %>
+	</div>
+
+	<div class="actions">
+		<%= f.submit I18n.translate('view_action.update') %>
+	</div>
+	
+<% end %>
+
+<%= link_to I18n.translate('assembly_components.show.action'), assembly_component_path(@assembly_component.id) %>
+<% if can? :manage, @assembly_component %>
+	| <%= link_to I18n.translate('assembly_components.index.action'), assembly_components_path %>
+	| <%= link_to I18n.translate('assembly_components.list.action'), list_assembly_components_path %>
+	| <%= link_to I18n.translate('assembly_components.new.action'), new_assembly_component_path %>
+<% end %>

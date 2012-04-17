@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120406171103) do
+ActiveRecord::Schema.define(:version => 20120412232631) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -23,6 +23,16 @@ ActiveRecord::Schema.define(:version => 20120406171103) do
   end
 
   add_index "assemblies", ["description"], :name => "index_assemblies_on_description", :unique => true
+
+  create_table "assembly_components", :force => true do |t|
+    t.integer  "assembly_id",                     :null => false
+    t.integer  "component_id",                    :null => false
+    t.string   "description",  :default => "",    :null => false
+    t.boolean  "required",     :default => true,  :null => false
+    t.boolean  "deactivated",  :default => false, :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
 
   create_table "component_types", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -72,6 +82,9 @@ ActiveRecord::Schema.define(:version => 20120406171103) do
     t.datetime "updated_at",         :null => false
     t.boolean  "deactivated"
   end
+
+  add_foreign_key "assembly_components", "assemblies", :name => "assembly_components_assembly_id_fk"
+  add_foreign_key "assembly_components", "components", :name => "assembly_components_component_id_fk"
 
   add_foreign_key "components", "component_types", :name => "components_component_type_id_fk"
   add_foreign_key "components", "defaults", :name => "components_default_id_fk"

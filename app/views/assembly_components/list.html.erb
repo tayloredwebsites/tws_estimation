@@ -1,0 +1,7 @@
+<%
+	@page_scope = 'assembly_components.list'
+	@deactivated_module = defined?(AssemblyComponent.new.deactivated_module)
+%>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'assembly_components/list' %>

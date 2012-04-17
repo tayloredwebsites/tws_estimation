@@ -1,27 +1,19 @@
-class Assembly < ActiveRecord::Base
+class AssemblyComponent < ActiveRecord::Base
 
   include Models::Deactivated
   include Models::CommonMethods
   
-  attr_accessible :description, :sort_order, :required, :deactivated
+  attr_accessible :description, :required, :deactivated, :component_id, :assembly_id
+  # todo ? remove these as accessible? -> attr_accessible :component_id, :assembly_id
+
+  belongs_to :assembly
+  belongs_to :component
     
-  has_many :assembly_components
-
-  validates :description,
-    :presence => true,
-    :uniqueness => true
-
-  validates :sort_order,
-    :numericality => {:only_integer => true }
-    
-  validates :required,
-    :inclusion => { :in => [true, false] }
-
   def nil_to_s
     # call to super here brings in deactivated feature
     desc
   end
-  
+
   def desc
     ''+super.nil_to_s+self.description.nil_to_s
   end
