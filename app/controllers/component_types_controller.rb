@@ -49,13 +49,13 @@ class ComponentTypesController < SecureApplicationController
     @component_type = ComponentType.new
   end
   
-  def new_component
-    @component_type = get_scope().find(params[:id])
-    @component = @component_type.components.build :component_type_id => params[:id]
-    # render the component for this component type in the components resource
-    render 'components/new'
-  end
-
+  # def new_component
+  #   @component_type = get_scope().find(params[:id])
+  #   @component = @component_type.components.build :component_type_id => params[:id]
+  #   # render the component for this component type in the components resource
+  #   render 'components/new'
+  # end
+  # 
   # GET /component_types/:id/edit
   def edit
     @component_type = get_scope().find(params[:id])

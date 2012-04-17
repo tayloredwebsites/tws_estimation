@@ -11,10 +11,6 @@ describe ComponentsController do
       get("/component_types/new").should route_to("component_types#new")
     end
 
-    it "routes to #new_component" do
-      get("/component_types/1/new_component").should route_to("component_types#new_component", :id => "1")
-    end
-
     it "routes to #show" do
       get("/component_types/1").should route_to("component_types#show", :id => "1")
     end
