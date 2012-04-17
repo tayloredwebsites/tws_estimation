@@ -5,7 +5,10 @@
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
 
-<!-- update this to have "parent_assoc" represent the name of the parent resource / association -->
+<!--
+	If need a parent association for breaks by parent, try $ rails generate tws_views component all <parent_association>:parent
+	Note: if child association is not the current table (e.g. join table), add <child_association>:child to the tws_views generate
+-->
 <table cellspacing="0">
 <%
 last_parent_assoc_id = 0
@@ -20,7 +23,9 @@ last_parent_association = ""
 		if last_parent_assoc_id != parent_association.id
 %>
 			</table>
-			<%= link_to "New #{last_parent_association.nil_to_s} Component", new_component_component_type_path(last_parent_assoc_id, :component_type_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
+			<!-- use this first link if has many association -->
+			<!-- use this second link if has many association and this class is a join table -->
+			<%= link_to "New #{last_parent_association.nil_to_s} Component", new_component_path(:component_type_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
 			<br>
 			<h3><%= link_to parent_association.nil_to_s, component_type_path(parent_association.id) %> (ComponentType)</h3>
 			<table cellspacing="0">
@@ -37,8 +42,8 @@ end # if table.each %>
 </table>
 
 <% if last_parent_assoc_id != 0 %>
-	<%= link_to "New #{last_parent_association.nil_to_s} Component", new_component_component_type_path(last_parent_assoc_id, :ComponentType_id => last_parent_assoc_id.to_s) %><br>
+	<%= link_to "New #{last_parent_association.nil_to_s} Component", new_component_path(:component_type_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
 <% end # if last_parent_assoc_id %>
-<br>
-<%= link_to I18n.translate('components.new.action'), new_component_path %>
 
+
+<%= link_to I18n.translate('components.new.action'), new_component_path %>
