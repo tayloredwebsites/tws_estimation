@@ -5,7 +5,7 @@ namespace :legacy do
   namespace :convert do
 
     desc 'import all legacy data'
-    task :all => [:setups, :defaults, :component_types, :components, :assemblies ]
+    task :all => [:setups, :defaults, :component_types, :components, :assemblies, :assembly_components ]
 
     task :setups => :environment
 
@@ -36,7 +36,7 @@ namespace :legacy do
       #ActiveRecord::Base.record_timestamps = false # turn off timestamps
       include Legacy::LegacyClasses
       # loop through the legacy component_types records
-      LegacyComponentTypes.all.each do |old_component_type|
+      LegacyComponentType.all.each do |old_component_type|
         begin
           new_component_type = ComponentType.new
           new_component_type.attributes = {
@@ -66,11 +66,14 @@ namespace :legacy do
       # loop through the legacy records
       LegacyComponent.all.each do |old_component|
         begin
+          # unique component_type found by description
+          old_component_type = LegacyComponentType.find(oldComponent.component_type_id)
+          new_component_type = ComponentType.find_by_description(old_component_type.description)
           new_component = Component.new
           new_component.attributes = {
-            :component_type_id => old_component.component_type_id,
+            :component_type_id => new_component_type.id,
             :description => old_component.description,
-            :default_id => old_component.default_id,
+            :default_id => old_component.default_id,  # note this assumes that the default ID values have been retained !!
             :calc_only => old_component.calc_only,
             :deactivated => old_component.deactivated
           }
@@ -101,6 +104,40 @@ namespace :legacy do
           puts "Successfully migrated Assemblies table."
         rescue Exception => e
           puts "Error migrating Assemblies record #{old_table.id.to_s}, #{e.inspect.to_s}."
+        end
+      end
+      #ActiveRecord::Base.record_timestamps = true # turn timestamps back on
+    end
+    
+    desc 'import assembly_components table from legacy data'
+    task :assembly_components => :setups do
+      #ActiveRecord::Base.record_timestamps = false # turn off timestamps
+      include Legacy::LegacyClasses
+      # loop through the legacy records
+      LegacyAssemblyComponent.all.each do |old_table|
+        # unique component found by component_type and description
+        old_component = LegacyComponent.find(old_table.component_id)
+        # unique component_type found by description
+        old_component_type = LegacyComponentType.find(old_component.component_type_id)
+        new_component_type = ComponentType.scoped_by_description(old_component_type.description).first
+        new_component = Component.where(:component_type_id => new_component_type.id, :description => old_component.description).first
+        # unique assembly found by description
+        old_assembly = LegacyAssembly.find(old_table.assembly_id)
+        new_assembly = Assembly.scoped_by_description(old_assembly.description).first
+        begin
+          new_table = AssemblyComponent.new
+          Rails.logger.debug("M migrating assembly_components AssemblyComponent component_id = #{new_component.id.to_s}, assembly_id = #{new_assembly.id.to_s}")
+          new_table.attributes = {
+            :component_id => new_component.id,
+            :assembly_id => new_assembly.id,
+            :description => (old_table.description.nil?) ? '' : old_table.description,
+            :required => old_table.required,
+            :deactivated => old_table.deactivated
+          }
+          new_table.save!
+          puts "Successfully migrated assembly_components record."
+        rescue Exception => e
+          Rails.logger.debug("M Error migrating assembly_components Error #{e.inspect.to_s}")
         end
       end
       #ActiveRecord::Base.record_timestamps = true # turn timestamps back on

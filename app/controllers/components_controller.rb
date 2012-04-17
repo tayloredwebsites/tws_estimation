@@ -52,7 +52,11 @@ class ComponentsController < SecureApplicationController
   # GET /components/new
   def new
     Rails.logger.debug("* ComponentsController.new - params = #{params.inspect.to_s}")
-    @component = Component.new
+    # only pass attribute parameters to new method (to pre-initialize params such as parent association id)
+    # todo - limit params to accessible attributes!
+    attribute_params = params.dup
+    attribute_params.delete_if{|key, val| Component.new.attribute_names.index(key).nil? }
+    @component = Component.new(attribute_params)
   end
 
   # GET /components/:id/edit

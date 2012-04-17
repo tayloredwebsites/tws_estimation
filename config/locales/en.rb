@@ -38,7 +38,8 @@
           :defaults => 'Defaults',
           :component_types => 'Component Types',
           :components => 'Components',
-          :assemblies => 'Assemblies'
+          :assemblies => 'Assemblies',
+          :assembly_components => 'Assembly Components'
         }
       },
       :estimuser => {
@@ -243,7 +244,7 @@
     # UsersSessionResource
     :users_sessions => {
       :title => 'User Sessions',
-      :system => 'maint',
+      :system => 'estimmaint',
       :index => {
         :title => "Main Menu",
         :header => "Main Menu"
@@ -277,7 +278,7 @@
     # Default Resource
     :defaults => {
       :title => 'Default Values',
-      :system => 'maint',
+      :system => 'estimmaint',
       :index => {
         :action => "List Default Values",
         :title => "List Installations Default Values",
@@ -318,7 +319,7 @@
     # ComponentType Resource
     :component_types => {
       :title => 'Component Types',
-      :system => 'maint',
+      :system => 'estimmaint',
       :index => {
         :action => "List Component Types",
         :title => "List Estimation Component Types",
@@ -378,7 +379,7 @@
     # Component Resource
     :components => {
       :title => 'Components',
-      :system => 'maint',
+      :system => 'estimmaint',
       :menu => {
         :action => "Components Actions Menu",
         :title => "Estimation Components Action Menu",
@@ -443,78 +444,156 @@
         :default_id => 'ID of the Default Value for this item.',
         :default => 'The Default Value for this item.',
         :calc_only => 'Calculated using Default Value (with no Value change allowed).',
-        :deactivated => 'Deactivated.',
+        :deactivated => 'Is this field deactivated?',
         :created_at => 'Created at this Date and Time.',
         :updated_at => 'Last Updated at this date and time.'
       },
       :messages => {
       }
     }, # end Component Resource
-      # Assemblies Resource
-      :assemblies => {
-        :title => 'Assemblies',
-        :system => 'maint',
-        :menu => {
-          :action => "Assemblies Actions Menu",
-          :title => "Estimation Assemblies Action Menu",
-          :header => "Estimation Assemblies Action Menu"
-        },
-        :index => {
-          :action => "List Assemblies in Sort Order",
-          :title => "List Estimation Assemblies in Sort Order",
-          :header => "List of all Estimation Assemblies in Sort Order",
-          :selected_header => "List of selected Assemblies in Sort Order"
-        },
-        :list => {
-          :action => "List Assemblies by Description",
-          :title => "List Estimation Assemblies in Description Order",
-          :header => "List of all Estimation Assemblies in Description Order",
-          :selected_header => "List of selected Assemblies in Description Order"
-        },
-        :edit => {
-          :action => "Edit Assembly",
-          :title => "Edit Assembly",
-          :header => "Edit a Assembly"
-        },
-        :new => {
-          :action => "New Assembly",
-          :title => "New Assembly",
-          :header => "Create a Assembly"
-        },
-        :show => {
-          :action => "View Assembly",
-          :title => "View Assembly",
-          :header => "View a Assembly"
-        },
-        :field_name => {
-          :id => 'ID',
-          :description => 'Description',
-          :sort_order => 'Sort Order',
-          :required => 'Required?',
-          :deactivated => 'Deactivated?',
-          :created_at => 'Created',
-          :updated_at => 'Updated'
-        },
-        :field_name_short => {
-          :id => 'ID',
-          :description => 'Description',
-          :sort_order => 'Sort Order',
-          :required => 'Required?',
-          :deactivated => 'Deactivated?',
-          :created_at => 'Created',
-          :updated_at => 'Updated'
-        },
-        :field_name_tip => {
-          :id => 'ID (identifier used by database to uniquely idenfify item in table).',
-          :description => 'Description.',
-          :sort_order => 'Sort Order',
-          :required => 'Is this field required?',
-          :deactivated => 'Deactivated.',
-          :created_at => 'Created at this Date and Time.',
-          :updated_at => 'Last Updated at this date and time.'
-        },
-        :messages => {
-        }
-      } # end Assembly Resource
+    # Assemblies Resource
+    :assemblies => {
+      :title => 'Assemblies',
+      :system => 'estimmaint',
+      :menu => {
+        :action => "Assemblies Actions Menu",
+        :title => "Estimation Assemblies Action Menu",
+        :header => "Estimation Assemblies Action Menu"
+      },
+      :index => {
+        :action => "List Assemblies in Sort Order",
+        :title => "List Estimation Assemblies in Sort Order",
+        :header => "List of all Estimation Assemblies in Sort Order",
+        :selected_header => "List of selected Assemblies in Sort Order"
+      },
+      :list => {
+        :action => "List Assemblies by Description",
+        :title => "List Estimation Assemblies in Description Order",
+        :header => "List of all Estimation Assemblies in Description Order",
+        :selected_header => "List of selected Assemblies in Description Order"
+      },
+      :edit => {
+        :action => "Edit Assembly",
+        :title => "Edit Assembly",
+        :header => "Edit a Assembly"
+      },
+      :new => {
+        :action => "New Assembly",
+        :title => "New Assembly",
+        :header => "Create a Assembly"
+      },
+      :show => {
+        :action => "View Assembly",
+        :title => "View Assembly",
+        :header => "View a Assembly"
+      },
+      :field_name => {
+        :id => 'ID',
+        :description => 'Description',
+        :sort_order => 'Sort Order',
+        :required => 'Required?',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :description => 'Description',
+        :sort_order => 'Sort Order',
+        :required => 'Required?',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :description => 'Description.',
+        :sort_order => 'Sort Order',
+        :required => 'Is this field required?',
+        :deactivated => 'Is this field deactivated?',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
+    }, # end Assembly Resource
+      # AssemblyComponent Resource
+    :assembly_components => {
+      :title => 'Assembly Component',
+      :system => 'estimmaint',
+      :menu => {
+        :action => "Assembly Components Actions Menu",
+        :title => "Estimation Assembly Components Action Menu",
+        :header => "Estimation Assembly Components Action Menu"
+      },
+      :index => {
+        :action => "List Assembly Components by Assembly",
+        :title => "List Assembly Components by Assembly ",
+        :header => "List of all Assembly Components by Assembly ",
+        :selected_header => "List of selected Assembly Components by Assembly "
+      },
+      :list => {
+        :action => "List Assembly Components by Description",
+        :title => "List Assembly Components in Description Order",
+        :header => "List of all Assembly Components in Description Order",
+        :selected_header => "List of selected Assembly Components by Description"
+      },
+      :edit => {
+        :action => "Edit Assembly Component",
+        :title => "Edit Assembly Component",
+        :header => "Edit an Assembly Component"
+      },
+      :new => {
+        :action => "New Assembly Component",
+        :title => "New Assembly Component",
+        :header => "Create an Assembly Component"
+      },
+      :show => {
+        :action => "View Assembly Component",
+        :title => "View Assembly Component",
+        :header => "View an Assembly Component"
+      },
+      :field_name => {
+        :id => 'ID',
+        :assembly_id => 'Assembly ID',
+        :assembly => 'Assembly',
+        :component_id => 'Component ID',
+        :component => 'Component',
+        :description => 'Override Component Description',
+        :sort_order => 'Sort Order',
+        :required => 'Required',
+        :deactivated => 'Deactivated',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :assembly_id => 'Assembly ID',
+        :assembly => 'Assembly',
+        :component_id => 'Component ID',
+        :component => 'Component',
+        :description => 'Desc.',
+        :sort_order => 'Sort',
+        :required => 'Req.',
+        :deactivated => 'Deact.',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :assembly_id => 'ID of the Assembly this belongs to.',
+        :assembly => 'The Assembly this belongs to.',
+        :component_id => 'ID of the Component for this.',
+        :component => 'The Component for this.',
+        :description => 'Use this Description instead of the default Component Description.',
+        :sort_order => 'Sort Order',
+        :required => 'Is this field required?',
+        :deactivated => 'Is this field deactivated?',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
+    }, # end Component Resource
   } # end en
 } #end localizations

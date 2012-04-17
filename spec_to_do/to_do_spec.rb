@@ -23,4 +23,8 @@ describe 'Miscellaneous items to do - ' do
   it 'should remove the @model creation in each controller - unless needed for model name specification - documented for user'
   it 'should have controllers not attempt to create records that are already there, but deactivated.'
   it 'should have cancan tests either in controller or integration specs'
+  context 'tws_views generator' do
+    it 'should allow default values from child fields (eg AssemblyComponents.description)'
+    it 'should have an erb for choosing entries in a join table (eg Components in AssemblyComponents)'
+  end
 end

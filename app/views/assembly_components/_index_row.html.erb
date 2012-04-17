@@ -1,0 +1,24 @@
+	<%= tag :tr, options = {:id => "assembly_component_#{item.id}", :class => "#{cycle('odd', 'even')}"}, open = true %>
+		
+    	<td id="<%= "assembly_component_#{item.id}_id" %>"><%= item.id %></td>
+		
+	    	<td id="<%= "assembly_component_#{item.id}_id" %>"><%= item.assembly.nil_to_s %></td>
+		
+	    	<td id="<%= "assembly_component_#{item.id}_id" %>"><%= item.component.nil_to_s %></td>
+		
+    	<td id="<%= "assembly_component_#{item.id}_description" %>"><%= item.description %></td>
+		
+    	<td id="<%= "assembly_component_#{item.id}_required" %>"><%= item.required %></td>
+				<% if @deactivated_module && show_deactivated? %>
+   		<td id="<%= "assembly_component_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
+		<% end %>
+	   <td><%= link_to I18n.translate('view_action.view'), assembly_component_path(item.id) %></td>
+	   <td><%= link_to I18n.translate('view_action.edit'), edit_assembly_component_path(item.id) %></td>
+		<% if @deactivated_module && can?(:deactivate, item) %>
+			<% if item.deactivated? %>
+				<td><%= link_to I18n.translate('view_action.reactivate'), reactivate_assembly_component_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.reactivate'), :id => item.id) %></td>
+			 	<td><%= link_to I18n.translate('view_action.delete'), item, :method => :delete, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.delete'), :id => item.id)  %></td>
+			<% else %>
+			 	<td><%= link_to I18n.translate('view_action.deactivate'), deactivate_assembly_component_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.deactivate'), :id => item.id) %></td>
+			<% end # end if item.deactivated? %>
+		<% end # end if @deactivated_module %>

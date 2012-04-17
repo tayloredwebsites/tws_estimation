@@ -40,7 +40,8 @@ APPLICATION_SYSTEMS = {
     :defaults => {:class_name => "Default", :action => :index, :start_uri => "/defaults"},
     :component_types => {:class_name => "ComponentType", :action => :index, :start_uri => "/component_types"},
     :components => {:class_name => "Component", :action => :index, :start_uri => "/components/menu"},
-    :assemblies => {:class_name => "Assembly", :action => :index, :start_uri => "/assemblies/menu"}
+    :assemblies => {:class_name => "Assembly", :action => :index, :start_uri => "/assemblies/menu"},
+    :assembly_components => {:class_name => "AssemblyComponent", :action => :index, :start_uri => "/assembly_components/menu"}
   } },
   :estimuser => {:id => 'estimuser', :actual => 'true', :type => 'external', :menu_items => {    
   } },

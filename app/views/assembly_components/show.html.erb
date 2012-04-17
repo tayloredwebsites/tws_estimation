@@ -1,0 +1,63 @@
+<%
+	@page_scope = 'assembly_components.show'
+	@deactivated_module = defined?(AssemblyComponent.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @assembly_component, :sys_errors => @errors  } %>
+
+<div class="fields_20_80">
+
+
+	<div class="field">
+	  <span class="label"><%= I18n.translate('assembly_components.field_name.id') %></span>
+	  <span class="value" id="assembly_component_id"><%= @assembly_component.id %></span>
+	</div>
+
+	<div class="field">
+	  <span class="label"><%= I18n.translate('assembly_components.field_name.assembly') %></span>
+	  <span class="value" id="assembly_component_assembly"><%= @assembly_component.assembly.nil_to_s %></span>
+	</div>
+
+	<div class="field">
+	  <span class="label"><%= I18n.translate('assembly_components.field_name.component') %></span>
+	  <span class="value" id="assembly_component_component"><%= @assembly_component.component.nil_to_s %></span>
+	</div>
+
+	<div class="field">
+	  <span class="label"><%= I18n.translate('assembly_components.field_name.description') %></span>
+	  <span class="value" id="assembly_component_description"><%= @assembly_component.description %></span>
+	</div>
+
+	<div class="field">
+	  <span class="label"><%= I18n.translate('assembly_components.field_name.required') %></span>
+	  <span class="value" id="assembly_component_required"><%= @assembly_component.required %></span>
+	</div>
+
+<% if (@deactivated_module) %>
+	 <div class="field">
+	   <span class="label"><%= I18n.translate('assembly_components.field_name.deactivated') %></span>
+	   <span class="value" id="assembly_component_deactivated"><%= I18n.is_deactivated_or_not(@assembly_component.deactivated?) %></span>
+	 </div>
+<% end %>
+
+	<div class="field">
+	  <span class="label"><%= I18n.translate('assembly_components.field_name.created_at') %></span>
+	  <span class="value" id="assembly_component_created_at"><%= @assembly_component.created_at %></span>
+	</div>
+
+	<div class="field">
+	  <span class="label"><%= I18n.translate('assembly_components.field_name.updated_at') %></span>
+	  <span class="value" id="assembly_component_updated_at"><%= @assembly_component.updated_at %></span>
+	</div>
+
+</div>
+
+
+<% if can? :manage, @assembly_component %>
+	<%= link_to I18n.translate('assembly_components.edit.action'), edit_assembly_component_path(@assembly_component.id) %>
+	| <%= link_to I18n.translate('assembly_components.index.action'), assembly_components_path %>
+	| <%= link_to I18n.translate('assembly_components.list.action'), list_assembly_components_path %>
+	| <%= link_to I18n.translate('assembly_components.new.action'), new_assembly_component_path %>
+<% end %>
