@@ -8,7 +8,12 @@ class AssemblyComponent < ActiveRecord::Base
 
   belongs_to :assembly
   belongs_to :component
-    
+
+  validates :assembly_id,
+    :presence => true
+  validates :component_id,
+    :presence => true
+
   def nil_to_s
     # call to super here brings in deactivated feature
     desc

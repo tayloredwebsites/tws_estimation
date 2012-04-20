@@ -7,6 +7,14 @@ describe AssemblyComponentsController do
       get("/assembly_components").should route_to("assembly_components#index")
     end
 
+    it "routes to #menu" do
+      get("/assembly_components/menu").should route_to("assembly_components#menu")
+    end
+
+    it "routes to #list" do
+      get("/assembly_components/list").should route_to("assembly_components#list")
+    end
+
     it "routes to #new" do
       get("/assembly_components/new").should route_to("assembly_components#new")
     end
@@ -29,6 +37,22 @@ describe AssemblyComponentsController do
 
     it "routes to #destroy" do
       delete("/assembly_components/1").should route_to("assembly_components#destroy", :id => "1")
+    end
+
+    it "routes to #deactivate" do
+      put("/assembly_components/1/deactivate").should route_to("assembly_components#deactivate", :id => "1")
+    end
+    
+    it "routes to #reactivate" do
+      put("/assembly_components/1/reactivate").should route_to("assembly_components#reactivate", :id => "1")
+    end
+    
+    it "routes to #deactivate" do
+      get("/assembly_components/1/deactivate").should route_to('home#errors', :status => 405, :id => "1")
+    end
+    
+    it "routes to #reactivate" do
+      get("/assembly_components/1/reactivate").should route_to('home#errors', :status => 405, :id => "1")
     end
 
   end
