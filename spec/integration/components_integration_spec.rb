@@ -347,10 +347,10 @@ describe 'Components Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
       find(:xpath, "//tr[@id=\"component_#{item1.id}\"]/td[@id=\"component_#{item1.id}_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       # find(:xpath, "(//tr[@id=\"component_#{item1.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.deactivate')}\z/
-      find(:xpath, "//tr[@id=\"component_#{item1.id}\"]").should have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
+      find(:xpath, "//tr[@id=\"component_#{item1.id}\"]").should have_selector(:xpath, "td/a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
       find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]/td[@id=\"component_#{item_deact.id}_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
       # find(:xpath, "(//tr[@id=\"component_#{item_deact.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.reactivate')}\z/
-      find(:xpath, "//tr[@id=\"component_#{item1.id}\"]").should have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.reactivate')}\"]")
+      find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]").should have_selector(:xpath, "td/a", :text => "#{I18n.translate('view_action.reactivate')}")
       find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]/td/a[@data-method=\"delete\"]").text.should =~ /\A#{I18n.translate('view_action.delete')}\z/
     end
     it 'should be able to list only active items when show_deactivated is off' do
@@ -369,8 +369,8 @@ describe 'Components Integration Tests' do
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
       find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]/td[@id=\"component_#{item_deact.id}_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
-      find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]").should have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.reactivate')}\"]")
-      find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]").should_not have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
+      find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]").should have_selector(:xpath, "td/a[text()=\"#{I18n.translate('view_action.reactivate')}\"]")
+      find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]").should_not have_selector(:xpath, "td/a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
     end
     it 'should not see reactivate option on an active item' do
       item_active = FactoryGirl.create(:component_min_create, component_type: @component_type, default: @default)
@@ -378,8 +378,8 @@ describe 'Components Integration Tests' do
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
       find(:xpath, "//tr[@id=\"component_#{item_active.id}\"]/td[@id=\"component_#{item_active.id}_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
-      find(:xpath, "//tr[@id=\"component_#{item_active.id}\"]").should_not have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.reactivate')}\"]")
-      find(:xpath, "//tr[@id=\"component_#{item_active.id}\"]").should have_selector(:xpath, "//a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
+      find(:xpath, "//tr[@id=\"component_#{item_active.id}\"]").should_not have_selector(:xpath, "td/a[text()=\"#{I18n.translate('view_action.reactivate')}\"]")
+      find(:xpath, "//tr[@id=\"component_#{item_active.id}\"]").should have_selector(:xpath, "td/a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
     end
     it 'should not see delete on an active item' do
       item_active = FactoryGirl.create(:component_min_create, component_type: @component_type, default: @default)
@@ -387,7 +387,7 @@ describe 'Components Integration Tests' do
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
       find(:xpath, "//tr[@id=\"component_#{item_active.id}\"]/td[@id=\"component_#{item_active.id}_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
-      find(:xpath, "//tr[@id=\"component_#{item_active.id}\"]").should_not have_selector(:xpath, "//a[@data-method=\"delete\"]")
+      find(:xpath, "//tr[@id=\"component_#{item_active.id}\"]").should_not have_selector(:xpath, "td/a[@data-method=\"delete\"]")
     end
     it 'should see delete on a deactivated item' do
       item_deact = FactoryGirl.create(:component_accessible_create, component_type: @component_type, default: @default)
@@ -395,7 +395,7 @@ describe 'Components Integration Tests' do
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
       find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]/td[@id=\"component_#{item_deact.id}_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
-      find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]").should have_selector(:xpath, "//a[@data-method=\"delete\"]")
+      find(:xpath, "//tr[@id=\"component_#{item_deact.id}\"]").should have_selector(:xpath, "td/a[@data-method=\"delete\"]")
     end
     it 'should GET show the active item as not deactivated' do
       item1 = FactoryGirl.create(:component_min_create, component_type: @component_type, default: @default)
