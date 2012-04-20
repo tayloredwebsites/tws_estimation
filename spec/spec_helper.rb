@@ -104,6 +104,7 @@ module UserIntegrationHelper
     visit signin_path
     helper_signin_form_submit(factory_arg)
     helper_user_on_page?('systems.guest.full_name', 'users_sessions.index.header', user_full_name)
+    Rails.logger.debug("T UserTestHelper.helper_signin - done")
   end
   def helper_signin_form_submit(factory_arg)
     # visit signin_path
@@ -114,24 +115,57 @@ module UserIntegrationHelper
     page.fill_in('user_session[password]', :with => FactoryGirl.attributes_for(factory_arg.to_sym)[:password] )
     find(:xpath, '//form[@action="/users_sessions"]//input[@type="submit"]').click
     # save_and_open_page
+    Rails.logger.debug("T UserTestHelper.helper_signin_form_submit - done")
   end
   def helper_user_on_page?(sys_header_arg, page_header_arg, user_full_name)
     find('#header_tagline_system_header').text.should =~ /^#{I18n.translate(sys_header_arg)}$/ if !sys_header_arg.nil?
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate(page_header_arg)}$/ if !page_header_arg.nil?
     find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
       /#{I18n.translate('view_labels.welcome_user', :user => user_full_name) }/ if !user_full_name.nil?
+      Rails.logger.debug("T UserTestHelper.helper_user_on_page - done")
   end
   def helper_load_defaults
     default1 = Default.create!(FactoryGirl.attributes_for(:default))
     default2 = Default.create!(FactoryGirl.attributes_for(:default))
     @defaults = [default1, default2]
     @default = default2
+    Rails.logger.debug("T UserTestHelper.helper_load_defaults - done")
   end
   def helper_load_component_types
     component_type1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
     component_type2 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
     @component_types = [component_type1, component_type2]
     @component_type = component_type2
+    Rails.logger.debug("T UserTestHelper.helper_load_component_types - done")
+  end
+  def helper_load_components
+    helper_load_defaults if !defined?(@defaults)
+    helper_load_component_types if !defined?(@component_types)
+    component1 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
+    component2 = FactoryGirl.create(:component_create, component_type: @component_types[1], default: @defaults[1])
+    component3 = FactoryGirl.create(:component_create, component_type: @component_types[1])
+    @components = [component1, component2, component3]
+    @component = component2
+    Rails.logger.debug("T UserTestHelper.helper_load_components - done")
+  end
+  def helper_load_assemblies
+    assembly1 = FactoryGirl.create(:assembly_create)
+    assembly2 = FactoryGirl.create(:assembly_create)
+    assembly3 = FactoryGirl.create(:assembly_create)
+    @assemblies = [assembly1, assembly2, assembly3]
+    @assembly = assembly2
+    Rails.logger.debug("T UserTestHelper.helper_load_assemblies - done")
+  end
+  def helper_load_assembly_components
+    helper_load_assemblies if !defined?(@assemblies)
+    helper_load_components if !defined?(@components)
+    assembly_component1 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[0], component: @components[0])
+    assembly_component2 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[0])
+    assembly_component3 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[1])
+    assembly_component4 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[2])
+    @assembly_components = [assembly_component1, assembly_component2, assembly_component3, assembly_component4]
+    @assembly_component = assembly_component2
+    Rails.logger.debug("T UserTestHelper.helper_load_assembly_components - done")
   end
   
 end

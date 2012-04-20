@@ -64,7 +64,7 @@ class AssemblyComponentsController < SecureApplicationController
   # POST /components
   def create
     Rails.logger.debug("* AssemblyComponentsController.create - params = #{params.inspect.to_s}")
-    @assembly_component = AssemblyComponent.new(params[:component])
+    @assembly_component = AssemblyComponent.new(params[:assembly_component])
     if @assembly_component.save
       # redirect_to @assembly_component, notice: 'Component was successfully created.'
       render :action => 'show'
