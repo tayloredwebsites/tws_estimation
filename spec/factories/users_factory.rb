@@ -8,13 +8,13 @@ FactoryGirl.define do
   end
   
   factory :users, :class => User do
-    email       {Factory.next(:email)}
-    username    {Factory.next(:username)}
+    email       {FactoryGirl.generate(:email)}
+    username    {FactoryGirl.generate(:username)}
   end
   
   factory :users_create, :class => User do
-    email       {Factory.next(:email)}
-    username    {Factory.next(:username)}
+    email       {FactoryGirl.generate(:email)}
+    username    {FactoryGirl.generate(:username)}
     password              'test'
     password_confirmation 'test'
   end
