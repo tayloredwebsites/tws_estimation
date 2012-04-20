@@ -8,17 +8,17 @@ FactoryGirl.define do
   end 
   factory :default, :class => Default do
     store       'Test Store'
-    name        {Factory.next(:default_name)}
-    value       {Factory.next(:default_value)}
+    name        {FactoryGirl.generate(:default_name)}
+    value       {FactoryGirl.generate(:default_value)}
   end
   factory :default_min, :class => Default do
     store       'Test Store'
-    name        {Factory.next(:default_name)}
+    name        {FactoryGirl.generate(:default_name)}
   end    
   factory :default_accessible, :class => Default do
     store         'Test Store Changed'
-    name          {Factory.next(:default_name)}
-    value         {Factory.next(:default_value)}
+    name          {FactoryGirl.generate(:default_name)}
+    value         {FactoryGirl.generate(:default_value)}
     deactivated   true
   end    
 end
