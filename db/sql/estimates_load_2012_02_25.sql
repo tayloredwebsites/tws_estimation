@@ -13,27 +13,6 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 
-CREATE TABLE customers (
-    cust_id integer NOT NULL,
-    cust_num character varying(25) DEFAULT ''::character varying NOT NULL,
-    cust_co_name character varying(50) DEFAULT ''::character varying NOT NULL,
-    cust_name character varying(50) DEFAULT ''::character varying NOT NULL,
-    cust_addr1 character varying(50) DEFAULT ''::character varying NOT NULL,
-    cust_addr2 character varying(50) DEFAULT ''::character varying NOT NULL,
-    cust_city character varying(50) DEFAULT ''::character varying NOT NULL,
-    cust_zip character(10) DEFAULT ''::bpchar NOT NULL,
-    cust_state_id integer NOT NULL,
-    cust_phone character varying(25) DEFAULT ''::character varying NOT NULL,
-    cust_fax character varying(25) DEFAULT ''::character varying NOT NULL,
-    cust_walk_thru character(1) DEFAULT 'N'::bpchar NOT NULL,
-    cust_bid_forms character(1) DEFAULT 'N'::bpchar NOT NULL,
-    cust_control_rev character(1) DEFAULT 'N'::bpchar NOT NULL,
-    cust_deleted character(1) DEFAULT 'N'::bpchar NOT NULL
-);
-
-
-ALTER TABLE public.customers OWNER TO postgres;
-
 --
 -- TOC entry 1510 (class 1259 OID 25713)
 -- Dependencies: 1819 6
@@ -78,35 +57,6 @@ ALTER TABLE public.estimatecomponents OWNER TO postgres;
 -- Name: estimates; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE estimates (
-    est_id integer NOT NULL,
-    est_name character varying(50) DEFAULT ''::character varying NOT NULL,
-    est_bid_date timestamp without time zone NOT NULL,
-    est_cust_id integer NOT NULL,
-    est_salesp_id integer NOT NULL,
-    est_deliv_id integer NOT NULL,
-    est_bond character(1) DEFAULT 'N'::bpchar NOT NULL,
-    est_prevail_wage character(1) DEFAULT 'N'::bpchar NOT NULL,
-    est_tax_status_id integer NOT NULL,
-    est_state_id integer NOT NULL,
-    est_walk_thru character(1) DEFAULT 'N'::bpchar NOT NULL,
-    est_walk_thru_date timestamp without time zone NOT NULL,
-    est_forms character(1) DEFAULT 'N'::bpchar NOT NULL,
-    est_control_reviewed character(1) DEFAULT 'N'::bpchar NOT NULL,
-    est_total_tonage integer NOT NULL,
-    est_cfm integer NOT NULL,
-    est_building_sq_ft integer NOT NULL,
-    est_heating_btu integer NOT NULL,
-    est_job_type_id integer NOT NULL,
-    est_locked character(1) DEFAULT 'N'::bpchar NOT NULL,
-    est_created_date timestamp without time zone,
-    est_deleted character(1) DEFAULT 'N'::bpchar NOT NULL,
-    est_simple character(1) DEFAULT 'N'::bpchar NOT NULL,
-    est_notes character varying(4000) DEFAULT ''::character varying NOT NULL
-);
-
-
-ALTER TABLE public.estimates OWNER TO postgres;
 
 --
 -- TOC entry 1513 (class 1259 OID 25738)
@@ -184,17 +134,6 @@ ALTER TABLE public.jobs OWNER TO postgres;
 -- Name: jobtypes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE jobtypes (
-    job_type_id integer NOT NULL,
-    job_type_desc character varying(50) DEFAULT ''::character varying NOT NULL,
-    job_type_mat_prop numeric(18,0) DEFAULT (0)::numeric NOT NULL,
-    job_type_lab_prop numeric(18,0) DEFAULT (0)::numeric NOT NULL,
-    job_type_sub_prop numeric(18,0) DEFAULT (0)::numeric NOT NULL,
-    job_type_deleted character(1) DEFAULT 'N'::bpchar NOT NULL
-);
-
-
-ALTER TABLE public.jobtypes OWNER TO postgres;
 
 --
 -- TOC entry 1517 (class 1259 OID 25765)
@@ -202,16 +141,6 @@ ALTER TABLE public.jobtypes OWNER TO postgres;
 -- Name: salespeople; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE salespeople (
-    salesp_id integer NOT NULL,
-    salesp_user_id integer NOT NULL,
-    salesp_min_mu_pct numeric(18,3) DEFAULT (0)::numeric NOT NULL,
-    salesp_max_mu_pct numeric(18,0) DEFAULT (0)::numeric NOT NULL,
-    salesp_deleted character(1) DEFAULT 'N'::bpchar NOT NULL
-);
-
-
-ALTER TABLE public.salespeople OWNER TO postgres;
 
 --
 -- TOC entry 1518 (class 1259 OID 25771)
@@ -237,14 +166,6 @@ ALTER TABLE public.staterates OWNER TO postgres;
 -- Name: states; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE states (
-    state_id integer NOT NULL,
-    state_code character(2) DEFAULT ''::bpchar NOT NULL,
-    state_desc character varying(25) DEFAULT ''::character varying NOT NULL
-);
-
-
-ALTER TABLE public.states OWNER TO postgres;
 
 --
 -- TOC entry 1522 (class 1259 OID 25792)
@@ -252,14 +173,6 @@ ALTER TABLE public.states OWNER TO postgres;
 -- Name: taxtypes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
-CREATE TABLE taxtypes (
-    tax_type_id integer NOT NULL,
-    tax_type_sort_order integer NOT NULL,
-    tax_type_desc character varying(50) DEFAULT ''::character varying NOT NULL
-);
-
-
-ALTER TABLE public.taxtypes OWNER TO postgres;
 
 --
 -- TOC entry 1523 (class 1259 OID 25796)
@@ -361,13 +274,6 @@ CREATE TABLE vendorsystems (
 ALTER TABLE public.vendorsystems OWNER TO postgres;
 
 
-
-INSERT INTO customers (cust_id, cust_num, cust_co_name, cust_name, cust_addr1, cust_addr2, cust_city, cust_zip, cust_state_id, cust_phone, cust_fax, cust_walk_thru, cust_bid_forms, cust_control_rev, cust_deleted) VALUES (1, '1', 'Moksa, Inc', 'DiPaola, Vince', '', '', '', '          ', 1, '', '', 'N', 'N', 'N', 'Y');
-INSERT INTO customers (cust_id, cust_num, cust_co_name, cust_name, cust_addr1, cust_addr2, cust_city, cust_zip, cust_state_id, cust_phone, cust_fax, cust_walk_thru, cust_bid_forms, cust_control_rev, cust_deleted) VALUES (4, '4', 'Joe''s Beauty Parlor', 'Joe Barber', '', '', '', '11111     ', 1, '', '', 'N', 'N', 'N', ' ');
-INSERT INTO customers (cust_id, cust_num, cust_co_name, cust_name, cust_addr1, cust_addr2, cust_city, cust_zip, cust_state_id, cust_phone, cust_fax, cust_walk_thru, cust_bid_forms, cust_control_rev, cust_deleted) VALUES (5, '5', 'Joe''s Auto Parts', 'Joe Smith', '', '', '', '          ', 1, '', '', 'Y', 'Y', 'N', ' ');
-INSERT INTO customers (cust_id, cust_num, cust_co_name, cust_name, cust_addr1, cust_addr2, cust_city, cust_zip, cust_state_id, cust_phone, cust_fax, cust_walk_thru, cust_bid_forms, cust_control_rev, cust_deleted) VALUES (6, '6', 'Joe''s Sandwich Shop', 'Joe Cook', '', '', '', '          ', 1, '', '', 'N', 'N', 'N', ' ');
-INSERT INTO customers (cust_id, cust_num, cust_co_name, cust_name, cust_addr1, cust_addr2, cust_city, cust_zip, cust_state_id, cust_phone, cust_fax, cust_walk_thru, cust_bid_forms, cust_control_rev, cust_deleted) VALUES (7, '7', 'Moksa', 'Dave', '', '', '', '          ', 1, '', '', 'N', 'N', 'N', 'N');
-INSERT INTO customers (cust_id, cust_num, cust_co_name, cust_name, cust_addr1, cust_addr2, cust_city, cust_zip, cust_state_id, cust_phone, cust_fax, cust_walk_thru, cust_bid_forms, cust_control_rev, cust_deleted) VALUES (12, '10', 'testing 1 2 3', 'testing 3 4 5', '', '', '', '          ', 1, '', '', 'N', 'N', 'N', 'N');
 
 
 --
@@ -609,40 +515,6 @@ INSERT INTO estimatecomponents (est_comp_id, est_comp_est_id, est_comp_sys_id, e
 
 
 --
--- TOC entry 1977 (class 0 OID 25722)
--- Dependencies: 1512
--- Data for Name: estimates; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (1, 'Bid 1', '2001-12-21 14:00:00', 5, 3, 1, 'N', 'N', 1, 1, 'N', '2000-01-01 00:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-03-16 10:06:27', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (2, 'Bid 2', '2001-12-21 14:00:00', 5, 3, 1, 'N', 'N', 1, 1, 'N', '2000-01-01 00:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-11-21 10:20:14', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (3, 'Bid 3', '2001-12-21 14:00:00', 5, 3, 1, 'N', 'N', 1, 1, 'N', '2000-01-01 00:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-11-21 13:47:38', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (4, 'Bid 4', '2001-12-21 14:00:00', 5, 3, 1, 'N', 'N', 1, 1, 'N', '2000-01-01 00:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-11-21 14:46:00', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (5, 'Bid 5', '2001-11-21 15:00:00', 4, 3, 1, 'N', 'N', 1, 1, 'N', '2001-11-21 15:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-11-21 15:36:58', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (6, 'Bid 6', '2001-11-25 15:00:00', 5, 3, 1, 'N', 'N', 1, 1, 'N', '2001-11-25 15:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-11-25 15:36:12', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (7, 'Bid 7', '2001-11-21 17:00:00', 6, 3, 1, 'N', 'N', 1, 1, 'N', '2001-08-21 17:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-11-21 17:25:48', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (9, 'New Bid', '2001-12-19 09:00:00', 4, 3, 1, 'N', 'N', 1, 1, 'N', '2001-01-19 09:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-12-19 09:33:09', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (11, 'Test Bid 2', '2001-12-19 12:00:00', 1, 3, 1, 'N', 'N', 1, 1, 'N', '2001-11-19 12:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-12-19 13:03:22', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (12, 'New Test 3', '2001-01-19 13:00:00', 7, 3, 1, 'N', 'N', 1, 1, 'N', '2000-01-01 00:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-12-19 13:25:21', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (13, 'New Test 4', '2001-12-19 13:00:00', 7, 3, 1, 'N', 'N', 1, 1, 'N', '2001-10-19 13:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-12-19 13:26:21', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (14, 'New One', '2001-12-20 08:00:00', 7, 3, 1, 'N', 'N', 4, 1, 'N', '2001-07-20 08:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-12-20 08:01:06', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (17, 'newer one', '2001-12-20 08:00:00', 7, 3, 1, 'N', 'N', 1, 1, 'N', '2001-11-20 08:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-12-20 08:40:26', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (18, 'newest one', '2001-12-20 08:00:00', 7, 3, 1, 'N', 'N', 4, 1, 'N', '2001-08-20 08:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2001-12-20 08:57:28', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (19, '73 Washington Ave', '2002-01-15 10:00:00', 7, 4, 2, 'N', 'N', 4, 1, 'N', '2002-01-15 10:00:00', 'N', 'N', 70, 28200, 26971, 840000, 1, 'N', '2002-01-15 10:47:20', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (20, 'YALE VISITOR CENTER', '2002-01-18 14:00:00', 7, 3, 2, 'N', 'N', 1, 1, 'Y', '2002-01-04 03:00:00', 'Y', 'Y', 0, 0, 0, 0, 1, 'N', '2002-01-16 08:30:43', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (21, 'RTU Test', '2002-02-18 15:00:00', 12, 4, 2, 'N', 'N', 3, 1, 'N', '2002-01-18 15:00:00', 'N', 'N', 2, 800, 300, 10000, 1, 'N', '2002-02-18 15:46:36', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (22, 'jpe Cool', '2002-05-18 16:00:00', 7, 4, 1, 'N', 'N', 1, 1, 'N', '2000-01-01 00:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2002-02-18 16:18:09', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (23, 'JPE Cool 1', '2002-06-18 16:00:00', 7, 4, 1, 'N', 'N', 1, 1, 'N', '2000-01-01 00:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2002-02-18 16:21:23', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (24, 'not simple 1', '2002-06-06 15:00:00', 7, 3, 1, 'N', 'N', 5, 1, 'N', '2002-02-06 15:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2002-06-06 15:26:09', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (25, 'dave simple 1', '2002-06-06 15:00:00', 7, 1, 1, 'N', 'N', 1, 1, 'N', '2002-03-06 15:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2002-06-06 15:45:20', 'N', 'Y', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (26, 'dave reg 1', '2002-06-06 15:00:00', 7, 1, 1, 'N', 'N', 3, 1, 'N', '2002-03-06 15:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2002-06-06 15:54:59', 'N', 'N', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (27, 'Stop & Shop Boiler Replacement', '2002-07-05 14:00:00', 7, 4, 2, 'N', 'N', 3, 1, 'N', '2002-03-05 14:00:00', 'N', 'N', 0, 0, 0, 1500000, 1, 'N', '2002-07-05 14:06:31', 'N', 'Y', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (28, 'Stop & Shop Ductless Split', '2002-07-05 14:00:00', 7, 4, 1, 'N', 'N', 3, 1, 'N', '2002-06-05 14:00:00', 'N', 'N', 21, 0, 0, 0, 1, 'N', '2002-07-05 14:28:47', 'N', 'Y', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (29, 'test0808', '2002-08-08 09:00:00', 7, 1, 1, 'N', 'N', 1, 1, 'N', '2002-01-08 09:00:00', 'N', 'N', 23, 45, 34, 234, 1, 'N', '2002-08-08 09:34:29', 'N', 'Y', '');
-INSERT INTO estimates (est_id, est_name, est_bid_date, est_cust_id, est_salesp_id, est_deliv_id, est_bond, est_prevail_wage, est_tax_status_id, est_state_id, est_walk_thru, est_walk_thru_date, est_forms, est_control_reviewed, est_total_tonage, est_cfm, est_building_sq_ft, est_heating_btu, est_job_type_id, est_locked, est_created_date, est_deleted, est_simple, est_notes) VALUES (30, 'test0808a', '2002-08-08 09:00:00', 7, 1, 1, 'N', 'N', 1, 1, 'N', '2002-07-08 09:00:00', 'N', 'N', 0, 0, 0, 0, 1, 'N', '2002-08-08 09:46:15', 'N', 'Y', '');
-
-
---
 -- TOC entry 1978 (class 0 OID 25738)
 -- Dependencies: 1513
 -- Data for Name: estimatesystems; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -705,10 +577,6 @@ INSERT INTO estimatesystems (est_sys_id, est_sys_est_id, est_sys_sys_id, est_sys
 -- Data for Name: salespeople; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO salespeople (salesp_id, salesp_user_id, salesp_min_mu_pct, salesp_max_mu_pct, salesp_deleted) VALUES (1, 1, 0.000, 5, 'N');
-INSERT INTO salespeople (salesp_id, salesp_user_id, salesp_min_mu_pct, salesp_max_mu_pct, salesp_deleted) VALUES (2, 2, 0.000, 5, 'N');
-INSERT INTO salespeople (salesp_id, salesp_user_id, salesp_min_mu_pct, salesp_max_mu_pct, salesp_deleted) VALUES (4, 4, 0.000, 0, 'N');
-INSERT INTO salespeople (salesp_id, salesp_user_id, salesp_min_mu_pct, salesp_max_mu_pct, salesp_deleted) VALUES (3, 3, 0.000, 0, 'N');
 
 
 --
@@ -738,10 +606,6 @@ INSERT INTO staterates (state_rate_id, state_rate_state_id, state_rate_tax_type_
 -- Data for Name: states; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO states (state_id, state_code, state_desc) VALUES (1, 'CT', 'Connecticut   ');
-INSERT INTO states (state_id, state_code, state_desc) VALUES (2, 'MA', 'Massachusetts');
-INSERT INTO states (state_id, state_code, state_desc) VALUES (3, 'NY', 'New York');
-INSERT INTO states (state_id, state_code, state_desc) VALUES (4, 'RI', 'Rhode Island');
 
 
 --
@@ -750,11 +614,6 @@ INSERT INTO states (state_id, state_code, state_desc) VALUES (4, 'RI', 'Rhode Is
 -- Data for Name: taxtypes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (1, 10, 'Tax Exempt');
-INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (2, 20, 'New Construction');
-INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (3, 30, 'Renovation');
-INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (4, 40, 'Residential');
-INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (5, 50, 'Manufacturing');
 
 
 --

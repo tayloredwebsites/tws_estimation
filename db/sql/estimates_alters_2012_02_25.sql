@@ -1,6 +1,4 @@
 
-ALTER TABLE ONLY customers
-    ADD CONSTRAINT customers_pk_customer PRIMARY KEY (cust_id);
 
 ALTER TABLE ONLY delivery_methods
     ADD CONSTRAINT delivery_methods_pk_delivery_methods PRIMARY KEY (deliv_id);
@@ -8,26 +6,13 @@ ALTER TABLE ONLY delivery_methods
 ALTER TABLE ONLY estimate_components
     ADD CONSTRAINT estimate_components_pk_estimate_components PRIMARY KEY (est_comp_id);
 
-ALTER TABLE ONLY estimates
-    ADD CONSTRAINT estimates_pk_estimates PRIMARY KEY (est_id);
-
 ALTER TABLE ONLY jobs
     ADD CONSTRAINT jobs_pk_jobs PRIMARY KEY (job_id);
 
-ALTER TABLE ONLY jobtypes
-    ADD CONSTRAINT jobtypes_pk_jobtypes PRIMARY KEY (job_type_id);
-
-ALTER TABLE ONLY sales_reps
-    ADD CONSTRAINT sales_reps_pk_sales_reps PRIMARY KEY (salesp_id);
 
 ALTER TABLE ONLY staterates
     ADD CONSTRAINT staterates_pk_staterates PRIMARY KEY (state_rate_id);
 
-ALTER TABLE ONLY states
-    ADD CONSTRAINT states_pk_states PRIMARY KEY (state_id);
-
-ALTER TABLE ONLY taxtypes
-    ADD CONSTRAINT taxtypes_pk_taxtypes PRIMARY KEY (tax_type_id);
 
 ALTER TABLE ONLY terms
     ADD CONSTRAINT terms_pk_terms PRIMARY KEY (terms_id);
@@ -44,19 +29,11 @@ ALTER TABLE ONLY vendors
 ALTER TABLE ONLY vendorsystems
     ADD CONSTRAINT vendorsystems_pk_vendorsystems_1 PRIMARY KEY (vs_id);
 
-CREATE UNIQUE INDEX customers_ix_customers ON customers USING btree (cust_num);
-
-CREATE UNIQUE INDEX customers_ix_customers_1 ON customers USING btree (cust_co_name);
 
 CREATE UNIQUE INDEX deliverymethods_ix_deliverymethods ON deliverymethods USING btree (deliv_desc);
 
 CREATE UNIQUE INDEX jobs_ix_jobs ON jobs USING btree (job_name);
 
-CREATE UNIQUE INDEX states_ix_states ON states USING btree (state_code);
-
-CREATE UNIQUE INDEX states_ix_states_1 ON states USING btree (state_desc);
-
-CREATE UNIQUE INDEX taxtypes_ix_taxtypes ON taxtypes USING btree (tax_type_desc);
 
 CREATE UNIQUE INDEX terms_ix_terms ON terms USING btree (terms_desc);
 
@@ -66,8 +43,6 @@ CREATE UNIQUE INDEX vendors_ix_vendors ON vendors USING btree (vend_num);
 
 CREATE UNIQUE INDEX vendors_ix_vendors_1 ON vendors USING btree (vend_name);
 
-ALTER TABLE ONLY customers
-    ADD CONSTRAINT fk_customers_states FOREIGN KEY (cust_state_id) REFERENCES states(state_id);
 
 ALTER TABLE ONLY estimatecomponents
     ADD CONSTRAINT fk_estimatecomponents_estimates FOREIGN KEY (est_comp_est_id) REFERENCES estimates(est_id);
@@ -77,18 +52,6 @@ ALTER TABLE ONLY estimatecomponents
 
 ALTER TABLE ONLY estimatecomponents
     ADD CONSTRAINT fk_estimatecomponents_vendors FOREIGN KEY (est_comp_vend_id) REFERENCES vendors(vend_id);
-
-ALTER TABLE ONLY estimates
-    ADD CONSTRAINT fk_estimates_customers FOREIGN KEY (est_cust_id) REFERENCES customers(cust_id);
-
-ALTER TABLE ONLY estimates
-    ADD CONSTRAINT fk_estimates_deliverymethods FOREIGN KEY (est_deliv_id) REFERENCES deliverymethods(deliv_id);
-
-ALTER TABLE ONLY estimates
-    ADD CONSTRAINT fk_estimates_sales_reps FOREIGN KEY (est_salesp_id) REFERENCES sales_reps(salesp_id);
-
-ALTER TABLE ONLY estimates
-    ADD CONSTRAINT fk_estimates_taxtypes FOREIGN KEY (est_tax_status_id) REFERENCES taxtypes(tax_type_id);
 
 ALTER TABLE ONLY estimatesystems
     ADD CONSTRAINT fk_estimatesystems_estimates FOREIGN KEY (est_sys_est_id) REFERENCES estimates(est_id);
@@ -114,8 +77,6 @@ ALTER TABLE ONLY jobs
 ALTER TABLE ONLY jobs
     ADD CONSTRAINT fk_jobs_taxtypes FOREIGN KEY (job_tax_status_id) REFERENCES taxtypes(tax_type_id);
 
-ALTER TABLE ONLY sales_reps
-    ADD CONSTRAINT fk_sales_reps_users FOREIGN KEY (salesp_user_id) REFERENCES users(users_id);
 
 ALTER TABLE ONLY staterates
     ADD CONSTRAINT fk_staterates_componenttypes FOREIGN KEY (state_rate_comp_type_id) REFERENCES componenttypes(comp_type_id);
