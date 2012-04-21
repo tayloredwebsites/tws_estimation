@@ -67,7 +67,7 @@ namespace :legacy do
       LegacyComponent.all.each do |old_component|
         begin
           # unique component_type found by description
-          old_component_type = LegacyComponentType.find(oldComponent.component_type_id)
+          old_component_type = LegacyComponentType.find(old_component.component_type_id)
           new_component_type = ComponentType.find_by_description(old_component_type.description)
           new_component = Component.new
           new_component.attributes = {
