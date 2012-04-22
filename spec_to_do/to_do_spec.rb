@@ -27,4 +27,11 @@ describe 'Miscellaneous items to do - ' do
     it 'should allow default values from child fields (eg AssemblyComponents.description)'
     it 'should have an erb for choosing entries in a join table (eg Components in AssemblyComponents)'
   end
+  context 'systems name usage - ' do
+    it 'should rename APPLICATION_SYSTEMS to APPLICATION_GROUPS IN config/initializers/app_constants.rb'
+    it 'should rename en.systems to en.groups in config/locales/en.rb'
+    it 'should change title of application to Estimation of systems/assemblies/components costs'
+    it 'should add system resource (is this a reserved word?)'
+    it 'should have system resource be a parent association to assemblies/assembly_components'
+  end
 end

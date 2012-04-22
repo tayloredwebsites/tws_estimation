@@ -60,15 +60,6 @@ CREATE TABLE lookups (
 -- 
 -- ALTER TABLE public.taxtypes OWNER TO postgres;
 
--- CREATE TABLE salespeople (
---     salesp_id integer NOT NULL,
---     salesp_user_id integer NOT NULL,
---     salesp_min_mu_pct numeric(18,3) DEFAULT (0)::numeric NOT NULL,
---     salesp_max_mu_pct numeric(18,0) DEFAULT (0)::numeric NOT NULL,
---     salesp_deleted character(1) DEFAULT 'N'::bpchar NOT NULL
--- );
--- 
--- 
 -- ALTER TABLE public.salespeople OWNER TO postgres;
 
 
@@ -93,16 +84,7 @@ INSERT INTO defaults (id, store, name, value) VALUES
 -- INSERT INTO salespeople (salesp_id, salesp_user_id, salesp_min_mu_pct, salesp_max_mu_pct, salesp_deleted) VALUES (4, 4, 0.000, 0, 'N');
 -- INSERT INTO salespeople (salesp_id, salesp_user_id, salesp_min_mu_pct, salesp_max_mu_pct, salesp_deleted) VALUES (3, 3, 0.000, 0, 'N');
 
--- INSERT INTO states (state_id, state_code, state_desc) VALUES (1, 'CT', 'Connecticut   ');
--- INSERT INTO states (state_id, state_code, state_desc) VALUES (2, 'MA', 'Massachusetts');
--- INSERT INTO states (state_id, state_code, state_desc) VALUES (3, 'NY', 'New York');
--- INSERT INTO states (state_id, state_code, state_desc) VALUES (4, 'RI', 'Rhode Island');
 
--- INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (1, 10, 'Tax Exempt');
--- INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (2, 20, 'New Construction');
--- INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (3, 30, 'Renovation');
--- INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (4, 40, 'Residential');
--- INSERT INTO taxtypes (tax_type_id, tax_type_sort_order, tax_type_desc) VALUES (5, 50, 'Manufacturing');
 
 
 
