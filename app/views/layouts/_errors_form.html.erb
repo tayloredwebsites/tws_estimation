@@ -1,28 +1,28 @@
 <%
-	tot_errors = active_obj.errors.size
-	if (!@errors.nil? && @errors.is_a?(Array) && @errors.size > 0)
-		tot_errors += @errors.size
-	end
-	
-	if tot_errors > 0 %>
-	<div id="error_explanation">
-		<strong><%= pluralize(active_obj.errors.count, "Error") %>:</strong>
-		<p><%= I18n.translate('errors.fix_following_errors') %></p>
-		<% if active_obj.errors.size - active_obj.errors[:base].size > 0 %>
-		<p><%= I18n.translate('errors.note_errors_below') %></p>
-		<% end %>
-		<ul>
-		<% active_obj.errors[:base].each do |msg| %>
-		 <li><%= msg %></li>
-		<% end %>
+    tot_errors = active_obj.errors.size
+    if (!@errors.nil? && @errors.is_a?(Array) && @errors.size > 0)
+        tot_errors += @errors.size
+    end
+    
+    if tot_errors > 0 %>
+    <div id="error_explanation">
+        <strong><%= pluralize(active_obj.errors.count, "Error") %>:</strong>
+        <p><%= I18n.translate('errors.fix_following_errors') %></p>
+        <% if active_obj.errors.size - active_obj.errors[:base].size > 0 %>
+        <p><%= I18n.translate('errors.note_errors_below') %></p>
+        <% end %>
+        <ul>
+        <% active_obj.errors[:base].each do |msg| %>
+         <li><%= msg %></li>
+        <% end %>
 <%
-			if !@errors.nil? && @errors.is_a?(Array)
-				@errors.each do |err| %>
-				  <li><%= err %></li>
+            if !@errors.nil? && @errors.is_a?(Array)
+                @errors.each do |err| %>
+                  <li><%= err %></li>
 <%
-				end
-			end %>
-		</ul>
-	</div>
+                end
+            end %>
+        </ul>
+    </div>
 <% end %>
 

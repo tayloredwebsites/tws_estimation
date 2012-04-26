@@ -38,13 +38,13 @@
       <div id="header_bottom_bar">
         <ul id="header_nav_bar">
           <li class="_6_across"><%= link_to I18n.translate('home.index.title'), home_index_path %></li>
-					<% if can? :manage, User %>
-          	<li class="_6_across"><%= link_to I18n.translate('users.title'), users_path %></li>
-					<% elsif @user_session.signed_in? %>
-          	<li class="_6_across"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
-					<% else %>
-	          <li class="_6_across"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
-					<% end %>
+                    <% if can? :manage, User %>
+              <li class="_6_across"><%= link_to I18n.translate('users.title'), users_path %></li>
+                    <% elsif @user_session.signed_in? %>
+              <li class="_6_across"><%= link_to I18n.translate('users.show.title'), user_path(cur_user_id) %></li>
+                    <% else %>
+              <li class="_6_across"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path  %></li>
+                    <% end %>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
@@ -52,7 +52,7 @@
         </ul><!-- end header_nav_bar -->
       </div><!-- end header_bottom_bar -->
       <div id="header_status">
-				<noscript class="script_notice">Javascript it turned off!  Some features of this site are not be available!</noscript>
+                <noscript class="script_notice">Javascript it turned off!  Some features of this site are not be available!</noscript>
         <p class="notice"><%= notice %></span>
         <p class="alert"><%= alert %></span>
       </div>
@@ -63,32 +63,32 @@
 
         <div class="block_module">
           <div class="module_header">
-						<% if @user_session.signed_in? %>
-							<%= I18n.translate('view_labels.welcome_user', :user => @user_session.current_user_full_name) %>
-							<br/>
-							<%= link_to content_tag(:span, I18n.translate('users_sessions.signout.action')), signout_path  %>
-					  <% else %>
-							<%= link_to content_tag(:span, I18n.translate('users_sessions.signin.action')), signin_path  %>
-						<% end %>
+                        <% if @user_session.signed_in? %>
+                            <%= I18n.translate('view_labels.welcome_user', :user => @user_session.current_user_full_name) %>
+                            <br/>
+                            <%= link_to content_tag(:span, I18n.translate('users_sessions.signout.action')), signout_path  %>
+                      <% else %>
+                            <%= link_to content_tag(:span, I18n.translate('users_sessions.signin.action')), signin_path  %>
+                        <% end %>
           </div>
          <ul class="module_body column_nav">
-						<% APPLICATION_SYSTEMS.each do |sys_name, system| %>
-							<%  	if cur_user.can_see_system?(system[:id].to_s) %>
-								<li id="lnav_<%= system[:id].to_s %>" class="list_column on"><%= content_tag(:span, I18n.translate("systems.#{system[:id].to_s}.full_name")) %>
-									<% if system[:menu_items].size > 0 %>
-		              	<ul class="column_nav">
-										<% system[:menu_items].each do |menu_key, menu_val|
-											# if can? :read , menu_val[:class_name].to_s.constantize
-											if can? menu_val[:action].to_sym , menu_val[:class_name].to_s.constantize
-										%>
-		                	<li id="lnav_<%= system[:id].to_s %>_<%= menu_val[:class_name].to_s %>_<%= menu_val[:action].to_s %>" class="list_column off"><%= link_to content_tag(:span, I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}") ), menu_val[:start_uri] %></li>
-											<% end # end  can? :read , resource.to_s
-											end # end system[:resources].each %>
-                  	</ul>
-									<% end # end if system[:resources].size > 0 %>
-								</li>
-							<% end # if cur_user.can_see_system? %>
-						<% end # APPLICATION_SYSTEMS.each %>
+                        <% APPLICATION_SYSTEMS.each do |sys_name, system| %>
+                            <%      if cur_user.can_see_system?(system[:id].to_s) %>
+                                <li id="lnav_<%= system[:id].to_s %>" class="list_column on"><%= content_tag(:span, I18n.translate("systems.#{system[:id].to_s}.full_name")) %>
+                                    <% if system[:menu_items].size > 0 %>
+                          <ul class="column_nav">
+                                        <% system[:menu_items].each do |menu_key, menu_val|
+                                            # if can? :read , menu_val[:class_name].to_s.constantize
+                                            if can? menu_val[:action].to_sym , menu_val[:class_name].to_s.constantize
+                                        %>
+                            <li id="lnav_<%= system[:id].to_s %>_<%= menu_val[:class_name].to_s %>_<%= menu_val[:action].to_s %>" class="list_column off"><%= link_to content_tag(:span, I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}") ), menu_val[:start_uri] %></li>
+                                            <% end # end  can? :read , resource.to_s
+                                            end # end system[:resources].each %>
+                      </ul>
+                                    <% end # end if system[:resources].size > 0 %>
+                                </li>
+                            <% end # if cur_user.can_see_system? %>
+                        <% end # APPLICATION_SYSTEMS.each %>
             <li class="list_column off"><%= link_to content_tag(:span, I18n.translate('home.help.title')), home_help_path %></li>
           </ul>
         </div><!-- end block_module -->
@@ -119,9 +119,9 @@
             <li class="_across"><%= link_to I18n.translate('home.about.title'), home_about_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.contact.title'), home_contact_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.news.title'), home_news_path %></li>
-						<% if @user_session.signed_in? %>
-							<li class="_across"><%= link_to I18n.translate('home.site_map.title'), home_site_map_path %></li>
-						<% end %>
+                        <% if @user_session.signed_in? %>
+                            <li class="_across"><%= link_to I18n.translate('home.site_map.title'), home_site_map_path %></li>
+                        <% end %>
             <li class="_across"><%= link_to I18n.translate('home.status.title'), home_status_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.help.title'), home_help_path %></li>
           </ul>
@@ -131,8 +131,8 @@
     
   </div><!-- end page -->
 
-	<div><%= debug(params) if Rails.env.development? %></div>
-	<div><%= session.inspect if Rails.env.development? && !session.nil? %></div>
+    <div><%= debug(params) if Rails.env.development? %></div>
+    <div><%= session.inspect if Rails.env.development? && !session.nil? %></div>
 
 </body>
 </html>

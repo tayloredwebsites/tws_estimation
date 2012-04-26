@@ -1,6 +1,6 @@
 <%%
-	@page_scope = '<%= plural_table_name %>.show'
-	@deactivated_module = defined?(<%= class_name %>.new.deactivated_module)
+    @page_scope = '<%= plural_table_name %>.show'
+    @deactivated_module = defined?(<%= class_name %>.new.deactivated_module)
 %>
 
 <h4><%%= I18n.translate('header', :scope => @page_scope) %></h4>
@@ -9,48 +9,48 @@
 
 <div class="fields_20_80">
 
-<%	attributes.each do |attribute|
-		if attribute.name == 'deactivated'
+<%    attributes.each do |attribute|
+        if attribute.name == 'deactivated'
 %>
 <%% if (@deactivated_module) %>
-	 <div class="field">
-	   <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.deactivated') %></span>
-	   <span class="value" id="<%= singular_table_name %>_deactivated"><%%= I18n.is_deactivated_or_not(@<%= singular_table_name %>.deactivated?) %></span>
-	 </div>
+     <div class="field">
+       <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.deactivated') %></span>
+       <span class="value" id="<%= singular_table_name %>_deactivated"><%%= I18n.is_deactivated_or_not(@<%= singular_table_name %>.deactivated?) %></span>
+     </div>
 <%% end %>
 <%      
-		else
-			if attribute.type.to_s == 'association'
+        else
+            if attribute.type.to_s == 'association'
 %>
-	<div class="field">
-	  <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>') %></span>
-	  <span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %>.nil_to_s %></span>
-	</div>
-<% 		
-			elsif attribute.type.to_s == 'reference'
-				# ignore references (don't show id field for associations / foreign keys)
-			else
+    <div class="field">
+      <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>') %></span>
+      <span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %>.nil_to_s %></span>
+    </div>
+<%         
+            elsif attribute.type.to_s == 'reference'
+                # ignore references (don't show id field for associations / foreign keys)
+            else
 %>
-	<div class="field">
-	  <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>') %></span>
-	  <span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %> %></span>
-	</div>
-<% 		
-			end # end if attribute.type
-		end # end attribute == deactivated
-	end # end attributes.each
-	
-	if (@deactivated_module)
+    <div class="field">
+      <span class="label"><%%= I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>') %></span>
+      <span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %> %></span>
+    </div>
+<%         
+            end # end if attribute.type
+        end # end attribute == deactivated
+    end # end attributes.each
+    
+    if (@deactivated_module)
 %>
 <%
-	end
+    end
 %>
 </div>
 
 
 <%% if can? :manage, @<%= singular_table_name %> %>
-	<%%= link_to I18n.translate('<%= plural_table_name %>.edit.action'), edit_<%= singular_table_name %>_path(@<%= singular_table_name %>.id) %>
-	| <%%= link_to I18n.translate('<%= plural_table_name %>.index.action'), <%= plural_table_name %>_path %>
-	| <%%= link_to I18n.translate('<%= plural_table_name %>.list.action'), list_<%= plural_table_name %>_path %>
-	| <%%= link_to I18n.translate('<%= plural_table_name %>.new.action'), new_<%= singular_table_name %>_path %>
+    <%%= link_to I18n.translate('<%= plural_table_name %>.edit.action'), edit_<%= singular_table_name %>_path(@<%= singular_table_name %>.id) %>
+    | <%%= link_to I18n.translate('<%= plural_table_name %>.index.action'), <%= plural_table_name %>_path %>
+    | <%%= link_to I18n.translate('<%= plural_table_name %>.list.action'), list_<%= plural_table_name %>_path %>
+    | <%%= link_to I18n.translate('<%= plural_table_name %>.new.action'), new_<%= singular_table_name %>_path %>
 <%% end %>

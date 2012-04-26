@@ -25,35 +25,35 @@ module Models::Deactivated
     
   # method to deactivate record
   def deactivate
-  	if deactivated?
-		  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') ) )
-			errors.add(:deactivated, I18n.translate('error_messages.is_deactivated') )
-			return false
-  	else
-			self.deactivated = DB_TRUE;
-			if !self.save
-			  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.got_error') ) )
-			  errors.add(:deactivated, I18n.translate('error_messages.got_error') )
-			  return false
-			end
-  	end
-  	return true
+      if deactivated?
+          errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.is_deactivated') ) )
+            errors.add(:deactivated, I18n.translate('error_messages.is_deactivated') )
+            return false
+      else
+            self.deactivated = DB_TRUE;
+            if !self.save
+              errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'deactivate', :msg => I18n.translate('error_messages.got_error') ) )
+              errors.add(:deactivated, I18n.translate('error_messages.got_error') )
+              return false
+            end
+      end
+      return true
   end
 
   # method to reactivate record
   def reactivate
-  	if deactivated?
-			self.deactivated = DB_FALSE;
-			if !self.save
-			  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'reactivate', :msg => I18n.translate('error_messages.got_error') ) )
-			  errors.add(:deactivated, I18n.translate('error_messages.got_error') )
-			  return false
-			end
-  	else
-		  errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'reactivate', :msg => I18n.translate('error_messages.is_active') ) )
-			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
-			return false
-  	end
+      if deactivated?
+            self.deactivated = DB_FALSE;
+            if !self.save
+              errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'reactivate', :msg => I18n.translate('error_messages.got_error') ) )
+              errors.add(:deactivated, I18n.translate('error_messages.got_error') )
+              return false
+            end
+      else
+          errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => 'reactivate', :msg => I18n.translate('error_messages.is_active') ) )
+            errors.add(:deactivated, I18n.translate('error_messages.is_active') )
+            return false
+      end
     return true
   end
 
@@ -78,13 +78,13 @@ module Models::Deactivated
   
   def error_if_exists(method)
     # Rails.logger.debug("* Models::Deactivated.error_if_exists self.deactivated:#{active?}")
-  	if active?
-			errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => method, :msg => I18n.translate('error_messages.is_active') ) )
-			errors.add(:deactivated, I18n.translate('error_messages.is_active') )
-			return false
-		else
-		  return true
-  	end
+      if active?
+            errors.add(:base, I18n.translate('errors.cannot_method_msg', :method => method, :msg => I18n.translate('error_messages.is_active') ) )
+            errors.add(:deactivated, I18n.translate('error_messages.is_active') )
+            return false
+        else
+          return true
+      end
   end
 
   def deactivated?

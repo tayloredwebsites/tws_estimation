@@ -1,7 +1,7 @@
 
 class Ability
   include CanCan::Ability
-	
+    
   def initialize(user)  #, session)
 
     user ||= User.new
