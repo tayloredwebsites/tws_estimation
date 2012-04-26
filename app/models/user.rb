@@ -1,15 +1,15 @@
 class User < ActiveRecord::Base
-  
+
   include Models::UserRoles
   include Application::CommonMethods
   # include Models::CommonMethods
   include Models::Deactivated
-  
+
   attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password, :roles
   attr_accessor :password, :old_password
-  
+
   has_one :sales_rep
-  
+
   validates :username,
       :presence => true,
       :uniqueness => true
@@ -20,10 +20,10 @@ class User < ActiveRecord::Base
       :presence => true,
       :uniqueness => true,
       :format => {:with => Regexp.new(VALID_EMAIL_EXPR) }
-   
+
   before_save :validate_save
   after_find :load_user_roles
-  
+
   def initialize(*args)
     # Rails.logger.debug("* User.initialize args:#{args.inspect.to_s}")
     # init_user_roles([])
@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
     super(*args)
     # Rails.logger.debug("* User.initialize done")
   end
-  
+
   def self.guest
     # Rails.logger.debug("* User - self.guest")
     @user = self.new
@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
     Rails.logger.debug("* User.guest - roles: #{@user.roles}")
     return @user
   end
-  
+
   def self.user_errors
     @user = self.new
     return @user
@@ -53,14 +53,14 @@ class User < ActiveRecord::Base
     super(*params)
     # Rails.logger.debug("* User.new - done")
   end
-  
+
   def save
     Rails.logger.debug ("* User.save has errors:#{errors.inspect.to_s}") if !errors.empty?
     # Rails.logger.debug("* User.save - call to validate_save - self:#{self.inspect.to_s}")
     # validate_save
     super if errors.empty? && self.id != 0  # don't save the guest user
   end
-  
+
 
   # class level valid_password to check password against user in database
   def self.valid_password? (username, password_in, password_confirmation=nil)
@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   # instance level password check against current user
   def has_password? (password_in, password_confirmation=nil)
     if !password_confirmation.nil? && password_in != password_confirmation
@@ -117,7 +117,7 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   def can_field_be_edited?(field_name, current_user)
     # if current_user is not this user, then OK
     return true if current_user.id.to_s != self.id.to_s
@@ -128,14 +128,14 @@ class User < ActiveRecord::Base
     # otherwise return false
     return false
   end
-  
+
   # does this user have this system in any of its roles?
   def can_see_system?(system)
     matched_roles = self.roles.split(' ').delete_if{|r| (r.index(system.to_s+'_').nil? && r.index('all_').nil?)}
     #Rails.logger.debug("* User.can_see_system? - system:#{system}, roles:#{self.roles}, matched_role:#{matched_roles}")
     return matched_roles.size > 0
   end
-    
+
   def update_attributes(params)
     # Rails.logger.debug("* User - update_attributes - params=#{params.inspect.to_s}")
       Rails.logger.error("* UserRoles - update_attributes - roles is an array !!!") if params[:roles].instance_of?(Array)
@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
     super(params) if errors.empty?
     # Rails.logger.debug("* User.update_attributes - after call to super - self:#{self.inspect.to_s}")
   end
-  
+
   def update_attribute(name,value)
     # do not allow password change through update_attribute
       Rails.logger.error("* UserRoles - update_attribute - roles is an array !!!") if name.to_s == 'roles' && value.instance_of?(Array)
@@ -179,8 +179,8 @@ class User < ActiveRecord::Base
       errors.add(:password_confirmation, I18n.translate('error_messages.password_mismatch') )
     end
   end
-  
-  
+
+
   def valid_password_change?(params)
     if params[:old_password].blank?
       # cannot be a password change if there is no old password
@@ -193,28 +193,28 @@ class User < ActiveRecord::Base
       false
     elsif self.encrypted_password != encrypt(params[:old_password])
       errors.add(:password_confirmation, I18n.translate('error_messages.invalid_password') )
-      errors.add(:password, I18n.translate('error_messages.invalid_password') ) 
+      errors.add(:password, I18n.translate('error_messages.invalid_password') )
       false
     else
       true
     end
   end
-  
+
   def reset_password
     self.password = generate_password
     self.password_confirmation = self.password
     encrypt_password
   end
-  
-  
-  
+
+
+
   def full_name
     name = ''
     name += self.first_name if !self.first_name.nil?
     name += ' ' + self.last_name if !self.last_name.nil?
     return name
   end
-  
+
   # validation before save
   # if passing in password, validate it before save (validate if password is not blank)
   def validate_save
@@ -229,10 +229,24 @@ class User < ActiveRecord::Base
       return false
     end
   end
-    
-  
+
+  def nil_to_s
+    # call to super here brings in deactivated feature
+    desc
+  end
+
+  def desc
+    ''+super.nil_to_s+self.last_name.nil_to_s+', '+self.first_name.nil_to_s
+  end
+
+  def field_nil_to_s(field_name)
+    # call to super here brings in deactivated feature
+    ret = ''+super(field_name).nil_to_s+self.send(field_name).nil_to_s
+  end
+
+
   private
- 
+
   # see if password passed in matches the encryped password
   def has_matching_password?
     if self.password.blank? || self.encrypted_password.blank?
@@ -245,7 +259,7 @@ class User < ActiveRecord::Base
       self.encrypted_password == encrypt(self.old_password)
     end
   end
-  
+
   def encrypt_password
     self.password_salt = generate_salt if self.new_record?
     self.encrypted_password = encrypt(self.password) if !self.password.blank?
@@ -262,7 +276,7 @@ class User < ActiveRecord::Base
   def generate_password
     encrypt_hash("#{Time.now.utc}.str[1,8]")
   end
-  
+
 end
 
 
