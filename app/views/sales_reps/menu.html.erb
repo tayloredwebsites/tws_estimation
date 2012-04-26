@@ -1,0 +1,44 @@
+<%
+@controller_scope = 'sales_reps'
+@page_scope = 'sales_reps.menu'
+@deactivated_module = defined?(SalesRep.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+
+<div class="fields_20_80">
+
+    <div class="field">
+      <span class="label_spacer"></span>
+      <span class="value"><h4><%= I18n.translate('action', :scope => @page_scope) %></h4></span>
+    </div>
+
+<% if can? :manage, Assembly %>
+
+    <div class="field">
+        <span class="label"><label for="index_action"><%= I18n.translate('index.action', :scope => @controller_scope) %></span>
+        <span class="value" id="index_action"><%= link_to I18n.translate('index.action', :scope => @controller_scope), sales_reps_path %></span>
+    </div>
+    <div class="field">
+        <span class="label"><label for="list_action"><%= I18n.translate('list.action', :scope => @controller_scope) %></span>
+        <span class="value" id="list_action"><%= link_to I18n.translate('list.action', :scope => @controller_scope), list_sales_reps_path %></span>
+    </div>
+    <div class="field">
+        <span class="label"><label for="new_action"><%= I18n.translate('new.action', :scope => @controller_scope) %></span>
+        <span class="value" id="new_action"><%= link_to I18n.translate('new.action', :scope => @controller_scope), new_sales_rep_path %></span>
+    </div>
+
+<% else %>
+
+    <div class="error"><%= i18n.translate('errors.access_denied_msg', :msg => i18n.translate('title', :scope => @controller_scope) ) %></div>
+    
+    <div class="field">
+      <label for="edit_action"><%= I18n.translate('users_sessions.signin.action') %></label>
+      <span class="value" id="users_sessions_signin_action"><%= link_to I18n.translate('users_sessions.signin.action'), signin_path %></span>
+    </div>
+
+<% end %>
+ 
+</div>
+

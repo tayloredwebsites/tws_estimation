@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120412232631) do
+ActiveRecord::Schema.define(:version => 20120422185449) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -70,6 +70,15 @@ ActiveRecord::Schema.define(:version => 20120412232631) do
     t.datetime "updated_at",                                                    :null => false
   end
 
+  create_table "sales_reps", :force => true do |t|
+    t.integer  "user_id",                                                          :null => false
+    t.decimal  "min_markup_pct", :precision => 18, :scale => 4
+    t.decimal  "max_markup_pct", :precision => 18, :scale => 4
+    t.boolean  "deactivated",                                   :default => false, :null => false
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
+  end
+
   create_table "users", :force => true do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -88,5 +97,7 @@ ActiveRecord::Schema.define(:version => 20120412232631) do
 
   add_foreign_key "components", "component_types", :name => "components_component_type_id_fk"
   add_foreign_key "components", "defaults", :name => "components_default_id_fk"
+
+  add_foreign_key "sales_reps", "users", :name => "sales_reps_user_id_fk"
 
 end

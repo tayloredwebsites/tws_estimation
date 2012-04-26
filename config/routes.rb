@@ -1,5 +1,14 @@
 TwsAuth::Application.routes.draw do
 
+  resources :sales_reps do
+    member do
+      put 'deactivate'      # route:          deactivate_sales_rep PUT    /sales_reps/:id/deactivate(.:format)          sales_reps#deactivate
+      put 'reactivate'      # route:          reactivate_sales_rep PUT    /sales_reps/:id/reactivate(.:format)          sales_reps#reactivate
+    end
+  end
+  match "sales_reps/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "sales_reps/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
+
   get "assembly_components/menu" # route: assembly_components_menu GET    /assembly_components/menu(.:format)           assembly_components#menu
   resources :assembly_components do
     member do
@@ -73,6 +82,9 @@ TwsAuth::Application.routes.draw do
       put 'update_password' # route:         update_password_user PUT    /users/:id/update_password(.:format) {:action=>"update_password", :controller=>"users"}
     #   put 'reset_password'  # route:          reset_password_user PUT    /users/:id/reset_password(.:format)          {:action=>"reset_password", :controller=>"users"}
     end
+    collection do
+      get 'list'            # route:           list_users GET    /users/list(.:format)                         users#list
+    end
   end
   match "users/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
   match "users/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
@@ -88,16 +100,16 @@ TwsAuth::Application.routes.draw do
   match "defaults/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
 
   # routes for home controller
-  get "home/index"	        # route:           home_index GET    /home/index(.:format)                {:controller=>"home", :action=>"index"}
-  get "home/about"	        # route:           home_about GET    /home/about(.:format)                {:controller=>"home", :action=>"about"}
-  get "home/contact"	      # route:         home_contact GET    /home/contact(.:format)              {:controller=>"home", :action=>"contact"}
-  get "home/errors"	        # route:          home_errors GET    /home/errors(.:format)               {:controller=>"home", :action=>"errors"}
-  get "home/news"	          # route:            home_news GET    /home/news(.:format)                 {:controller=>"home", :action=>"news"}
-  get "home/site_map"	      # route:        home_site_map GET    /home/site_map(.:format)             {:controller=>"home", :action=>"site_map"}
-  get "home/status"	        # route:          home_status GET    /home/status(.:format)               {:controller=>"home", :action=>"status"}
-  get "home/help"	          # route:            home_help GET    /home/help(.:format)                 {:controller=>"home", :action=>"help"}
-  root :to => "home#index"	# route:                 root        /(.:format)                          {:controller=>"home", :action=>"index"}
-  match '/home', :to => "home#index"	# route:         home        /home(.:format)                      {:controller=>"home", :action=>"index"}
+  get "home/index"            # route:           home_index GET    /home/index(.:format)                {:controller=>"home", :action=>"index"}
+  get "home/about"            # route:           home_about GET    /home/about(.:format)                {:controller=>"home", :action=>"about"}
+  get "home/contact"          # route:         home_contact GET    /home/contact(.:format)              {:controller=>"home", :action=>"contact"}
+  get "home/errors"            # route:          home_errors GET    /home/errors(.:format)               {:controller=>"home", :action=>"errors"}
+  get "home/news"              # route:            home_news GET    /home/news(.:format)                 {:controller=>"home", :action=>"news"}
+  get "home/site_map"          # route:        home_site_map GET    /home/site_map(.:format)             {:controller=>"home", :action=>"site_map"}
+  get "home/status"            # route:          home_status GET    /home/status(.:format)               {:controller=>"home", :action=>"status"}
+  get "home/help"              # route:            home_help GET    /home/help(.:format)                 {:controller=>"home", :action=>"help"}
+  root :to => "home#index"    # route:                 root        /(.:format)                          {:controller=>"home", :action=>"index"}
+  match '/home', :to => "home#index"    # route:         home        /home(.:format)                      {:controller=>"home", :action=>"index"}
   
   # match '/readme', :to => redirect('/README.markdown')
 

@@ -1,0 +1,7 @@
+<%
+    @page_scope = 'sales_reps.list'
+    @deactivated_module = defined?(SalesRep.new.deactivated_module)
+%>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'sales_reps/list' %>

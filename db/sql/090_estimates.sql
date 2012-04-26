@@ -23,7 +23,9 @@ CREATE TABLE estimates (
     deactivated boolean DEFAULT false NOT NULL
 );
 
+CREATE SEQUENCE estimates_seq;
 ALTER TABLE ONLY estimates
+    ALTER COLUMN id SET DEFAULT NEXTVAL('estimates_seq'),
     ADD CONSTRAINT estimates_pk_id PRIMARY KEY (id),
     ADD CONSTRAINT estimates_fk_sales_reps_id FOREIGN KEY (sales_rep_id) REFERENCES sales_reps(id),
     ADD CONSTRAINT estimates_fk_job_types_id FOREIGN KEY (job_type_id) REFERENCES job_types(id),

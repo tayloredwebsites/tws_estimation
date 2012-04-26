@@ -14,6 +14,10 @@ class UsersController< SecureApplicationController
     @model = User.new
   end
   
+  def self.list(scope = nil)
+    list_scope = (scope.nil?) ? self.new.get_scope() : scope
+  end
+
   # chain current scope with any modules that have set scope (e.g. DeactivatedController)
   def get_scope(cur_scope = nil)
     # Rails.logger.debug ("* UsersController.get_scope - cur_scope in: #{cur_scope}, show_deactivated?: #{show_deactivated?}")
@@ -23,8 +27,13 @@ class UsersController< SecureApplicationController
     
   # GET /users
   def index
-    @users = get_scope().all
+    @users = get_scope().order('username')
     authorize! :index, @users   # authorize from CanCan::ControllerAdditions
+  end
+
+  # GET /users/list
+  def list
+    @users = get_scope().order('last_name, first_name')
   end
 
   # GET /users/1
