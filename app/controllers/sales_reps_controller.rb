@@ -2,7 +2,7 @@ class SalesRepsController < SecureApplicationController
 
   # allow records to be deactivated using extras/controllers/deactivated_controller.rb
   include Controllers::DeactivatedController
-  
+
   def initialize
     # this is within the estimation maintenance sub-application
     @systemc = 'estimmaint'
@@ -18,7 +18,7 @@ class SalesRepsController < SecureApplicationController
     # @defaults = DefaultsController.new.get_scope().all
     # Rails.logger.debug("* SalesRepsController.before_filter - @defaults:#{@defaults.inspect.to_s}")
   end
-  
+
   def self.list(scope = nil)
     list_scope = (scope.nil?) ? self.new.get_scope() : scope
   end
@@ -41,7 +41,7 @@ class SalesRepsController < SecureApplicationController
 
   # GET /sales_reps/list
   def list
-    @sales_reps = get_scope().joins(:user).order('users.last_name, users.first_name')
+    index
   end
 
   # GET /sales_reps/:id

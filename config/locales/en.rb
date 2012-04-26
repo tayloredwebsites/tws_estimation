@@ -605,16 +605,16 @@
         :header => "Estimation Sales Representatives Action Menu"
       },
       :index => {
-        :action => "List Sales Representatives by Assembly",
-        :title => "List Sales Representatives by Assembly ",
-        :header => "List of all Sales Representatives by Assembly ",
-        :selected_header => "List of selected Sales Representatives by Assembly "
+        :action => "List Sales Representatives",
+        :title => "List Sales Representatives",
+        :header => "List of all Sales Representatives",
+        :selected_header => "List of selected Sales Representatives"
       },
       :list => {
-        :action => "List Sales Representatives by Description",
-        :title => "List Sales Representatives in Description Order",
-        :header => "List of all Sales Representatives in Description Order",
-        :selected_header => "List of selected Sales Representatives by Description"
+        :action => "List Sales Representatives",
+        :title => "List Sales Representatives ",
+        :header => "List of all Sales Representatives",
+        :selected_header => "List of selected Sales Representatives"
       },
       :edit => {
         :action => "Edit Sales Representative",
@@ -634,6 +634,7 @@
       :field_name => {
         :id => 'ID',
         :user_id => 'User ID',
+        :user => 'User',
         :min_markup_pct => 'Minimum Markup Percent',
         :max_markup_pct => 'Maximum Markup Percent',
         :deactivated => 'Deactivated',
@@ -643,6 +644,7 @@
       :field_name_short => {
         :id => 'ID',
         :user_id => 'User ID',
+        :user => 'User',
         :min_markup_pct => 'Min. Markup %',
         :max_markup_pct => 'Max. Markup %',
         :deactivated => 'Deact.',
@@ -652,6 +654,7 @@
       :field_name_tip => {
         :id => 'ID (identifier used by database to uniquely idenfify item in table).',
         :user_id => 'User ID (identifier of the user for this salesperson)',
+        :user => 'User (the user for this salesperson)',
         :min_markup_pct => 'Minimum Markup Percent this salesperson can adjust by',
         :max_markup_pct => 'Maximum Markup Percent this salesperson can adjust by',
         :deactivated => 'Is this field deactivated?',

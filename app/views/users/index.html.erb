@@ -54,7 +54,7 @@
             <% end %>
         <td><%= link_to I18n.translate('view_action.view'), user %></td>
         <td><%= link_to I18n.translate('view_action.edit'), edit_user_path(user) %></td>
-            <% if (defined? @model.deactivated_module) && can?(:deactivate, user) %>
+            <% if (defined? @model.deactivated_module && can?(:deactivate, user) ) %>
                 <% if user.deactivated? %>
                      <td><%= link_to I18n.translate('view_action.reactivate'), reactivate_user_path(user.id), :method => :put, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.reactivate'), :name => user.username+"?") %></td>
                      <td><%= link_to I18n.translate('view_action.delete'), user, :confirm => I18n.translate('warning.sure_action_name?', :action => I18n.translate('view_action.delete'), :name => user.username+"?"), :method => :delete  %></td>

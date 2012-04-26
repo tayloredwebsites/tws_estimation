@@ -5,6 +5,9 @@ TwsAuth::Application.routes.draw do
       put 'deactivate'      # route:          deactivate_sales_rep PUT    /sales_reps/:id/deactivate(.:format)          sales_reps#deactivate
       put 'reactivate'      # route:          reactivate_sales_rep PUT    /sales_reps/:id/reactivate(.:format)          sales_reps#reactivate
     end
+    collection do
+      get 'list'            # route:               list_sales_reps GET    /sales_reps/list(.:format)                    sales_reps#list
+    end
   end
   match "sales_reps/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
   match "sales_reps/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
@@ -89,7 +92,7 @@ TwsAuth::Application.routes.draw do
   match "users/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
   match "users/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
   match "users/:id/update_password", :via => :get, :to => 'home#errors', :status => 405
-  
+
   resources :defaults do
     member do
       put 'deactivate'      # route:   deactivate_default PUT    /defaults/:id/deactivate(.:format)    defaults#deactivate
@@ -110,7 +113,7 @@ TwsAuth::Application.routes.draw do
   get "home/help"              # route:            home_help GET    /home/help(.:format)                 {:controller=>"home", :action=>"help"}
   root :to => "home#index"    # route:                 root        /(.:format)                          {:controller=>"home", :action=>"index"}
   match '/home', :to => "home#index"    # route:         home        /home(.:format)                      {:controller=>"home", :action=>"index"}
-  
+
   # match '/readme', :to => redirect('/README.markdown')
 
 
