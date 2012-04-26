@@ -42,9 +42,9 @@ TwsAuth::Application.configure do
   # config.active_record.schema_format = :sql
 
   # specify logger and set to debug
-	config.logger = Logger.new(STDOUT)
+    config.logger = Logger.new(STDOUT)
   config.log_level = :debug
-	LOGGING = true
+    LOGGING = true
   
   # Print deprecation notices
   config.active_support.deprecation = :stderr  # Print deprecation notices to the stderr

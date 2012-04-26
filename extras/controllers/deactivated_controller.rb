@@ -50,11 +50,11 @@ module Controllers::DeactivatedController
         # # don't show deactivated item (edit button no good if show_deactivated false), better to show item gone
         # redirect_to components_path
       else
-      	if item.errors[:base].count > 0
-      	  notify_error( item.errors[:base][0] )
-      	else
-      	  notify_error("Error deactivating #{item.class.name} #{item.id}")
-      	end
+          if item.errors[:base].count > 0
+            notify_error( item.errors[:base][0] )
+          else
+            notify_error("Error deactivating #{item.class.name} #{item.id}")
+          end
         # @user.errors.add(:base, "error deactivating item")
         Rails.logger.debug("* Controllers::DeactivatedController.deactivate - return instance variable #{'@'+item.class.name.underscore}")
         self.instance_variable_set('@'+item.class.name.underscore, item)
@@ -80,9 +80,9 @@ module Controllers::DeactivatedController
         self.instance_variable_set('@'+item.class.name.underscore, item)
         render :action => 'show', :id => item.id
       else
-      	if item.errors[:base].count > 0
-      	  notify_error( item.errors[:base][0] )
-      	else
+          if item.errors[:base].count > 0
+            notify_error( item.errors[:base][0] )
+          else
           notify_error("Error reactivating #{item.class.name} #{item.id}")
         end
         # @user.errors.add(:base, "error reactivating item")
@@ -114,13 +114,13 @@ module Controllers::DeactivatedController
         render :action => 'index'
       else
         Rails.logger.debug("* Controllers::DeactivatedController.destroy errors.count: #{item.errors.count.to_s}")
-      	if item.errors[:base].count > 0
-      	  Rails.logger.debug("* Controllers::DeactivatedController.destroy errors: #{item.errors.inspect.to_s}")
-      	  notify_error( item.errors[:base][0] )
-      	else
-      	  Rails.logger.debug("* Controllers::DeactivatedController.destroy Error deleting user #{item.id}")
-      	  notify_error("Error deleting user #{item.id}")
-      	end
+          if item.errors[:base].count > 0
+            Rails.logger.debug("* Controllers::DeactivatedController.destroy errors: #{item.errors.inspect.to_s}")
+            notify_error( item.errors[:base][0] )
+          else
+            Rails.logger.debug("* Controllers::DeactivatedController.destroy Error deleting user #{item.id}")
+            notify_error("Error deleting user #{item.id}")
+          end
         Rails.logger.debug("* Controllers::DeactivatedController.destroy - return instance variable #{'@'+item.class.name.underscore}")
         self.instance_variable_set('@'+item.class.name.underscore, item)
         render :action => 'edit', :id => item.id

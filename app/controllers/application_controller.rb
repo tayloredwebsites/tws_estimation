@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-	layout "application"
+    layout "application"
   
   include ApplicationHelper
   include Application::CommonMethods

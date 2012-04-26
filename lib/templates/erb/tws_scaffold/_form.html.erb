@@ -1,58 +1,58 @@
 
 <% attributes.each do |attribute| -%>
 <%
-	Rails.logger.debug("G _form.html.erb - attribute = #{attribute.name.to_s}:#{attribute.type.to_s}")
-	if attribute.name.to_s == 'id'
-		# don't allow edit of record ID
+    Rails.logger.debug("G _form.html.erb - attribute = #{attribute.name.to_s}:#{attribute.type.to_s}")
+    if attribute.name.to_s == 'id'
+        # don't allow edit of record ID
 %>
 <div class="field">
-  	<%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
-	<span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %> %></span>
+      <%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
+    <span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %> %></span>
 </div>
 <%
-	elsif attribute.type.to_s == 'boolean'
-		#display boolean fields with radio buttons
+    elsif attribute.type.to_s == 'boolean'
+        #display boolean fields with radio buttons
 %>
 <div class="field">
-  	<%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
-	<span class="value">
-		<%%= f.radio_button :<%= attribute.name %>, true %>
-		<%%= f.label "<%= attribute.name %>_true", "true", :class => 'span_after_label' %>
-		<%%= f.radio_button :<%= attribute.name %>, false %>
-		<%%= f.label "<%= attribute.name %>_false", "false", :class => 'span_after_label' %>
-	</span>
+      <%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
+    <span class="value">
+        <%%= f.radio_button :<%= attribute.name %>, true %>
+        <%%= f.label "<%= attribute.name %>_true", "true", :class => 'span_after_label' %>
+        <%%= f.radio_button :<%= attribute.name %>, false %>
+        <%%= f.label "<%= attribute.name %>_false", "false", :class => 'span_after_label' %>
+    </span>
 </div>
 <%
-	elsif attribute.type.to_s == 'datetime' && (attribute.name.to_s == 'created_at' || attribute.name.to_s == 'updated_at')
-		# dont allow edit of created_at or updated_at fields
+    elsif attribute.type.to_s == 'datetime' && (attribute.name.to_s == 'created_at' || attribute.name.to_s == 'updated_at')
+        # dont allow edit of created_at or updated_at fields
 %>
 <div class="field">
-	<%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
-	<span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %> %></span>
+    <%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
+    <span class="value" id="<%= singular_table_name %>_<%= attribute.name %>"><%%= @<%= singular_table_name %>.<%= attribute.name %> %></span>
 </div>
 <%
-	elsif attribute.type.to_s == 'association'
-		# show associations (foreign key fields) with select boxes
+    elsif attribute.type.to_s == 'association'
+        # show associations (foreign key fields) with select boxes
 %>
 <div class="field">
-	<%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
-	<span class="value">
-		<%%= collection_select( :<%= singular_table_name %>, :<%= attribute.name %>_id, <%= attribute.name.pluralize.camelize %>Controller.list, :id, :desc, { :include_blank => true }) %>
-	</span>
+    <%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
+    <span class="value">
+        <%%= collection_select( :<%= singular_table_name %>, :<%= attribute.name %>_id, <%= attribute.name.pluralize.camelize %>Controller.list, :id, :desc, { :include_blank => true }) %>
+    </span>
 </div>
 <%
-	elsif attribute.type.to_s == 'reference'
-		# ignore references (don't show id field for associations / foreign keys)
-		Rails.logger.debug("G _form.html.erb - attribute.type is a reference")
-	else
-		# otherwise use default edit of field for this field_type
+    elsif attribute.type.to_s == 'reference'
+        # ignore references (don't show id field for associations / foreign keys)
+        Rails.logger.debug("G _form.html.erb - attribute.type is a reference")
+    else
+        # otherwise use default edit of field for this field_type
 %>
 <div class="field">
-	<%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
+    <%%= f.label :<%= attribute.name.to_s %>, I18n.translate('<%= plural_table_name %>.field_name.<%= attribute.name %>'), :class => 'label' %>
     <span class="value"><%%= f.<%= attribute.field_type %> :<%= attribute.name %> %></span>
 </div>
 <%
-	end # end attribute.instance_variable_get
+    end # end attribute.instance_variable_get
 %>
 <%
 end # end attributes.each

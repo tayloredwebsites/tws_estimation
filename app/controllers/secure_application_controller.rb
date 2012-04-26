@@ -7,14 +7,14 @@ class SecureApplicationController < ApplicationController
   # after_filter :save_session, :except => []
   # 
   # before_filter :authenticate_user
-	
-	
-	protected
-	
-	def authenticate_user
-		#Rails.logger.debug("* SecureApplicationController -  authenticate_user")
-		Rails.logger.debug('* SecureApplicationController - authenticate_user - signed_in? = '+@user_session.signed_in?.to_s)
-		#Rails.logger.debug('* SecureApplicationController - authenticate_user - current_user_id = '+@user_session.current_user_id.to_s)
+    
+    
+    protected
+    
+    def authenticate_user
+        #Rails.logger.debug("* SecureApplicationController -  authenticate_user")
+        Rails.logger.debug('* SecureApplicationController - authenticate_user - signed_in? = '+@user_session.signed_in?.to_s)
+        #Rails.logger.debug('* SecureApplicationController - authenticate_user - current_user_id = '+@user_session.current_user_id.to_s)
     unless @user_session.signed_in?
       notify_error ("You must be logged in to access this section")
       Rails.logger.debug("* SecureApplicationController - rescue_from CanCan - redirect_away users_sessions#signin")

@@ -28,10 +28,10 @@ TwsAuth::Application.configure do
   config.action_mailer.raise_delivery_errors = false
 
   # specify logger and set to debug
-	config.logger = Logger.new(STDOUT)  #default
+    config.logger = Logger.new(STDOUT)  #default
   # See everything in the log (default is :info)
   config.log_level = :debug
-	LOGGING = true  #default
+    LOGGING = true  #default
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log

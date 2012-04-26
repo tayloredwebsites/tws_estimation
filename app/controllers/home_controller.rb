@@ -6,7 +6,7 @@ class HomeController < SecureApplicationController
     Rails.logger.debug("* UsersController.initialize before super - systemc:#{@systemc.to_s}")
     super
   end
-	
+    
   before_filter do |controller|
     # self.load_session
     # logger.debug('Home Controller filter = '+%w{ site_map }.index(params[:action]).to_s)

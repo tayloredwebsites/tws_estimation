@@ -1,33 +1,33 @@
-	<%%= tag :tr, options = {:id => "<%= singular_table_name %>_#{item.id}", :class => "#{cycle('odd', 'even')}"}, open = true %>
-		<% attributes.each do |attribute|
-			if attribute.name == 'deactivated'
-				# only show deactivated field if deactivated module is defined.
-				if (defined?(class_name.constantize.new.deactivated_module)) -%>
-		    <td id="<%%= "<%= singular_table_name %>_#{item.id}_<%= attribute.name %>" %>"><%%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
-		<%      
-				end
-			elsif attribute.type.to_s == 'reference'
-				# don't list references
-			elsif attribute.type.to_s == 'association'
-				# list associations (foreign key) as the value chosen
-		%>
-	    	<td id="<%%= "<%= singular_table_name %>_#{item.id}_id" %>"><%%= item.<%= attribute.name %>.nil_to_s %></td>
-		<% 	
-			elsif attribute.type.to_s == 'datetime' && (attribute.name.to_s == 'created_at' || attribute.name.to_s == 'updated_at')
-				# don't list created at or updated at fields
-			else
-		%>
-    	<td id="<%%= "<%= singular_table_name %>_#{item.id}_<%= attribute.name %>" %>"><%%= item.<%= attribute.name %> %></td>
-		<% 	end  # end if attribute.name
-		end # end attributes.each -%>
+    <%%= tag :tr, options = {:id => "<%= singular_table_name %>_#{item.id}", :class => "#{cycle('odd', 'even')}"}, open = true %>
+        <% attributes.each do |attribute|
+            if attribute.name == 'deactivated'
+                # only show deactivated field if deactivated module is defined.
+                if (defined?(class_name.constantize.new.deactivated_module)) -%>
+            <td id="<%%= "<%= singular_table_name %>_#{item.id}_<%= attribute.name %>" %>"><%%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
+        <%      
+                end
+            elsif attribute.type.to_s == 'reference'
+                # don't list references
+            elsif attribute.type.to_s == 'association'
+                # list associations (foreign key) as the value chosen
+        %>
+            <td id="<%%= "<%= singular_table_name %>_#{item.id}_id" %>"><%%= item.<%= attribute.name %>.nil_to_s %></td>
+        <%     
+            elsif attribute.type.to_s == 'datetime' && (attribute.name.to_s == 'created_at' || attribute.name.to_s == 'updated_at')
+                # don't list created at or updated at fields
+            else
+        %>
+        <td id="<%%= "<%= singular_table_name %>_#{item.id}_<%= attribute.name %>" %>"><%%= item.<%= attribute.name %> %></td>
+        <%     end  # end if attribute.name
+        end # end attributes.each -%>
 
-	   <td><%%= link_to I18n.translate('view_action.view'), <%= singular_table_name %>_path(item.id) %></td>
-	   <td><%%= link_to I18n.translate('view_action.edit'), edit_<%= singular_table_name %>_path(item.id) %></td>
-		<%% if @deactivated_module && can?(:deactivate, item) %>
-			<%% if item.deactivated? %>
-			 	<td><%%= link_to I18n.translate('view_action.reactivate'), reactivate_<%= singular_table_name %>_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.reactivate'), :id => item.id) %></td>
-			 	<td><%%= link_to I18n.translate('view_action.delete'), item, :method => :delete, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.delete'), :id => item.id)  %></td>
-			<%% else %>
-			 	<td><%%= link_to I18n.translate('view_action.deactivate'), deactivate_<%= singular_table_name %>_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.deactivate'), :id => item.id) %></td>
-			<%% end # end if item.deactivated? %>
-		<%% end # end if @deactivated_module %>
+       <td><%%= link_to I18n.translate('view_action.view'), <%= singular_table_name %>_path(item.id) %></td>
+       <td><%%= link_to I18n.translate('view_action.edit'), edit_<%= singular_table_name %>_path(item.id) %></td>
+        <%% if @deactivated_module && can?(:deactivate, item) %>
+            <%% if item.deactivated? %>
+                 <td><%%= link_to I18n.translate('view_action.reactivate'), reactivate_<%= singular_table_name %>_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.reactivate'), :id => item.id) %></td>
+                 <td><%%= link_to I18n.translate('view_action.delete'), item, :method => :delete, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.delete'), :id => item.id)  %></td>
+            <%% else %>
+                 <td><%%= link_to I18n.translate('view_action.deactivate'), deactivate_<%= singular_table_name %>_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.deactivate'), :id => item.id) %></td>
+            <%% end # end if item.deactivated? %>
+        <%% end # end if @deactivated_module %>

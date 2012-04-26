@@ -1,32 +1,32 @@
 <%%
-	@page_scope = '<%= plural_table_name %>.index'
-	@deactivated_module = defined?(<%= class_name %>.new.deactivated_module)
+    @page_scope = '<%= plural_table_name %>.index'
+    @deactivated_module = defined?(<%= class_name %>.new.deactivated_module)
 %>
 <h4><%%= I18n.translate('header', :scope => @page_scope) %></h4>
 
 <%
 # g_parent_assoc = ''
 # attributes.each do |attribute|
-# 	if attribute.type.to_s == 'association'
-# 		g_parent_assoc = attribute.name
-# 		break
-# 	end
+#     if attribute.type.to_s == 'association'
+#         g_parent_assoc = attribute.name
+#         break
+#     end
 # end
 
 # generate this page only if there are references / associations in this resource
 # otherwise the standard index.html.erb should be used, since there should be no foreign key association here
 if @tws_views_parent_association == ''
-	# no references, using simple index listing (without parent association breaks).
+    # no references, using simple index listing (without parent association breaks).
 %>
 <table cellspacing="0">
 <%%= render :partial => '<%= plural_table_name %>/index_head' %>
 <%%
 @<%= plural_table_name %>.each do |item|
-		# only show deactivated item if deactivated module installed, and show deactivated is set.
-		( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
-	if show_row
+        # only show deactivated item if deactivated module installed, and show deactivated is set.
+        ( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
+    if show_row
 %>
-	<%%= render :partial => '<%= plural_table_name %>/index_row', :locals => { :item => item } %>
+    <%%= render :partial => '<%= plural_table_name %>/index_row', :locals => { :item => item } %>
 <%% end # if show_row
 end # if table.each %>
 
@@ -35,8 +35,8 @@ end # if table.each %>
 else # have references, use index listing with parent association breaks.
 %>
 <!--
-	If need a parent association for breaks by parent, try $ rails generate tws_views <%= singular_table_name %> all <parent_association>:parent
-	Note: if child association is not the current table (e.g. join table), add <child_association>:child to the tws_views generate
+    If need a parent association for breaks by parent, try $ rails generate tws_views <%= singular_table_name %> all <parent_association>:parent
+    Note: if child association is not the current table (e.g. join table), add <child_association>:child to the tws_views generate
 -->
 <table cellspacing="0">
 <%%
@@ -44,34 +44,34 @@ last_parent_assoc_id = 0
 parent_association = ""
 last_parent_association = ""
 @<%= plural_table_name %>.each do |item|
-		# only show deactivated item if deactivated module installed, and show deactivated is set.
-		( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
-	if show_row
-		parent_association = item.send('<%= @tws_views_parent_association %>')
-		# Rails.logger.debug("G index.html.erb parent_association = #{parent_association.inspect.to_s}")
-		if last_parent_assoc_id != parent_association.id
+        # only show deactivated item if deactivated module installed, and show deactivated is set.
+        ( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
+    if show_row
+        parent_association = item.send('<%= @tws_views_parent_association %>')
+        # Rails.logger.debug("G index.html.erb parent_association = #{parent_association.inspect.to_s}")
+        if last_parent_assoc_id != parent_association.id
 %>
-			</table>
-			<!-- use this first link if has many association -->
-			<!-- use this second link if has many association and this class is a join table -->
-			<%%= link_to "New #{last_parent_association.nil_to_s} <%= @tws_views_child_association.camelize %>", new_<%= singular_table_name %>_path(:<%= @tws_views_parent_association %>_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
-			<br>
-			<h3><%%= link_to parent_association.nil_to_s, <%= @tws_views_parent_association %>_path(parent_association.id) %> (<%= @tws_views_parent_association.camelize %>)</h3>
-			<table cellspacing="0">
-			<%%= render :partial => '<%= plural_table_name %>/index_head' %>
+            </table>
+            <!-- use this first link if has many association -->
+            <!-- use this second link if has many association and this class is a join table -->
+            <%%= link_to "New #{last_parent_association.nil_to_s} <%= @tws_views_child_association.camelize %>", new_<%= singular_table_name %>_path(:<%= @tws_views_parent_association %>_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
+            <br>
+            <h3><%%= link_to parent_association.nil_to_s, <%= @tws_views_parent_association %>_path(parent_association.id) %> (<%= @tws_views_parent_association.camelize %>)</h3>
+            <table cellspacing="0">
+            <%%= render :partial => '<%= plural_table_name %>/index_head' %>
 <%%
-			last_parent_assoc_id = parent_association.id
-			last_parent_association = parent_association
-		end # break in parent_assoc_id
+            last_parent_assoc_id = parent_association.id
+            last_parent_association = parent_association
+        end # break in parent_assoc_id
 %>
-	<%%= render :partial => '<%= plural_table_name %>/index_row', :locals => { :item => item } %>
+    <%%= render :partial => '<%= plural_table_name %>/index_row', :locals => { :item => item } %>
 <%% end # if show_row
 end # if table.each %>
 
 </table>
 
 <%% if last_parent_assoc_id != 0 %>
-	<%%= link_to "New #{last_parent_association.nil_to_s} <%= @tws_views_child_association.camelize %>", new_<%= singular_table_name %>_path(:<%= @tws_views_parent_association %>_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
+    <%%= link_to "New #{last_parent_association.nil_to_s} <%= @tws_views_child_association.camelize %>", new_<%= singular_table_name %>_path(:<%= @tws_views_parent_association %>_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
 <%% end # if last_parent_assoc_id %>
 <% end # if have_association
 %>
