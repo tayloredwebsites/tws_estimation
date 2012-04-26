@@ -1,53 +1,53 @@
 
 
 <div class="field">
-  	<%= f.label :id, I18n.translate('assemblies.field_name.id'), :class => 'label' %>
-	<span class="value" id="assembly_id"><%= @assembly.id %></span>
+      <%= f.label :id, I18n.translate('assemblies.field_name.id'), :class => 'label' %>
+    <span class="value" id="assembly_id"><%= @assembly.id %></span>
 </div>
 
 
 <div class="field">
-	<%= f.label :description, I18n.translate('assemblies.field_name.description'), :class => 'label' %>
+    <%= f.label :description, I18n.translate('assemblies.field_name.description'), :class => 'label' %>
     <span class="value"><%= f.text_field :description %></span>
 </div>
 
 
 <div class="field">
-	<%= f.label :sort_order, I18n.translate('assemblies.field_name.sort_order'), :class => 'label' %>
+    <%= f.label :sort_order, I18n.translate('assemblies.field_name.sort_order'), :class => 'label' %>
     <span class="value"><%= f.number_field :sort_order %></span>
 </div>
 
 
 <div class="field">
-  	<%= f.label :required, I18n.translate('assemblies.field_name.required'), :class => 'label' %>
-	<span class="value">
-		<%= f.radio_button :required, true %>
-		<%= f.label "required_true", "true", :class => 'span_after_label' %>
-		<%= f.radio_button :required, false %>
-		<%= f.label "required_false", "false", :class => 'span_after_label' %>
-	</span>
+      <%= f.label :required, I18n.translate('assemblies.field_name.required'), :class => 'label' %>
+    <span class="value">
+        <%= f.radio_button :required, true %>
+        <%= f.label "required_true", "true", :class => 'span_after_label' %>
+        <%= f.radio_button :required, false %>
+        <%= f.label "required_false", "false", :class => 'span_after_label' %>
+    </span>
 </div>
 
 
 <div class="field">
-  	<%= f.label :deactivated, I18n.translate('assemblies.field_name.deactivated'), :class => 'label' %>
-	<span class="value">
-		<%= f.radio_button :deactivated, true %>
-		<%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
-		<%= f.radio_button :deactivated, false %>
-		<%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
-	</span>
+      <%= f.label :deactivated, I18n.translate('assemblies.field_name.deactivated'), :class => 'label' %>
+    <span class="value">
+        <%= f.radio_button :deactivated, true %>
+        <%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
+        <%= f.radio_button :deactivated, false %>
+        <%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
+    </span>
 </div>
 
 
 <div class="field">
-	<%= f.label :created_at, I18n.translate('assemblies.field_name.created_at'), :class => 'label' %>
-	<span class="value" id="assembly_created_at"><%= @assembly.created_at %></span>
+    <%= f.label :created_at, I18n.translate('assemblies.field_name.created_at'), :class => 'label' %>
+    <span class="value" id="assembly_created_at"><%= @assembly.created_at %></span>
 </div>
 
 
 <div class="field">
-	<%= f.label :updated_at, I18n.translate('assemblies.field_name.updated_at'), :class => 'label' %>
-	<span class="value" id="assembly_updated_at"><%= @assembly.updated_at %></span>
+    <%= f.label :updated_at, I18n.translate('assemblies.field_name.updated_at'), :class => 'label' %>
+    <span class="value" id="assembly_updated_at"><%= @assembly.updated_at %></span>
 </div>
 

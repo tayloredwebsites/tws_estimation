@@ -11,13 +11,13 @@
 
     <th><%= I18n.translate('assembly_components.field_name_short.required') %></th>
 <% if @deactivated_module %>
-	<% if show_deactivated? %>
-	<th><%= I18n.translate('assembly_components.field_name_short.deactivated') %></th>
+    <% if show_deactivated? %>
+    <th><%= I18n.translate('assembly_components.field_name_short.deactivated') %></th>
     <th colspan="4"><%= link_to I18n.translate('view_action.hide_deactivated'), list_assembly_components_path('show_deactivated' => DB_FALSE.to_s) %></th>
-	<% else %>
-	<th colspan="3"><%= link_to I18n.translate('view_action.show_deactivated'), list_assembly_components_path('show_deactivated' => DB_TRUE.to_s) %></th>
-	<% end %>
+    <% else %>
+    <th colspan="3"><%= link_to I18n.translate('view_action.show_deactivated'), list_assembly_components_path('show_deactivated' => DB_TRUE.to_s) %></th>
+    <% end %>
 <% else %>
-	<th colspan="2">&nbsp;</th>
+    <th colspan="2">&nbsp;</th>
 <% end %>
   </tr>

@@ -1,6 +1,6 @@
 <%
   @page_scope = 'component_types.show'
-	@deactivated_module = defined?(ComponentType.new.deactivated_module)
+    @deactivated_module = defined?(ComponentType.new.deactivated_module)
 %>
 
 <h3><%= I18n.translate('header', :scope => @page_scope) %></h3>
@@ -39,12 +39,12 @@
     <span class="label"><%= I18n.translate('component_types.field_name.no_entry') %></span>
     <span class="value" id="component_type_no_entry"><%= @component_type.no_entry %></span>
   </div>
-	<% if (@deactivated_module) %>
-	  <div class="field">
-	    <span class="label"><%= I18n.translate('component_types.field_name.deactivated') %></span>
-	    <span class="value" id="component_type_deactivated"><%= I18n.is_deactivated_or_not(@component_type.deactivated?) %></span>
-	  </div>
-	<% end %>
+    <% if (@deactivated_module) %>
+      <div class="field">
+        <span class="label"><%= I18n.translate('component_types.field_name.deactivated') %></span>
+        <span class="value" id="component_type_deactivated"><%= I18n.is_deactivated_or_not(@component_type.deactivated?) %></span>
+      </div>
+    <% end %>
 </div>
 
 <%= link_to I18n.translate('component_types.edit.action'), edit_component_type_path(@component_type) %>

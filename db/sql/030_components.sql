@@ -20,9 +20,9 @@ CREATE TABLE components (
     apply_pct_mask integer DEFAULT 0 NOT NULL,
     calc_only boolean DEFAULT false NOT NULL,
     sort_priority character(1) DEFAULT 'M'::bpchar NOT NULL,
-	created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	deactivated boolean
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    deactivated boolean
  );
 -- ALTER TABLE public.components OWNER TO RoR;
 
@@ -114,7 +114,7 @@ INSERT INTO components (id, component_type_id, description, defaults_id, apply_p
 
 CREATE SEQUENCE components_seq;
 ALTER TABLE ONLY components
-	ALTER COLUMN id SET DEFAULT NEXTVAL('components_seq'),
+    ALTER COLUMN id SET DEFAULT NEXTVAL('components_seq'),
     ADD CONSTRAINT components_pk_components PRIMARY KEY (id),
     ADD CONSTRAINT components_ix_components_type_description UNIQUE(component_type_id, description),
     ADD CONSTRAINT components_fk_defaults FOREIGN KEY (defaults_id) REFERENCES defaults(id),

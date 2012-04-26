@@ -1,65 +1,65 @@
 
 
 <div class="field">
-  	<%= f.label :id, I18n.translate('components.field_name.id'), :class => 'label' %>
-	<span class="value" id="component_id"><%= @component.id %></span>
+      <%= f.label :id, I18n.translate('components.field_name.id'), :class => 'label' %>
+    <span class="value" id="component_id"><%= @component.id %></span>
 </div>
 
 
 
 <div class="field">
-	<%= f.label :component_type, I18n.translate('components.field_name.component_type'), :class => 'label' %>
-	<span class="value">
-		<%= collection_select( :component, :component_type_id, ComponentTypesController.list, :id, :desc, { :include_blank => true }) %>
-	</span>
+    <%= f.label :component_type, I18n.translate('components.field_name.component_type'), :class => 'label' %>
+    <span class="value">
+        <%= collection_select( :component, :component_type_id, ComponentTypesController.list, :id, :desc, { :include_blank => true }) %>
+    </span>
 </div>
 
 
 <div class="field">
-	<%= f.label :description, I18n.translate('components.field_name.description'), :class => 'label' %>
+    <%= f.label :description, I18n.translate('components.field_name.description'), :class => 'label' %>
     <span class="value"><%= f.text_field :description %></span>
 </div>
 
 
 
 <div class="field">
-	<%= f.label :default, I18n.translate('components.field_name.default'), :class => 'label' %>
-	<span class="value">
-		<%= collection_select( :component, :default_id, DefaultsController.list, :id, :desc, { :include_blank => true }) %>
-	</span>
+    <%= f.label :default, I18n.translate('components.field_name.default'), :class => 'label' %>
+    <span class="value">
+        <%= collection_select( :component, :default_id, DefaultsController.list, :id, :desc, { :include_blank => true }) %>
+    </span>
 </div>
 
 
 <div class="field">
-  	<%= f.label :calc_only, I18n.translate('components.field_name.calc_only'), :class => 'label' %>
-	<span class="value">
-		<%= f.radio_button :calc_only, true %>
-		<%= f.label "calc_only_true", "true", :class => 'span_after_label' %>
-		<%= f.radio_button :calc_only, false %>
-		<%= f.label "calc_only_false", "false", :class => 'span_after_label' %>
-	</span>
+      <%= f.label :calc_only, I18n.translate('components.field_name.calc_only'), :class => 'label' %>
+    <span class="value">
+        <%= f.radio_button :calc_only, true %>
+        <%= f.label "calc_only_true", "true", :class => 'span_after_label' %>
+        <%= f.radio_button :calc_only, false %>
+        <%= f.label "calc_only_false", "false", :class => 'span_after_label' %>
+    </span>
 </div>
 
 
 <div class="field">
-  	<%= f.label :deactivated, I18n.translate('components.field_name.deactivated'), :class => 'label' %>
-	<span class="value">
-		<%= f.radio_button :deactivated, true %>
-		<%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
-		<%= f.radio_button :deactivated, false %>
-		<%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
-	</span>
+      <%= f.label :deactivated, I18n.translate('components.field_name.deactivated'), :class => 'label' %>
+    <span class="value">
+        <%= f.radio_button :deactivated, true %>
+        <%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
+        <%= f.radio_button :deactivated, false %>
+        <%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
+    </span>
 </div>
 
 
 <div class="field">
-	<%= f.label :created_at, I18n.translate('components.field_name.created_at'), :class => 'label' %>
-	<span class="value" id="component_created_at"><%= @component.created_at %></span>
+    <%= f.label :created_at, I18n.translate('components.field_name.created_at'), :class => 'label' %>
+    <span class="value" id="component_created_at"><%= @component.created_at %></span>
 </div>
 
 
 <div class="field">
-	<%= f.label :updated_at, I18n.translate('components.field_name.updated_at'), :class => 'label' %>
-	<span class="value" id="component_updated_at"><%= @component.updated_at %></span>
+    <%= f.label :updated_at, I18n.translate('components.field_name.updated_at'), :class => 'label' %>
+    <span class="value" id="component_updated_at"><%= @component.updated_at %></span>
 </div>
 

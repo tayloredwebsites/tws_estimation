@@ -16,12 +16,12 @@ CREATE TABLE sales_reps (
     user_id integer NOT NULL,
     min_markup_pct numeric(18,3) DEFAULT (0)::numeric NOT NULL,
     max_markup_pct numeric(18,3) DEFAULT (0)::numeric NOT NULL,
-	deactivated boolean DEFAULT false NOT NULL
+    deactivated boolean DEFAULT false NOT NULL
 );
 
 CREATE SEQUENCE sales_reps_seq;
 ALTER TABLE sales_reps
-	ALTER COLUMN id SET DEFAULT NEXTVAL('sales_reps_seq'),
-	ADD CONSTRAINT sales_reps_pk_id PRIMARY KEY (id);
+    ALTER COLUMN id SET DEFAULT NEXTVAL('sales_reps_seq'),
+    ADD CONSTRAINT sales_reps_pk_id PRIMARY KEY (id);
 --    ADD CONSTRAINT sales_reps_ix_user_id UNIQUE(user_id),
 --    ADD CONSTRAINT sales_reps_fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);

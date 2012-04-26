@@ -2,11 +2,11 @@
 <%= render :partial => 'components/list_head' %>
 <%
 @components.each do |item|
-		# only show deactivated item if deactivated module installed, and show deactivated is set.
-		( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
-	if show_row
+        # only show deactivated item if deactivated module installed, and show deactivated is set.
+        ( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
+    if show_row
 %>
-	<%= render :partial => 'components/index_row', :locals => { :item => item } %>
+    <%= render :partial => 'components/index_row', :locals => { :item => item } %>
 <% end # if show_row
 end # if table.each %>
 

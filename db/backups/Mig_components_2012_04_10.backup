@@ -21,7 +21,7 @@ SET default_with_oids = false;
 
 CREATE SEQUENCE components_seq;
 --ALTER TABLE ONLY components
---	ALTER COLUMN id SET DEFAULT NEXTVAL('components_seq'),
+--    ALTER COLUMN id SET DEFAULT NEXTVAL('components_seq'),
 --    ADD CONSTRAINT components_pk_components PRIMARY KEY (id),
 --    ADD CONSTRAINT components_ix_components_type_description UNIQUE(component_type_id, description),
 --    ADD CONSTRAINT components_fk_defaults FOREIGN KEY (defaults_id) REFERENCES defaults(id),

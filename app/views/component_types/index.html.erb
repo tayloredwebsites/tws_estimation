@@ -1,6 +1,6 @@
 <%
   @page_scope = 'component_types.index'
-	@deactivated_module = defined? ComponentType.new.deactivated_module
+    @deactivated_module = defined? ComponentType.new.deactivated_module
 %>
 
 <div><%= I18n.translate('header', :scope => @page_scope) %></div>
@@ -15,51 +15,51 @@
     <th><%= I18n.translate('component_types.field_name_short.has_vendor') %></th>
     <th><%= I18n.translate('component_types.field_name_short.has_misc') %></th>
     <th><%= I18n.translate('component_types.field_name_short.no_entry') %></th>
-		<% if (@deactivated_module) %>
-			<% if show_deactivated? %>
-		    <th><%= I18n.translate('component_types.field_name_short.deactivated') %></th>
-		    <th colspan="4"><%= link_to I18n.translate('view_action.hide_deactivated'), component_types_path('show_deactivated' => DB_FALSE.to_s) %></th>
-			<% else %>
-	    	<th colspan="3"><%= link_to I18n.translate('view_action.show_deactivated'), component_types_path('show_deactivated' => DB_TRUE.to_s) %></th>
-			<% end %>
-		<% else %>
-  		<th colspan="2">&nbsp;</th>
-		<% end %>
+        <% if (@deactivated_module) %>
+            <% if show_deactivated? %>
+            <th><%= I18n.translate('component_types.field_name_short.deactivated') %></th>
+            <th colspan="4"><%= link_to I18n.translate('view_action.hide_deactivated'), component_types_path('show_deactivated' => DB_FALSE.to_s) %></th>
+            <% else %>
+            <th colspan="3"><%= link_to I18n.translate('view_action.show_deactivated'), component_types_path('show_deactivated' => DB_TRUE.to_s) %></th>
+            <% end %>
+        <% else %>
+          <th colspan="2">&nbsp;</th>
+        <% end %>
   </tr>
 
 
 <%
-	@component_types.each do |item|
-		# only show deactivated item if deactivated module installed, and show deactivated is set.
-		( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
-		if show_row
+    @component_types.each do |item|
+        # only show deactivated item if deactivated module installed, and show deactivated is set.
+        ( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
+        if show_row
 %>
-		<%= tag :tr, options = {:id => "component_type_#{item.id}", :class => "#{cycle('odd', 'even')}"}, open = true %>
-	    <td id="<%= "component_type_#{item.id}_id" %>"><%= item.id %></td>
-	    <td id="<%= "component_type_#{item.id}_description" %>"><%= item.description %></td>
-	    <td id="<%= "component_type_#{item.id}_sort_order" %>"><%= item.sort_order %></td>
-	    <td id="<%= "component_type_#{item.id}_has_costs" %>"><%= item.has_costs %></td>
-	    <td id="<%= "component_type_#{item.id}_has_hours" %>"><%= item.has_hours %></td>
-	    <td id="<%= "component_type_#{item.id}_has_vendor" %>"><%= item.has_vendor %></td>
-	    <td id="<%= "component_type_#{item.id}_has_misc" %>"><%= item.has_misc %></td>
-	    <td id="<%= "component_type_#{item.id}_no_entry" %>"><%= item.no_entry %></td>
-			<% if @deactivated_module && show_deactivated? %>
-	    	<td id="<%= "component_type_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
-			<% end %>
-	    <td><%= link_to I18n.translate('view_action.view'), component_type_path(item) %></td>
-	    <td><%= link_to I18n.translate('view_action.edit'), edit_component_type_path(item) %></td>
-			<% if @deactivated_module && can?(:deactivate, item) %>
-				<% if item.deactivated? %>
-				 	<td><%= link_to I18n.translate('view_action.reactivate'), reactivate_component_type_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.reactivate'), :id => item.id) %></td>
-				 	<td><%= link_to I18n.translate('view_action.delete'), item, :method => :delete, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.delete'), :id => item.id)  %></td>
-				<% else %>
-				 	<td><%= link_to I18n.translate('view_action.deactivate'), deactivate_component_type_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.deactivate'), :id => item.id) %></td>
-				<% end %>
-			<% end %>
-		</tr>
+        <%= tag :tr, options = {:id => "component_type_#{item.id}", :class => "#{cycle('odd', 'even')}"}, open = true %>
+        <td id="<%= "component_type_#{item.id}_id" %>"><%= item.id %></td>
+        <td id="<%= "component_type_#{item.id}_description" %>"><%= item.description %></td>
+        <td id="<%= "component_type_#{item.id}_sort_order" %>"><%= item.sort_order %></td>
+        <td id="<%= "component_type_#{item.id}_has_costs" %>"><%= item.has_costs %></td>
+        <td id="<%= "component_type_#{item.id}_has_hours" %>"><%= item.has_hours %></td>
+        <td id="<%= "component_type_#{item.id}_has_vendor" %>"><%= item.has_vendor %></td>
+        <td id="<%= "component_type_#{item.id}_has_misc" %>"><%= item.has_misc %></td>
+        <td id="<%= "component_type_#{item.id}_no_entry" %>"><%= item.no_entry %></td>
+            <% if @deactivated_module && show_deactivated? %>
+            <td id="<%= "component_type_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
+            <% end %>
+        <td><%= link_to I18n.translate('view_action.view'), component_type_path(item) %></td>
+        <td><%= link_to I18n.translate('view_action.edit'), edit_component_type_path(item) %></td>
+            <% if @deactivated_module && can?(:deactivate, item) %>
+                <% if item.deactivated? %>
+                     <td><%= link_to I18n.translate('view_action.reactivate'), reactivate_component_type_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.reactivate'), :id => item.id) %></td>
+                     <td><%= link_to I18n.translate('view_action.delete'), item, :method => :delete, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.delete'), :id => item.id)  %></td>
+                <% else %>
+                     <td><%= link_to I18n.translate('view_action.deactivate'), deactivate_component_type_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.deactivate'), :id => item.id) %></td>
+                <% end %>
+            <% end %>
+        </tr>
 <%
-		end   # end of: if show_row
-	end   # end of: each do |item|
+        end   # end of: if show_row
+    end   # end of: each do |item|
 %>
 </table>
 

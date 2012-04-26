@@ -1,6 +1,6 @@
 <%
-	@page_scope = 'assemblies.index'
-	@deactivated_module = defined?(Assembly.new.deactivated_module)
+    @page_scope = 'assemblies.index'
+    @deactivated_module = defined?(Assembly.new.deactivated_module)
 %>
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
@@ -9,11 +9,11 @@
 <%= render :partial => 'assemblies/index_head' %>
 <%
 @assemblies.each do |item|
-		# only show deactivated item if deactivated module installed, and show deactivated is set.
-		( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
-	if show_row
+        # only show deactivated item if deactivated module installed, and show deactivated is set.
+        ( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
+    if show_row
 %>
-	<%= render :partial => 'assemblies/index_row', :locals => { :item => item } %>
+    <%= render :partial => 'assemblies/index_row', :locals => { :item => item } %>
 <% end # if show_row
 end # if table.each %>
 

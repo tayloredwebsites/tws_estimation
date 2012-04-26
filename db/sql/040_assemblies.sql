@@ -13,7 +13,7 @@ SET default_with_oids = false;
 
 CREATE TABLE assemblies (
     id integer NOT NULL,
-	description character varying(255) DEFAULT ''::character varying NOT NULL,
+    description character varying(255) DEFAULT ''::character varying NOT NULL,
     sort_order integer DEFAULT 0 NOT NULL,
     required boolean DEFAULT false NOT NULL,
     deactivated boolean DEFAULT false NOT NULL
@@ -38,7 +38,7 @@ INSERT INTO assemblies (id, sort_order, description, required, deactivated) VALU
 -- DROP SEQUENCE assemblies_seq;
 CREATE SEQUENCE assemblies_seq;
 ALTER TABLE ONLY assemblies
-	ALTER COLUMN id SET DEFAULT NEXTVAL('assemblies_seq'),
+    ALTER COLUMN id SET DEFAULT NEXTVAL('assemblies_seq'),
     ADD CONSTRAINT assemblies_pk_assemblies PRIMARY KEY (id),
     ADD CONSTRAINT assemblies_ix_description UNIQUE(description)
 

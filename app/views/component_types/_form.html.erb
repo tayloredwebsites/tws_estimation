@@ -8,57 +8,57 @@
   </div>
   <div class="field">
     <%= f.label :has_costs, I18n.translate('component_types.field_name.has_costs'), :class => 'label' %>
-		<span class="value">
-			<%= f.radio_button :has_costs, true %>
-			<%= f.label "has_costs_true", "true", :class => 'span_after_label' %>
-			<%= f.radio_button :has_costs, false %>
-			<%= f.label "has_costs_false", "false", :class => 'span_after_label' %>
-		</span>
+        <span class="value">
+            <%= f.radio_button :has_costs, true %>
+            <%= f.label "has_costs_true", "true", :class => 'span_after_label' %>
+            <%= f.radio_button :has_costs, false %>
+            <%= f.label "has_costs_false", "false", :class => 'span_after_label' %>
+        </span>
   </div>
   <div class="field">
     <%= f.label :has_hours, I18n.translate('component_types.field_name.has_hours'), :class => 'label' %>
-		<span class="value">
-			<%= f.radio_button :has_hours, true %>
-			<%= f.label "has_hours_true", "true", :class => 'span_after_label' %>
-			<%= f.radio_button :has_hours, false %>
-			<%= f.label "has_hours_false", "false", :class => 'span_after_label' %>
-		</span>
+        <span class="value">
+            <%= f.radio_button :has_hours, true %>
+            <%= f.label "has_hours_true", "true", :class => 'span_after_label' %>
+            <%= f.radio_button :has_hours, false %>
+            <%= f.label "has_hours_false", "false", :class => 'span_after_label' %>
+        </span>
   </div>
   <div class="field">
     <%= f.label :has_vendor, I18n.translate('component_types.field_name.has_vendor'), :class => 'label' %>
-		<span class="value">
-			<%= f.radio_button :has_vendor, true %>
-			<%= f.label "has_vendor_true", "true", :class => 'span_after_label' %>
-			<%= f.radio_button :has_vendor, false %>
-			<%= f.label "has_vendor_false", "false", :class => 'span_after_label' %>
-		</span>
+        <span class="value">
+            <%= f.radio_button :has_vendor, true %>
+            <%= f.label "has_vendor_true", "true", :class => 'span_after_label' %>
+            <%= f.radio_button :has_vendor, false %>
+            <%= f.label "has_vendor_false", "false", :class => 'span_after_label' %>
+        </span>
   </div>
   <div class="field">
     <%= f.label :has_misc, I18n.translate('component_types.field_name.has_misc'), :class => 'label' %>
-		<span class="value">
-			<%= f.radio_button :has_misc, true %>
-			<%= f.label "has_misc_true", "true", :class => 'span_after_label' %>
-			<%= f.radio_button :has_misc, false %>
-			<%= f.label "has_misc_false", "false", :class => 'span_after_label' %>
-		</span>
+        <span class="value">
+            <%= f.radio_button :has_misc, true %>
+            <%= f.label "has_misc_true", "true", :class => 'span_after_label' %>
+            <%= f.radio_button :has_misc, false %>
+            <%= f.label "has_misc_false", "false", :class => 'span_after_label' %>
+        </span>
   </div>
   <div class="field">
     <%= f.label :no_entry, I18n.translate('component_types.field_name.no_entry'), :class => 'label' %>
-		<span class="value">
-			<%= f.radio_button :no_entry, true %>
-			<%= f.label "no_entry_true", "true", :class => 'span_after_label' %>
-			<%= f.radio_button :no_entry, false %>
-			<%= f.label "no_entry_false", "false", :class => 'span_after_label' %>
-		</span>
+        <span class="value">
+            <%= f.radio_button :no_entry, true %>
+            <%= f.label "no_entry_true", "true", :class => 'span_after_label' %>
+            <%= f.radio_button :no_entry, false %>
+            <%= f.label "no_entry_false", "false", :class => 'span_after_label' %>
+        </span>
   </div>
-	<% if @deactivated_module && can?(:deactivate, @default) %>
-	  <div class="field">
-	    <%= f.label :deactivated, I18n.translate('component_types.field_name.deactivated'), :class => 'label' %>
-	    <span class="value">
-				<%= f.radio_button :deactivated, true %>
-				<%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
-				<%= f.radio_button :deactivated, false %>
-				<%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
-			</span>
-	  </div>
-	<% end %>
+    <% if @deactivated_module && can?(:deactivate, @default) %>
+      <div class="field">
+        <%= f.label :deactivated, I18n.translate('component_types.field_name.deactivated'), :class => 'label' %>
+        <span class="value">
+                <%= f.radio_button :deactivated, true %>
+                <%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
+                <%= f.radio_button :deactivated, false %>
+                <%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
+            </span>
+      </div>
+    <% end %>
