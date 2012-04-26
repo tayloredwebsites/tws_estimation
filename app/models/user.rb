@@ -7,6 +7,9 @@ class User < ActiveRecord::Base
   
   attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password, :roles
   attr_accessor :password, :old_password
+  
+  has_one :sales_rep
+  
   validates :username,
       :presence => true,
       :uniqueness => true
@@ -135,7 +138,7 @@ class User < ActiveRecord::Base
     
   def update_attributes(params)
     # Rails.logger.debug("* User - update_attributes - params=#{params.inspect.to_s}")
-	  Rails.logger.error("* UserRoles - update_attributes - roles is an array !!!") if params[:roles].instance_of?(Array)
+      Rails.logger.error("* UserRoles - update_attributes - roles is an array !!!") if params[:roles].instance_of?(Array)
     if valid_password_change?(params)
       # valid password change, set it
       self.password = params[:password]
@@ -160,7 +163,7 @@ class User < ActiveRecord::Base
   
   def update_attribute(name,value)
     # do not allow password change through update_attribute
-	  Rails.logger.error("* UserRoles - update_attribute - roles is an array !!!") if name.to_s == 'roles' && value.instance_of?(Array)
+      Rails.logger.error("* UserRoles - update_attribute - roles is an array !!!") if name.to_s == 'roles' && value.instance_of?(Array)
     if %w{password password_confirmation old_password}.index(name).nil?
       if name.to_s == 'roles'
         # Rails.logger.debug("* User - update_attributes - initial roles:#{value.inspect.to_s}")

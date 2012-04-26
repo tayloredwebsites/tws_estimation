@@ -1,0 +1,17 @@
+<table cellspacing="0">
+<%= render :partial => 'sales_reps/list_head' %>
+<%
+@sales_reps.each do |item|
+        # only show deactivated item if deactivated module installed, and show deactivated is set.
+        ( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
+    if show_row
+%>
+    <%= render :partial => 'sales_reps/index_row', :locals => { :item => item } %>
+<% end # if show_row
+end # if table.each %>
+
+</table>
+
+<br />
+
+<%= link_to I18n.translate('sales_reps.new.action'), new_sales_rep_path %>

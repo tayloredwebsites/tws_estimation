@@ -1,0 +1,21 @@
+
+  <tr>
+
+    <th><%= I18n.translate('sales_reps.field_name_short.id') %></th>
+
+    <th><%= I18n.translate('sales_reps.field_name_short.user') %></th>
+
+    <th><%= I18n.translate('sales_reps.field_name_short.min_markup_pct') %></th>
+
+    <th><%= I18n.translate('sales_reps.field_name_short.max_markup_pct') %></th>
+<% if @deactivated_module %>
+    <% if show_deactivated? %>
+    <th><%= I18n.translate('sales_reps.field_name_short.deactivated') %></th>
+    <th colspan="4"><%= link_to I18n.translate('view_action.hide_deactivated'), list_sales_reps_path('show_deactivated' => DB_FALSE.to_s) %></th>
+    <% else %>
+    <th colspan="3"><%= link_to I18n.translate('view_action.show_deactivated'), list_sales_reps_path('show_deactivated' => DB_TRUE.to_s) %></th>
+    <% end %>
+<% else %>
+    <th colspan="2">&nbsp;</th>
+<% end %>
+  </tr>

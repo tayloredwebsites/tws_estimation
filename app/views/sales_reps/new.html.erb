@@ -1,0 +1,22 @@
+<%
+    @page_scope = 'sales_reps.new'
+    @deactivated_module = defined?(SalesRep.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= form_for(@sales_rep, :action => 'create') do |f| %>
+
+    <%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @sales_rep, :sys_errors => @errors  } %>
+
+    <div class="fields_20_80">
+        <%= render :partial => 'sales_reps/form', :locals => { :f => f } %>
+    </div>
+
+    <div class="actions">
+        <%= f.submit I18n.translate('view_action.create') %>
+    </div>
+    
+<% end %>
+
+<%= link_to I18n.translate('sales_reps.index.action'), sales_reps_path if can? :manage, @sales_rep %>
