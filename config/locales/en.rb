@@ -39,7 +39,8 @@
           :component_types => 'Component Types',
           :components => 'Components',
           :assemblies => 'Assemblies',
-          :assembly_components => 'Assembly Components'
+          :assembly_components => 'Assembly Components',
+          :sales_reps => 'Sales Reps'
         }
       },
       :estimuser => {
@@ -594,6 +595,71 @@
       },
       :messages => {
       }
-    }, # end Component Resource
+    }, # end AssemblyComponent Resource
+    :sales_reps => {
+      :title => 'Sales Representatives',
+      :system => 'estimmaint',
+      :menu => {
+        :action => "Sales Representatives Actions Menu",
+        :title => "Estimation Sales Representatives Action Menu",
+        :header => "Estimation Sales Representatives Action Menu"
+      },
+      :index => {
+        :action => "List Sales Representatives by Assembly",
+        :title => "List Sales Representatives by Assembly ",
+        :header => "List of all Sales Representatives by Assembly ",
+        :selected_header => "List of selected Sales Representatives by Assembly "
+      },
+      :list => {
+        :action => "List Sales Representatives by Description",
+        :title => "List Sales Representatives in Description Order",
+        :header => "List of all Sales Representatives in Description Order",
+        :selected_header => "List of selected Sales Representatives by Description"
+      },
+      :edit => {
+        :action => "Edit Sales Representative",
+        :title => "Edit Sales Representative",
+        :header => "Edit an Sales Representative"
+      },
+      :new => {
+        :action => "New Sales Representative",
+        :title => "New Sales Representative",
+        :header => "Create an Sales Representative"
+      },
+      :show => {
+        :action => "View Sales Representative",
+        :title => "View Sales Representative",
+        :header => "View an Sales Representative"
+      },
+      :field_name => {
+        :id => 'ID',
+        :user_id => 'User ID',
+        :min_markup_pct => 'Minimum Markup Percent',
+        :max_markup_pct => 'Maximum Markup Percent',
+        :deactivated => 'Deactivated',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :user_id => 'User ID',
+        :min_markup_pct => 'Min. Markup %',
+        :max_markup_pct => 'Max. Markup %',
+        :deactivated => 'Deact.',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :user_id => 'User ID (identifier of the user for this salesperson)',
+        :min_markup_pct => 'Minimum Markup Percent this salesperson can adjust by',
+        :max_markup_pct => 'Maximum Markup Percent this salesperson can adjust by',
+        :deactivated => 'Is this field deactivated?',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
+    } # end Sales Rep Resource
   } # end en
 } #end localizations

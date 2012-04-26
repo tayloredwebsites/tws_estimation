@@ -37,6 +37,7 @@ group :development do
   
   gem 'rspec-rails'
   gem 'annotate'
+  gem "rails_best_practices"
 
 end
 

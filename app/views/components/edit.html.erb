@@ -1,27 +1,27 @@
 <%
-	@page_scope = 'components.edit'
-	@deactivated_module = defined?(Component.new.deactivated_module)
+    @page_scope = 'components.edit'
+    @deactivated_module = defined?(Component.new.deactivated_module)
 %>
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
 <%= form_for(@component, :action => 'update') do |f| %>
 
-	<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @component, :sys_errors => @errors  } %>
+    <%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @component, :sys_errors => @errors  } %>
 
-	<div class="fields_20_80">
-		<%= render :partial => 'form', :locals => { :f => f } %>
-	</div>
+    <div class="fields_20_80">
+        <%= render :partial => 'form', :locals => { :f => f } %>
+    </div>
 
-	<div class="actions">
-		<%= f.submit I18n.translate('view_action.update') %>
-	</div>
-	
+    <div class="actions">
+        <%= f.submit I18n.translate('view_action.update') %>
+    </div>
+    
 <% end %>
 
 <%= link_to I18n.translate('components.show.action'), component_path(@component.id) %>
 <% if can? :manage, @component %>
-	| <%= link_to I18n.translate('components.index.action'), components_path %>
-	| <%= link_to I18n.translate('components.list.action'), list_components_path %>
-	| <%= link_to I18n.translate('components.new.action'), new_component_path %>
+    | <%= link_to I18n.translate('components.index.action'), components_path %>
+    | <%= link_to I18n.translate('components.list.action'), list_components_path %>
+    | <%= link_to I18n.translate('components.new.action'), new_component_path %>
 <% end %>

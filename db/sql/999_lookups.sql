@@ -16,7 +16,7 @@ CREATE TABLE lookups (
     store character varying(255) DEFAULT ''::character NOT NULL,
     name character varying(255) DEFAULT ''::character NOT NULL,
     value text varying(4000) NULL,
-	deactivated boolan DEFAULT false NOT NULL
+    deactivated boolan DEFAULT false NOT NULL
 );
 -- CREATE TABLE customers (
 --     cust_id integer NOT NULL,
@@ -91,8 +91,8 @@ INSERT INTO defaults (id, store, name, value) VALUES
 
 CREATE SEQUENCE defaults_seq;
 ALTER TABLE defaults
-	ALTER COLUMN id SET DEFAULT NEXTVAL('defaultsseq'),
-	ADD CONSTRAINT defaults_ix_defaults_description UNIQUE(description),
+    ALTER COLUMN id SET DEFAULT NEXTVAL('defaultsseq'),
+    ADD CONSTRAINT defaults_ix_defaults_description UNIQUE(description),
 
 -- ALTER TABLE ONLY customers
 --     ADD CONSTRAINT customers_pk_customer PRIMARY KEY (cust_id);

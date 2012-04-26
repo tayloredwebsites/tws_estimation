@@ -21,9 +21,9 @@ CREATE TABLE job_types (
 
 CREATE SEQUENCE job_types_seq;
 ALTER TABLE job_types
-	ALTER COLUMN id SET DEFAULT NEXTVAL('job_types_seq'),
-	ADD CONSTRAINT job_types_pk_id PRIMARY KEY (id),
-	ADD CONSTRAINT job_types_ix_name UNIQUE(name);
+    ALTER COLUMN id SET DEFAULT NEXTVAL('job_types_seq'),
+    ADD CONSTRAINT job_types_pk_id PRIMARY KEY (id),
+    ADD CONSTRAINT job_types_ix_name UNIQUE(name);
 
 
 INSERT INTO job_types (name, description, sort_order) VALUES

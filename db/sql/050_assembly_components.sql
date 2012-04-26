@@ -496,10 +496,10 @@ INSERT INTO assembly_components (id, component_id, assembly_id, description, req
 -- DROP SEQUENCE assembly_components_seq;
 CREATE SEQUENCE assembly_components_seq;
 ALTER TABLE ONLY assembly_components
-	ALTER COLUMN id SET DEFAULT NEXTVAL('assembly_components_seq'),
+    ALTER COLUMN id SET DEFAULT NEXTVAL('assembly_components_seq'),
     ADD CONSTRAINT assembly_components_pk_assembly_components PRIMARY KEY (id),
-	ADD CONSTRAINT fk_assembly_components_components FOREIGN KEY (component_id) REFERENCES components(id),
-	ADD CONSTRAINT fk_assembly_components_assemblies FOREIGN KEY (assembly_id) REFERENCES assemblies(id);
+    ADD CONSTRAINT fk_assembly_components_components FOREIGN KEY (component_id) REFERENCES components(id),
+    ADD CONSTRAINT fk_assembly_components_assemblies FOREIGN KEY (assembly_id) REFERENCES assemblies(id);
 
 
 

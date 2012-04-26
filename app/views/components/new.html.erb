@@ -1,22 +1,22 @@
 <%
-	@page_scope = 'components.new'
-	@deactivated_module = defined?(Component.new.deactivated_module)
+    @page_scope = 'components.new'
+    @deactivated_module = defined?(Component.new.deactivated_module)
 %>
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
 <%= form_for(@component, :action => 'create') do |f| %>
 
-	<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @component, :sys_errors => @errors  } %>
+    <%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @component, :sys_errors => @errors  } %>
 
-	<div class="fields_20_80">
-		<%= render :partial => 'components/form', :locals => { :f => f } %>
-	</div>
+    <div class="fields_20_80">
+        <%= render :partial => 'components/form', :locals => { :f => f } %>
+    </div>
 
-	<div class="actions">
-		<%= f.submit I18n.translate('view_action.create') %>
-	</div>
-	
+    <div class="actions">
+        <%= f.submit I18n.translate('view_action.create') %>
+    </div>
+    
 <% end %>
 
 <%= link_to I18n.translate('components.index.action'), components_path if can? :manage, @component %>
