@@ -10,7 +10,7 @@
 <div class="field">
     <%= f.label :user, I18n.translate('sales_reps.field_name.user'), :class => 'label' %>
     <span class="value">
-        <%= collection_select( :sales_rep, :user_id, UsersController.list, :id, :username) %>
+        <%= collection_select( :sales_rep, :user_id, UsersController.list_valid_sales_rep_users(@sales_rep.user.nil? ? '' : @sales_rep.user.id), :id, :username, { :include_blank => true }) %>
     </span>
 </div>
 
