@@ -1,24 +1,34 @@
 FactoryGirl.define do
-  
+
   sequence :email do |n|
     "user_#{n}@me.com"
   end
   sequence :username do |n|
-    "username_#{n}"
+    "username#{n}"
   end
-  
-  factory :users, :class => User do
+  sequence :last_name do |n|
+    "LastName#{n}"
+  end
+  sequence :first_name do |n|
+    "FirstName#{n}"
+  end
+
+  factory :user, :class => User do
     email       {FactoryGirl.generate(:email)}
     username    {FactoryGirl.generate(:username)}
+    first_name  {FactoryGirl.generate(:first_name)}
+    last_name   {FactoryGirl.generate(:last_name)}
   end
-  
-  factory :users_create, :class => User do
+
+  factory :user_create, :class => User do
     email       {FactoryGirl.generate(:email)}
     username    {FactoryGirl.generate(:username)}
+    first_name  {FactoryGirl.generate(:first_name)}
+    last_name   {FactoryGirl.generate(:last_name)}
     password              'test'
     password_confirmation 'test'
   end
-  
+
   factory :user_min_attr, :class => User do
     email     'email@example.com'
     username  'TestUser'
@@ -45,7 +55,7 @@ FactoryGirl.define do
     password              'new_pass'
     password_confirmation 'new_pass'
   end
-  
+
   factory :user_roles_attr, :class => User do
     roles           'all_guests maint_users'
   end
@@ -63,7 +73,7 @@ FactoryGirl.define do
     foo         'true'
     bar         'true'
   end
-  
+
   factory :reg_user_min_attr, :class => User do
     email     'reguser@example.com'
     username  'RegUser'
@@ -90,7 +100,7 @@ FactoryGirl.define do
     password              'new_pass'
     password_confirmation 'new_pass'
   end
-    
+
   factory :admin_user_min_attr, :class => User do
     email     'admin@example.com'
     username  'AdminUser'
@@ -117,5 +127,5 @@ FactoryGirl.define do
     password              'new_pass'
     password_confirmation 'new_pass'
   end
-  
+
 end

@@ -4,12 +4,12 @@ include UserIntegrationHelper
 describe "Error Handling Display to User - " do
 
   context 'Regular User' do
-    
+
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
       helper_signin(:reg_user_full_create_attr, @me.full_name)
     end
-    
+
     it "should display the notify error in the error at the top of the page" do
       @testuser = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
       visit user_path (@testuser.id)
@@ -21,7 +21,7 @@ describe "Error Handling Display to User - " do
     end
 
     it "should display Access Denied! error in the error at the top of the page" do
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:user_create).merge({:deactivated => DB_TRUE}))
       User.count.should > 1
       visit users_path()
       # save_and_open_page
@@ -44,5 +44,5 @@ describe "Error Handling Display to User - " do
     end
 
   end
-  
+
 end

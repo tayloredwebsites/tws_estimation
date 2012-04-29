@@ -16,12 +16,12 @@ describe 'Users Integration Tests' do
       visit home_index_path
       Rails.logger.debug("T users_integration_spec Admin user logged in before - done")
     end
-    
+
     it "should have a working New user link on the index page" do
       # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:user_create).merge({:deactivated => DB_TRUE}))
       @num_users = User.count
       @num_users.should > 1
       visit users_path()
@@ -30,12 +30,12 @@ describe 'Users Integration Tests' do
       find('a', :text => I18n.translate('users.new.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('users.new.header')}$/
     end
-  
+
     it "should have a working View user link on the index page" do
       # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:user_create).merge({:deactivated => DB_TRUE}))
       @num_users = User.count
       @num_users.should > 1
       visit users_path(:show_deactivated => DB_TRUE.to_s)
@@ -44,12 +44,12 @@ describe 'Users Integration Tests' do
       find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]//a", :text => "#{I18n.translate('view_action.show')}").click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('users.show.header')}$/
     end
-  
+
     it "should have a working Edit user link on the index page" do
      # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
      #    User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
      #  end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:user_create).merge({:deactivated => DB_TRUE}))
       @num_users = User.count
       @num_users.should > 1
       visit users_path(:show_deactivated => DB_TRUE.to_s)
@@ -58,7 +58,7 @@ describe 'Users Integration Tests' do
       find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]//a", :text => "#{I18n.translate('view_action.edit')}").click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('users.edit.header')}$/
     end
-    
+
     it 'should be able to create a user with no errors displayed' do
       @num_users = User.count
       visit new_user_path()
@@ -186,7 +186,7 @@ describe 'Users Integration Tests' do
       @num_users.should == User.count
     end
 
-    
+
   end
 
 end
@@ -200,7 +200,7 @@ describe 'Users Sessions Integration Tests' do
     @model = User.new
     visit signin_path
   end
-  
+
   it 'should show the title and login fields of the login page - ' do
     # save_and_open_page
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
@@ -231,7 +231,7 @@ describe 'Users Sessions Integration Tests' do
     before(:each) do
       helper_signin_form_submit(:admin_user_full_create_attr)
     end
-    
+
     it 'login with valid credentials - should send the user to the Logged In page (Session Create page)' do
       # should be on the Session Create page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
@@ -250,20 +250,20 @@ describe 'Users Sessions Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       # click the signout link
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a', :text => I18n.translate('users_sessions.signout.action')).click
-      # save_and_open_page  
+      # save_and_open_page
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~ /^#{I18n.translate('users_sessions.signin.action')}$/
       # user should have a signin link in a left module header
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
         /#{I18n.translate('users_sessions.signin.action')}/
     end
-  
+
   end
 
 
 end
 
 describe 'Users Roles Tests - ' do
-    
+
   before(:each) do
     @user1 = FactoryGirl.create(:user_full_create_attr)
     @admin = FactoryGirl.create(:admin_user_full_create_attr)
@@ -271,7 +271,7 @@ describe 'Users Roles Tests - ' do
     @model = User.new
     visit signin_path
   end
-  
+
   context 'Admin user logged in - ' do
     before(:each) do
       helper_signin_form_submit(:admin_user_full_create_attr)
@@ -537,7 +537,7 @@ describe 'Users Roles Tests - ' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       page.should_not have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="valid.email@example.com"]')
-      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ 
+      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @reg.username )}$/
       @updated_user = User.find(@reg.id)
       @updated_user.email.should =~ /valid.email@example.com/
@@ -657,7 +657,7 @@ describe 'Systems Tests' do
       visit new_user_path()
       # should be redirect to signin page
       helper_signin_form_submit(:admin_user_full_create_attr)
-      # should be signed in, and redirected to the original page 
+      # should be signed in, and redirected to the original page
       # save_and_open_page
       helper_user_on_page?('systems.maint.full_name', 'users.new.header', @admin.full_name)
     end
@@ -665,12 +665,12 @@ describe 'Systems Tests' do
       visit signout_path()
       # should be redirect to signin page
       helper_signin_form_submit(:admin_user_full_create_attr)
-      # should be signed in, and redirected to the original page 
+      # should be signed in, and redirected to the original page
       # save_and_open_page
       helper_user_on_page?('systems.guest.full_name', 'users_sessions.index.header', @admin.full_name)
     end
-    
+
   end
-  
+
 
 end
