@@ -15,7 +15,7 @@ describe 'Users Integration Tests' do
       visit home_index_path
       Rails.logger.debug("T users_integration_spec Admin user logged in before - done")
     end
-  
+
     it 'should GET show the active user as not deactivated' do
       visit user_path (@user1.id)
       # save_and_open_page
@@ -23,7 +23,7 @@ describe 'Users Integration Tests' do
       find(:xpath, '//*[@id="user_deactivated"]').text.should_not =~ /\A\s*\z/
       find(:xpath, '//*[@id="user_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     end
-  
+
     it 'should show the deactivated field in edit' do
       visit edit_user_path (@user1.id)
       # save_and_open_page
@@ -32,12 +32,12 @@ describe 'Users Integration Tests' do
       find(:xpath, '//*[@id="user_deactivated"]').value.should =~ /\Afalse\z/
       find(:xpath, '//*[@id="user_deactivated"]/option[@selected]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
     end
-  
+
     it 'should list users with deactivate/reactivate action/link/button depending upon status' do
       # UserTestHelper.user_safe_attributes.each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE.to_s}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:user_create).merge({:deactivated => DB_TRUE.to_s}))
       User.count.should > 1
       visit users_path(:show_deactivated => DB_TRUE.to_s) # need to show deactivated records for this test
       #save_and_open_page
@@ -48,7 +48,7 @@ describe 'Users Integration Tests' do
       find(:xpath, "(//tr[@id=\"user_#{@user_deact.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.reactivate')}\z/
       find(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]/td/a[@data-method=\"delete\"]").text.should =~ /\A#{I18n.translate('view_action.delete')}\z/
     end
-    
+
     it 'Update action should allow a change from deactivated to active' do
       @user1.deactivated?.should be_false
       @user1.deactivate
@@ -76,7 +76,7 @@ describe 'Users Integration Tests' do
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated?.should be_false
     end
-  
+
     it 'Update action should allow a change from active to deactivated' do
       @user1.deactivated?.should be_false
       @num_users = User.count
@@ -100,7 +100,7 @@ describe 'Users Integration Tests' do
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated?.should be_true
     end
-    
+
     it 'should allow a user to be deactivated from the index page' do
       # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
@@ -123,7 +123,7 @@ describe 'Users Integration Tests' do
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated?.should be_true
     end
-  
+
     it 'should allow a user to be reactivated from the index page' do
       # FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
@@ -148,12 +148,12 @@ describe 'Users Integration Tests' do
       @updated_user = User.find(@user1.id)
       @updated_user.deactivated?.should be_false
     end
-    
+
     it 'should not list deactivated users by default' do
       # UserTestHelper.user_safe_attributes.each do |key, value|
       #   User.create!( FactoryGirl.attributes_for(:user_min_create_attr).merge({key => value}) )
       # end
-      @user_deact = User.create!(FactoryGirl.attributes_for(:users_create).merge({:deactivated => DB_TRUE}))
+      @user_deact = User.create!(FactoryGirl.attributes_for(:user_create).merge({:deactivated => DB_TRUE}))
       User.count.should > 1
       visit users_path()
       # save_and_open_page
@@ -162,7 +162,7 @@ describe 'Users Integration Tests' do
       find(:xpath, "(//tr[@id=\"user_#{@user1.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.deactivate')}\z/
       page.should_not have_selector(:xpath, "//tr[@id=\"user_#{@user_deact.id}\"]/td[@class=\"user_deactivated\"]", :text => I18n.is_deactivated_or_not(true) )
     end
-    
+
     it 'should not allow a user to deactivate themselves (no deactivate button in index listing)' do
       @me.deactivated?.should be_false
       visit users_path(:show_deactivated => DB_TRUE.to_s)
@@ -192,7 +192,7 @@ describe 'Users Sessions Integration Tests' do
     @model = User.new
     visit signin_path
   end
-  
+
   it 'should show the title and login fields of the login page - ' do
     # save_and_open_page
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
@@ -229,7 +229,7 @@ describe 'Users Sessions Integration Tests' do
       # save_and_open_page
       Rails.logger.debug("T users_integration_spec Admin user logged in before - done")
     end
-    
+
     it 'login with valid credentials - should send the user to the Logged In page (Session Create page)' do
       # should be on the Session Create page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
@@ -248,27 +248,27 @@ describe 'Users Sessions Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       # click the signout link
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a', :text => I18n.translate('users_sessions.signout.action')).click
-      # save_and_open_page  
+      # save_and_open_page
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~ /^#{I18n.translate('users_sessions.signin.action')}$/
       # user should have a signin link in a left module header
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
         /#{I18n.translate('users_sessions.signin.action')}/
     end
-  
+
   end
 
 
 end
 
 describe 'Users Roles Tests - ' do
-    
+
   before(:each) do
     @user1 = FactoryGirl.create(:user_full_create_attr)
     @admin = FactoryGirl.create(:admin_user_full_create_attr)
     @reg = FactoryGirl.create(:reg_user_full_create_attr)
     @model = User.new
   end
-  
+
   context 'Admin user logged in - ' do
     before(:each) do
       # should fill in the login form to login

@@ -152,7 +152,7 @@ describe UsersController do
     it 'should create user with each of the safe parameters' do
       FactoryGirl.attributes_for(:user_safe_attr).each do |key, value|
         @num_users = User.count
-        post :create, :user => FactoryGirl.attributes_for(:users_create).merge({key => value})
+        post :create, :user => FactoryGirl.attributes_for(:user_create).merge({key => value})
         assigns(:user).should_not be_nil
         assigns(:user).should be_instance_of(User)
         assigns(:user)[key].should == value
@@ -162,7 +162,7 @@ describe UsersController do
     it "should ignore unsafe parameters in create user" do
       FactoryGirl.attributes_for(:user_unsafe_attr).each do |key, value|
         @num_users = User.count
-        post :create, :user => FactoryGirl.attributes_for(:users_create).merge({key => value})
+        post :create, :user => FactoryGirl.attributes_for(:user_create).merge({key => value})
         assigns(:user).should_not be_nil
         assigns(:user)[key].should_not == value
         User.count.should == (@num_users+1)
@@ -171,7 +171,7 @@ describe UsersController do
     it "should ignore any of the bad_attributes when creating a user" do
       FactoryGirl.attributes_for(:user_inval_attr).each do |key, value|
         @num_users = User.count
-        post :create, :user => FactoryGirl.attributes_for(:users_create).merge({key => value})
+        post :create, :user => FactoryGirl.attributes_for(:user_create).merge({key => value})
         assigns(:user).should_not be_nil
         assigns(:user)[key].should_not == value
         User.count.should == (@num_users+1)
@@ -179,7 +179,7 @@ describe UsersController do
     end
     it 'should not create a user with mismatched password' do
       @num_users = User.count
-      post :create, :user => FactoryGirl.attributes_for(:users_create).merge({:password_confirmation => 'not_the_password'})
+      post :create, :user => FactoryGirl.attributes_for(:user_create).merge({:password_confirmation => 'not_the_password'})
       User.count.should == (@num_users)
       assigns(:user).should_not be_nil
       assigns(:user).should be_instance_of(User) 

@@ -16,13 +16,13 @@ describe User do
       lambda {User.create!()}.should raise_error(ActiveRecord::RecordInvalid)
       User.count.should == (@num_users)
     end
-    
+
     it "should not create user when created with no attributes" do
       @num_users = User.count
       user = User.create()
       User.count.should == (@num_users)
     end
-    
+
     it "should create user when created with the minimum_attributes" do
       @num_users = User.count
       user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr))
@@ -32,7 +32,7 @@ describe User do
       user.errors.count.should == 0
       User.count.should == (@num_users+1)
     end
-    
+
     it "should not create user when created without password" do
       @num_users = User.count
       user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).reject{|key,val| key == :password} )
@@ -41,7 +41,7 @@ describe User do
       user.errors.count.should > 0
       User.count.should == (@num_users)
     end
-    
+
     it "should not create user when created without password_confirmation" do
       @num_users = User.count
       user = User.create(FactoryGirl.attributes_for(:reg_user_min_create_attr).reject{|key,val| key == :password_confirmation} )
@@ -50,7 +50,7 @@ describe User do
       user.errors.count.should > 0
       User.count.should == (@num_users)
     end
-    
+
     it 'should not create user when created without a minimum (required) attribute' do
       FactoryGirl.attributes_for(:reg_user_min_attr).each do |key, value|
         test_attributes = FactoryGirl.attributes_for(:reg_user_min_create_attr)
@@ -66,16 +66,16 @@ describe User do
         User.count.should == (@num_users)
       end
     end
-    
+
     it 'should create user when created with safe_attributes' do
       @num_users = User.count
-      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:first_name => FactoryGirl.attributes_for(:user_safe_attr)[:first_name]))
+      user = User.create!(FactoryGirl.attributes_for(:user_create).merge(:first_name => FactoryGirl.attributes_for(:user_safe_attr)[:first_name]))
       User.count.should == (@num_users+1)
       @num_users = User.count
-      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:last_name => FactoryGirl.attributes_for(:user_safe_attr)[:last_name]))
+      user = User.create!(FactoryGirl.attributes_for(:user_create).merge(:last_name => FactoryGirl.attributes_for(:user_safe_attr)[:last_name]))
       User.count.should == (@num_users+1)
       @num_users = User.count
-      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:username => FactoryGirl.attributes_for(:user_safe_attr)[:username]))
+      user = User.create!(FactoryGirl.attributes_for(:user_create).merge(:username => FactoryGirl.attributes_for(:user_safe_attr)[:username]))
       User.count.should == (@num_users+1)
     end
 
@@ -93,15 +93,15 @@ describe User do
 
     it "should ignore invalid attributes when creating a user" do
       @num_users = User.count
-      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:first_name => FactoryGirl.attributes_for(:user_inval_attr)[:admin]))
+      user = User.create!(FactoryGirl.attributes_for(:user_create).merge(:first_name => FactoryGirl.attributes_for(:user_inval_attr)[:admin]))
       user.should_not respond_to(:admin)
       User.count.should == (@num_users+1)
       @num_users = User.count
-      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:last_name => FactoryGirl.attributes_for(:user_inval_attr)[:foo]))
+      user = User.create!(FactoryGirl.attributes_for(:user_create).merge(:last_name => FactoryGirl.attributes_for(:user_inval_attr)[:foo]))
       user.should_not respond_to(:foo)
       User.count.should == (@num_users+1)
       @num_users = User.count
-      user = User.create!(FactoryGirl.attributes_for(:users_create).merge(:username => FactoryGirl.attributes_for(:user_inval_attr)[:bar]))
+      user = User.create!(FactoryGirl.attributes_for(:user_create).merge(:username => FactoryGirl.attributes_for(:user_inval_attr)[:bar]))
       user.should_not respond_to(:bar)
       User.count.should == (@num_users+1)
       @num_users = User.count
@@ -132,19 +132,19 @@ describe User do
       #   User.count.should == @user_count+1
       # end
       @user_count = User.count
-      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@controlledair.com') )
+      a_user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'test@controlledair.com') )
       User.count.should == @user_count+1
       @user_count = User.count
-      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@me.com') )
+      a_user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'test@me.com') )
       User.count.should == @user_count+1
       @user_count = User.count
-      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@gmail.com') )
+      a_user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'test@gmail.com') )
       User.count.should == @user_count+1
       @user_count = User.count
-      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@example.com') )
+      a_user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'test@example.com') )
       User.count.should == @user_count+1
       @user_count = User.count
-      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => '1@me.com') )
+      a_user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => '1@me.com') )
       User.count.should == @user_count+1
     end
     it 'should reject invalid email addresses using VALID_EMAIL_EXPR application constant' do
@@ -154,39 +154,39 @@ describe User do
       #   User.count.should == @user_count
       # end
       @user_count = User.count
-      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@testing.com') )
+      a_user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'test@testing.com') )
       User.count.should == @user_count
-      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'a.b.com') )
+      a_user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'a.b.com') )
       User.count.should == @user_count
-      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'me@yahoo.com') )
+      a_user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'me@yahoo.com') )
       User.count.should == @user_count
-      a_user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'hello') )
+      a_user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'hello') )
       User.count.should == @user_count
     end
     it 'should reject an email that is not unique' do
       @user_count = User.count
-      user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@example.com') )
+      user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'test@example.com') )
       # user.errors.each do |type, msg|
       #   msg.should == ''
       # end
       user.errors.count.should == 0
       User.count.should == @user_count+1
       @user_count = User.count
-      user = User.create(FactoryGirl.attributes_for(:users_create).merge(:email => 'test@example.com') )
+      user = User.create(FactoryGirl.attributes_for(:user_create).merge(:email => 'test@example.com') )
       user.errors.count.should > 0
       User.count.should == @user_count
     end
     it 'should reject a username is not unique' do
       @user_count = User.count
-      user = User.create(FactoryGirl.attributes_for(:users_create).merge(:username => 'MyName') )
+      user = User.create(FactoryGirl.attributes_for(:user_create).merge(:username => 'MyName') )
       user.errors.count.should == 0
       User.count.should == @user_count+1
       @user_count = User.count
-      user = User.create(FactoryGirl.attributes_for(:users_create).merge(:username => 'MyName') )
+      user = User.create(FactoryGirl.attributes_for(:user_create).merge(:username => 'MyName') )
       user.errors.count.should > 0
       User.count.should == @user_count
     end
-    
+
     it 'should should have accessible attributes and methods' do
       FactoryGirl.attributes_for(:reg_user_min_create_attr).each do |key, value|
         @user1.should respond_to(key)
@@ -202,9 +202,9 @@ describe User do
     end
 
   end
-  
+
   context 'logged in regular user -' do
-    
+
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr))
       @model = User.new
@@ -229,7 +229,7 @@ describe User do
       updated_user = User.find(user.id)
       updated_user.has_password?('NewPass').should be_true
     end
-    
+
   end
 
 
@@ -237,7 +237,7 @@ describe User do
     before(:each) do
       @reg = FactoryGirl.create(:reg_user_min_create_attr)
     end
-    
+
     it 'should always see the see the system of the role, and not others' do
       # loop through all valid roles
       VALID_ROLES.each do |role|
@@ -264,7 +264,7 @@ describe User do
         end
       end
     end
-    
+
   end
 end
 
