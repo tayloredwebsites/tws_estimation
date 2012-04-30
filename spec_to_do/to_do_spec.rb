@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
+  context 'finish up sales reps - ' do
+    it 'should have new user page translation en.systems.estim.full_name'
+    it 'should have current user in user dropdown in edit sales rep (worked in tests?)'
+  end
+  context 'finish up estimates - ' do
+    it 'should have customers'
+    it 'should have states'
+    it 'should have estimates'
+  end
   context 'password management - ' do
     it 'allow users to reset their password (and get it sent to email)'
     it 'should allow an administrator to reset their password (and get it sent to email)'
