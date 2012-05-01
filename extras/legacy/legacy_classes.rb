@@ -21,4 +21,8 @@ module Legacy::LegacyClasses
     establish_connection :legacy
     self.table_name = 'assembly_components'
   end
+  class LegacyJobType < ActiveRecord::Base
+    establish_connection :legacy
+    self.table_name = 'job_types'
+  end
 end

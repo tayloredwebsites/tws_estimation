@@ -153,6 +153,7 @@ describe 'SalesReps Integration Tests' do
             page.fill_in "sales_rep_#{at_key.to_s}", :with => at_val
           end
         end
+        # save_and_open_page
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page

@@ -36,15 +36,16 @@ APPLICATION_SYSTEMS = {
   :maint => {:id => 'maint', :actual => 'true', :type => 'shared', :menu_items => {
     :users => {:class_name => "User", :action => :index, :start_uri => "/users"}
   } },
-  :estimmaint => {:id => 'estimmaint', :actual => 'true', :type => 'shared', :menu_items => {
+  :estimmaint => {:id => 'estim', :actual => 'true', :type => 'shared', :menu_items => {
     :defaults => {:class_name => "Default", :action => :index, :start_uri => "/defaults"},
     :component_types => {:class_name => "ComponentType", :action => :index, :start_uri => "/component_types"},
     :components => {:class_name => "Component", :action => :index, :start_uri => "/components/menu"},
     :assemblies => {:class_name => "Assembly", :action => :index, :start_uri => "/assemblies/menu"},
     :assembly_components => {:class_name => "AssemblyComponent", :action => :index, :start_uri => "/assembly_components/menu"},
-    :sales_reps => {:class_name => "SalesRep", :action => :index, :start_uri => "/sales_reps"}
+    :sales_reps => {:class_name => "SalesRep", :action => :index, :start_uri => "/sales_reps"},
+    :job_types => {:class_name => "JobType", :action => :index, :start_uri => "/job_types"}
   } },
-  :estimuser => {:id => 'estimuser', :actual => 'true', :type => 'external', :menu_items => {    
+  :estimuser => {:id => 'estim', :actual => 'true', :type => 'external', :menu_items => {    
   } },
   :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :menu_items => {    
   } }

@@ -1,0 +1,48 @@
+
+
+<div class="field">
+      <%= f.label :id, I18n.translate('job_types.field_name.id'), :class => 'label' %>
+    <span class="value" id="job_type_id"><%= @job_type.id %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :name, I18n.translate('job_types.field_name.name'), :class => 'label' %>
+    <span class="value"><%= f.text_field :name %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :description, I18n.translate('job_types.field_name.description'), :class => 'label' %>
+    <span class="value"><%= f.text_field :description %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :sort_order, I18n.translate('job_types.field_name.sort_order'), :class => 'label' %>
+    <span class="value"><%= f.number_field :sort_order %></span>
+</div>
+
+
+<div class="field">
+      <%= f.label :deactivated, I18n.translate('job_types.field_name.deactivated'), :class => 'label' %>
+    <span class="value">
+        <%= f.radio_button :deactivated, true %>
+        <%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
+        <%= f.radio_button :deactivated, false %>
+        <%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
+    </span>
+</div>
+
+
+<div class="field">
+    <%= f.label :created_at, I18n.translate('job_types.field_name.created_at'), :class => 'label' %>
+    <span class="value" id="job_type_created_at"><%= @job_type.created_at %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :updated_at, I18n.translate('job_types.field_name.updated_at'), :class => 'label' %>
+    <span class="value" id="job_type_updated_at"><%= @job_type.updated_at %></span>
+</div>
+

@@ -1,0 +1,24 @@
+    <%= tag :tr, options = {:id => "job_type_#{item.id}", :class => "#{cycle('odd', 'even')}"}, open = true %>
+        
+        <td id="<%= "job_type_#{item.id}_id" %>"><%= item.id %></td>
+        
+        <td id="<%= "job_type_#{item.id}_name" %>"><%= item.name %></td>
+        
+        <td id="<%= "job_type_#{item.id}_description" %>"><%= item.description %></td>
+        
+        <td id="<%= "job_type_#{item.id}_sort_order" %>"><%= item.sort_order %></td>
+                <% if @deactivated_module && show_deactivated? %>
+           <td id="<%= "job_type_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
+        <% end %>
+       <td><%= link_to I18n.translate('view_action.view'), job_type_path(item.id) %></td>
+       <td><%= link_to I18n.translate('view_action.edit'), edit_job_type_path(item.id) %></td>
+        <% if @deactivated_module && can?(:deactivate, item) %>
+            <% if item.deactivated? %>
+                <td><%= link_to I18n.translate('view_action.reactivate'), reactivate_job_type_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.reactivate'), :id => item.id) %></td>
+                 <td><%= link_to I18n.translate('view_action.delete'), item, :method => :delete, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.delete'), :id => item.id)  %></td>
+            <% else %>
+                 <td><%= link_to I18n.translate('view_action.deactivate'), deactivate_job_type_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.deactivate'), :id => item.id) %></td>
+            <% end # end if item.deactivated? %>
+		<% else %>
+				<td><%= link_to I18n.translate('view_action.delete'), item, :method => :delete, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.delete'), :id => item.id)  %></td>
+        <% end # end if @deactivated_module %>
