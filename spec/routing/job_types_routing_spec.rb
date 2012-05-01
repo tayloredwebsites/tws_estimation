@@ -31,5 +31,21 @@ describe JobTypesController do
       delete("/job_types/1").should route_to("job_types#destroy", :id => "1")
     end
 
+    it "routes to #deactivate" do
+      put("/job_types/1/deactivate").should route_to("job_types#deactivate", :id => "1")
+    end
+    
+    it "routes to #reactivate" do
+      put("/job_types/1/reactivate").should route_to("job_types#reactivate", :id => "1")
+    end
+    
+    it "routes to #deactivate" do
+      get("/job_types/1/deactivate").should route_to('home#errors', :status => 405, :id => "1")
+    end
+    
+    it "routes to #reactivate" do
+      get("/job_types/1/reactivate").should route_to('home#errors', :status => 405, :id => "1")
+    end
+
   end
 end
