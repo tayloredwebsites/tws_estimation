@@ -31,5 +31,21 @@ describe SalesRepsController do
       delete("/sales_reps/1").should route_to("sales_reps#destroy", :id => "1")
     end
 
+    it "routes to #deactivate" do
+      put("/sales_reps/1/deactivate").should route_to("sales_reps#deactivate", :id => "1")
+    end
+    
+    it "routes to #reactivate" do
+      put("/sales_reps/1/reactivate").should route_to("sales_reps#reactivate", :id => "1")
+    end
+    
+    it "routes to #deactivate" do
+      get("/sales_reps/1/deactivate").should route_to('home#errors', :status => 405, :id => "1")
+    end
+    
+    it "routes to #reactivate" do
+      get("/sales_reps/1/reactivate").should route_to('home#errors', :status => 405, :id => "1")
+    end
+
   end
 end

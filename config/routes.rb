@@ -9,8 +9,8 @@ TwsAuth::Application.routes.draw do
       get 'list'            # route:               list_job_types GET    /job_types/list(.:format)                     job_types#list
     end
   end
-  match "sales_reps/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
-  match "sales_reps/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "job_types/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "job_types/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
 
   resources :sales_reps do
     member do
