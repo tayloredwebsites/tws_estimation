@@ -31,7 +31,7 @@
           :users => 'Users'
         }
       },
-      :estimmaint => {
+      :estim => {
         :abbreviation => 'Estimation Maintenance',
         :full_name => 'Estimation Maintenance',
         :menu_items => {
