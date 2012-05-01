@@ -40,7 +40,8 @@
           :components => 'Components',
           :assemblies => 'Assemblies',
           :assembly_components => 'Assembly Components',
-          :sales_reps => 'Sales Reps'
+          :sales_reps => 'Sales Reps',
+          :job_types => 'Job Taxability Types'
         }
       },
       :estimuser => {
@@ -657,6 +658,71 @@
         :user => 'User (the user for this salesperson)',
         :min_markup_pct => 'Minimum Markup Percent this salesperson can adjust by',
         :max_markup_pct => 'Maximum Markup Percent this salesperson can adjust by',
+        :deactivated => 'Is this field deactivated?',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
+    }, # end Sales Rep Resource
+    :job_types => {
+      :title => 'Job Taxability Types',
+      :system => 'estimmaint',
+      :menu => {
+        :action => "Job Taxability Types Actions Menu",
+        :title => "Estimation Job Taxability Types Action Menu",
+        :header => "Estimation Job Taxability Types Action Menu"
+      },
+      :index => {
+        :action => "List Job Taxability Types",
+        :title => "List Job Taxability Types",
+        :header => "List of all Job Taxability Types",
+        :selected_header => "List of selected Job Taxability Types"
+      },
+      :list => {
+        :action => "List Job Taxability Types",
+        :title => "List Job Taxability Types ",
+        :header => "List of all Job Taxability Types",
+        :selected_header => "List of selected Job Taxability Types"
+      },
+      :edit => {
+        :action => "Edit Job Taxability Type",
+        :title => "Edit Job Taxability Type",
+        :header => "Edit an Job Taxability Type"
+      },
+      :new => {
+        :action => "New Job Taxability Type",
+        :title => "New Job Taxability Type",
+        :header => "Create an Job Taxability Type"
+      },
+      :show => {
+        :action => "View Job Taxability Type",
+        :title => "View Job Taxability Type",
+        :header => "View an Job Taxability Type"
+      },
+      :field_name => {
+        :id => 'ID',
+        :name => 'Name',
+        :description => 'Description',
+        :sort_order => 'Sort Order',
+        :deactivated => 'Deactivated',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :name => 'Name',
+        :description => 'Descr.',
+        :sort_order => 'Sort Order',
+        :deactivated => 'Deact.',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :name => 'Sales Rep Name',
+        :description => 'Description of areas of focus or territories',
+        :sort_order => 'Sort Order',
         :deactivated => 'Is this field deactivated?',
         :created_at => 'Created at this Date and Time.',
         :updated_at => 'Last Updated at this date and time.'

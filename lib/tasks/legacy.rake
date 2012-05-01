@@ -137,7 +137,29 @@ namespace :legacy do
           new_table.save!
           puts "Successfully migrated assembly_components record."
         rescue Exception => e
-          Rails.logger.debug("M Error migrating assembly_components Error #{e.inspect.to_s}")
+          Rails.logger.debug("M Error migrating assembly_components record #{old_table.id.to_s},  #{e.inspect.to_s}")
+        end
+      end
+      #ActiveRecord::Base.record_timestamps = true # turn timestamps back on
+    end
+    
+    task :job_types => :setups do
+      #ActiveRecord::Base.record_timestamps = false # turn off timestamps
+      include Legacy::LegacyClasses
+      # loop through the legacy default records
+      LegacyJobType.all.each do |old_table|
+        begin
+          new_table = JobType.new
+          new_table.attributes = {
+            :name => old_table.name,
+            :description => old_table.description,
+            :sort_order => old_table.sort_order,
+            :deactivated => old_table.deactivated
+          }
+          new_table.save!
+          puts "Successfully migrated job_types table."
+        rescue Exception => e
+          Rails.logger.debug("M Error migrating job_types record #{old_table.id.to_s},  #{e.inspect.to_s}")
         end
       end
       #ActiveRecord::Base.record_timestamps = true # turn timestamps back on

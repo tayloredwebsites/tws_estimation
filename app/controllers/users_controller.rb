@@ -29,14 +29,15 @@ class UsersController< SecureApplicationController
     Rails.logger.debug("* UsersController.self.list_valid_sales_rep_users cur:#{cur_user_id.inspect.to_s}")
     Rails.logger.debug("* UsersController.self.list_valid_sales_rep_users match:#{(/^\d*$/.match(cur_user_id.to_s)).inspect.to_s}")
     if /^\d+$/.match(cur_user_id.to_s)
-      ret = self.new.get_scope().where('id NOT IN (SELECT user_id FROM sales_reps where id NOT IN (?)) AND id IS NOT NULL',cur_user_id).order('username')
+      ret = self.new.get_scope().where('id NOT IN (SELECT user_id FROM sales_reps where user_id NOT IN (?))',cur_user_id).order('username')
+      # ret = self.new.get_scope().where('id NOT IN (SELECT user_id FROM sales_reps where id NOT IN (?)) AND id IS NOT NULL',cur_user_id).order('username')
       Rails.logger.debug("* UsersController.self.list_valid_sales_rep_users cur:#{cur_user_id.to_s}, ret:#{ret.inspect.to_s}")
     else
       ret = self.new.get_scope().where('id NOT IN (SELECT user_id FROM sales_reps) AND id IS NOT NULL').order('username')
       Rails.logger.debug("* UsersController.self.list_valid_sales_rep_users ret:#{ret.inspect.to_s}")
     end
     ret
-  end
+ end
 
   # GET /users
   def index

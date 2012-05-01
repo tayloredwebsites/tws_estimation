@@ -1,0 +1,7 @@
+<%
+    @page_scope = 'job_types.list'
+    @deactivated_module = defined?(JobType.new.deactivated_module)
+%>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'job_types/list' %>

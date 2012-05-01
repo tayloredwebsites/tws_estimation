@@ -1,8 +1,13 @@
 require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
+  context 'resolve difference between role system and left menu systems' do
+    it 'should remove translation missing: en.systems.estim.full_name on users#edit'
+    it 'should have the systems loop on the left nav match the systems in some way or form'
+    it 'should resolve if the @systemc is needed'
+    it 'should see if app_constants.rb.APPLICATION_SYSTEMS can be simplified'
+  end
   context 'finish up sales reps - ' do
-    it 'should have new user page translation en.systems.estim.full_name'
     it 'should have current user in user dropdown in edit sales rep (worked in tests?)'
   end
   context 'finish up estimates - ' do

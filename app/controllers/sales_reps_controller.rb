@@ -23,11 +23,6 @@ class SalesRepsController < SecureApplicationController
     list_scope = (scope.nil?) ? self.new.get_scope() : scope
   end
 
-  def self.list_unused(scope = nil)
-    list_scope = (scope.nil?) ? self.new.get_scope() : scope
-    list_scope.where()
-  end
-
   # chain current scope with any modules that have set scope (e.g. DeactivatedController)
   def get_scope(cur_scope = nil)
     # base default scope is set up here so that deactivated module can update this

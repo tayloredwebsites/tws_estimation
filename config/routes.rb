@@ -1,5 +1,17 @@
 TwsAuth::Application.routes.draw do
 
+  resources :job_types do
+    member do
+      put 'deactivate'      # route:          deactivate_job_type PUT    /job_types/:id/deactivate(.:format)           job_types#deactivate
+      put 'reactivate'      # route:          reactivate_job_type PUT    /job_types/:id/reactivate(.:format)           job_types#reactivate
+    end
+    collection do
+      get 'list'            # route:               list_job_types GET    /job_types/list(.:format)                     job_types#list
+    end
+  end
+  match "sales_reps/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "sales_reps/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
+
   resources :sales_reps do
     member do
       put 'deactivate'      # route:          deactivate_sales_rep PUT    /sales_reps/:id/deactivate(.:format)          sales_reps#deactivate
