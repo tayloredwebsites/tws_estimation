@@ -43,7 +43,8 @@ APPLICATION_SYSTEMS = {
     :assemblies => {:class_name => "Assembly", :action => :index, :start_uri => "/assemblies/menu"},
     :assembly_components => {:class_name => "AssemblyComponent", :action => :index, :start_uri => "/assembly_components/menu"},
     :sales_reps => {:class_name => "SalesRep", :action => :index, :start_uri => "/sales_reps"},
-    :job_types => {:class_name => "JobType", :action => :index, :start_uri => "/job_types"}
+    :job_types => {:class_name => "JobType", :action => :index, :start_uri => "/job_types"},
+    :states => {:class_name => "State", :action => :index, :start_uri => "/states"}
   } },
   :estimuser => {:id => 'estim', :actual => 'true', :type => 'external', :menu_items => {    
   } },

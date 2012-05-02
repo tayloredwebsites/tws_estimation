@@ -1,0 +1,31 @@
+
+
+<div class="field">
+      <%= f.label :id, I18n.translate('states.field_name.id'), :class => 'label' %>
+    <span class="value" id="state_id"><%= @state.id %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :code, I18n.translate('states.field_name.code'), :class => 'label' %>
+    <span class="value"><%= f.text_field :code %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :name, I18n.translate('states.field_name.name'), :class => 'label' %>
+    <span class="value"><%= f.text_field :name %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :created_at, I18n.translate('states.field_name.created_at'), :class => 'label' %>
+    <span class="value" id="state_created_at"><%= @state.created_at %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :updated_at, I18n.translate('states.field_name.updated_at'), :class => 'label' %>
+    <span class="value" id="state_updated_at"><%= @state.updated_at %></span>
+</div>
+

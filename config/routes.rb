@@ -1,5 +1,16 @@
 TwsAuth::Application.routes.draw do
 
+  resources :states do
+    member do
+      put 'deactivate'      # route:          deactivate_state PUT    /states/:id/deactivate(.:format)              states#deactivate
+      put 'reactivate'      # route:          reactivate_state PUT    /states/:id/reactivate(.:format)              states#reactivate
+    end
+    collection do
+      get 'list'            # route:               list_states GET    /states/list(.:format)                        states#list
+    end
+  end
+  
+
   resources :job_types do
     member do
       put 'deactivate'      # route:          deactivate_job_type PUT    /job_types/:id/deactivate(.:format)           job_types#deactivate

@@ -118,8 +118,8 @@ module Controllers::DeactivatedController
             Rails.logger.debug("* Controllers::DeactivatedController.destroy errors: #{item.errors.inspect.to_s}")
             notify_error( item.errors[:base][0] )
           else
-            Rails.logger.debug("* Controllers::DeactivatedController.destroy Error deleting user #{item.id}")
-            notify_error("Error deleting user #{item.id}")
+            Rails.logger.debug("* Controllers::DeactivatedController.destroy Error deleting #{item.class.name} with ID #{item.id}")
+            notify_error("Error deleting #{item.class.name} with ID #{item.id}")
           end
         Rails.logger.debug("* Controllers::DeactivatedController.destroy - return instance variable #{'@'+item.class.name.underscore}")
         self.instance_variable_set('@'+item.class.name.underscore, item)
@@ -127,6 +127,7 @@ module Controllers::DeactivatedController
       end
     else
       Rails.logger.error("E Controllers::DeactivatedController Attempt to #{params[:action]} #{get_model_name(params)}.id:#{params[:id]} when not in scope - e.g. deactivated")
+      redirect_to(home_errors_path)
     end
   end
 
@@ -155,6 +156,7 @@ module Controllers::DeactivatedController
       end
     else
       Rails.logger.error("E Controllers::DeactivatedController Attempt to #{params[:action]} #{get_model_name(params)}.id:#{params[:id]} when not in scope")
+      redirect_to(home_errors_path)
     end
   end
 

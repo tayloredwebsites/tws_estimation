@@ -1,0 +1,13 @@
+<table cellspacing="0">
+<%= render :partial => 'states/list_head' %>
+<%
+@states.each do |item|
+%>
+    <%= render :partial => 'states/index_row', :locals => { :item => item } %>
+<% end # if table.each %>
+
+</table>
+
+<br />
+
+<%= link_to I18n.translate('states.new.action'), new_state_path %>
