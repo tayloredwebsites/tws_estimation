@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120502142539) do
+ActiveRecord::Schema.define(:version => 20120502205927) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -69,6 +69,24 @@ ActiveRecord::Schema.define(:version => 20120502142539) do
     t.datetime "created_at",                                                    :null => false
     t.datetime "updated_at",                                                    :null => false
   end
+
+  create_table "estimates", :force => true do |t|
+    t.string   "title",                              :null => false
+    t.string   "customer_name",                      :null => false
+    t.string   "customer_note",   :default => "",    :null => false
+    t.integer  "sales_rep_id",                       :null => false
+    t.integer  "job_type_id",                        :null => false
+    t.integer  "state_id",                           :null => false
+    t.boolean  "prevailing_wage", :default => false, :null => false
+    t.string   "note",            :default => "",    :null => false
+    t.boolean  "deactivated",     :default => false, :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
+
+  add_index "estimates", ["job_type_id"], :name => "index_estimates_on_job_type_id"
+  add_index "estimates", ["sales_rep_id"], :name => "index_estimates_on_sales_rep_id"
+  add_index "estimates", ["state_id"], :name => "index_estimates_on_state_id"
 
   create_table "job_types", :force => true do |t|
     t.string   "name",        :default => "",    :null => false

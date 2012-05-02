@@ -46,7 +46,8 @@ APPLICATION_SYSTEMS = {
     :job_types => {:class_name => "JobType", :action => :index, :start_uri => "/job_types"},
     :states => {:class_name => "State", :action => :index, :start_uri => "/states"}
   } },
-  :estimuser => {:id => 'estim', :actual => 'true', :type => 'external', :menu_items => {    
+  :estimuser => {:id => 'estim', :actual => 'true', :type => 'external', :menu_items => {
+    :estimates => {:class_name => "Estimate", :action => :index, :start_uri => "/estimates"}
   } },
   :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :menu_items => {    
   } }

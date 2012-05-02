@@ -4,6 +4,8 @@ describe 'Miscellaneous items to do - ' do
   context 'resolve difference between role system and left menu systems' do
     it 'should resolve if the @systemc is needed'
     it 'should see if app_constants.rb.APPLICATION_SYSTEMS can be simplified'
+  end
+  context 'updates to tws_views generator - '
     it 'should have nil_to_s code in common model code (note need code for not deactivated models)'
     it 'should not generate deactivated tws_views code if no deactivated field _index_row, _index_head, _list, _list_head, index'
     it 'should have tws_views handle list page links and no list page links consistent to whether list is created or not'
