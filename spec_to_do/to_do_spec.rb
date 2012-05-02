@@ -9,10 +9,8 @@ describe 'Miscellaneous items to do - ' do
     it 'should have tws_views handle list page links and no list page links consistent to whether list is created or not'
   end
   context 'finish up estimates - ' do
-    it 'should have states'
-    it 'should allow components to be updated on deactivated parent (component type select missing current id)'
-    it 'should warn user if parent association is deactivated (at least a flag in name/description)'
-    it 'should have tests and development of parent select of current id missing or not '
+    it 'should allow components to be updated on deactivated parent ? (component type select missing current id)'
+    it 'should warn user or prevent editing item if parent association is deactivated'
     it 'should have estimates'
   end
   context 'password management - ' do
