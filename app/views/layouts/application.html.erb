@@ -47,8 +47,8 @@
                     <% end %>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to 'Item', '#' %></li>
-          <li class="_6_across"><%= link_to 'Item', '#' %></li>
           <li class="_6_across"><%= link_to I18n.translate('home.help.title'), home_help_path %></li>
+          <li class="_6_across"><%= link_to I18n.translate('home.about.title'), home_about_path %></li>
         </ul><!-- end header_nav_bar -->
       </div><!-- end header_bottom_bar -->
       <div id="header_status">
@@ -116,7 +116,6 @@
       <div id="footer_content">
         <div id="footer_nav_bar">
           <ul>
-            <li class="_across"><%= link_to I18n.translate('home.about.title'), home_about_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.contact.title'), home_contact_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.news.title'), home_news_path %></li>
                         <% if @user_session.signed_in? %>
@@ -124,6 +123,8 @@
                         <% end %>
             <li class="_across"><%= link_to I18n.translate('home.status.title'), home_status_path %></li>
             <li class="_across"><%= link_to I18n.translate('home.help.title'), home_help_path %></li>
+            <li class="_across"><%= link_to I18n.translate('home.license.title'), home_license_path %></li>
+            <li class="_across"><%= link_to I18n.translate('home.about.title'), home_about_path %></li>
           </ul>
         </div><!-- end footer_nav_bar -->
       </div><!-- end footer_content -->

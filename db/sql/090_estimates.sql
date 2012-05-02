@@ -15,6 +15,7 @@ CREATE TABLE estimates (
     id integer NOT NULL,
     name character varying(255) DEFAULT ''::character varying NOT NULL,
     customer_name integer NULL,
+	customer_notes character varying(4000) DEFAULT ''::character varying NOT NULL,
     sales_rep_id integer NULL,
     job_type_id integer NOT NULL,
     state_id integer NOT NULL,

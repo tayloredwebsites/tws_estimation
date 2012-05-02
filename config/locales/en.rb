@@ -158,6 +158,10 @@
         :title => "About",
         :header => "About this site"
       },
+      :license => {
+        :title => "Licensing",
+        :header => "This software is distributed under MIT Licensing."
+      },
       :contact => {
         :title => "Contact",
         :header => "Contact us"

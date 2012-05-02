@@ -1,7 +1,7 @@
 # Estimation of Assembly/Component costs #
 
 This is an application by [Taylored Web Sites](http://www.tayloredwebsites.com).
-This software is distributed under the [MIT license](MIT-LICENSE)
+This software is distributed under the [MIT license](license)
 
 ## Estimation System: ##
 
