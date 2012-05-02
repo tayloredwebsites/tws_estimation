@@ -1,0 +1,46 @@
+<%
+    @page_scope = 'states.show'
+    @deactivated_module = defined?(State.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @state, :sys_errors => @errors  } %>
+
+<div class="fields_20_80">
+
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('states.field_name.id') %></span>
+      <span class="value" id="state_id"><%= @state.id %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('states.field_name.code') %></span>
+      <span class="value" id="state_code"><%= @state.code %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('states.field_name.name') %></span>
+      <span class="value" id="state_name"><%= @state.name %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('states.field_name.created_at') %></span>
+      <span class="value" id="state_created_at"><%= @state.created_at %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('states.field_name.updated_at') %></span>
+      <span class="value" id="state_updated_at"><%= @state.updated_at %></span>
+    </div>
+
+</div>
+
+
+<% if can? :manage, @state %>
+    <%= link_to I18n.translate('states.edit.action'), edit_state_path(@state.id) %>
+    | <%= link_to I18n.translate('states.index.action'), states_path %>
+    | <%= link_to I18n.translate('states.list.action'), list_states_path %>
+    | <%= link_to I18n.translate('states.new.action'), new_state_path %>
+<% end %>

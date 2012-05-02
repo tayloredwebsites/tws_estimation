@@ -41,7 +41,8 @@
           :assemblies => 'Assemblies',
           :assembly_components => 'Assembly Components',
           :sales_reps => 'Sales Reps',
-          :job_types => 'Job Taxability Types'
+          :job_types => 'Job Taxability Types',
+          :states => 'States'
         }
       },
       :estimuser => {
@@ -390,14 +391,12 @@
       :index => {
         :action => "List Components by Type",
         :title => "List Estimation Components by Component Type",
-        :header => "List of all Estimation Components by Component Type",
-        :selected_header => "List of selected Components by Component Type"
+        :header => "List of all Estimation Components by Component Type"
       },
       :list => {
         :action => "List Components by Description",
         :title => "List Estimation Components in Description Order",
-        :header => "List of all Estimation Components in Description Order",
-        :selected_header => "List of selected Components in Description Order"
+        :header => "List of all Estimation Components in Description Order"
       },
       :edit => {
         :action => "Edit Component",
@@ -465,14 +464,12 @@
       :index => {
         :action => "List Assemblies in Sort Order",
         :title => "List Estimation Assemblies in Sort Order",
-        :header => "List of all Estimation Assemblies in Sort Order",
-        :selected_header => "List of selected Assemblies in Sort Order"
+        :header => "List of all Estimation Assemblies in Sort Order"
       },
       :list => {
         :action => "List Assemblies by Description",
         :title => "List Estimation Assemblies in Description Order",
-        :header => "List of all Estimation Assemblies in Description Order",
-        :selected_header => "List of selected Assemblies in Description Order"
+        :header => "List of all Estimation Assemblies in Description Order"
       },
       :edit => {
         :action => "Edit Assembly",
@@ -531,14 +528,12 @@
       :index => {
         :action => "List Assembly Components by Assembly",
         :title => "List Assembly Components by Assembly ",
-        :header => "List of all Assembly Components by Assembly ",
-        :selected_header => "List of selected Assembly Components by Assembly "
+        :header => "List of all Assembly Components by Assembly "
       },
       :list => {
         :action => "List Assembly Components by Description",
         :title => "List Assembly Components in Description Order",
-        :header => "List of all Assembly Components in Description Order",
-        :selected_header => "List of selected Assembly Components by Description"
+        :header => "List of all Assembly Components in Description Order"
       },
       :edit => {
         :action => "Edit Assembly Component",
@@ -608,14 +603,12 @@
       :index => {
         :action => "List Sales Representatives",
         :title => "List Sales Representatives",
-        :header => "List of all Sales Representatives",
-        :selected_header => "List of selected Sales Representatives"
+        :header => "List of all Sales Representatives"
       },
       :list => {
         :action => "List Sales Representatives",
         :title => "List Sales Representatives ",
-        :header => "List of all Sales Representatives",
-        :selected_header => "List of selected Sales Representatives"
+        :header => "List of all Sales Representatives"
       },
       :edit => {
         :action => "Edit Sales Representative",
@@ -676,14 +669,12 @@
       :index => {
         :action => "List Job Taxability Types",
         :title => "List Job Taxability Types",
-        :header => "List of all Job Taxability Types",
-        :selected_header => "List of selected Job Taxability Types"
+        :header => "List of all Job Taxability Types"
       },
       :list => {
         :action => "List Job Taxability Types",
         :title => "List Job Taxability Types ",
-        :header => "List of all Job Taxability Types",
-        :selected_header => "List of selected Job Taxability Types"
+        :header => "List of all Job Taxability Types"
       },
       :edit => {
         :action => "Edit Job Taxability Type",
@@ -729,6 +720,63 @@
       },
       :messages => {
       }
-    } # end Sales Rep Resource
+    }, # end Job Types Resource
+    :states => {
+      :title => 'States',
+      :system => 'estimmaint',
+      :menu => {
+        :action => "States Actions Menu",
+        :title => "Estimation States Action Menu",
+        :header => "Estimation States Action Menu"
+      },
+      :index => {
+        :action => "List States",
+        :title => "List States",
+        :header => "List of all States"
+      },
+      :list => {
+        :action => "List States by Code",
+        :title => "List States by Code",
+        :header => "List of all States by Code"
+      },
+      :edit => {
+        :action => "Edit State",
+        :title => "Edit State",
+        :header => "Edit an State"
+      },
+      :new => {
+        :action => "New State",
+        :title => "New State",
+        :header => "Create an State"
+      },
+      :show => {
+        :action => "View State",
+        :title => "View State",
+        :header => "View an State"
+      },
+      :field_name => {
+        :id => 'ID',
+        :code => 'Code',
+        :name => 'Name',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :code => 'Code',
+        :name => 'Name',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :code => 'Code',
+        :name => 'Name',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
+    } # end State Resource
   } # end en
 } #end localizations

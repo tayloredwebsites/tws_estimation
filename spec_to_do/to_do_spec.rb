@@ -2,17 +2,17 @@ require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
   context 'resolve difference between role system and left menu systems' do
-    it 'should remove translation missing: en.systems.estim.full_name on users#edit'
-    it 'should have the systems loop on the left nav match the systems in some way or form'
     it 'should resolve if the @systemc is needed'
     it 'should see if app_constants.rb.APPLICATION_SYSTEMS can be simplified'
-  end
-  context 'finish up sales reps - ' do
-    it 'should have current user in user dropdown in edit sales rep (worked in tests?)'
+    it 'should have nil_to_s code in common model code (note need code for not deactivated models)'
+    it 'should not generate deactivated tws_views code if no deactivated field _index_row, _index_head, _list, _list_head, index'
+    it 'should have tws_views handle list page links and no list page links consistent to whether list is created or not'
   end
   context 'finish up estimates - ' do
-    it 'should have customers'
     it 'should have states'
+    it 'should allow components to be updated on deactivated parent (component type select missing current id)'
+    it 'should warn user if parent association is deactivated (at least a flag in name/description)'
+    it 'should have tests and development of parent select of current id missing or not '
     it 'should have estimates'
   end
   context 'password management - ' do
