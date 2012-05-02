@@ -1,5 +1,7 @@
 TwsAuth::Application.routes.draw do
 
+  resources :estimates
+
   resources :states do
     member do
       put 'deactivate'      # route:          deactivate_state PUT    /states/:id/deactivate(.:format)              states#deactivate
