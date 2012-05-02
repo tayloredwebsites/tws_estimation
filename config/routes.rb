@@ -128,6 +128,7 @@ TwsAuth::Application.routes.draw do
   # routes for home controller
   get "home/index"            # route:           home_index GET    /home/index(.:format)                {:controller=>"home", :action=>"index"}
   get "home/about"            # route:           home_about GET    /home/about(.:format)                {:controller=>"home", :action=>"about"}
+  get "home/license"            # route:           home_about GET    /home/license(.:format)                {:controller=>"home", :action=>"license"}
   get "home/contact"          # route:         home_contact GET    /home/contact(.:format)              {:controller=>"home", :action=>"contact"}
   get "home/errors"            # route:          home_errors GET    /home/errors(.:format)               {:controller=>"home", :action=>"errors"}
   get "home/news"              # route:            home_news GET    /home/news(.:format)                 {:controller=>"home", :action=>"news"}

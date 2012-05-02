@@ -10,7 +10,9 @@ gem 'pg'
 
 gem 'cancan'
 
-gem 'foreigner'
+gem 'foreigner'	# foreign key handling
+
+gem 'rdiscount'	# markdown display in view
 
 # Use unicorn as the web server
 # gem 'unicorn'

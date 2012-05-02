@@ -40,6 +40,9 @@ describe 'Users layouts Tests - ' do
     it 'should have a help item in the top nav bar' do
       page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('home.help.title') )
     end
+    it 'should have an about item in the top nav bar' do
+      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('home.about.title') )
+    end
     it 'should not have Welcome in a left module header' do
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should_not =~
         /#{I18n.translate('view_labels.welcome_user', :user => '') }/
@@ -91,6 +94,10 @@ describe 'Users layouts Tests - ' do
     it 'should go to the About page when the footer about link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.about.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.about.header')}$/
+    end        
+    it 'should go to the License page when the footer License link is clicked' do
+      find('div#footer_nav_bar').find('a', :text => I18n.translate('home.license.title')).click
+      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.license.header')}$/
     end        
     it 'should go to the Contact page when the footer contact link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.contact.title')).click

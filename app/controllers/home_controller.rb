@@ -18,6 +18,9 @@ class HomeController < SecureApplicationController
   def about
   end
 
+  def license
+  end
+
   def contact
   end
 
