@@ -33,7 +33,8 @@
   #left_content {border-right:1px solid black;}
   #center_content {position:relative;left:-1px;border-left:1px solid black;}
   #content_header {padding:0 10px;border-bottom:1px solid black;margin-top:-1px;}
-  #content_body {padding:0 10px;}
+  #content_body {padding:0;}
+  #content_body_content {padding:10px;}
   #content_footer {padding:5px;} /* border-top:1px solid black; } */
   #right_content {}
   #footer {border-top:1px solid black;background-color:#fff;
