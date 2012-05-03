@@ -14,8 +14,8 @@ class StatesController < SecureApplicationController
    self.authenticate_user # always authenticate user   if (%w{ index show }.index(params[:action]).nil?)
  end
 
- def self.list(scope = nil)
-   list_scope = (scope.nil?) ? self.new.get_scope() : scope
+ def self.list
+   self.new.get_scope().order('name')
  end
 
  # chain current scope with any modules that have set scope (e.g. DeactivatedController)

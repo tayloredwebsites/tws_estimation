@@ -1,0 +1,27 @@
+<%
+    @page_scope = 'estimates.edit'
+    @deactivated_module = defined?(Estimate.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= form_for(@estimate, :action => 'update') do |f| %>
+
+    <%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @estimate, :sys_errors => @errors  } %>
+
+    <div class="fields_20_80">
+        <%= render :partial => 'form', :locals => { :f => f } %>
+    </div>
+
+    <div class="actions">
+        <%= f.submit I18n.translate('view_action.update') %>
+    </div>
+    
+<% end %>
+
+<%= link_to I18n.translate('estimates.show.action'), estimate_path(@estimate.id) %>
+<% if can? :manage, @estimate %>
+    | <%= link_to I18n.translate('estimates.index.action'), estimates_path %>
+    | <%= link_to I18n.translate('estimates.list.action'), list_estimates_path %>
+    | <%= link_to I18n.translate('estimates.new.action'), new_estimate_path %>
+<% end %>

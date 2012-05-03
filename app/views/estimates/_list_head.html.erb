@@ -1,0 +1,31 @@
+
+  <tr>
+
+    <th><%= I18n.translate('estimates.field_name_short.id') %></th>
+
+    <th><%= I18n.translate('estimates.field_name_short.title') %></th>
+
+    <th><%= I18n.translate('estimates.field_name_short.customer_name') %></th>
+
+    <th><%= I18n.translate('estimates.field_name_short.customer_note') %></th>
+
+    <th><%= I18n.translate('estimates.field_name_short.sales_rep') %></th>
+
+    <th><%= I18n.translate('estimates.field_name_short.job_type') %></th>
+
+    <th><%= I18n.translate('estimates.field_name_short.state') %></th>
+
+    <th><%= I18n.translate('estimates.field_name_short.prevailing_wage') %></th>
+
+    <th><%= I18n.translate('estimates.field_name_short.note') %></th>
+<% if @deactivated_module %>
+    <% if show_deactivated? %>
+    <th><%= I18n.translate('estimates.field_name_short.deactivated') %></th>
+    <th colspan="4"><%= link_to I18n.translate('view_action.hide_deactivated'), list_estimates_path('show_deactivated' => DB_FALSE.to_s) %></th>
+    <% else %>
+    <th colspan="3"><%= link_to I18n.translate('view_action.show_deactivated'), list_estimates_path('show_deactivated' => DB_TRUE.to_s) %></th>
+    <% end %>
+<% else %>
+    <th colspan="2">&nbsp;</th>
+<% end %>
+  </tr>

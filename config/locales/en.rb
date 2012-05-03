@@ -9,7 +9,7 @@
       :app_name => 'Estimation of systems/component costs',
       :app => 'tws_estimation'  # not used so far
     },
-    :systems => {
+    :applications => {
       :all => {
         :abbreviation => 'All',
         :full_name => 'All Systems',
@@ -42,17 +42,8 @@
           :assembly_components => 'Assembly Components',
           :sales_reps => 'Sales Reps',
           :job_types => 'Job Taxability Types',
-          :states => 'States'
-        }
-      },
-      :estimuser => {
-        :abbreviation => 'Estimation',
-        :full_name => 'Estimation System',
-        :menu_items => {
-          :defaults => 'Defaults',
-          :component_types => 'Component Types',
-          :components => 'Components',
-          :assemblies => 'Assemblies'
+          :states => 'States',
+          :estimates => 'Estimates'
         }
       },
       :prevail => {
@@ -781,6 +772,93 @@
       },
       :messages => {
       }
-    } # end State Resource
+    }, # end State Resource
+    :estimates => {
+      :title => 'Estimates',
+      :system => 'estimmaint',
+      :menu => {
+        :action => "Estimates Actions Menu",
+        :title => "Estimation Estimates Action Menu",
+        :header => "Estimation Estimates Action Menu"
+      },
+      :index => {
+        :action => "List Estimates",
+        :title => "List Estimates",
+        :header => "List of all Estimates"
+      },
+      :list => {
+        :action => "List Estimates by Code",
+        :title => "List Estimates by Code",
+        :header => "List of all Estimates by Code"
+      },
+      :edit => {
+        :action => "Edit Estimate",
+        :title => "Edit Estimate",
+        :header => "Edit an Estimate"
+      },
+      :new => {
+        :action => "New Estimate",
+        :title => "New Estimate",
+        :header => "Create an Estimate"
+      },
+      :show => {
+        :action => "View Estimate",
+        :title => "View Estimate",
+        :header => "View an Estimate"
+      },
+      :field_name => {
+        :id => 'ID',
+        :title => 'Title',
+        :customer_name => 'Customer Name',
+        :customer_note => 'Customer Note',
+        :sales_rep_id => 'Sales Rep ID',
+        :sales_rep => 'Sales Rep',
+        :job_type_id => 'Job Type ID',
+        :job_type => 'Job Type',
+        :state_id => 'State ID',
+        :state => 'State',
+        :prevailing_wage => 'Prevailing Wage?',
+        :note => 'Note',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :title => 'Title',
+        :customer_name => 'Cust. Name',
+        :customer_note => 'Cust. Note',
+        :sales_rep_id => 'Sales Rep ID',
+        :sales_rep => 'Sales Rep',
+        :job_type_id => 'Job Type ID',
+        :job_type => 'Job Type',
+        :state_id => 'State ID',
+        :state => 'State',
+        :prevailing_wage => 'Prevail?',
+        :note => 'Note',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :title => 'The Title of this estimate',
+        :customer_name => 'The name of the Customer or Prospect for this Estimate',
+        :customer_note => 'Any special information about this Customer or Prospect',
+        :sales_rep_id => 'The ID of the Sales Rep for this Estimate',
+        :sales_rep => 'The Sales Rep for this Estimate',
+        :job_type_id => 'The ID of the Job Taxability Type this estimate is',
+        :job_type => 'The Job Taxability Type this estimate is',
+        :state_id => 'The ID of the state this job is being done',
+        :state => 'The state this job is being done',
+        :prevailing_wage => 'Is this a prevailing wage Job (for govt. work)?',
+        :note => 'Any special information about this Estimate',
+        :deactivated => 'Is this record deactivated?',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
+    } # end Estimate Resource
   } # end en
 } #end localizations

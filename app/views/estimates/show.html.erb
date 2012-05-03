@@ -1,0 +1,83 @@
+<%
+    @page_scope = 'estimates.show'
+    @deactivated_module = defined?(Estimate.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @estimate, :sys_errors => @errors  } %>
+
+<div class="fields_20_80">
+
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.id') %></span>
+      <span class="value" id="estimate_id"><%= @estimate.id %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.title') %></span>
+      <span class="value" id="estimate_title"><%= @estimate.title %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.customer_name') %></span>
+      <span class="value" id="estimate_customer_name"><%= @estimate.customer_name %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.customer_note') %></span>
+      <span class="value" id="estimate_customer_note"><%= @estimate.customer_note %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.sales_rep') %></span>
+      <span class="value" id="estimate_sales_rep"><%= @estimate.sales_rep.nil_to_s %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.job_type') %></span>
+      <span class="value" id="estimate_job_type"><%= @estimate.job_type.nil_to_s %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.state') %></span>
+      <span class="value" id="estimate_state"><%= @estimate.state.nil_to_s %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.prevailing_wage') %></span>
+      <span class="value" id="estimate_prevailing_wage"><%= @estimate.prevailing_wage %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.note') %></span>
+      <span class="value" id="estimate_note"><%= @estimate.note %></span>
+    </div>
+
+<% if (@deactivated_module) %>
+     <div class="field">
+       <span class="label"><%= I18n.translate('estimates.field_name.deactivated') %></span>
+       <span class="value" id="estimate_deactivated"><%= I18n.is_deactivated_or_not(@estimate.deactivated?) %></span>
+     </div>
+<% end %>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.created_at') %></span>
+      <span class="value" id="estimate_created_at"><%= @estimate.created_at %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimates.field_name.updated_at') %></span>
+      <span class="value" id="estimate_updated_at"><%= @estimate.updated_at %></span>
+    </div>
+
+</div>
+
+
+<% if can? :manage, @estimate %>
+    <%= link_to I18n.translate('estimates.edit.action'), edit_estimate_path(@estimate.id) %>
+    | <%= link_to I18n.translate('estimates.index.action'), estimates_path %>
+    | <%= link_to I18n.translate('estimates.list.action'), list_estimates_path %>
+    | <%= link_to I18n.translate('estimates.new.action'), new_estimate_path %>
+<% end %>

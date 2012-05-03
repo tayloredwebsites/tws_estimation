@@ -19,8 +19,8 @@ class SalesRepsController < SecureApplicationController
     # Rails.logger.debug("* SalesRepsController.before_filter - @defaults:#{@defaults.inspect.to_s}")
   end
 
-  def self.list(scope = nil)
-    list_scope = (scope.nil?) ? self.new.get_scope() : scope
+  def self.list
+    self.new.get_scope().joins(:user).order('users.last_name, users.first_name')
   end
 
   # chain current scope with any modules that have set scope (e.g. DeactivatedController)

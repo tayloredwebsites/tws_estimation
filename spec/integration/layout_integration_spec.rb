@@ -23,7 +23,7 @@ describe 'Users layouts Tests - ' do
       find('#header_tagline_system_header').text.should_not =~ /\A\s*\z/
     end
     it 'should find exactly matching System title' do
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('systems.guest.full_name')}$/
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.guest.full_name')}$/
     end
     it 'should not find all whitespace in the page title' do
       find('#header_tagline_page_header').text.should_not =~ /\A\s*\z/
@@ -172,7 +172,7 @@ describe 'Users Layouts Links Tests - ' do
     end
     it 'should only see guest system in the left nav' do
       # save_and_open_page
-      APPLICATION_SYSTEMS.each do | sys_name, system |
+      APPLICATION_NAV.each do | sys_name, system |
         if @me.can_see_system?(system[:id].to_s)
           page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
         else
@@ -182,7 +182,7 @@ describe 'Users Layouts Links Tests - ' do
     end
     it 'should only see the resources a guest can see and can? see' do
       # save_and_open_page
-      APPLICATION_SYSTEMS.each do | sys_name, system |
+      APPLICATION_NAV.each do | sys_name, system |
         if @me.can_see_system?(system[:id].to_s)
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
           system[:menu_items].each do | menu_key, menu_val |
@@ -219,7 +219,7 @@ describe 'Users Layouts Links Tests - ' do
     end            
     it 'should list all authorized systems in the left nav' do
       # save_and_open_page
-      APPLICATION_SYSTEMS.each do | sys_name, system |
+      APPLICATION_NAV.each do | sys_name, system |
         if @me.can_see_system?(system[:id].to_s)
           page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
         else
@@ -229,7 +229,7 @@ describe 'Users Layouts Links Tests - ' do
     end
     it 'should list all of the resources per system that the item can see and can? see' do
       # save_and_open_page
-      APPLICATION_SYSTEMS.each do | sys_name, system |
+      APPLICATION_NAV.each do | sys_name, system |
         if @me.can_see_system?(system[:id].to_s)
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
           system[:menu_items].each do | menu_key, menu_val |
@@ -266,7 +266,7 @@ describe 'Users Layouts Links Tests - ' do
     end            
     it 'should list all the systems the item can see in the left nav' do
       # save_and_open_page
-      APPLICATION_SYSTEMS.each do | sys_name, system |
+      APPLICATION_NAV.each do | sys_name, system |
         if @me.can_see_system?(system[:id].to_s)
           page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
         else
@@ -276,7 +276,7 @@ describe 'Users Layouts Links Tests - ' do
     end
     it 'should list all of the resources per system that the item can see and can? :read' do
       # save_and_open_page
-      APPLICATION_SYSTEMS.each do | sys_name, system |
+      APPLICATION_NAV.each do | sys_name, system |
         if @me.can_see_system?(system[:id].to_s)
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
           system[:menu_items].each do | menu_key, menu_val |

@@ -41,7 +41,7 @@ class EstimatesController < SecureApplicationController
 
   # GET /estimates/list
   def list
-    @estimates = get_scope().joins(:sales_rep).order('sales_rep.user.last_name, sales_rep.user.first_name, title')
+    @estimates = get_scope().joins(:sales_rep).order('sales_reps.user.last_name, sales_reps.user.first_name, title')
   end
 
   # GET /estimates/:id

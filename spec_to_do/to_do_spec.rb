@@ -3,7 +3,10 @@ require 'spec_helper'
 describe 'Miscellaneous items to do - ' do
   context 'resolve difference between role system and left menu systems' do
     it 'should resolve if the @systemc is needed'
-    it 'should see if app_constants.rb.APPLICATION_SYSTEMS can be simplified'
+    it 'should see if app_constants.rb.APPLICATION_NAV can be simplified'
+    it 'should have different name in left nav for Estimation and Estimation Maint'
+    it 'should put list and index functions on the left nav'
+    it 'should allow hide and show of left nav sub components'
   end
   context 'updates to tws_views generator - '
     it 'should have nil_to_s code in common model code (note need code for not deactivated models)'
@@ -34,7 +37,7 @@ describe 'Miscellaneous items to do - ' do
     it 'should have the hide/show deactivated records status in the layout header'
   end
   it 'should give a warning to the user on problems with roles - want to update and still notify user'
-  it 'should confirm that Role.sys_id and Role.sys_name correspond with app_constants.rb - APPLICATION_SYSTEMS'
+  it 'should confirm that Role.sys_id and Role.sys_name correspond with app_constants.rb - APPLICATION_NAV'
   it 'should have dropdown for selection of Defaults Store field - Value Store name, with add new Value Store name option'
   it 'should add audit trail to the defaults table for tws_auth app for audit trail example'
   it 'should let cancan authorize resources for the home controller.  Base Model? Guest Model? '
@@ -46,7 +49,7 @@ describe 'Miscellaneous items to do - ' do
     it 'should have an erb for choosing entries in a join table (eg Components in AssemblyComponents)'
   end
   context 'systems name usage - ' do
-    it 'should rename APPLICATION_SYSTEMS to APPLICATION_GROUPS IN config/initializers/app_constants.rb'
+    it 'should rename APPLICATION_NAV to APPLICATION_GROUPS IN config/initializers/app_constants.rb'
     it 'should rename en.systems to en.groups in config/locales/en.rb'
     it 'should change title of application to Estimation of systems/assemblies/components costs'
     it 'should add system resource (is this a reserved word?)'
