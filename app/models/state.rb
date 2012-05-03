@@ -4,6 +4,8 @@ class State < ActiveRecord::Base
 
   attr_accessible :code, :name
 
+  has_many :estimates
+
   validates :code,
     :presence => true,
     :uniqueness => true

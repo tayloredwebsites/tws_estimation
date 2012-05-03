@@ -7,6 +7,7 @@ class SalesRep < ActiveRecord::Base
   # todo ? remove these as accessible? -> attr_accessible :user_id
 
   belongs_to :user
+  has_many :estimates
 
   validates :min_markup_pct,
     :numericality => {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 10}
@@ -18,13 +19,17 @@ class SalesRep < ActiveRecord::Base
     :presence => true,
     :uniqueness => true
 
+  def username
+    self.user.username
+  end
+
   def nil_to_s
     # call to super here brings in deactivated feature
     desc
   end
 
   def desc
-    ''+super.nil_to_s+self.description.nil_to_s
+    ''+super.nil_to_s+self.user.last_name.nil_to_s+', '+self.user.first_name.nil_to_s
   end
 
   def field_nil_to_s(field_name)

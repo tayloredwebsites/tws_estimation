@@ -1,0 +1,92 @@
+
+
+<div class="field">
+      <%= f.label :id, I18n.translate('estimates.field_name.id'), :class => 'label' %>
+    <span class="value" id="estimate_id"><%= @estimate.id %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :title, I18n.translate('estimates.field_name.title'), :class => 'label' %>
+    <span class="value"><%= f.text_field :title %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :customer_name, I18n.translate('estimates.field_name.customer_name'), :class => 'label' %>
+    <span class="value"><%= f.text_field :customer_name %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :customer_note, I18n.translate('estimates.field_name.customer_note'), :class => 'label' %>
+    <span class="value"><%= f.text_field :customer_note %></span>
+</div>
+
+
+
+<div class="field">
+    <%= f.label :sales_rep, I18n.translate('estimates.field_name.sales_rep'), :class => 'label' %>
+    <span class="value">
+        <%= collection_select( :estimate, :sales_rep_id, SalesRepsController.list, :id, :username, { :include_blank => true }) %>
+    </span>
+</div>
+
+
+
+<div class="field">
+    <%= f.label :job_type, I18n.translate('estimates.field_name.job_type'), :class => 'label' %>
+    <span class="value">
+        <%= collection_select( :estimate, :job_type_id, JobTypesController.list, :id, :name, { :include_blank => true }) %>
+    </span>
+</div>
+
+
+
+<div class="field">
+    <%= f.label :state, I18n.translate('estimates.field_name.state'), :class => 'label' %>
+    <span class="value">
+        <%= collection_select( :estimate, :state_id, StatesController.list, :id, :name, { :include_blank => true }) %>
+    </span>
+</div>
+
+
+<div class="field">
+      <%= f.label :prevailing_wage, I18n.translate('estimates.field_name.prevailing_wage'), :class => 'label' %>
+    <span class="value">
+        <%= f.radio_button :prevailing_wage, true %>
+        <%= f.label "prevailing_wage_true", "true", :class => 'span_after_label' %>
+        <%= f.radio_button :prevailing_wage, false %>
+        <%= f.label "prevailing_wage_false", "false", :class => 'span_after_label' %>
+    </span>
+</div>
+
+
+<div class="field">
+    <%= f.label :note, I18n.translate('estimates.field_name.note'), :class => 'label' %>
+    <span class="value"><%= f.text_field :note %></span>
+</div>
+
+
+<div class="field">
+      <%= f.label :deactivated, I18n.translate('estimates.field_name.deactivated'), :class => 'label' %>
+    <span class="value">
+        <%= f.radio_button :deactivated, true %>
+        <%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
+        <%= f.radio_button :deactivated, false %>
+        <%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
+    </span>
+</div>
+
+
+<div class="field">
+    <%= f.label :created_at, I18n.translate('estimates.field_name.created_at'), :class => 'label' %>
+    <span class="value" id="estimate_created_at"><%= @estimate.created_at %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :updated_at, I18n.translate('estimates.field_name.updated_at'), :class => 'label' %>
+    <span class="value" id="estimate_updated_at"><%= @estimate.updated_at %></span>
+</div>
+

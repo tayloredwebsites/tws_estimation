@@ -6,6 +6,8 @@ class JobType < ActiveRecord::Base
   attr_accessible :name, :description, :sort_order, :deactivated
   # todo ? remove these as accessible? -> attr_accessible :user_id
 
+  has_many :estimates
+
   validates :name,
     :presence => true,
     :uniqueness => true

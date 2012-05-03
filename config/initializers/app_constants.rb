@@ -24,14 +24,17 @@ DB_VALUES = {
 # Roles used for cancan implementation (to do) (see app/models/roles.rb, app/models/ability.rb)
 # each role has layout: (application_name/all)_(role_name/guest)
 # each resource is the available resources(model/controller) under that system with authorization by cancan - app/models/ability.rb
-# i18n translations of each menu_item is en.systems.{APPLICATION_SYSTEMS(key)}.menu_items.{menu_items(key)}
-APPLICATION_SYSTEMS = {
+# i18n translations of each menu_item is en.systems.{APPLICATION_NAV(key)}.menu_items.{menu_items(key)}
+APPLICATION_NAV = {
 #  :all => {:id => 'all', :actual => 'false', :type => 'system', :resources => ['Home', 'User', 'Default']},
 #  :home => {:id => 'home', :actual => 'true', :type => 'shared'},
   :guest => {:id => 'guest', :actual => 'true', :type => 'shared', :menu_items => {
     :home => {:class_name => "UserSession", :action => :index, :start_uri => "/"},
     :user_signin => {:class_name => "UserSession", :action => :sign_in, :start_uri => "/signin"},
     :user_signout => {:class_name => "UserSession", :action => :sign_out, :start_uri => "/signout"}
+  } },
+  :estimuser => {:id => 'estim', :actual => 'true', :type => 'shared', :menu_items => {
+    :estimates => {:class_name => "Estimate", :action => :index, :start_uri => "/estimates"}
   } },
   :maint => {:id => 'maint', :actual => 'true', :type => 'shared', :menu_items => {
     :users => {:class_name => "User", :action => :index, :start_uri => "/users"}
@@ -45,9 +48,6 @@ APPLICATION_SYSTEMS = {
     :sales_reps => {:class_name => "SalesRep", :action => :index, :start_uri => "/sales_reps"},
     :job_types => {:class_name => "JobType", :action => :index, :start_uri => "/job_types"},
     :states => {:class_name => "State", :action => :index, :start_uri => "/states"}
-  } },
-  :estimuser => {:id => 'estim', :actual => 'true', :type => 'external', :menu_items => {
-    :estimates => {:class_name => "Estimate", :action => :index, :start_uri => "/estimates"}
   } },
   :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :menu_items => {    
   } }

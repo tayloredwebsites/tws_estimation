@@ -1,6 +1,17 @@
 TwsAuth::Application.routes.draw do
 
-  resources :estimates
+  resources :estimates do
+    member do
+      put 'deactivate'      # route:          deactivate_estimate PUT    /estimates/:id/deactivate(.:format)           estimates#deactivate
+      put 'reactivate'      # route:          reactivate_estimate PUT    /estimates/:id/reactivate(.:format)           estimates#reactivate
+    end
+    collection do
+      get 'list'            # route:               list_estimates GET    /estimates/list(.:format)                     estimates#list
+    end
+  end
+  match "sales_reps/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "sales_reps/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
+  
 
   resources :states do
     member do
