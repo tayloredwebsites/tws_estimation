@@ -248,7 +248,7 @@ describe User do
         # Rails.logger.debug("T user_spec can_see_system? - role:#{role}, system:#{this_role.sys_id}, #{@reg.can_see_system?(this_role.sys_id)}")
         @reg.can_see_system?(this_role.sys_id).should be_true
         # loop through all valid systems
-        APPLICATION_SYSTEMS.each do |system_id, system|
+        APPLICATION_NAV.each do |system_id, system|
           # Rails.logger.debug("T user_spec can_see_system? check - role:#{role}, system:#{system_id}")
           sysid = system_id.to_s
           # make sure it cannot see a (non default role) system different from its current (unless all system)
