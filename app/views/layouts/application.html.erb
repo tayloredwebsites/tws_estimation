@@ -18,7 +18,7 @@
           <div id="header_tagline">
             <!-- h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('config.company_name') %></h2 -->
             <h2 id="header_tagline_app_name" class="nowrap"><%= I18n.translate('config.app_name') %></h2>
-            <h3 id="header_tagline_system_header"><%= I18n.translate('systems.'+cur_system+'.full_name') %></h3>
+            <h3 id="header_tagline_system_header"><%= I18n.translate('applications.'+cur_system+'.full_name') %></h3>
             <h4 id="header_tagline_page_header"><%= I18n.translate('.header', :scope => @page_scope) %></h4>
           </div>
         </div><!-- end header_logo_left -->
@@ -72,23 +72,23 @@
                         <% end %>
           </div>
          <ul class="module_body column_nav">
-                        <% APPLICATION_SYSTEMS.each do |sys_name, system| %>
+                        <% APPLICATION_NAV.each do |sys_name, system| %>
                             <%      if cur_user.can_see_system?(system[:id].to_s) %>
-                                <li id="lnav_<%= system[:id].to_s %>" class="list_column on"><%= content_tag(:span, I18n.translate("systems.#{system[:id].to_s}.full_name")) %>
+                                <li id="lnav_<%= system[:id].to_s %>" class="list_column on"><%= content_tag(:span, I18n.translate("applications.#{system[:id].to_s}.full_name")) %>
                                     <% if system[:menu_items].size > 0 %>
                           <ul class="column_nav">
                                         <% system[:menu_items].each do |menu_key, menu_val|
                                             # if can? :read , menu_val[:class_name].to_s.constantize
                                             if can? menu_val[:action].to_sym , menu_val[:class_name].to_s.constantize
                                         %>
-                            <li id="lnav_<%= system[:id].to_s %>_<%= menu_val[:class_name].to_s %>_<%= menu_val[:action].to_s %>" class="list_column off"><%= link_to content_tag(:span, I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}") ), menu_val[:start_uri] %></li>
+                            <li id="lnav_<%= system[:id].to_s %>_<%= menu_val[:class_name].to_s %>_<%= menu_val[:action].to_s %>" class="list_column off"><%= link_to content_tag(:span, I18n.translate("applications.#{system[:id].to_s}.menu_items.#{menu_key.to_s}") ), menu_val[:start_uri] %></li>
                                             <% end # end  can? :read , resource.to_s
                                             end # end system[:resources].each %>
                       </ul>
                                     <% end # end if system[:resources].size > 0 %>
                                 </li>
                             <% end # if cur_user.can_see_system? %>
-                        <% end # APPLICATION_SYSTEMS.each %>
+                        <% end # APPLICATION_NAV.each %>
             <li class="list_column off"><%= link_to content_tag(:span, I18n.translate('home.help.title')), home_help_path %></li>
           </ul>
         </div><!-- end block_module -->
@@ -100,7 +100,7 @@
         <div id="content_header">
         </div><!-- end content_header -->
 
-        <div id="content_body"><%= yield %></div>
+        <div id="content_body"><div id="content_body_content"><%= yield %></div></div>
 
         <div id="content_footer"></div><!-- end content_footer -->
   
