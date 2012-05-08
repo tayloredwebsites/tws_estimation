@@ -218,12 +218,8 @@ describe 'Users Sessions Integration Tests' do
     # save_and_open_page
     # should be on the Session Create page
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
-    # it should display an error to the user
-    find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
-      /^#{I18n.translate('users_sessions.signin.title') }$/
-    # user should have a signin link in a left module header
-    find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
-      /#{I18n.translate('users_sessions.signin.action')}/
+    # user should have a signin link in the top nav
+    page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signin.action') )
   end
 
   context 'Admin user logged in - visit signin path - ' do
@@ -239,9 +235,8 @@ describe 'Users Sessions Integration Tests' do
         /#{I18n.translate('view_labels.welcome_user', :user => @admin.full_name) }/
         find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
           /#{I18n.translate('view_labels.welcome_user', :user => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:first_name]+' '+FactoryGirl.attributes_for(:admin_user_full_create_attr)[:last_name] ) }/
-      # user should have a signout link in a left module header
-      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
-        /#{I18n.translate('users_sessions.signout.action')}/
+          # user should have a signout link in the top nav
+          page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signout.action') )
     end
 
     it 'logout - should log the user out' do
@@ -249,12 +244,10 @@ describe 'Users Sessions Integration Tests' do
       # should be on the Session Create page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       # click the signout link
-      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a', :text => I18n.translate('users_sessions.signout.action')).click
+      find('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signout.action') ).click
       # save_and_open_page
-      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~ /^#{I18n.translate('users_sessions.signin.action')}$/
-      # user should have a signin link in a left module header
-      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
-        /#{I18n.translate('users_sessions.signin.action')}/
+      # user should have a signin link in the top nav
+      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signin.action') )
     end
 
   end

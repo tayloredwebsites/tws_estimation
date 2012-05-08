@@ -233,7 +233,7 @@ describe User do
   end
 
 
-  context 'should properly test can_see_system?' do
+  context 'should properly test can_see_app?' do
     before(:each) do
       @reg = FactoryGirl.create(:reg_user_min_create_attr)
     end
@@ -245,21 +245,21 @@ describe User do
         # assign this role to this user
         @reg.update_attributes({:roles => role})
         @reg.has_role?(role).should be_true
-        # Rails.logger.debug("T user_spec can_see_system? - role:#{role}, system:#{this_role.sys_id}, #{@reg.can_see_system?(this_role.sys_id)}")
-        @reg.can_see_system?(this_role.sys_id).should be_true
+        # Rails.logger.debug("T user_spec can_see_app? - role:#{role}, system:#{this_role.app_id}, #{@reg.can_see_app?(this_role.app_id)}")
+        @reg.can_see_app?(this_role.app_id).should be_true
         # loop through all valid systems
-        APPLICATION_NAV.each do |system_id, system|
-          # Rails.logger.debug("T user_spec can_see_system? check - role:#{role}, system:#{system_id}")
-          sysid = system_id.to_s
+        MENU_ITEMS.each do |app_id, app|
+          # Rails.logger.debug("T user_spec can_see_app? check - role:#{role}, app:#{app_id}")
+          appid = app_id.to_s
           # make sure it cannot see a (non default role) system different from its current (unless all system)
-          if !DEFAULT_ROLES.split(' ').index(role).nil? && sysid != this_role.sys_id && this_role.sys_id != 'all'
-            # Rails.logger.debug("T user_spec can_see_system? - cant see others - role:#{role}, system:#{sysid} - #{@reg.can_see_system?(sysid)}")
-            @reg.can_see_system?(sysid).should be_false
+          if !DEFAULT_ROLES.split(' ').index(role).nil? && appid != this_role.app_id && this_role.app_id != 'all'
+            # Rails.logger.debug("T user_spec can_see_app? - cant see others - role:#{role}, system:#{appid} - #{@reg.can_see_app?(appid)}")
+            @reg.can_see_app?(appid).should be_false
           end
           # it system for this role is all, make sure it can see all systems
-          if this_role.sys_id == 'all'
-            # Rails.logger.debug("T user_spec can_see_system? - all seeing all - role:#{role}, system:#{sysid} - #{@reg.can_see_system?(sysid)}")
-            @reg.can_see_system?(sysid).should be_true
+          if this_role.app_id == 'all'
+            # Rails.logger.debug("T user_spec can_see_app? - all seeing all - role:#{role}, app:#{appid} - #{@reg.can_see_app?(appid)}")
+            @reg.can_see_app?(appid).should be_true
           end
         end
       end
