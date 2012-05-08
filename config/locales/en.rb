@@ -6,15 +6,10 @@
     :config => {
       :company_name => 'Taylored Web Sites',
       :company_email => 'tayloredwebsites@me.com',
-      :app_name => 'Estimation of systems/component costs',
+      :app_name => 'Estimation of assembly/component costs',
       :app => 'tws_estimation'  # not used so far
     },
-    :applications => {
-      :all => {
-        :abbreviation => 'All',
-        :full_name => 'All Systems',
-        :menu_items => {} # not used
-      },
+    :menu_items => {
       :guest => {
         :abbreviation => 'Common',
         :full_name => 'Common',
@@ -32,14 +27,32 @@
         }
       },
       :estim => {
-        :abbreviation => 'Estimation Maintenance',
-        :full_name => 'Estimation Maintenance',
+        :abbreviation => 'Estimation',
+        :full_name => 'Estimation',
         :menu_items => {
           :defaults => 'Defaults',
           :component_types => 'Component Types',
-          :components => 'Components',
-          :assemblies => 'Assemblies',
-          :assembly_components => 'Assembly Components',
+          :components => {
+            :abbreviation => 'Components',
+            :full_name => 'Components',
+            :menu_items => {
+              :components_index => 'Components by Type',
+              :components_list => 'Components Description'
+          } },
+          :assemblies => {
+            :abbreviation => 'Assemblies',
+            :full_name => 'Assemblies',
+            :menu_items => {
+              :assemblies_index => 'Assemblies in Sort Order',
+              :assemblies_list => 'Assemblies by Description'
+          } },
+          :assembly_components => {
+            :abbreviation => 'Assembly Components',
+            :full_name => 'Assembly Components',
+            :menu_items => {
+              :assembly_components_index => 'Assembly Components by Assembly',
+              :assembly_components_list => 'Assembly Components by Description'
+          } },
           :sales_reps => 'Sales Reps',
           :job_types => 'Job Taxability Types',
           :states => 'States',
@@ -50,6 +63,13 @@
         :abbreviation => 'Prevail',
         :full_name => 'Prevailing Wages',
         :menu_items => {
+          :tests => {
+            :abbreviation => 'Test Mid',
+            :full_name => 'Test Mid Menu',
+            :menu_items => {
+              :tests_inner => 'Test Inner Menu'
+            }
+          }
         }
       }
     },
