@@ -130,9 +130,9 @@ class User < ActiveRecord::Base
   end
 
   # does this user have this system in any of its roles?
-  def can_see_system?(system)
+  def can_see_app?(system)
     matched_roles = self.roles.split(' ').delete_if{|r| (r.index(system.to_s+'_').nil? && r.index('all_').nil?)}
-    #Rails.logger.debug("* User.can_see_system? - system:#{system}, roles:#{self.roles}, matched_role:#{matched_roles}")
+    #Rails.logger.debug("* User.can_see_app? - system:#{system}, roles:#{self.roles}, matched_role:#{matched_roles}")
     return matched_roles.size > 0
   end
 

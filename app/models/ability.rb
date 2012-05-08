@@ -8,7 +8,7 @@ class Ability
     
     Rails.logger.debug("* Ability - initialize - current user:#{user.full_name}, with roles:#{user.roles.inspect.to_s}")
     cannot :sign_out, UserSession
-    if user.can_see_system?('guest')
+    if user.can_see_app?('guest')
       if user.has_role? 'guest_users'
         #let all users do these, since all_guests is a required role
         can :reset_password, User
@@ -16,7 +16,7 @@ class Ability
         can [:sign_in, :index], UserSession
       end
     end
-    if user.can_see_system?('all')
+    if user.can_see_app?('all')
       if user.has_role? 'all_admins'
         can [:manage, :deactivate, :reactivate], :all
         cannot :deactivate, User, :id => user.id
@@ -25,7 +25,7 @@ class Ability
         cannot :sign_in, UserSession
       end
     end
-    if user.can_see_system?('maint')
+    if user.can_see_app?('maint')
       if user.has_role? 'maint_admins'
         can [:manage, :deactivate, :reactivate], User
         cannot :deactivate, User, :id => user.id
@@ -38,7 +38,7 @@ class Ability
       can :sign_out, UserSession
       cannot :sign_in, UserSession
     end
-    if user.can_see_system?('estim')
+    if user.can_see_app?('estim')
       if user.has_role? 'estim_admins'
         can [:manage, :deactivate, :reactivate], [Default, ComponentType, Component, Assembly, AssemblyComponent, SalesRep, JobType]
       elsif user.has_role? 'estim_users'

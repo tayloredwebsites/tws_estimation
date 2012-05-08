@@ -12,7 +12,7 @@ class Role
     if !role_id.blank?
       role_parts = role_id.split('_')
       if role_parts.size == 2
-        @role_sys_id = role_parts[0]
+        @role_app_id = role_parts[0]
         @role_role_id = role_parts[1]
         @role = role_id
       else
@@ -27,12 +27,12 @@ class Role
     @role
   end
   
-  def sys_id
-    @role_sys_id
+  def app_id
+    @role_app_id
   end
   
   def sys_name
-   I18n.translate('systems.'+@role_sys_id.to_s+'.full_name')
+   I18n.translate('systems.'+@role_app_id.to_s+'.full_name')
    # @role_app_id
   end
       
@@ -47,7 +47,7 @@ class Role
       
   
   def clear_role
-    @role = @role_sys_id = @role_role_id = nil
+    @role = @role_app_id = @role_role_id = nil
   end
   
   def ==(another_role)
@@ -55,8 +55,8 @@ class Role
     self.role == another_role.role
   end
   def same_sys(another_role)
-    Rails.logger.debug("* Role - same_app - #{@role_app_id == another_role.sys_id}, #{@role_sys_id}, #{another_role.sys_id}")
-    @role_sys_id == another_role.sys_id
+    Rails.logger.debug("* Role - same_app - #{@role_app_id == another_role.app_id}, #{@role_app_id}, #{another_role.app_id}")
+    @role_app_id == another_role.app_id
   end
   def same_role(another_role)
     Rails.logger.debug("* Role - same_role - #{self.role_id == another_role.role_id}, #{self.role_id}, #{another_role.role_id}")

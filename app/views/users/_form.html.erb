@@ -23,7 +23,7 @@
         last_role = Role.new
         VALID_ROLES.each do |role|
             cur_role = Role.new(role)
-            if last_role.sys_id != cur_role.sys_id
+            if last_role.app_id != cur_role.app_id
                 # new line (field with label/values) for each application (label) and the roles (values)
                 last_role = cur_role
         %>

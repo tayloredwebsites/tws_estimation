@@ -42,7 +42,6 @@ describe "Page Existing tests" do
     find('#header_tagline_page_header').text.should_not =~ /\A\s*\z/
     find('#header_tagline_page_header').text.should_not =~ /translation missing/
     find('#header_tagline_page_header').text.should_not =~ /^#{I18n.translate('home.site_map.header')}$/
-    find('div.module_header/a', :text => I18n.translate('users_sessions.signin.title'))
   end
   it 'should be able to visit home_status page' do
     visit home_status_path

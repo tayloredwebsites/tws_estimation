@@ -25,31 +25,40 @@ DB_VALUES = {
 # each role has layout: (application_name/all)_(role_name/guest)
 # each resource is the available resources(model/controller) under that system with authorization by cancan - app/models/ability.rb
 # i18n translations of each menu_item is en.systems.{APPLICATION_NAV(key)}.menu_items.{menu_items(key)}
-APPLICATION_NAV = {
+MENU_ITEMS = {
 #  :all => {:id => 'all', :actual => 'false', :type => 'system', :resources => ['Home', 'User', 'Default']},
 #  :home => {:id => 'home', :actual => 'true', :type => 'shared'},
-  :guest => {:id => 'guest', :actual => 'true', :type => 'shared', :menu_items => {
+  :guest => {:app_id => 'guest', :menu_items => {
     :home => {:class_name => "UserSession", :action => :index, :start_uri => "/"},
     :user_signin => {:class_name => "UserSession", :action => :sign_in, :start_uri => "/signin"},
     :user_signout => {:class_name => "UserSession", :action => :sign_out, :start_uri => "/signout"}
   } },
-  :estimuser => {:id => 'estim', :actual => 'true', :type => 'shared', :menu_items => {
+  :estimuser => {:app_id => 'estim', :menu_items => {
     :estimates => {:class_name => "Estimate", :action => :index, :start_uri => "/estimates"}
   } },
-  :maint => {:id => 'maint', :actual => 'true', :type => 'shared', :menu_items => {
+  :maint => {:app_id => 'maint', :menu_items => {
     :users => {:class_name => "User", :action => :index, :start_uri => "/users"}
   } },
-  :estimmaint => {:id => 'estim', :actual => 'true', :type => 'shared', :menu_items => {
+  :estimmaint => {:app_id => 'estim', :menu_items => {
     :defaults => {:class_name => "Default", :action => :index, :start_uri => "/defaults"},
     :component_types => {:class_name => "ComponentType", :action => :index, :start_uri => "/component_types"},
-    :components => {:class_name => "Component", :action => :index, :start_uri => "/components/menu"},
-    :assemblies => {:class_name => "Assembly", :action => :index, :start_uri => "/assemblies/menu"},
-    :assembly_components => {:class_name => "AssemblyComponent", :action => :index, :start_uri => "/assembly_components/menu"},
+    :components => {:class_name => "Component", :action => :menu, :start_uri => "/components/menu", :menu_items => {
+      :components_index => {:class_name => "Component", :action => :index, :start_uri => "/components"},
+      :components_list => {:class_name => "Component", :action => :list, :start_uri => "/components/list"}
+    } },
+    :assemblies => {:class_name => "Assembly", :action => :menu, :start_uri => "/assemblies/menu", :menu_items => {
+      :assemblies_index => {:class_name => "Assembly", :action => :index, :start_uri => "/assemblies"},
+      :assemblies_list => {:class_name => "Assembly", :action => :list, :start_uri => "/assemblies/list"}
+    } },
+    :assembly_components => {:class_name => "AssemblyComponent", :action => :menu, :start_uri => "/assembly_components/menu", :menu_items => {
+      :assembly_components_index => {:class_name => "AssemblyComponent", :action => :index, :start_uri => "/assembly_components"},
+      :assembly_components_list => {:class_name => "AssemblyComponent", :action => :list, :start_uri => "/assembly_components/list"}
+    } },
     :sales_reps => {:class_name => "SalesRep", :action => :index, :start_uri => "/sales_reps"},
     :job_types => {:class_name => "JobType", :action => :index, :start_uri => "/job_types"},
     :states => {:class_name => "State", :action => :index, :start_uri => "/states"}
   } },
-  :prevail => {:id => 'prevail', :actual => 'true', :type => 'external', :menu_items => {    
+  :prevail => {:app_id => 'prevail', :menu_items => {
   } }
 }
 

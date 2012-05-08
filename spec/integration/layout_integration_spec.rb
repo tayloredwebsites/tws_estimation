@@ -43,18 +43,12 @@ describe 'Users layouts Tests - ' do
     it 'should have an about item in the top nav bar' do
       page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('home.about.title') )
     end
+    it 'should have a signin link in in the top nav bar' do
+      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signin.action') )
+    end
     it 'should not have Welcome in a left module header' do
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should_not =~
         /#{I18n.translate('view_labels.welcome_user', :user => '') }/
-    end
-    it 'should have a signin link in a left module header' do
-      find('div.module_header/a', :text => I18n.translate('users_sessions.signin.title'))
-      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
-        /^#{I18n.translate('users_sessions.signin.title') }$/
-    end
-    it 'should have a reset password link in a left module header' do
-      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]/a').text.should =~
-        /#{I18n.translate('users_sessions.signin.action')}/
     end
     it 'should have a help link in the left nav bar' do
       find('div#left_content').find('a', :text => I18n.translate('home.help.title'))
@@ -124,7 +118,9 @@ describe 'Users layouts Tests - ' do
     end
     it 'should be on the home index page' do
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
-      find('div.module_header/a', :text => I18n.translate('users_sessions.signin.action'))
+    end
+    it 'should have a signin link in in the top nav bar' do
+      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signin.action') )
     end
     it 'should not see user links' do
       page.should have_no_selector('ul#header_nav_bar//a', :text => I18n.translate('users.show.title'))
@@ -142,8 +138,8 @@ describe 'Users layouts Tests - ' do
       helper_signin(:reg_user_full_create_attr, @me.full_name)
       visit home_index_path
     end
-    it 'should have a user item in the top nav bar' do
-      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users.show.title'))
+    it 'should have a signout link in in the top nav bar' do
+      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signout.action') )
     end
   end
 
@@ -153,8 +149,8 @@ describe 'Users layouts Tests - ' do
       helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
     end
-    it 'should have a user item in the top nav bar 1st item' do
-      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users.title') )
+    it 'should have a signout link in in the top nav bar' do
+      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signout.action') )
     end
     it 'should have a Users link in the left nav bar' do
       find('div#left_content').find('a', :text => I18n.translate('users.title'))
@@ -172,28 +168,29 @@ describe 'Users Layouts Links Tests - ' do
     end
     it 'should only see guest system in the left nav' do
       # save_and_open_page
-      APPLICATION_NAV.each do | sys_name, system |
-        if @me.can_see_system?(system[:id].to_s)
-          page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+      MENU_ITEMS.each do | app_id, app |
+        # Rails.logger.debug("T MENU_ITEMS can_see_app? : #{app.inspect.to_s}")
+        if @me.can_see_app?(app[:app_id].to_s)
+          page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
         else
-          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
         end
       end
     end
     it 'should only see the resources a guest can see and can? see' do
       # save_and_open_page
-      APPLICATION_NAV.each do | sys_name, system |
-        if @me.can_see_system?(system[:id].to_s)
+      MENU_ITEMS.each do | app_id, app |
+        if @me.can_see_app?(app[:id].to_s)
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
-          system[:menu_items].each do | menu_key, menu_val |
+          app[:menu_items].each do | menu_key, menu_val |
             ability = Ability.new(@me)
-            Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
+            # Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
             if ability.can?(menu_val[:action].to_sym, menu_val[:class_name].to_s.constantize)
-              Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
-              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
+              # Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
             else
-              Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
-              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
+              # Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
             end
           end
         end
@@ -210,7 +207,6 @@ describe 'Users Layouts Links Tests - ' do
     it 'should go to Users index page when user clicks top nav Users link' do
       visit home_index_path
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
-      find('ul#header_nav_bar//a', :text => I18n.translate('users.show.title')).click
       find('#header_tagline_page_header').text.should_not =~ /^#{I18n.translate('users.index.header')}$/
     end
     it 'should go to the Site map page when the footer site map link is clicked' do
@@ -219,28 +215,28 @@ describe 'Users Layouts Links Tests - ' do
     end            
     it 'should list all authorized systems in the left nav' do
       # save_and_open_page
-      APPLICATION_NAV.each do | sys_name, system |
-        if @me.can_see_system?(system[:id].to_s)
-          page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+      MENU_ITEMS.each do | app_id, app |
+        if @me.can_see_app?(app[:app_id].to_s)
+          page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
         else
-          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
         end
       end
     end
     it 'should list all of the resources per system that the item can see and can? see' do
       # save_and_open_page
-      APPLICATION_NAV.each do | sys_name, system |
-        if @me.can_see_system?(system[:id].to_s)
+      MENU_ITEMS.each do | app_id, app |
+        if @me.can_see_app?(app[:app_id].to_s)
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
-          system[:menu_items].each do | menu_key, menu_val |
+          app[:menu_items].each do | menu_key, menu_val |
             ability = Ability.new(@me)
-            Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
+            # Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
             if ability.can?(menu_val[:action].to_sym, menu_val[:class_name].to_s.constantize)
-              Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
-              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
+              # Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
             else
-              Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
-              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
+              # Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
             end
           end
         end
@@ -257,8 +253,6 @@ describe 'Users Layouts Links Tests - ' do
     it 'should go to Users index page when user clicks top nav Users link' do
       visit home_index_path
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.index.header')}$/
-      find('ul#header_nav_bar').find('a', :text => I18n.translate('users.title')).click
-      find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('users.index.header')}$/
     end
     it 'should go to the Site map page when the footer site map link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
@@ -266,28 +260,28 @@ describe 'Users Layouts Links Tests - ' do
     end            
     it 'should list all the systems the item can see in the left nav' do
       # save_and_open_page
-      APPLICATION_NAV.each do | sys_name, system |
-        if @me.can_see_system?(system[:id].to_s)
-          page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+      MENU_ITEMS.each do | app_id, app |
+        if @me.can_see_app?(app[:app_id].to_s)
+          page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
         else
-          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
+          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
         end
       end
     end
     it 'should list all of the resources per system that the item can see and can? :read' do
       # save_and_open_page
-      APPLICATION_NAV.each do | sys_name, system |
-        if @me.can_see_system?(system[:id].to_s)
+      MENU_ITEMS.each do | app_id, app |
+        if @me.can_see_app?(app[:app_id].to_s)
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
-          system[:menu_items].each do | menu_key, menu_val |
+          app[:menu_items].each do | menu_key, menu_val |
             ability = Ability.new(@me)
-            Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
+            # Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
             if ability.can?(menu_val[:action].to_sym, menu_val[:class_name].to_s.constantize)
-              Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
-              page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
+              # Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
             else
-              Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{system[:id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
-              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
+              # Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
             end
           end
         end
