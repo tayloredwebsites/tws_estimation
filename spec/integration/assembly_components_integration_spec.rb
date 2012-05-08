@@ -243,15 +243,15 @@ describe 'AssemblyComponents Integration Tests' do
         visit assembly_components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
-        page.should have_selector(:xpath, "//div[@id='content_body']/h3/a", :text => "#{@assembly_component.assembly.nil_to_s}" )
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text =>  "New #{@assembly_component.assembly.nil_to_s} AssemblyComponent" )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/h3/a", :text => "#{@assembly_component.assembly.nil_to_s}" )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  "New #{@assembly_component.assembly.nil_to_s} AssemblyComponent" )
       end
       it 'has clickable parent view link' do
-        find(:xpath, "//div[@id='content_body']/h3/a", :text => "#{@assembly_component.assembly.nil_to_s}" ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/h3/a", :text => "#{@assembly_component.assembly.nil_to_s}" ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.show.header')}$/
       end
       it 'has clickable parent new child button' do
-        find(:xpath, "//div[@id='content_body']/a", :text =>  "New #{@assembly_component.assembly.nil_to_s} AssemblyComponent" ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  "New #{@assembly_component.assembly.nil_to_s} AssemblyComponent" ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.new.header')}$/
       end
     end
@@ -260,10 +260,10 @@ describe 'AssemblyComponents Integration Tests' do
         visit assembly_components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('assembly_components.new.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('assembly_components.new.action') )
       end
       it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('assembly_components.new.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('assembly_components.new.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.new.header')}$/
       end
     end
@@ -272,10 +272,10 @@ describe 'AssemblyComponents Integration Tests' do
         visit list_assembly_components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.list.header')}$/
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.new.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.new.action') )
       end
       it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.new.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.new.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.new.header')}$/
       end
     end
@@ -301,10 +301,10 @@ describe 'AssemblyComponents Integration Tests' do
         visit new_assembly_component_path()
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.new.header')}$/
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.index.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.index.action') )
       end
       it 'has clickable index link' do
-        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.index.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.index.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
       end
     end
@@ -313,25 +313,25 @@ describe 'AssemblyComponents Integration Tests' do
         visit edit_assembly_component_path(@assembly_component.id)
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.edit.header')}$/
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('assembly_components.show.action') )
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.index.action') )
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.list.action') )
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.new.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('assembly_components.show.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.index.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.list.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.new.action') )
       end
       it 'has clickable show button' do
-        find(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('assembly_components.show.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('assembly_components.show.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.show.header')}$/
       end
       it 'has clickable index link' do
-        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.index.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.index.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
       end
       it 'has clickable list link' do
-        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.list.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.list.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.list.header')}$/
       end
       it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.new.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.new.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.new.header')}$/
       end
     end
@@ -340,25 +340,25 @@ describe 'AssemblyComponents Integration Tests' do
         visit assembly_component_path(@assembly_component.id)
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.show.header')}$/
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('assembly_components.edit.action') )
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.index.action') )
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.list.action') )
-        page.should have_selector(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.new.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('assembly_components.edit.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.index.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.list.action') )
+        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.new.action') )
       end
       it 'has clickable edit button' do
-        find(:xpath, "//div[@id='content_body']/a", :text =>  I18n.translate('assembly_components.edit.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('assembly_components.edit.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.edit.header')}$/
       end
       it 'has clickable index link' do
-        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.index.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.index.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
       end
       it 'has clickable list link' do
-        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.list.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.list.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.list.header')}$/
       end
       it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/a", :text => I18n.translate('assembly_components.new.action') ).click
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assembly_components.new.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.new.header')}$/
       end
     end

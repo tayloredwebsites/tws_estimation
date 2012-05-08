@@ -3,8 +3,6 @@ require 'spec_helper'
 describe 'Miscellaneous items to do - ' do
   context 'resolve difference between role system and left menu systems' do
     it 'should resolve if the @systemc is needed'
-    it 'should see if app_constants.rb.APPLICATION_NAV can be simplified'
-    it 'should have different name in left nav for Estimation and Estimation Maint'
     it 'should put list and index functions on the left nav'
     it 'should allow hide and show of left nav sub components'
   end
@@ -37,7 +35,7 @@ describe 'Miscellaneous items to do - ' do
     it 'should have the hide/show deactivated records status in the layout header'
   end
   it 'should give a warning to the user on problems with roles - want to update and still notify user'
-  it 'should confirm that Role.sys_id and Role.sys_name correspond with app_constants.rb - APPLICATION_NAV'
+  it 'should confirm that Role.app_id and Role.sys_name correspond with app_constants.rb - APPLICATION_NAV'
   it 'should have dropdown for selection of Defaults Store field - Value Store name, with add new Value Store name option'
   it 'should add audit trail to the defaults table for tws_auth app for audit trail example'
   it 'should let cancan authorize resources for the home controller.  Base Model? Guest Model? '
