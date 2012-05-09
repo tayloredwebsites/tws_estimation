@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
+  context 'tws_auth cleanup' do
+    it 'should clean up the left nav and the i18n'
+  end
   context 'resolve difference between role system and left menu systems' do
     it 'should resolve if the @systemc is needed'
     it 'should put list and index functions on the left nav'
