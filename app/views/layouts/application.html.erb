@@ -68,7 +68,7 @@
          <ul class="module_body column_nav">
             <% MENU_ITEMS.each do |menu_item_id, menu_item| # loop through app_constants.rb menu items for left navigation %>
                 <%      if cur_user.can_see_app?(menu_item[:app_id].to_s) # only show top/app level menu items that the user has any app level access to (in roles) %>
-                    <li id="lnav_<%= menu_item[:app_id].to_s %>" class="list_column on"><%= content_tag(:span, I18n.translate("menu_items.#{menu_item[:app_id].to_s}.full_name")) %>
+                    <li id="lnav_<%= menu_item_id.to_s %>" class="list_column on"><%= content_tag(:span, I18n.translate("menu_items.#{menu_item_id.to_s}.full_name")) %>
                         <% if menu_item[:menu_items].size > 0 #  %>
               <ul class="column_nav">
                             <% menu_item[:menu_items].each do |menu_key, menu_val| # loop through

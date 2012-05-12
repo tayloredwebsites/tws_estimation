@@ -1,4 +1,4 @@
-# layout_integration_spec.rb
+ # layout_integration_spec.rb
 
 require 'spec_helper'
 include UserIntegrationHelper
@@ -23,7 +23,7 @@ describe 'Users layouts Tests - ' do
       find('#header_tagline_system_header').text.should_not =~ /\A\s*\z/
     end
     it 'should find exactly matching System title' do
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.guest.full_name')}$/
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.guest.full_name')}$/
     end
     it 'should not find all whitespace in the page title' do
       find('#header_tagline_page_header').text.should_not =~ /\A\s*\z/
@@ -213,16 +213,16 @@ describe 'Users Layouts Links Tests - ' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
     end            
-    it 'should list all authorized systems in the left nav' do
-      # save_and_open_page
-      MENU_ITEMS.each do | app_id, app |
-        if @me.can_see_app?(app[:app_id].to_s)
-          page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
-        else
-          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
-        end
-      end
-    end
+    # it 'should list all authorized systems in the left nav' do
+    #   save_and_open_page
+    #   MENU_ITEMS.each do | app_id, app |
+    #     if @me.can_see_app?(app[:app_id].to_s)
+    #       page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
+    #     else
+    #       page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
+    #     end
+    #   end
+    # end
     it 'should list all of the resources per system that the item can see and can? see' do
       # save_and_open_page
       MENU_ITEMS.each do | app_id, app |
@@ -262,9 +262,9 @@ describe 'Users Layouts Links Tests - ' do
       # save_and_open_page
       MENU_ITEMS.each do | app_id, app |
         if @me.can_see_app?(app[:app_id].to_s)
-          page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
+          page.should have_selector(:xpath, "//li[@id=\"lnav_#{app_id.to_s}\"]")
         else
-          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
+          page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app_id.to_s}\"]")
         end
       end
     end
