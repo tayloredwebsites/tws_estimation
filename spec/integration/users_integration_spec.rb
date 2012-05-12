@@ -573,26 +573,26 @@ describe 'Systems Tests' do
   context 'Logged Out user systems' do
     it 'should have home system for home page' do
       visit home_index_path
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.guest.full_name')}$/
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.guest.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
     end
     it 'should have home system for errors page' do
       visit home_errors_path
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.guest.full_name')}$/
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.guest.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
     end
     it 'should see limited maint menu items' do
     #  visit reset_password_path
-    #  find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.guest.full_name')}$/
+    #  find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.guest.full_name')}$/
       visit signin_path
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.guest.full_name')}$/
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.guest.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
     end
     it 'should not see estim menu items (does not have estim_user role)' do
       visit home_index_path
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.guest.full_name')}$/
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.guest.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
-      page.should_not have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('applications.estim.full_path'))
+      page.should_not have_selector(:xpath, '//div[@id="left_content"]//li', :text => I18n.translate('menu_items.estim.full_path'))
     end
   end
   context 'Regular user systems' do
@@ -604,17 +604,17 @@ describe 'Systems Tests' do
     end
     it 'should have home system for home page' do
       visit home_index_path
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.guest.full_name')}$/
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.guest.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
     end
     it 'should have home system for errors page' do
       visit home_errors_path
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.guest.full_name')}$/
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.guest.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
     end
     it 'should have maint system for user pages' do
       visit user_path(@me.id)
-      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('applications.maint.full_name')}$/
+      find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.maint.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
     end
     # it 'should see the maintenance menu sub items if currently in that system'
@@ -628,15 +628,15 @@ describe 'Systems Tests' do
     end
     it 'should have home system for home page' do
       visit home_index_path
-      helper_user_on_page?('applications.guest.full_name', 'home.index.header', @me.full_name)
+      helper_user_on_page?('menu_items.guest.full_name', 'home.index.header', @me.full_name)
     end
     it 'should have home system for errors page' do
       visit home_errors_path
-      helper_user_on_page?('applications.guest.full_name', 'home.errors.header', @me.full_name)
+      helper_user_on_page?('menu_items.guest.full_name', 'home.errors.header', @me.full_name)
     end
     it 'should have maint system for user pages' do
       visit user_path(@me.id)
-      helper_user_on_page?('applications.maint.full_name', 'users.show.header', @me.full_name)
+      helper_user_on_page?('menu_items.maint.full_name', 'users.show.header', @me.full_name)
     end
   end
 
@@ -652,7 +652,7 @@ describe 'Systems Tests' do
       helper_signin_form_submit(:admin_user_full_create_attr)
       # should be signed in, and redirected to the original page
       # save_and_open_page
-      helper_user_on_page?('applications.maint.full_name', 'users.new.header', @admin.full_name)
+      helper_user_on_page?('menu_items.maint.full_name', 'users.new.header', @admin.full_name)
     end
     it 'should not signout a user after just signing in due to redirect back coding' do
       visit signout_path()
@@ -660,7 +660,7 @@ describe 'Systems Tests' do
       helper_signin_form_submit(:admin_user_full_create_attr)
       # should be signed in, and redirected to the original page
       # save_and_open_page
-      helper_user_on_page?('applications.guest.full_name', 'users_sessions.index.header', @admin.full_name)
+      helper_user_on_page?('menu_items.guest.full_name', 'users_sessions.index.header', @admin.full_name)
     end
 
   end
