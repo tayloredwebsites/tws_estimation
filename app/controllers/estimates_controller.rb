@@ -12,11 +12,15 @@ class EstimatesController < SecureApplicationController
 
   before_filter do |controller|
     self.authenticate_user # always authenticate user   if (%w{ index show }.index(params[:action]).nil?)
-    # Rails.logger.debug("* EstimatesController.before_filter called")
-    # @estimate_types = EstimateTypesController.new.get_scope().all
-    # Rails.logger.debug("* EstimatesController.before_filter - @estimate_types:#{@estimate_types.inspect.to_s}")
-    # @defaults = DefaultsController.new.get_scope().all
-    # Rails.logger.debug("* EstimatesController.before_filter - @defaults:#{@defaults.inspect.to_s}")
+    Rails.logger.debug("* EstimatesController.before_filter called with id: #{params[:id]}")
+    # create a EstimateAssemblies list for any renders that require it
+    if (!params[:id].nil?)
+      # set up here because these are used for rendering from deactivated module
+      @estimate_assemblies = EstimateAssembliesController.new.get_scope().where(:estimate_id => params[:id] )
+    else
+      # make sure that we have at least an empty components list
+      @estimate_assemblies = []
+    end
   end
   
   def self.list(scope = nil)

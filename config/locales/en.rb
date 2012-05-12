@@ -59,18 +59,20 @@
           :estimates => 'Estimates'
         }
       },
+      :estimuser => {
+        :abbreviation => 'Estim. Entry',
+        :full_name => 'Estimation Entry',
+        :menu_items => {} # see estim entry (this is for titles of systems with mutiple nav items)
+      },
+      :estimmaint => {
+        :abbreviation => 'Estim. Maint.',
+        :full_name => 'Estimation Maintenance',
+        :menu_items => {} # see estim entry (this is for titles of systems with mutiple nav items)
+      },
       :prevail => {
         :abbreviation => 'Prevail',
         :full_name => 'Prevailing Wages',
-        :menu_items => {
-          :tests => {
-            :abbreviation => 'Test Mid',
-            :full_name => 'Test Mid Menu',
-            :menu_items => {
-              :tests_inner => 'Test Inner Menu'
-            }
-          }
-        }
+        :menu_items => {}
       }
     },
     :roles => {

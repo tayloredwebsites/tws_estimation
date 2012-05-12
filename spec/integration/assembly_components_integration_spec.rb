@@ -575,4 +575,53 @@ describe 'AssemblyComponents Integration Tests' do
       page.should_not have_selector(:xpath, "//tr[@id=\"assembly_component_#{@item_deact.id}\"]/td[@class=\"assembly_component_deactivated\"]", :text => I18n.is_deactivated_or_not(true) )
     end   
   end
+  context 'Assembly Components partial listing - ' do
+    before(:each) do
+      helper_load_assemblies if !defined?(@assemblies)
+      helper_load_assembly_components if !defined?(@assembly_components)
+      # visit home_index_path
+    end
+    context 'should be visible in the Edit page - ' do
+      before(:each) do
+        visit edit_assembly_path(@assembly.id)
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.edit.header')}$/
+      end
+      it 'with the Assembly Components listing Title' do
+        page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+      end
+      it 'with all its Assembly Components listed' do
+        # page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+        Rails.logger.debug("T @assembly.id = #{@assembly.id.to_s}")
+        @assembly_components.each do | assembly_component |
+          # page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+          if assembly_component.id == @assembly.id
+            Rails.logger.debug("T assembly_component = #{assembly_component.inspect.to_s}")
+            page.should have_selector(:xpath, "//tr[@id=\"assembly_component_#{assembly_component.id.to_s}\"]")
+          end
+        end
+      end
+    end
+    context 'should be visible in the Show page' do
+      before(:each) do
+        visit assembly_path(@assembly.id)
+        # save_and_open_page
+        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.show.header')}$/
+      end
+      it 'with the Assembly Components listing Title' do
+        page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+      end
+      it 'with all its Assembly Components listed' do
+        # page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+        Rails.logger.debug("T @assembly.id = #{@assembly.id.to_s}")
+        @assembly_components.each do | assembly_component |
+          # page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+          if assembly_component.id == @assembly.id
+            Rails.logger.debug("T assembly_component = #{assembly_component.inspect.to_s}")
+            page.should have_selector(:xpath, "//tr[@id=\"assembly_component_#{assembly_component.id.to_s}\"]")
+          end
+        end
+      end
+    end
+  end
 end

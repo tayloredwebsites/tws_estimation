@@ -12,11 +12,14 @@ class AssembliesController < SecureApplicationController
 
   before_filter do |controller|
     self.authenticate_user # always authenticate user   if (%w{ index show }.index(params[:action]).nil?)
-    # Rails.logger.debug("* AssembliesController.before_filter called")
-    # @assembly_types = AssemblyTypesController.new.get_scope().all
-    # Rails.logger.debug("* AssembliesController.before_filter - @assembly_types:#{@assembly_types.inspect.to_s}")
-    # @defaults = DefaultsController.new.get_scope().all
-    # Rails.logger.debug("* AssembliesController.before_filter - @defaults:#{@defaults.inspect.to_s}")
+    # create a components list for any renders that require the component listing
+    if (!params[:id].nil?)
+      # set up here because these are used for rendering from deactivated module
+      @assembly_components = AssemblyComponentsController.new.get_scope().joins(:assembly).joins(:component).where(:assembly_id => params[:id] ).order('components.description, assembly_components.description')
+    else
+      # make sure that we have at least an empty components list
+      @assembly_components = []
+    end
   end
   
   def self.list(scope = nil)
@@ -57,6 +60,8 @@ class AssembliesController < SecureApplicationController
 
   # GET /assemblies/:id/edit
   def edit
+    Rails.logger.debug("* AssembliesController.edit - params = #{params.inspect.to_s}")
+    Rails.logger.debug("* AssembliesController.edit - @components = #{@components.inspect.to_s}")
     @assembly = get_scope().find(params[:id])
   end
 

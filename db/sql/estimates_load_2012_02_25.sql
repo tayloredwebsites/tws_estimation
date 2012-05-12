@@ -51,28 +51,6 @@ CREATE TABLE estimatecomponents (
 
 ALTER TABLE public.estimatecomponents OWNER TO postgres;
 
---
--- TOC entry 1512 (class 1259 OID 25722)
--- Dependencies: 1822 1823 1824 1825 1826 1827 1828 1829 1830 1831 6
--- Name: estimates; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
---
-
-
---
--- TOC entry 1513 (class 1259 OID 25738)
--- Dependencies: 1832 6
--- Name: estimatesystems; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE estimatesystems (
-    est_sys_id integer NOT NULL,
-    est_sys_est_id integer NOT NULL,
-    est_sys_sys_id integer NOT NULL,
-    est_sys_deleted character(1) DEFAULT 'N'::bpchar NOT NULL
-);
-
-
-ALTER TABLE public.estimatesystems OWNER TO postgres;
 
 --
 -- TOC entry 1514 (class 1259 OID 25742)
@@ -129,20 +107,6 @@ CREATE TABLE jobs (
 ALTER TABLE public.jobs OWNER TO postgres;
 
 --
--- TOC entry 1516 (class 1259 OID 25757)
--- Dependencies: 1842 1843 1844 1845 1846 6
--- Name: jobtypes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
---
-
-
---
--- TOC entry 1517 (class 1259 OID 25765)
--- Dependencies: 1847 1848 1849 6
--- Name: salespeople; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
---
-
-
---
 -- TOC entry 1518 (class 1259 OID 25771)
 -- Dependencies: 1850 1851 6
 -- Name: staterates; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -159,20 +123,6 @@ CREATE TABLE staterates (
 
 
 ALTER TABLE public.staterates OWNER TO postgres;
-
---
--- TOC entry 1519 (class 1259 OID 25776)
--- Dependencies: 1852 1853 6
--- Name: states; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
---
-
-
---
--- TOC entry 1522 (class 1259 OID 25792)
--- Dependencies: 1859 6
--- Name: taxtypes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
---
-
 
 --
 -- TOC entry 1523 (class 1259 OID 25796)
@@ -546,39 +496,6 @@ INSERT INTO estimatesystems (est_sys_id, est_sys_est_id, est_sys_sys_id, est_sys
 INSERT INTO estimatesystems (est_sys_id, est_sys_est_id, est_sys_sys_id, est_sys_deleted) VALUES (24, 29, 2, 'N');
 INSERT INTO estimatesystems (est_sys_id, est_sys_est_id, est_sys_sys_id, est_sys_deleted) VALUES (25, 29, 3, 'N');
 
-
---
--- TOC entry 1979 (class 0 OID 25742)
--- Dependencies: 1514
--- Data for Name: jobcomponents; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 1980 (class 0 OID 25746)
--- Dependencies: 1515
--- Data for Name: jobs; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 1981 (class 0 OID 25757)
--- Dependencies: 1516
--- Data for Name: jobtypes; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 1982 (class 0 OID 25765)
--- Dependencies: 1517
--- Data for Name: salespeople; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
 --
 -- TOC entry 1983 (class 0 OID 25771)
 -- Dependencies: 1518
@@ -598,22 +515,6 @@ INSERT INTO staterates (state_rate_id, state_rate_state_id, state_rate_tax_type_
 INSERT INTO staterates (state_rate_id, state_rate_state_id, state_rate_tax_type_id, state_rate_comp_type_id, state_rate_proportion, state_rate_deleted) VALUES (10, 1, 4, 13, 6.0000, 'N');
 INSERT INTO staterates (state_rate_id, state_rate_state_id, state_rate_tax_type_id, state_rate_comp_type_id, state_rate_proportion, state_rate_deleted) VALUES (11, 1, 4, 16, 6.0000, 'N');
 INSERT INTO staterates (state_rate_id, state_rate_state_id, state_rate_tax_type_id, state_rate_comp_type_id, state_rate_proportion, state_rate_deleted) VALUES (12, 1, 4, 17, 6.0000, 'N');
-
-
---
--- TOC entry 1984 (class 0 OID 25776)
--- Dependencies: 1519
--- Data for Name: states; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- TOC entry 1987 (class 0 OID 25792)
--- Dependencies: 1522
--- Data for Name: taxtypes; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
 
 
 --
@@ -638,14 +539,6 @@ INSERT INTO users (users_id, users_name, users_pass, users_lname, users_fname, u
 INSERT INTO users (users_id, users_name, users_pass, users_lname, users_fname, users_login, users_deleted, users_super) VALUES (2, 'vince', 'vince', 'DiPaola', 'Vince', 'Y', 'N', 'Y');
 INSERT INTO users (users_id, users_name, users_pass, users_lname, users_fname, users_login, users_deleted, users_super) VALUES (3, 'mikec', 'mikec', 'Chiocchio', 'Mike', 'Y', 'N', 'Y');
 INSERT INTO users (users_id, users_name, users_pass, users_lname, users_fname, users_login, users_deleted, users_super) VALUES (4, 'vincec', 'vincec', 'Chiocchio', 'Vince', 'Y', 'N', 'Y');
-
-
---
--- TOC entry 1990 (class 0 OID 25811)
--- Dependencies: 1525
--- Data for Name: vendorcomponents; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
 
 
 --

@@ -25,7 +25,7 @@ def generate_sales_rep_min_attributes(user_id = nil)
   return {
     :user_id => user.id,
     :min_markup_pct => 0.0,
-    :max_markup_pct => 10.0,
+    :max_markup_pct => 10.0
   }
 end
 

@@ -9,6 +9,7 @@ class Estimate < ActiveRecord::Base
   belongs_to :sales_rep
   belongs_to :job_type
   belongs_to :state
+  has_many :estimate_assemblies
   
   validates :title,
     :presence => true,
@@ -28,7 +29,7 @@ class Estimate < ActiveRecord::Base
   end
 
   def desc
-    ''+super.nil_to_s+self.description.nil_to_s
+    ''+super.nil_to_s+self.title.nil_to_s
   end
 
   def field_nil_to_s(field_name)

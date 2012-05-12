@@ -53,12 +53,6 @@ ALTER TABLE ONLY estimatecomponents
 ALTER TABLE ONLY estimatecomponents
     ADD CONSTRAINT fk_estimatecomponents_vendors FOREIGN KEY (est_comp_vend_id) REFERENCES vendors(vend_id);
 
-ALTER TABLE ONLY estimatesystems
-    ADD CONSTRAINT fk_estimatesystems_estimates FOREIGN KEY (est_sys_est_id) REFERENCES estimates(est_id);
-
-ALTER TABLE ONLY estimatesystems
-    ADD CONSTRAINT fk_estimatesystems_systems FOREIGN KEY (est_sys_sys_id) REFERENCES systems(sys_id);
-
 ALTER TABLE ONLY jobcomponents
     ADD CONSTRAINT fk_jobcomponents_jobs FOREIGN KEY (job_comp_job_id) REFERENCES jobs(job_id);
 

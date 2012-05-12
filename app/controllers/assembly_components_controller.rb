@@ -12,6 +12,14 @@ class AssemblyComponentsController < SecureApplicationController
 
   before_filter do |controller|
     self.authenticate_user # always authenticate user   if (%w{ index show }.index(params[:action]).nil?)
+    # # create a components list for any renders that require the component listing
+    # if (!params[:id].nil?)
+    #   # set up here because these are used for rendering from deactivated module
+    #   @components = ComponentsController.new.get_scope().where(:component_id => params[:component_id] ).order('description ASC')
+    # else
+    #   # make sure that we have at least an empty components list
+    #   @components = []
+    # end
   end
   
   def self.list(scope = nil)

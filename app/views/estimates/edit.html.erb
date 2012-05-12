@@ -25,3 +25,10 @@
     | <%= link_to I18n.translate('estimates.list.action'), list_estimates_path %>
     | <%= link_to I18n.translate('estimates.new.action'), new_estimate_path %>
 <% end %>
+
+
+<br><hr><br>
+
+<h3><%= html_escape @estimate.nil_to_s %> Components:</h3>
+<%= render :partial => 'estimate_assemblies/list' %>
+

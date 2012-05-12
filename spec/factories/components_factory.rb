@@ -1,6 +1,7 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 
+# return all attributes for create, for later comparison in tests
 def generate_component_accessible_attributes
   component_type = FactoryGirl.create(:component_type_accessible)
   default = FactoryGirl.create(:default_accessible)
@@ -13,12 +14,13 @@ def generate_component_accessible_attributes
   }
 end
   
+# return minimum attributes required to create, for later comparison in tests
 def generate_component_min_attributes
   component_type = FactoryGirl.create(:component_type_accessible)
   default = FactoryGirl.create(:default_accessible)
   return {
     :component_type_id => component_type.id,
-    :description => FactoryGirl.generate(:component_description),
+    :description => FactoryGirl.generate(:component_description)
   }
 end
   

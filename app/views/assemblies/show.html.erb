@@ -56,3 +56,10 @@
     | <%= link_to I18n.translate('assemblies.list.action'), list_assemblies_path %>
     | <%= link_to I18n.translate('assemblies.new.action'), new_assembly_path %>
 <% end %>
+
+
+<br><hr><br>
+
+<h3><%= html_escape @assembly.nil_to_s %> <%= I18n.translate('assembly_components.title') %>:</h3>
+<%= render :partial => 'assembly_components/list' %>
+
