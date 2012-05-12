@@ -1,5 +1,6 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
+# return all attributes for create, for later comparison in tests
 def generate_assembly_component_accessible_attributes
   assembly = FactoryGirl.create(:assembly_create)
   component_type = FactoryGirl.create(:component_type_accessible)
@@ -13,6 +14,7 @@ def generate_assembly_component_accessible_attributes
   }
 end
   
+# return minimum attributes required to create, for later comparison in tests
 def generate_assembly_component_min_attributes
   assembly = FactoryGirl.create(:assembly_create)
   component_type = FactoryGirl.create(:component_type_accessible)
@@ -28,7 +30,7 @@ end
   
 FactoryGirl.define do
   sequence :assembly_component_description do |n|
-    "Description#{n}"
+    "AssemblyDescription#{n}"
   end
   # standard fields used to create an item
   factory :assembly_component_create, :class => AssemblyComponent do

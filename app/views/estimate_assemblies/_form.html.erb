@@ -1,0 +1,48 @@
+
+
+<div class="field">
+      <%= f.label :id, I18n.translate('estimate_assemblies.field_name.id'), :class => 'label' %>
+    <span class="value" id="estimate_assembly_id"><%= @estimate_assembly.id %></span>
+</div>
+
+
+
+<div class="field">
+    <%= f.label :estimate, I18n.translate('estimate_assemblies.field_name.estimate'), :class => 'label' %>
+    <span class="value">
+        <%= collection_select( :estimate_assembly, :estimate_id, EstimatesController.list, :id, :desc, { :include_blank => true }) %>
+    </span>
+</div>
+
+
+
+<div class="field">
+    <%= f.label :assembly, I18n.translate('estimate_assemblies.field_name.assembly'), :class => 'label' %>
+    <span class="value">
+        <%= collection_select( :estimate_assembly, :assembly_id, AssembliesController.list, :id, :desc, { :include_blank => true }) %>
+    </span>
+</div>
+
+
+<div class="field">
+      <%= f.label :deactivated, I18n.translate('estimate_assemblies.field_name.deactivated'), :class => 'label' %>
+    <span class="value">
+        <%= f.radio_button :deactivated, true %>
+        <%= f.label "deactivated_true", "true", :class => 'span_after_label' %>
+        <%= f.radio_button :deactivated, false %>
+        <%= f.label "deactivated_false", "false", :class => 'span_after_label' %>
+    </span>
+</div>
+
+
+<div class="field">
+    <%= f.label :created_at, I18n.translate('estimate_assemblies.field_name.created_at'), :class => 'label' %>
+    <span class="value" id="estimate_assembly_created_at"><%= @estimate_assembly.created_at %></span>
+</div>
+
+
+<div class="field">
+    <%= f.label :updated_at, I18n.translate('estimate_assemblies.field_name.updated_at'), :class => 'label' %>
+    <span class="value" id="estimate_assembly_updated_at"><%= @estimate_assembly.updated_at %></span>
+</div>
+

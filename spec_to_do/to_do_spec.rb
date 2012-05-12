@@ -1,23 +1,36 @@
 require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
+  context 'finish up estimates - ' do
+    it 'should have estimate integration and model tests'
+    it 'should have estimate assemblies model tests'
+    it 'should remove estimate assemblies controller'
+    it 'should have estimate assemblies, selectable and remembered'
+    it 'should list assemblies as a child association of estimate, and have tests for it'
+    it 'should have estimate assembly components displayed for each selected system, and remembered'
+    it 'should list assembly components as a child association of estimate, and have tests for it'
+    it 'should have estimate totals computed'
+    it 'should have estimate calculations performed'
+    it 'should allow sales reps to new/create estimates, and to edit/update/view/list their own estimates'
+    it 'should allow components to be updated on deactivated parent ? (component type select missing current id)'
+    it 'should warn user or prevent editing item if parent association is deactivated'
+  end
   context 'tws_auth cleanup' do
     it 'should clean up the left nav and the i18n'
+    it 'should have tests to make sure no i18n errors occur in the left nav'
+    it 'should have tests to make sure no i18n errors occur in the header'
+    it 'should have tests to make sure no i18n errors occur in the top nav'
+    it 'should have tests to make sure no i18n errors occur in the bottom nav'
+    it 'should have tests to make sure no i18n errors occur in the page'
   end
   context 'resolve difference between role system and left menu systems' do
     it 'should resolve if the @systemc is needed'
-    it 'should put list and index functions on the left nav'
     it 'should allow hide and show of left nav sub components'
   end
   context 'updates to tws_views generator - '
     it 'should have nil_to_s code in common model code (note need code for not deactivated models)'
     it 'should not generate deactivated tws_views code if no deactivated field _index_row, _index_head, _list, _list_head, index'
     it 'should have tws_views handle list page links and no list page links consistent to whether list is created or not'
-  end
-  context 'finish up estimates - ' do
-    it 'should allow components to be updated on deactivated parent ? (component type select missing current id)'
-    it 'should warn user or prevent editing item if parent association is deactivated'
-    it 'should have estimates'
   end
   context 'password management - ' do
     it 'allow users to reset their password (and get it sent to email)'

@@ -40,9 +40,10 @@ class Ability
     end
     if user.can_see_app?('estim')
       if user.has_role? 'estim_admins'
-        can [:manage, :deactivate, :reactivate], [Default, ComponentType, Component, Assembly, AssemblyComponent, SalesRep, JobType]
+        can [:manage, :deactivate, :reactivate], [Default, ComponentType, Component, Assembly, AssemblyComponent, SalesRep, JobType, State, Estimate]
       elsif user.has_role? 'estim_users'
-        can :read, [Default, ComponentType, Component, Assembly, AssemblyComponent, SalesRep, JobType]
+        can :read, [Default, ComponentType, Component, Assembly, AssemblyComponent, SalesRep, JobType, State]
+        can [:manage, :deactivate, :reactivate], Estimate
       end
       can :sign_out, UserSession
       cannot :sign_in, UserSession

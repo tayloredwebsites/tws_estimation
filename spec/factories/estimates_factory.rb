@@ -1,15 +1,86 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
+# return all attributes for create, for later comparison in tests
+def generate_estimate_accessible_attributes(user_id = nil)
+  sales_rep = SalesRep.new(generate_sales_rep_accessible_attributes(user_id))
+  job_type = JobType.new(FactoryGirl.attributes_for(:job_type))
+  state = State.new(FactoryGirl.attributes_for(:state))
+  return {
+    :title              => FactoryGirl.generate(:estimate_title),
+    :customer_name      => FactoryGirl.generate(:estimate_customer_name),
+    :customer_note      => FactoryGirl.generate(:estimate_customer_note),
+    :sales_rep_id       => sales_rep.id,
+    :job_type_id        => job_type.id,
+    :state_id           => state.id,
+    :prevailing_wage    => false,
+    :note               => FactoryGirl.generate(:estimate_note),
+    :deactivated        => false
+  }
+end
+
+# return minimum attributes required to create, for later comparison in tests
+def generate_estimate_min_attributes(user_id = nil)
+  sales_rep = SalesRep.new(generate_sales_rep_accessible_attributes(user_id))
+  job_type = JobType.new(FactoryGirl.attributes_for(:job_type))
+  state = State.new(FactoryGirl.attributes_for(:state))
+  return {
+    :title              => FactoryGirl.generate(:estimate_title),
+    :customer_name      => FactoryGirl.generate(:estimate_customer_name),
+    :sales_rep_id       => sales_rep.id,
+    :job_type_id        => job_type.id,
+    :state_id           => state.id
+  }
+end
+
 FactoryGirl.define do
-  factory :estimate do
-    name "MyString"
-    customer_name "MyString"
-    customer_notes "MyString"
-    sales_rep nil
-    job_type nil
-    state nil
-    prevailing_wage false
-    notes "MyString"
-    deactivated false
+  
+  sequence :estimate_title do |n|
+    "EstimateTitle#{n}"
   end
+  sequence :estimate_customer_name do |n|
+    "EstimateCustomerName#{n}"
+  end
+  sequence :estimate_customer_note do |n|
+    "EstimateCustomerNote#{n}"
+  end
+  sequence :estimate_note do |n|
+    "EstimateNote#{n}"
+  end
+  factory :estimate, :class => Estimate do
+    title             {FactoryGirl.generate(:estimate_title)}
+    customer_name     {FactoryGirl.generate(:estimate_customer_name)}
+    customer_note     {FactoryGirl.generate(:estimate_customer_note)}
+    association       :sales_rep,  :factory => :sales_rep_create,  :strategy => :build
+    association       :job_type,  :factory => :job_type,  :strategy => :build
+    association       :state,  :factory => :state,  :strategy => :build
+    prevailing_wage   false
+    note              {FactoryGirl.generate(:estimate_note)}
+    deactivated       false
+  end
+  factory :estimate_min, :class => Estimate do
+    title             {FactoryGirl.generate(:estimate_title)}
+    customer_name     {FactoryGirl.generate(:estimate_customer_name)}
+    association       :sales_rep,  :factory => :sales_rep_create,  :strategy => :build
+    association       :job_type_id,  :factory => :job_type,  :strategy => :build
+    association       :state_id,  :factory => :state,  :strategy => :build
+  end    
+  factory :estimate_accessible_create, :class => Estimate do
+    title             'My Title'
+    customer_name     'Customer Name'
+    customer_note     'A note about the customer'
+    association       :sales_rep,  :factory => :sales_rep_create,  :strategy => :build
+    association       :job_type,  :factory => :job_type,  :strategy => :build
+    association       :state,  :factory => :state,  :strategy => :build
+    prevailing_wage   true
+    note              'A note about the estimate'
+    deactivated       true
+  end    
+  factory :estimate_accessible, :class => Estimate do
+    title             'My Title'
+    customer_name     'Customer Name'
+    customer_note     'A note about the customer'
+    prevailing_wage   true
+    note              'A note about the estimate'
+    deactivated       true
+  end    
 end

@@ -1,0 +1,17 @@
+<table cellspacing="0">
+<%= render :partial => 'estimate_assemblies/list_head' %>
+<%
+@estimate_assemblies.each do |item|
+        # only show deactivated item if deactivated module installed, and show deactivated is set.
+        ( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
+    if show_row
+%>
+    <%= render :partial => 'estimate_assemblies/index_row', :locals => { :item => item } %>
+<% end # if show_row
+end # if table.each %>
+
+</table>
+
+<br />
+
+<%= link_to I18n.translate('estimate_assemblies.new.action'), new_estimate_assembly_path %>

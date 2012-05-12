@@ -103,7 +103,7 @@ module UserIntegrationHelper
   def helper_signin(factory_arg, user_full_name)
     visit signin_path
     helper_signin_form_submit(factory_arg)
-    helper_user_on_page?('applications.guest.full_name', 'users_sessions.index.header', user_full_name)
+    helper_user_on_page?('menu_items.guest.full_name', 'users_sessions.index.header', user_full_name)
     Rails.logger.debug("T UserTestHelper.helper_signin - done")
   end
   def helper_signin_form_submit(factory_arg)

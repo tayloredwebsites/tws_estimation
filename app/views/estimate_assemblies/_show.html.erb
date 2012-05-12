@@ -1,0 +1,53 @@
+<%
+    @page_scope = 'estimate_assemblies.show'
+    @deactivated_module = defined?(EstimateAssembly.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @estimate_assembly, :sys_errors => @errors  } %>
+
+<div class="fields_20_80">
+
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimate_assemblies.field_name.id') %></span>
+      <span class="value" id="estimate_assembly_id"><%= @estimate_assembly.id %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimate_assemblies.field_name.estimate') %></span>
+      <span class="value" id="estimate_assembly_estimate"><%= @estimate_assembly.estimate.nil_to_s %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimate_assemblies.field_name.assembly') %></span>
+      <span class="value" id="estimate_assembly_assembly"><%= @estimate_assembly.assembly.nil_to_s %></span>
+    </div>
+
+<% if (@deactivated_module) %>
+     <div class="field">
+       <span class="label"><%= I18n.translate('estimate_assemblies.field_name.deactivated') %></span>
+       <span class="value" id="estimate_assembly_deactivated"><%= I18n.is_deactivated_or_not(@estimate_assembly.deactivated?) %></span>
+     </div>
+<% end %>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimate_assemblies.field_name.created_at') %></span>
+      <span class="value" id="estimate_assembly_created_at"><%= @estimate_assembly.created_at %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('estimate_assemblies.field_name.updated_at') %></span>
+      <span class="value" id="estimate_assembly_updated_at"><%= @estimate_assembly.updated_at %></span>
+    </div>
+
+</div>
+
+
+<% if can? :manage, @estimate_assembly %>
+    <%= link_to I18n.translate('estimate_assemblies.edit.action'), edit_estimate_assembly_path(@estimate_assembly.id) %>
+    | <%= link_to I18n.translate('estimate_assemblies.index.action'), estimate_assemblies_path %>
+    | <%= link_to I18n.translate('estimate_assemblies.list.action'), list_estimate_assemblies_path %>
+    | <%= link_to I18n.translate('estimate_assemblies.new.action'), new_estimate_assembly_path %>
+<% end %>
