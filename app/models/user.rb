@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   attr_accessor :password, :old_password
 
   has_one :sales_rep
+  # has_many :estimates, :through => :sales_rep
 
   validates :username,
       :presence => true,

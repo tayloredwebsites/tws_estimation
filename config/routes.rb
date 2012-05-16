@@ -13,6 +13,7 @@ TwsAuth::Application.routes.draw do
   # match "estimate_assemblies/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
   
 
+  get "estimates/menu"      # route:              estimates_menu GET    /estimates/menu(.:format)           estimates#menu
   resources :estimates do
     member do
       put 'deactivate'      # route:          deactivate_estimate PUT    /estimates/:id/deactivate(.:format)           estimates#deactivate

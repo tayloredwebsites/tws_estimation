@@ -581,7 +581,7 @@ describe 'AssemblyComponents Integration Tests' do
       helper_load_assembly_components if !defined?(@assembly_components)
       # visit home_index_path
     end
-    context 'should be visible in the Edit page - ' do
+    context 'should be visible in the Assembly Edit page - ' do
       before(:each) do
         visit edit_assembly_path(@assembly.id)
         # save_and_open_page
@@ -602,7 +602,7 @@ describe 'AssemblyComponents Integration Tests' do
         end
       end
     end
-    context 'should be visible in the Show page' do
+    context 'should be visible in the Assembly Show page' do
       before(:each) do
         visit assembly_path(@assembly.id)
         # save_and_open_page
