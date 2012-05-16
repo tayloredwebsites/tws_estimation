@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120509165828) do
+ActiveRecord::Schema.define(:version => 20120515194349) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(:version => 20120509165828) do
   create_table "estimate_assemblies", :force => true do |t|
     t.integer  "estimate_id",                    :null => false
     t.integer  "assembly_id",                    :null => false
-    t.boolean  "deactivated", :default => false, :null => false
+    t.boolean  "selected",    :default => false, :null => false
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
   end

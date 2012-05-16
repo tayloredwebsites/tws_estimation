@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
   context 'finish up estimates - ' do
-    it 'should have estimate integration and model tests'
     it 'should have estimate assemblies model tests'
     it 'should remove estimate assemblies controller'
     it 'should have estimate assemblies, selectable and remembered'
@@ -14,14 +13,10 @@ describe 'Miscellaneous items to do - ' do
     it 'should allow sales reps to new/create estimates, and to edit/update/view/list their own estimates'
     it 'should allow components to be updated on deactivated parent ? (component type select missing current id)'
     it 'should warn user or prevent editing item if parent association is deactivated'
+    it 'should add the translations missing - context to integration specs for all resources'
   end
   context 'tws_auth cleanup' do
-    it 'should clean up the left nav and the i18n'
-    it 'should have tests to make sure no i18n errors occur in the left nav'
-    it 'should have tests to make sure no i18n errors occur in the header'
-    it 'should have tests to make sure no i18n errors occur in the top nav'
-    it 'should have tests to make sure no i18n errors occur in the bottom nav'
-    it 'should have tests to make sure no i18n errors occur in the page'
+    it 'should add the translations missing - context to integration specs for all resources'
   end
   context 'resolve difference between role system and left menu systems' do
     it 'should resolve if the @systemc is needed'

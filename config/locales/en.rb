@@ -56,7 +56,13 @@
           :sales_reps => 'Sales Reps',
           :job_types => 'Job Taxability Types',
           :states => 'States',
-          :estimates => 'Estimates'
+          :estimates => {
+            :abbreviation => 'Estimates',
+            :full_name => 'Estimates',
+            :menu_items => {
+              :estimates_index => 'Estimates by Sales Rep',
+              :estimates_list => 'Estimates by Title'
+          } }
         }
       },
       :estimuser => {
@@ -804,14 +810,14 @@
         :header => "Estimation Estimates Action Menu"
       },
       :index => {
-        :action => "List Estimates",
-        :title => "List Estimates",
-        :header => "List of all Estimates"
+        :action => "List Estimates by Sales Rep",
+        :title => "List Estimates by Sales Rep",
+        :header => "List of all Estimates by Sales Rep"
       },
       :list => {
-        :action => "List Estimates by Code",
-        :title => "List Estimates by Code",
-        :header => "List of all Estimates by Code"
+        :action => "List Estimates by Title",
+        :title => "List Estimates by Title",
+        :header => "List of all Estimates by Title"
       },
       :edit => {
         :action => "Edit Estimate",
@@ -836,7 +842,7 @@
         :sales_rep_id => 'Sales Rep ID',
         :sales_rep => 'Sales Rep',
         :job_type_id => 'Job Type ID',
-        :job_type => 'Job Type',
+        :job_type => 'Job Taxability Type',
         :state_id => 'State ID',
         :state => 'State',
         :prevailing_wage => 'Prevailing Wage?',
@@ -853,7 +859,7 @@
         :sales_rep_id => 'Sales Rep ID',
         :sales_rep => 'Sales Rep',
         :job_type_id => 'Job Type ID',
-        :job_type => 'Job Type',
+        :job_type => 'Job Tax Type',
         :state_id => 'State ID',
         :state => 'State',
         :prevailing_wage => 'Prevail?',
@@ -881,6 +887,72 @@
       },
       :messages => {
       }
-    } # end Estimate Resource
+    }, # end Estimate Resource
+    :estimate_assemblies => {
+      # :title => 'Estimates',
+      # :system => 'estimmaint',
+      # :menu => {
+      #   :action => "Estimates Actions Menu",
+      #   :title => "Estimation Estimates Action Menu",
+      #   :header => "Estimation Estimates Action Menu"
+      # },
+      # :index => {
+      #   :action => "List Estimates",
+      #   :title => "List Estimates",
+      #   :header => "List of all Estimates"
+      # },
+      # :list => {
+      #   :action => "List Estimates by Code",
+      #   :title => "List Estimates by Code",
+      #   :header => "List of all Estimates by Code"
+      # },
+      # :edit => {
+      #   :action => "Edit Estimate",
+      #   :title => "Edit Estimate",
+      #   :header => "Edit an Estimate"
+      # },
+      # :new => {
+      #   :action => "New Estimate",
+      #   :title => "New Estimate",
+      #   :header => "Create an Estimate"
+      # },
+      # :show => {
+      #   :action => "View Estimate",
+      #   :title => "View Estimate",
+      #   :header => "View an Estimate"
+      # },
+      :field_name => {
+        :id => 'ID',
+        :estimate_id => 'Estimate ID',
+        :estimate => 'Estimate',
+        :assembly_id => 'Assembly ID',
+        :assembly => 'Assembly',
+        :selected => 'Selected?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :estimate_id => 'Estimate ID',
+        :estimate => 'Estimate',
+        :assembly_id => 'Assembly ID',
+        :assembly => 'Assembly',
+        :selected => 'Selected?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :estimate_id => 'The ID of the Estimate for this assembly',
+        :estimate => 'The Estimate for this assembly',
+        :assembly_id => 'The ID of this Assembly',
+        :assembly => 'This Assembly',
+        :selected => 'Is this record selected?',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
+    } # end EstimateAssemblies Resource
   } # end en
 } #end localizations

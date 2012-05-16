@@ -34,7 +34,10 @@ MENU_ITEMS = {
     :user_signout => {:class_name => "UserSession", :action => :sign_out, :start_uri => "/signout"}
   } },
   :estimuser => {:app_id => 'estim', :menu_items => {
-    :estimates => {:class_name => "Estimate", :action => :index, :start_uri => "/estimates"}
+    :estimates => {:class_name => "Estimate", :action => :menu, :start_uri => "/estimates/menu", :menu_items => {
+      :estimates_index => {:class_name => "Estimate", :action => :index, :start_uri => "/estimates"},
+      :estimates_list => {:class_name => "Estimate", :action => :list, :start_uri => "/estimates/list"}
+    } }
   } },
   :maint => {:app_id => 'maint', :menu_items => {
     :users => {:class_name => "User", :action => :index, :start_uri => "/users"}

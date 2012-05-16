@@ -1,9 +1,8 @@
 class EstimateAssembly < ActiveRecord::Base
 
-  include Models::Deactivated
   include Models::CommonMethods
   
-  attr_accessible :description, :required, :deactivated, :estimate_id, :assembly_id
+  attr_accessible :description, :required, :selected, :estimate_id, :assembly_id
   # todo ? remove these as accessible? -> attr_accessible :estimate_id, :assembly_id
 
   belongs_to :estimate
@@ -13,6 +12,16 @@ class EstimateAssembly < ActiveRecord::Base
     :presence => true
   validates :assembly_id,
     :presence => true
+
+  # method to destroy record is not allowed
+  def destroy
+    return false
+  end
+
+  # method to delete record is not allowed
+  def delete
+    return false
+  end
 
   def nil_to_s
     # call to super here brings in deactivated feature

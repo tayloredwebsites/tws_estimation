@@ -1,7 +1,7 @@
 class EstimateAssembliesController < SecureApplicationController
 
   # allow records to be deactivated using extras/controllers/deactivated_controller.rb
-  include Controllers::DeactivatedController
+  # include Controllers::DeactivatedController
   
   def initialize
     # this is within the estimation maintenance sub-application

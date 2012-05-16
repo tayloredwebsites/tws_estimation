@@ -23,6 +23,14 @@ class SalesRep < ActiveRecord::Base
     self.user.username
   end
 
+  def first_name
+    self.user.first_name
+  end
+
+  def last_name
+    self.user.last_name
+  end
+
   def nil_to_s
     # call to super here brings in deactivated feature
     desc
