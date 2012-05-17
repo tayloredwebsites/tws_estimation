@@ -26,7 +26,7 @@ describe Component do
         acc_attribs[key.to_sym].should_not be_nil
       end
     end
-    it 'should create user when created with the minimum_attributes' do
+    it 'should create Component when created with the minimum_attributes' do
       num_items = Component.count
       attribs = generate_component_accessible_attributes()
       Rails.logger.debug("T generate_component_accessible_attributes: #{attribs.inspect.to_s}")

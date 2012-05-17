@@ -20,9 +20,9 @@ end
 
 # return minimum attributes required to create, for later comparison in tests
 def generate_estimate_min_attributes(estimate_attribs = {})
-  sales_rep_id = estimate_attribs[:sales_rep_id].nil? ? SalesRep.new(generate_sales_rep_accessible_attributes()).id : estimate_attribs[:sales_rep_id]
-  job_type_id = estimate_attribs[:job_type_id].nil? ? JobType.new(FactoryGirl.attributes_for(:job_type)).id : estimate_attribs[:job_type_id]
-  state_id = estimate_attribs[:state_id].nil? ? State.new(FactoryGirl.attributes_for(:state)).id : estimate_attribs[:state_id]
+  sales_rep_id = estimate_attribs[:sales_rep_id].nil? ? SalesRep.create!(generate_sales_rep_accessible_attributes()).id : estimate_attribs[:sales_rep_id]
+  job_type_id = estimate_attribs[:job_type_id].nil? ? JobType.create!(FactoryGirl.attributes_for(:job_type)).id : estimate_attribs[:job_type_id]
+  state_id = estimate_attribs[:state_id].nil? ? State.create!(FactoryGirl.attributes_for(:state)).id : estimate_attribs[:state_id]
   return {
     :title              => FactoryGirl.generate(:estimate_title),
     :customer_name      => FactoryGirl.generate(:estimate_customer_name),
