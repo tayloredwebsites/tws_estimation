@@ -1,13 +1,14 @@
-<table cellspacing="0">
-<%= render :partial => 'estimate_assemblies/list_head' %>
-<%
-@estimate_assemblies.each do |item|
-        # only show deactivated item if deactivated module installed, and show deactivated is set.
-        ( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
-    if show_row
-%>
-    <%= render :partial => 'estimate_assemblies/index_row', :locals => { :item => item } %>
-<% end # if show_row
-end # if table.each %>
 
-</table>
+<% # assume already in Estimate form tag %>
+
+<div class="field">
+	<%= label_tag :estimate_assemblies, I18n.translate('estimate_assemblies.title'), :class => 'label' %>
+	<span class="value">
+<% @estimate_assemblies.each do |item|  %>
+	    <span class="width_40"><%= check_box_tag "estimate[estimate_assembly][#{item.id.to_s}]", item.description, item.selected, :name => "estimate[estimate_assembly][]" %></span>
+	    <%= label_tag "estimate_estimate_assembly_#{item.id.to_s}", item.description, :class => 'span_after_label' %>
+	</span>
+<% end # if table.each %>
+</div>
+
+

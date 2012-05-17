@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
   context 'finish up estimates - ' do
-    it 'should have estimate assemblies model tests'
-    it 'should remove estimate assemblies controller'
     it 'should have estimate assemblies, selectable and remembered'
+    it 'should have updates to all estimate associations in one form with Estimate.transaction do estimate.save! estimate_assemblies.save! end'
     it 'should list assemblies as a child association of estimate, and have tests for it'
     it 'should have estimate assembly components displayed for each selected system, and remembered'
     it 'should list assembly components as a child association of estimate, and have tests for it'

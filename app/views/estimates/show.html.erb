@@ -86,5 +86,5 @@
 <br><hr><br>
 
 <h3><%= html_escape @estimate.nil_to_s %></h3>
-<%= render :partial => 'estimate_assemblies/list' %>
+<%= render :partial => 'estimate_assemblies/list', :locals => {:sys_errors => @errors  } %>
 

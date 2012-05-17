@@ -13,13 +13,14 @@ class EstimatesController < SecureApplicationController
   before_filter do |controller|
     self.authenticate_user # always authenticate user   if (%w{ index show }.index(params[:action]).nil?)
     Rails.logger.debug("* EstimatesController.before_filter called with id: #{params[:id]}")
-    # create a EstimateAssemblies list for any renders that require it
+    # list of all Assemblies, with current selected EstimateAssemblies selected
+    # note: if an Assembly is deactivated, it will only be listed if it is selected in EstimateAssemblies
     if (!params[:id].nil?)
-      # set up here because these are used for rendering from deactivated module
-      @estimate_assemblies = EstimateAssembliesController.new.get_scope().where(:estimate_id => params[:id] )
+      # @estimate_assemblies = Assembly.includes(:estimate_assemblies) #.where('estimate_assemblies.estimate_id = ? and (assemblies.deactivated IS NOT TRUE OR estimate_assemblies.selected IS TRUE)', params[:estimate_id])
+      @estimate_assemblies = EstimateAssembly.joins('RIGHT JOIN assemblies ON estimate_assemblies.assembly_id = assemblies.id')#.where('estimate_assemblies.estimate_id = ?', params[:estimate_id]) # and (assemblies.deactivated IS NOT TRUE OR estimate_assemblies.selected IS TRUE)
     else
-      # make sure that we have at least an empty components list
-      @estimate_assemblies = []
+      # make sure that we have at least the list of Assemblies
+      @estimate_assemblies = Assembly.where('assemblies.deactivated IS NOT TRUE')
     end
   end
   
@@ -92,4 +93,5 @@ class EstimatesController < SecureApplicationController
     # destroys are passed to the deactivated controller, as it knows how to handle deactivated records
     super # call to parent (e.g. Controllers::DeactivatedController)
   end
+  
 end

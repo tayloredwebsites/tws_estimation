@@ -12,6 +12,11 @@ class EstimateAssembly < ActiveRecord::Base
     :presence => true
   validates :assembly_id,
     :presence => true
+  
+  # methods
+  def description
+    'dummy desc.' #assembly.description
+  end
 
   # method to destroy record is not allowed
   def destroy
