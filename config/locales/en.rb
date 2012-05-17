@@ -889,7 +889,7 @@
       }
     }, # end Estimate Resource
     :estimate_assemblies => {
-      # :title => 'Estimates',
+      :title => 'Estimate Assemblies',
       # :system => 'estimmaint',
       # :menu => {
       #   :action => "Estimates Actions Menu",
