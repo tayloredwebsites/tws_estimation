@@ -11,7 +11,7 @@ FactoryGirl.define do
   factory :assembly_create, :class => Assembly do
     description             {FactoryGirl.generate(:assembly_description)}
     sort_order              {FactoryGirl.generate(:assembly_sort_order)}
-    required                true
+    required                false
   end
   # minimum fields defined to create an item
   factory :assembly_min_create, :class => Assembly do

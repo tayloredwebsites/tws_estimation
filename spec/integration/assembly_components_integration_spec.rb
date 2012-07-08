@@ -112,7 +112,8 @@ describe 'AssemblyComponents Integration Tests' do
       all_attribs = FactoryGirl.attributes_for(:assembly_component_accessible)
       item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: @component)
       item1.deactivated?.should be_false
-      visit edit_assembly_component_path (item1.id)
+      # visit edit_assembly_component_path (item1.id)
+      visit ("/assembly_components/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.edit.header')}$/
       within(".edit_assembly_component") do
@@ -495,7 +496,8 @@ describe 'AssemblyComponents Integration Tests' do
       item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: @component)
       item1.deactivated?.should be_false
       @num_items = AssemblyComponent.count
-      visit edit_assembly_component_path (item1.id)
+      # visit edit_assembly_component_path (item1.id)
+      visit ("/assembly_components/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.edit.header')}$/
       page.should_not have_selector(:xpath, "//*[@id=\"assembly_component_deactivated_true\" and @checked]")

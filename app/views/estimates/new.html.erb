@@ -3,6 +3,7 @@
     @deactivated_module = defined?(Estimate.new.deactivated_module)
 %>
 
+<h3><%= @estimate.nil_to_s %></h3>
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
 <%= form_for(@estimate, :action => 'create') do |f| %>
@@ -11,6 +12,9 @@
 
     <div class="fields_20_80">
         <%= render :partial => 'estimates/form', :locals => { :f => f } %>
+
+		<%= render :partial => 'estimate_assemblies/list_form', :locals => {:sys_errors => @errors  } %>
+
     </div>
 
     <div class="actions">

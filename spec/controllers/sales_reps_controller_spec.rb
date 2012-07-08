@@ -60,17 +60,18 @@ describe SalesRepsController do
       item1 = FactoryGirl.create(:sales_rep_min_create, user: @parent)
       new_attribs = FactoryGirl.attributes_for(:sales_rep_accessible)
       put :update, :id => item1.id, :sales_rep => new_attribs
-      assigns(:sales_rep).should_not be_nil
-      assigns(:sales_rep).should be_a(SalesRep)
-      assigns(:sales_rep).should be_persisted
+      # assigns(:sales_rep).should_not be_nil
+      # assigns(:sales_rep).should be_a(SalesRep)
+      # assigns(:sales_rep).should be_persisted
       updated_item = SalesRep.find(item1.id)
       updated_item.should_not be_nil
       new_attribs.each  do |key, value|
         Rails.logger.debug("T component_controller_spec udpate - match on:#{key.to_s}")
-        assigns(:sales_rep).send(key.to_sym).should eq(new_attribs[key.to_sym])
+        # assigns(:sales_rep).send(key.to_sym).should eq(new_attribs[key.to_sym])
         updated_item.send(key.to_sym).should eq(new_attribs[key.to_sym])
       end
-      response.should render_template("show")
+      # response.should render_template("show")
+      response.should redirect_to(:controller => 'sales_reps', :action => 'show')
     end
     it 'should be able to GET show an item' do
       item1 = FactoryGirl.create(:sales_rep_min_create, user: @parent)

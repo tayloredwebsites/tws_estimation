@@ -2,9 +2,7 @@ require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
   context 'finish up estimates - ' do
-    it 'should have estimate assemblies, selectable and remembered'
     it 'should have updates to all estimate associations in one form with Estimate.transaction do estimate.save! estimate_assemblies.save! end'
-    it 'should list assemblies as a child association of estimate, and have tests for it'
     it 'should have estimate assembly components displayed for each selected system, and remembered'
     it 'should list assembly components as a child association of estimate, and have tests for it'
     it 'should have estimate totals computed'
@@ -32,8 +30,11 @@ describe 'Miscellaneous items to do - ' do
     it 'should ensure that username comes from name in email address (less @domain)'
     it 'should send user their reset password'
   end
-  it 'should be html5 with graceful degradations'
-  it 'should have app_config fully tested'
+  context 'use paper trail instead of deactivated module' do
+    it 'should confirm that paper trail will easily provice reactivations'
+    it 'should provide simple migration from deactivated to paper trail - including view generators'
+    it 'should look into seeing if paper trail can provide an audit trail - listing using hash vs active object'
+  end
   context 'deactivated module' do
     it 'should have test controller and model without deactivated modules - modularized?'
     it 'should have a test controller and model with the deactivation modules included - modularized?'
@@ -44,21 +45,26 @@ describe 'Miscellaneous items to do - ' do
     it 'should always hide deactivated records on new/create'
     it 'should have the hide/show deactivated records status in the layout header'
   end
-  it 'should give a warning to the user on problems with roles - want to update and still notify user'
-  it 'should confirm that Role.app_id and Role.sys_name correspond with app_constants.rb - APPLICATION_NAV'
+  context 'user roles maintenance - ' do
+    it 'should allow roles to checked if an administrator'
+    it 'should allow roles to be unchecked if an administrator'
+    it 'should not allow roles to checked or unchecked if not an administrator'
+    it 'should give a warning to the user on problems with roles - want to update and still notify user'
+    it 'should confirm that Role.app_id and Role.sys_name correspond with app_constants.rb - APPLICATION_NAV'
+    it 'should let cancan authorize resources for the home controller.  Base Model? Guest Model? '
+    it 'should have cancan tests either in controller or integration specs'
+  end
+  it 'should be html5 with graceful degradations'
+  it 'should have app_config fully tested'
   it 'should have dropdown for selection of Defaults Store field - Value Store name, with add new Value Store name option'
   it 'should add audit trail to the defaults table for tws_auth app for audit trail example'
-  it 'should let cancan authorize resources for the home controller.  Base Model? Guest Model? '
   it 'should remove the @model creation in each controller - unless needed for model name specification - documented for user'
   it 'should have controllers not attempt to create records that are already there, but deactivated.'
-  it 'should have cancan tests either in controller or integration specs'
   context 'tws_views generator' do
     it 'should allow default values from child fields (eg AssemblyComponents.description)'
     it 'should have an erb for choosing entries in a join table (eg Components in AssemblyComponents)'
   end
-  context 'systems name usage - ' do
-    it 'should rename APPLICATION_NAV to APPLICATION_GROUPS IN config/initializers/app_constants.rb'
-    it 'should rename en.systems to en.groups in config/locales/en.rb'
+  context 'systems/product/service product/good name usage - ' do
     it 'should change title of application to Estimation of systems/assemblies/components costs'
     it 'should add system resource (is this a reserved word?)'
     it 'should have system resource be a parent association to assemblies/assembly_components'

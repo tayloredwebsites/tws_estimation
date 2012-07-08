@@ -62,13 +62,13 @@ describe EstimateAssembly do
       end
     end   
   end
-  context 'it should be associated with estimates' do
+  context 'it should be associated with estimates and assemblies' do
     before (:each) do
       @parent = Estimate.create!(generate_estimate_accessible_attributes)
       @assembly1 = FactoryGirl.create(:assembly_create) #Assembly.create!(generate_estimate_accessible_attributes)
       @assembly2 = FactoryGirl.create(:assembly_create) #Assembly.create!(generate_estimate_accessible_attributes)
     end
-    it 'should not allow destroy of parent if there are estimate_assemblies' do
+    it 'should not allow destroy of Estimate if there are estimate_assemblies' do
       FactoryGirl.create(:estimate_assembly, estimate: @parent, assembly: @assembly1)
       FactoryGirl.create(:estimate_assembly, estimate: @parent, assembly: @assembly2)
       @parent.estimate_assemblies.length.should == 2
@@ -78,7 +78,20 @@ describe EstimateAssembly do
       @parent.errors.count.should > 0
       Estimate.count.should == num_parent
     end
-    it 'should allow destroy of estimate_type if there are no estimate_assemblies' do
+    it 'should not allow destroy of Assembly if there are estimate_assemblies' do
+      # FactoryGirl.create(:estimate_assembly, estimate: @parent, assembly: @assembly1)
+      FactoryGirl.create(:estimate_assembly, estimate: @parent, assembly: @assembly2)
+      @parent.estimate_assemblies.length.should == 1
+      num_parent = Estimate.count
+      @assembly1.deactivate()
+      @assembly1.destroy()
+      @assembly1.errors.count.should == 0
+      @assembly2.deactivate()
+      @assembly2.destroy()
+      @assembly2.errors.count.should > 0
+      Estimate.count.should == num_parent
+    end
+    it 'should allow destroy of estimate if there are no estimate_assemblies' do
       num_parent = Estimate.count
       @parent.deactivate()
       @parent.destroy()

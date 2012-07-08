@@ -3,6 +3,7 @@
     @deactivated_module = defined?(Estimate.new.deactivated_module)
 %>
 
+<h3><%= @estimate.nil_to_s %></h3>
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
 
 <%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @estimate, :sys_errors => @errors  } %>
@@ -72,6 +73,8 @@
       <span class="value" id="estimate_updated_at"><%= @estimate.updated_at %></span>
     </div>
 
+	<%= render :partial => 'estimate_assemblies/list_show', :locals => {:sys_errors => @errors  } %>
+
 </div>
 
 
@@ -82,9 +85,4 @@
     | <%= link_to I18n.translate('estimates.new.action'), new_estimate_path %>
 <% end %>
 
-
-<br><hr><br>
-
-<h3><%= html_escape @estimate.nil_to_s %></h3>
-<%= render :partial => 'estimate_assemblies/list', :locals => {:sys_errors => @errors  } %>
 

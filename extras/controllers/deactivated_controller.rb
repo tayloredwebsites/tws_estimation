@@ -146,9 +146,10 @@ module Controllers::DeactivatedController
           :obj => item.class.name,
           :id => item.id )
         )
-        Rails.logger.debug("* Controllers::DeactivatedController.update - return instance variable #{'@'+item.class.name.underscore}")
-        self.instance_variable_set('@'+item.class.name.underscore, item)
-        render :action => 'show'
+        # Rails.logger.debug("* Controllers::DeactivatedController.update - return instance variable #{'@'+item.class.name.underscore}")
+        # self.instance_variable_set('@'+item.class.name.underscore, item)
+        # render :action => 'show'
+        redirect_to :action => 'show' # needed to refresh any instance variables besides the usual
       else
         Rails.logger.debug("* Controllers::DeactivatedController.update - return instance variable #{'@'+item.class.name.underscore}")
         self.instance_variable_set('@'+item.class.name.underscore, item)

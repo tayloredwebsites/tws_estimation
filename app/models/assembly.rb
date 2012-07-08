@@ -7,6 +7,7 @@ class Assembly < ActiveRecord::Base
     
   has_many :assembly_components
   has_many :estimate_assemblies
+  has_many :estimates, :through => :estimate_assemblies
 
   validates :description,
     :presence => true,

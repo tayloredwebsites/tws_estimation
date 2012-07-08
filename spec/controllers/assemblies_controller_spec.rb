@@ -86,17 +86,18 @@ describe AssembliesController do
       item1 = FactoryGirl.create(:assembly_min_create)
       new_attribs = FactoryGirl.attributes_for(:assembly_accessible)
       put :update, :id => item1.id, :assembly => new_attribs
-      assigns(:assembly).should_not be_nil
-      assigns(:assembly).should be_a(Assembly)
-      assigns(:assembly).should be_persisted
+      # assigns(:assembly).should_not be_nil
+      # assigns(:assembly).should be_a(Assembly)
+      # assigns(:assembly).should be_persisted
       updated_item = Assembly.find(item1.id)
       updated_item.should_not be_nil
       new_attribs.each  do |key, value|
         Rails.logger.debug("T assembly_controller_spec udpate - match on:#{key.to_s}")
-        assigns(:assembly).send(key.to_sym).should eq(new_attribs[key.to_sym])
+        # assigns(:assembly).send(key.to_sym).should eq(new_attribs[key.to_sym])
         updated_item.send(key.to_sym).should eq(new_attribs[key.to_sym])
       end
-      response.should render_template("show")
+      # response.should render_template("show")
+      response.should redirect_to(:controller => 'assemblies', :action => 'show')
     end
     it 'should be able to GET show an item' do
       item1 = FactoryGirl.create(:assembly_min_create)

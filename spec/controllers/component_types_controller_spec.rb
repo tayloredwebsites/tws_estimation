@@ -81,14 +81,15 @@ describe ComponentTypesController do
     it 'should be able to PUT update an item' do
       item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       put :update, :id => item1.id, :component_type => FactoryGirl.attributes_for(:component_type).merge({:has_hours => true})
-      assigns(:component_type).should_not be_nil
-      assigns(:component_type).should be_a(ComponentType)
-      assigns(:component_type).has_hours.should == true
-      assigns(:component_type).should be_persisted
+      # assigns(:component_type).should_not be_nil
+      # assigns(:component_type).should be_a(ComponentType)
+      # assigns(:component_type).has_hours.should == true
+      # assigns(:component_type).should be_persisted
       updated_item = ComponentType.find(item1.id)
       updated_item.should_not be_nil
       updated_item.has_hours.should eq(true)
-      response.should render_template("show")
+      # response.should render_template("show")
+      response.should redirect_to(:controller => 'component_types', :action => 'show')
     end
     it 'should be able to GET show an item' do
       item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))

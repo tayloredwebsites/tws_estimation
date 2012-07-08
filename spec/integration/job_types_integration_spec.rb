@@ -57,7 +57,8 @@ describe 'JobTypes Integration Tests' do
       all_attribs = FactoryGirl.attributes_for(:job_type_accessible)
       item1 = JobType.create!(FactoryGirl.attributes_for(:job_type))
       item1.deactivated?.should be_false
-      visit edit_job_type_path (item1.id)
+      # visit edit_job_type_path (item1.id)
+      visit ("/job_types/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('job_types.edit.header')}$/
       within(".edit_job_type") do
@@ -250,7 +251,8 @@ describe 'JobTypes Integration Tests' do
       item1 = JobType.create!(FactoryGirl.attributes_for(:job_type))
       item1.deactivated?.should be_false
       @num_items = JobType.count
-      visit edit_job_type_path (item1.id)
+      # visit edit_job_type_path (item1.id)
+      visit ("/job_types/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('job_types.edit.header')}$/
       page.should_not have_selector(:xpath, "//*[@id=\"job_type_deactivated_true\" and @checked]")

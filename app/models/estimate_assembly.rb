@@ -15,7 +15,7 @@ class EstimateAssembly < ActiveRecord::Base
   
   # methods
   def description
-    'dummy desc.' #assembly.description
+    self.assembly.description
   end
 
   # method to destroy record is not allowed

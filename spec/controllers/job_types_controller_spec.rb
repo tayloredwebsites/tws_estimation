@@ -81,14 +81,15 @@ describe JobTypesController do
     it 'should be able to PUT update an item' do
       item1 = JobType.create!(FactoryGirl.attributes_for(:job_type))
       put :update, :id => item1.id, :job_type => FactoryGirl.attributes_for(:job_type).merge({:description => 'Newest Description'})
-      assigns(:job_type).should_not be_nil
-      assigns(:job_type).should be_a(JobType)
-      assigns(:job_type).description.should =~ /^Newest Description$/
-      assigns(:job_type).should be_persisted
+      # assigns(:job_type).should_not be_nil
+      # assigns(:job_type).should be_a(JobType)
+      # assigns(:job_type).description.should =~ /^Newest Description$/
+      # assigns(:job_type).should be_persisted
       updated_item = JobType.find(item1.id)
       updated_item.should_not be_nil
       updated_item.description.should =~ /^Newest Description$/
-      response.should render_template("show")
+      # response.should render_template("show")
+      response.should redirect_to(:controller => 'job_types', :action => 'show')
     end
     it 'should be able to GET show an item' do
       item1 = JobType.create!(FactoryGirl.attributes_for(:job_type))

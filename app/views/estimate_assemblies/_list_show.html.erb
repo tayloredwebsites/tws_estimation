@@ -1,0 +1,27 @@
+
+<%
+# assume already in Estimate form tag
+%>
+
+<div class="field">
+	<%= label_tag :estimate_assemblies, I18n.translate('estimate_assemblies.title'), :class => 'label' %>
+	<span class="value">
+<% 
+@assemblies.each do |ass|
+	ea = (@estimate_assemblies[ass.id]) ? true : false
+	ea_checked = ea || ass.required
+	ea_show = ea || !ass.deactivated
+	if ea_show
+%>
+		<span style='display:inline-block;'>    
+			<span class="width_40">
+				<%= check_box_tag "estimate_assemblies[#{ass.id.to_s}]", ass.id.to_s, ea_checked, :name => "estimate_assemblies[#{ass.id.to_s}]", :disabled => true %>
+			</span>
+		    <%= label_tag "assembly_#{ass.id.to_s}", ass.nil_to_s, :class => 'span_after_label' %>
+		</span>
+<% 	end # !deactivated or selected
+end # if table.each
+%>
+	</span>
+</div>
+
