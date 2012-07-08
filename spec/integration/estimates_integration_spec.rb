@@ -460,7 +460,7 @@ describe 'Estimates Integration Tests' do
       @num_items = Estimate.count
       # visit edit_estimate_path (item1.id)
       visit ("/estimates/#{item1.id}/edit?show_deactivated=true")
-      save_and_open_page
+      # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
       page.should_not have_selector(:xpath, "//*[@id=\"estimate_deactivated_true\" and @checked]")
       page.should have_selector(:xpath, "//*[@id=\"estimate_deactivated_false\" and @checked]")
