@@ -16,12 +16,25 @@ class EstimatesController < SecureApplicationController
     # list of all Assemblies, with current selected EstimateAssemblies selected
     # note: if an Assembly is deactivated, it will only be listed if it is selected in EstimateAssemblies
     if (!params[:id].nil?)
-      # @estimate_assemblies = Assembly.includes(:estimate_assemblies) #.where('estimate_assemblies.estimate_id = ? and (assemblies.deactivated IS NOT TRUE OR estimate_assemblies.selected IS TRUE)', params[:estimate_id])
-      @estimate_assemblies = EstimateAssembly.joins('RIGHT JOIN assemblies ON estimate_assemblies.assembly_id = assemblies.id')#.where('estimate_assemblies.estimate_id = ?', params[:estimate_id]) # and (assemblies.deactivated IS NOT TRUE OR estimate_assemblies.selected IS TRUE)
+      # if params[:id] =~ /^\d*$/
+      estimate_assemblies = EstimateAssembly.where('estimate_id = ?', params[:id])
+      @assemblies = Assembly.order(:sort_order)
+      # else
+      #   Rails.logger.error("E invalid id parameter (#{params[:id]}) in estimates controller before_filter")
+      #   estimate_assemblies = EstimateAssembly.where('false')
+      #   @assemblies = Assembly.order(:sort_order)
+      #   # raise ActiveRecord::Rollback
+      # end
     else
-      # make sure that we have at least the list of Assemblies
-      @estimate_assemblies = Assembly.where('assemblies.deactivated IS NOT TRUE')
+      estimate_assemblies = EstimateAssembly.where('false')
+      @assemblies = Assembly.order(:sort_order)
     end
+    Rails.logger.debug("****** EstimatesController.before_filter @assemblies: #{@assemblies.inspect.to_s}")
+    @estimate_assemblies = Hash.new()
+    estimate_assemblies.each do |est_ass|
+      Rails.logger.debug("****** EstimatesController.before_filter estimate_assembly: #{est_ass.inspect.to_s}")
+      @estimate_assemblies[est_ass.assembly_id] = true if est_ass.selected
+   end
   end
   
   def self.list(scope = nil)
@@ -85,7 +98,26 @@ class EstimatesController < SecureApplicationController
   # PUT /estimates/:id
   def update
     # updates are passed to the deactivated controller, as it knows how to handle deactivated records
-    super # call to parent (e.g. Controllers::DeactivatedController)
+    # super # call to parent (e.g. Controllers::DeactivatedController)
+    @estimate = get_scope().find(params[:id])
+    if (!@estimate.nil?)
+      authorize! :update, @estimate   # authorize from CanCan::ControllerAdditions
+      @estimate.update_attributes(params.dup)
+      if @estimate.errors.count == 0
+        notify_success( I18n.translate('errors.success_method_obj_name',
+          :method => params[:action],
+          :obj => 'Estimate',
+          :name => @estimate.desc )
+        )
+        render :action => 'show'
+        # redirect_to :action => 'show' # needed to refresh any instance variables besides the usual
+      else
+        render :action => "edit"
+      end
+    else
+      Rails.logger.error("E Attempt to #{params[:action]} #{@model.class.name}.id:#{params[:id]} when not in scope")
+      redirect_to(home_errors_path)
+    end
   end
 
   # DELETE /estimates/:id

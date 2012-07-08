@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
 
   def update_attributes(params)
     # Rails.logger.debug("* User - update_attributes - params=#{params.inspect.to_s}")
-      Rails.logger.error("* UserRoles - update_attributes - roles is an array !!!") if params[:roles].instance_of?(Array)
+    # Rails.logger.error("* UserRoles - update_attributes - roles is an array !!!") if params[:roles].instance_of?(Array)
     if valid_password_change?(params)
       # valid password change, set it
       self.password = params[:password]

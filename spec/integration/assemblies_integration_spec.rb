@@ -82,7 +82,8 @@ describe 'Assemblies Integration Tests' do
       all_attribs = FactoryGirl.attributes_for(:assembly_accessible)
       item1 = Assembly.create!(FactoryGirl.attributes_for(:assembly_min_create))
       item1.deactivated?.should be_false
-      visit edit_assembly_path (item1.id)
+      # visit edit_assembly_path (item1.id)
+      visit ("/assemblies/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.edit.header')}$/
       within(".edit_assembly") do
@@ -102,6 +103,7 @@ describe 'Assemblies Integration Tests' do
             page.fill_in "assembly_#{at_key.to_s}", :with => at_val
           end
         end
+        # save_and_open_page
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -442,7 +444,8 @@ describe 'Assemblies Integration Tests' do
       item1 = Assembly.create!(FactoryGirl.attributes_for(:assembly_create))
       item1.deactivated?.should be_false
       @num_items = Assembly.count
-      visit edit_assembly_path (item1.id)
+      # visit edit_assembly_path (item1.id)
+      visit ("/assemblies/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.edit.header')}$/
       page.should_not have_selector(:xpath, "//*[@id=\"assembly_deactivated_true\" and @checked]")

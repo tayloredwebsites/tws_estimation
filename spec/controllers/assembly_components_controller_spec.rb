@@ -64,17 +64,18 @@ describe AssemblyComponentsController do
       item1 = FactoryGirl.create(:assembly_component_min_create, :assembly => @parent, :component => @child)
       new_attribs = FactoryGirl.attributes_for(:assembly_component_accessible)
       put :update, :id => item1.id, :assembly_component => new_attribs
-      assigns(:assembly_component).should_not be_nil
-      assigns(:assembly_component).should be_a(AssemblyComponent)
-      assigns(:assembly_component).should be_persisted
+      # assigns(:assembly_component).should_not be_nil
+      # assigns(:assembly_component).should be_a(AssemblyComponent)
+      # assigns(:assembly_component).should be_persisted
       updated_item = AssemblyComponent.find(item1.id)
       updated_item.should_not be_nil
       new_attribs.each  do |key, value|
         Rails.logger.debug("T component_controller_spec udpate - match on:#{key.to_s}")
-        assigns(:assembly_component).send(key.to_sym).should eq(new_attribs[key.to_sym])
+        # assigns(:assembly_component).send(key.to_sym).should eq(new_attribs[key.to_sym])
         updated_item.send(key.to_sym).should eq(new_attribs[key.to_sym])
       end
-      response.should render_template("show")
+      # response.should render_template("show")
+      response.should redirect_to(:controller => 'assembly_components', :action => 'show')
     end
     it 'should be able to GET show an item' do
       item1 = FactoryGirl.create(:assembly_component_min_create, :assembly => @parent, :component => @child)

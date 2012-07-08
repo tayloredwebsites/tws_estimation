@@ -60,17 +60,18 @@ describe ComponentsController do
       item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
       new_attribs = FactoryGirl.attributes_for(:component_accessible)
       put :update, :id => item1.id, :component => new_attribs
-      assigns(:component).should_not be_nil
-      assigns(:component).should be_a(Component)
-      assigns(:component).should be_persisted
+      # assigns(:component).should_not be_nil
+      # assigns(:component).should be_a(Component)
+      # assigns(:component).should be_persisted
       updated_item = Component.find(item1.id)
       updated_item.should_not be_nil
       new_attribs.each  do |key, value|
         Rails.logger.debug("T component_controller_spec udpate - match on:#{key.to_s}")
-        assigns(:component).send(key.to_sym).should eq(new_attribs[key.to_sym])
+        # assigns(:component).send(key.to_sym).should eq(new_attribs[key.to_sym])
         updated_item.send(key.to_sym).should eq(new_attribs[key.to_sym])
       end
-      response.should render_template("show")
+      # response.should render_template("show")
+      response.should redirect_to(:controller => 'components', :action => 'show')
     end
     it 'should be able to GET show an item' do
       item1 = FactoryGirl.create(:component_min_create, component_type: @parent)

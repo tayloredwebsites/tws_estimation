@@ -58,6 +58,6 @@ __This system is table driven, so there is a lot of flexibility built into it:__
 ### Future Features: ###
 
 * Create a Systems (or other name if problem) to organize Assemblies, say to have a HVAC estimate, or to have a Software estimate.
-* An audit trail of transactions will be available for some tables, utilizing the Deactivation feature.
+* An audit trail of transactions will be available for some tables, utilizing the Deactivation feature (probably using paper trail).
 * Reset Password feature.
 * Developing an engine for the common features.

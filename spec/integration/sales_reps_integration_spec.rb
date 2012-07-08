@@ -524,7 +524,8 @@ describe 'SalesReps Integration Tests' do
       item1 = FactoryGirl.create(:sales_rep_min_create, user: @user1)
       item1.deactivated?.should be_false
       @num_items = SalesRep.count
-      visit edit_sales_rep_path (item1.id)
+      # visit edit_sales_rep_path (item1.id)
+      visit ("/sales_reps/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.edit.header')}$/
       page.should_not have_selector(:xpath, "//*[@id=\"sales_rep_deactivated_true\" and @checked]")

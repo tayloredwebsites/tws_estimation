@@ -57,7 +57,8 @@ describe 'ComponentTypes Integration Tests' do
       all_attribs = FactoryGirl.attributes_for(:component_type_accessible)
       item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
-      visit edit_component_type_path (item1.id)
+      # visit edit_component_type_path (item1.id)
+      visit ("/component_types/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.edit.header')}$/
       within(".edit_component_type") do
@@ -250,7 +251,8 @@ describe 'ComponentTypes Integration Tests' do
       item1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
       item1.deactivated?.should be_false
       @num_items = ComponentType.count
-      visit edit_component_type_path (item1.id)
+      # visit edit_component_type_path (item1.id)
+      visit ("/component_types/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('component_types.edit.header')}$/
       page.should_not have_selector(:xpath, "//*[@id=\"component_type_deactivated_true\" and @checked]")
