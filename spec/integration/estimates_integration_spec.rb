@@ -673,4 +673,5 @@ describe 'Estimates Integration Tests' do
 
   end
 
+  context 'it should list estimate components - '
 end

@@ -1,5 +1,7 @@
 TwsAuth::Application.routes.draw do
 
+  # resources :estimate_components
+
   # resources :estimate_assemblies do
   #   member do
   #     put 'deactivate'      # route: deactivate_estimate_assembly PUT    /estimate_assemblies/:id/deactivate(.:format) estimate_assemblies#deactivate

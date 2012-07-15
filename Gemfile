@@ -12,7 +12,9 @@ gem 'cancan'
 
 gem 'foreigner'	# foreign key handling
 
-gem 'rdiscount'	# markdown display in view
+gem 'rdiscount'	# markdown files display in view
+
+gem 'jquery-rails'
 
 # Use unicorn as the web server
 # gem 'unicorn'

@@ -6,7 +6,7 @@
         
             <td id="<%= "assembly_component_#{item.id}_id" %>"><%= item.component.nil_to_s %></td>
         
-        <td id="<%= "assembly_component_#{item.id}_description" %>"><%= item.description %></td>
+        <td id="<%= "assembly_component_#{item.id}_description" %>"><%= item.nil_to_s %></td>
         
         <td id="<%= "assembly_component_#{item.id}_required" %>"><%= item.required %></td>
                 <% if @deactivated_module && show_deactivated? %>

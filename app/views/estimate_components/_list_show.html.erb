@@ -1,0 +1,73 @@
+
+<%
+# assume already in Estimate form tag
+%>
+
+<% 
+
+# # start loop through @estimate_components to match the Assembly Components
+# ec_idx = 0
+# ec_max =  @estimate_components.size
+# if ec_idx < ec_max
+# 	ec_next = @estimate_components[ec_idx]
+# 	ec_idx += 1
+# else
+# 	ec_next = nil
+# end
+
+@assemblies.each do |ass|
+	ea = (@estimate_assemblies[ass.id]) ? true : false
+	ea_checked = ea || ass.required
+	if ea_checked
+		ass_deact = (ass.deactivated) ? ' * ' : ''
+%>
+		<h3 class="show_hide"><%= ass_deact + ass.description + ass_deact %></h3>
+		<div id="assembly_<%= ass.id %>"><div>
+<% 
+		last_component_type = 0
+		AssemblyComponent.for_assembly(ass.id).each do |ass_comp|
+			# break by Component Type
+			if last_component_type != ass_comp.component.component_type_id	
+%>
+				<h4 class="margin_left_20">
+					<%= ass_comp.component.component_type.nil_to_s %>
+				</h4>
+<% 
+				last_component_type = ass_comp.component.component_type_id
+			end # end break by Component Type
+			# Rails.logger.debug("VVVV AssemblyComponent = #{ass_comp.inspect.to_s}")
+			
+			est_comp = EstimateComponent.for_estimate_assembly_component(@estimate.id, ass.id, ass_comp.component.id )
+			# if !ec_next.nil? && ass_comp.id = ec_next.assembly_component_id
+			# 	est_comp = ec_next
+			# 	ec_next = @estimate_components[ec_idx]
+			# 	ec_idx += 1
+			# end
+			if est_comp.nil?
+%>
+				<div class="field">
+					<%= label_tag "estimate_components[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_0]", ass_comp.nil_to_s, :class => 'label' %>
+					<span class="value">
+					</span>
+				</div>
+<%
+			else
+				Rails.logger.debug("VVVV est_comp = #{est_comp.inspect.to_s}")
+%>
+			<div class="field">
+				<%= label_tag "estimate_components_[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_#{est_comp.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
+				<span class="value">
+				<%= est_comp.value if est_comp %>
+				</span>
+			</div>
+<%
+						end
+						Rails.logger.debug("VVVV Estimate Component value = #{est_comp.inspect.to_s}")
+	   	end # AssemblyComponent.for_assembly(ass.id).each
+		%>
+				</div></div> <!-- end of div id="assembly_<%= ass.id %>" -->
+		<% 
+	end # ea_checked
+end # if table.each
+%>
+

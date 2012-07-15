@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120517124728) do
+ActiveRecord::Schema.define(:version => 20120711134519) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -81,6 +81,22 @@ ActiveRecord::Schema.define(:version => 20120517124728) do
   add_index "estimate_assemblies", ["assembly_id"], :name => "index_estimate_assemblies_on_assembly_id"
   add_index "estimate_assemblies", ["estimate_id"], :name => "index_estimate_assemblies_on_estimate_id"
 
+  create_table "estimate_components", :force => true do |t|
+    t.integer  "estimate_id",                                                     :null => false
+    t.integer  "assembly_id",                                                     :null => false
+    t.integer  "component_id",                                                    :null => false
+    t.string   "write_in_name",                                :default => "",    :null => false
+    t.decimal  "value",         :precision => 19, :scale => 4, :default => 0.0,   :null => false
+    t.boolean  "deactivated",                                  :default => false, :null => false
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
+  end
+
+  add_index "estimate_components", ["assembly_id"], :name => "index_estimate_components_on_assembly_id"
+  add_index "estimate_components", ["component_id"], :name => "index_estimate_components_on_component_id"
+  add_index "estimate_components", ["estimate_id", "assembly_id", "component_id"], :name => "unique_estimate_component", :unique => true
+  add_index "estimate_components", ["estimate_id"], :name => "index_estimate_components_on_estimate_id"
+
   create_table "estimates", :force => true do |t|
     t.string   "title",                              :null => false
     t.string   "customer_name",                      :null => false
@@ -145,6 +161,10 @@ ActiveRecord::Schema.define(:version => 20120517124728) do
 
   add_foreign_key "estimate_assemblies", "assemblies", :name => "estimate_assemblies_assembly_id_fk"
   add_foreign_key "estimate_assemblies", "estimates", :name => "estimate_assemblies_estimate_id_fk"
+
+  add_foreign_key "estimate_components", "assemblies", :name => "estimate_components_assembly_id_fk"
+  add_foreign_key "estimate_components", "components", :name => "estimate_components_component_id_fk"
+  add_foreign_key "estimate_components", "estimates", :name => "estimate_components_estimate_id_fk"
 
   add_foreign_key "estimates", "job_types", :name => "estimates_job_type_id_fk"
   add_foreign_key "estimates", "sales_reps", :name => "estimates_sales_rep_id_fk"

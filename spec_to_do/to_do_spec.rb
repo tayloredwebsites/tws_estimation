@@ -2,14 +2,15 @@ require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
   context 'finish up estimates - ' do
-    it 'should have updates to all estimate associations in one form with Estimate.transaction do estimate.save! estimate_assemblies.save! end'
-    it 'should have estimate assembly components displayed for each selected system, and remembered'
-    it 'should list assembly components as a child association of estimate, and have tests for it'
-    it 'should have estimate totals computed'
+    it 'should have clean spec tests'
+    it 'should have model tests'
+    it 'should have integration tests in with the estimation integration tests'
+    it 'should have assembly totals computed and always displayed at bottom of assembly'
+    it 'should have assembly/component type totals computed and always displayed at bottom of component type'
     it 'should have estimate calculations performed'
     it 'should allow sales reps to new/create estimates, and to edit/update/view/list their own estimates'
     it 'should allow components to be updated on deactivated parent ? (component type select missing current id)'
-    it 'should warn user or prevent editing item if parent association is deactivated'
+    it 'should confirm all deactivations make sense and work and test out properly'
     it 'should add the translations missing - context to integration specs for all resources'
   end
   context 'tws_auth cleanup' do
