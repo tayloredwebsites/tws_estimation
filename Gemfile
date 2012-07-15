@@ -68,6 +68,8 @@ group :test do
   # spork performance improvement to tests
   gem 'spork'
   
+  # gem 'sqlite3-ruby', :require => 'sqlite3'  - no good for inmemory testing - can't turn on foreign key validations
+  
   # factory for testing
   gem 'factory_girl_rails'
 
