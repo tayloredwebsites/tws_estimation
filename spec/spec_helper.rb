@@ -36,6 +36,16 @@ require 'rspec/rails'
 require 'capybara/rspec'
 require 'capybara/rails'
 
+# testing using sqlite3 in memory database - force schema to load
+# # http://www.osmonov.com/2011/01/in-memory-sqlite-database-for-testing.html
+# load_schema = lambda {
+#     load "#{::Rails.root}/db/schema.rb" # use db agnostic schema by default
+#     # ActiveRecord::Migrator.up('db/migrate') # use migrations
+#   }
+#   silence_stream(STDOUT, &load_schema) 
+if in_memory_database?
+  in_memory_load_db_schema(false)
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
