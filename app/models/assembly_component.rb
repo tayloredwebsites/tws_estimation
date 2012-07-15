@@ -13,6 +13,8 @@ class AssemblyComponent < ActiveRecord::Base
     :presence => true
   validates :component_id,
     :presence => true
+  validates_uniqueness_of :component_id,
+    :scope => [:assembly_id] 
 
   # scopes
   def self.for_assembly(id)

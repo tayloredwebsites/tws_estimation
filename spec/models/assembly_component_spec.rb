@@ -156,17 +156,26 @@ describe AssemblyComponent do
       @component1 = FactoryGirl.create(:component_min_create, component_type: @component_type)
       @component2 = FactoryGirl.create(:component_min_create, component_type: @component_type)
     end
-    it 'should not allow destroy of parent if there are items' do
+    it 'should have uniqueness by assembly and component' do
+      num_items = AssemblyComponent.count
+      attribs = generate_assembly_component_accessible_attributes()
+      item1 = AssemblyComponent.create(attribs)
+      AssemblyComponent.count.should == num_items + 1
+      item2 = AssemblyComponent.create(attribs)
+      item2.errors.count.should > 0
+      AssemblyComponent.count.should == num_items + 1
+    end
+    it 'should not allow destroy of assembly if there are assembly_components' do
       FactoryGirl.create(:assembly_component_create, assembly: @parent, :component => @component1)
-      FactoryGirl.create(:assembly_component_create, assembly: @parent, :component => @component1)
+      FactoryGirl.create(:assembly_component_create, assembly: @parent, :component => @component2)
       @parent.assembly_components.length.should == 2
-      num_parent = AssemblyComponent.count
+      num_assemblies = Assembly.count
       @parent.deactivate()
       @parent.destroy()
-      @parent.errors.count.should > 0
-      AssemblyComponent.count.should == num_parent
+      Assembly.count.should == num_assemblies
+      # @parent.errors.count.should > 0
     end
-    it 'should allow destroy of component_type if there are no items' do
+    it 'should allow destroy of component_type if there are no assembly_components' do
       num_parent = Assembly.count
       @parent.deactivate()
       @parent.destroy()
