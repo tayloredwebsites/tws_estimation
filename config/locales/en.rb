@@ -953,6 +953,51 @@
       },
       :messages => {
       }
+    }, # end EstimateAssemblies Resource
+    :estimate_components => {
+      :title => 'Estimate Components',
+      :field_name => {
+        :id => 'ID',
+        :estimate_assembly_id => 'Estimate Assembly ID',
+        :estimate_assembly => 'Estimate Assembly',
+        :assembly_component_id => 'Assembly Component ID',
+        :assembly_component => 'Assembly Component',
+        :write_in_name => 'Write-in Name',
+        :value => 'value',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :estimate_assembly_id => 'Estimate Assembly ID',
+        :estimate_assembly => 'Estimate Assembly',
+        :assembly_component_id => 'Assembly Component ID',
+        :assembly_component => 'Assembly Component',
+        :write_in_name => 'Write-in Name',
+        :value => 'value',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :estimate_id => 'The ID of the Estimate for this assembly',
+        :estimate => 'The Estimate for this assembly',
+        :assembly_id => 'The ID of this Assembly',
+        :assembly => 'This Assembly',
+        :estimate_assembly_id => 'The ID of the Estimate Assembly for this component',
+        :estimate_assembly => 'The Estimate Assembly for this component',
+        :assembly_component_id => 'The ID of the Assembly Component for this component',
+        :assembly_component => 'The Assembly Componentfor this component',
+        :write_in_name => 'Write-in Name (will default to component description)',
+        :value => 'value (decimal number)',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
     } # end EstimateAssemblies Resource
   } # end en
 } #end localizations

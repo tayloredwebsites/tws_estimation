@@ -105,6 +105,10 @@
   .column_nav ul {margin:0;padding:0}
   .column_nav a:hover {text-decoration:none;background-color:#fdd;}
 
+  .show_hide:hover {background-color:#fee;}
+  .show_hide:after {content:' (Click to hide/show)';font-weight:normal;font-size:70%;color:#f00;}
+  .show_hide+div {border:1px solid black;padding:10px;}
+
 /* error styling */
 .error {color:#f00;font-size:larger;}
 .warning {color:#f00;}
@@ -120,6 +124,7 @@
 
 /* helper styles */
   .block {display:block;}
+  .inline {display:inline;}
   .list_column {display:block;text-decoration:none;padding:5px;}
   .float_right {display:inline;float:left;padding:5px;}
   .float_left {display:inline;float:left;padding:5px;}
@@ -170,6 +175,10 @@
   .margin_right_10 {margin-right:10px;}
   .margin_right_15 {margin-right:15px;}
   .margin_right_20 {margin-right:20px;}
+  .margin_left_5 {margin-left:5px;}
+  .margin_left_10 {margin-left:10px;}
+  .margin_left_15 {margin-left:15px;}
+  .margin_left_20 {margin-left:20px;}
 
 /* label and value percentage width layouts for form fields
 	right_label for items such as radio buttons and checkboxes where label is to the right

@@ -13,6 +13,11 @@ class EstimateAssembly < ActiveRecord::Base
   validates :assembly_id,
     :presence => true
   
+  # # scopes
+  # def self.for_estimate(id)
+  #   where("estimate_id = ?", id)
+  # end
+  # 
   # methods
   def description
     self.assembly.description

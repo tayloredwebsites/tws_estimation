@@ -15,26 +15,23 @@ class EstimatesController < SecureApplicationController
     Rails.logger.debug("* EstimatesController.before_filter called with id: #{params[:id]}")
     # list of all Assemblies, with current selected EstimateAssemblies selected
     # note: if an Assembly is deactivated, it will only be listed if it is selected in EstimateAssemblies
-    if (!params[:id].nil?)
-      # if params[:id] =~ /^\d*$/
-      estimate_assemblies = EstimateAssembly.where('estimate_id = ?', params[:id])
-      @assemblies = Assembly.order(:sort_order)
-      # else
-      #   Rails.logger.error("E invalid id parameter (#{params[:id]}) in estimates controller before_filter")
-      #   estimate_assemblies = EstimateAssembly.where('false')
-      #   @assemblies = Assembly.order(:sort_order)
-      #   # raise ActiveRecord::Rollback
-      # end
-    else
-      estimate_assemblies = EstimateAssembly.where('false')
-      @assemblies = Assembly.order(:sort_order)
-    end
+    est_id = (params[:id].nil? ? '0' : params[:id])
+    @assemblies = Assembly.order(:sort_order)
+    estimate_assemblies = EstimateAssembly.where('estimate_id = ?', est_id)
+    @estimate_components = EstimateComponent.joins(:component => :component_type).where('estimate_components.estimate_id = ?', est_id ).order('component_types.sort_order, components.description')
     Rails.logger.debug("****** EstimatesController.before_filter @assemblies: #{@assemblies.inspect.to_s}")
     @estimate_assemblies = Hash.new()
+    Rails.logger.debug("****** EstimatesController.before_filter @estimate_assemblies: #{@estimate_assemblies.inspect.to_s}")
     estimate_assemblies.each do |est_ass|
-      Rails.logger.debug("****** EstimatesController.before_filter estimate_assembly: #{est_ass.inspect.to_s}")
+      Rails.logger.debug("*** EstimatesController.before_filter got estimate_assembly: #{est_ass.inspect.to_s}")
       @estimate_assemblies[est_ass.assembly_id] = true if est_ass.selected
-   end
+      Rails.logger.debug("****** EstimatesController.before_filter @estimate_assemblies: #{@estimate_assemblies.inspect.to_s}")
+    end
+    Rails.logger.debug("****** EstimatesController.before_filter @estimate_components each start")
+    @estimate_components.each do |est_comp|
+      Rails.logger.debug("*** EstimatesController.before_filter @estimate_components: #{est_comp.inspect.to_s}")
+    end
+    Rails.logger.debug("****** EstimatesController.before_filter @estimate_components each done")
   end
   
   def self.list(scope = nil)

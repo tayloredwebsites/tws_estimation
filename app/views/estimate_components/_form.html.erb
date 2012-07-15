@@ -1,0 +1,33 @@
+<%= form_for(@estimate_component) do |f| %>
+  <% if @estimate_component.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@estimate_component.errors.count, "error") %> prohibited this estimate_component from being saved:</h2>
+
+      <ul>
+      <% @estimate_component.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :estimate_assembly %><br />
+    <%= f.text_field :estimate_assembly %>
+  </div>
+  <div class="field">
+    <%= f.label :assembly_component %><br />
+    <%= f.text_field :assembly_component %>
+  </div>
+  <div class="field">
+    <%= f.label :write_in_name, %><br />
+    <%= f.text_field :write_in_name, %>
+  </div>
+  <div class="field">
+    <%= f.label :value %><br />
+    <%= f.text_field :value %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
