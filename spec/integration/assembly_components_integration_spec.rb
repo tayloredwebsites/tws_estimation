@@ -21,15 +21,16 @@ describe 'AssemblyComponents Integration Tests' do
     it "should create a new item with parent association specified" do
       num_items = AssemblyComponent.count
       num_items.should == 4
+      component4 = FactoryGirl.create(:component_create, component_type: @component_type)
+      attribs = FactoryGirl.attributes_for(:assembly_component_create, assembly: @assembly, component: component4)
+      Rails.logger.debug("T assembly_components_integration_spec - attribs = #{attribs.inspect.to_s}")
       visit new_assembly_component_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       # save_and_open_page      
-      attribs = FactoryGirl.attributes_for(:assembly_component_create, assembly: @assembly, component: @component)
-      Rails.logger.debug("T assembly_components_integration_spec - attribs = #{attribs.inspect.to_s}")
       within("#new_assembly_component") do
         page.select @assembly.description, :from => 'assembly_component_assembly_id'
-        page.select @component.description, :from => 'assembly_component_component_id'
+        page.select component4.description, :from => 'assembly_component_component_id'
         page.fill_in 'assembly_component_description', :with => attribs[:description]
         find(:xpath, '//input[@type="submit"]').click
       end
@@ -109,8 +110,9 @@ describe 'AssemblyComponents Integration Tests' do
       end
     end
     it 'should be able to edit and update all of an items accessible fields' do
+      component4 = FactoryGirl.create(:component_create, component_type: @component_type)
       all_attribs = FactoryGirl.attributes_for(:assembly_component_accessible)
-      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: @component)
+      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: component4)
       item1.deactivated?.should be_false
       # visit edit_assembly_component_path (item1.id)
       visit ("/assembly_components/#{item1.id}/edit?show_deactivated=true")
@@ -160,9 +162,13 @@ describe 'AssemblyComponents Integration Tests' do
       end
     end
     it 'should be able to show all accessible fields of an item' do
-      all_attribs = FactoryGirl.attributes_for(:assembly_component_accessible)
-      item1 = FactoryGirl.create(:assembly_component_accessible_create, assembly: @assembly, component: @component)
-      item1.deactivated?.should be_true
+      component4 = FactoryGirl.create(:component_create, component_type: @component_type)
+      # all_attribs = FactoryGirl.attributes_for(:assembly_component_accessible)
+      all_attribs = generate_assembly_component_accessible_attributes
+      # item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: component4)
+      item1 = AssemblyComponent.create(all_attribs)
+      Rails.logger.debug("T created item1 with ID: #{item1.id.inspect.to_s}")
+      # item1.deactivated?.should be_true
       # visit (assembly_component_path, item1, :show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       visit "/assembly_components/#{item1.id}?show_deactivated=true" # show deactivated records for this test
       # save_and_open_page
@@ -177,6 +183,8 @@ describe 'AssemblyComponents Integration Tests' do
         elsif at_val.is_a?(FalseClass)
           Rails.logger.debug("T assembly_components_integration_spec edit updated show #{at_key.to_s} - FalseClass")
           find(:xpath, "//*[@id=\"assembly_component_#{at_key.to_s}\"]").text.should =~ /^false$/
+        elsif at_key =~ /_id$/
+          # do association selects manually (capybara select method only selects by value, not ID)
         else
           find(:xpath, "//*[@id=\"assembly_component_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/ 
         end
@@ -371,7 +379,8 @@ describe 'AssemblyComponents Integration Tests' do
       # visit home_index_path
     end
     it 'should be able to list all items when show_deactivated is set' do
-      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: @component)
+      component4 = FactoryGirl.create(:component_create, component_type: @component_type)
+      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: component4)
       item1.deactivated?.should be_false
       item_deact = FactoryGirl.create(:assembly_component_accessible_create, assembly: @assembly, component: @component)
       item_deact.deactivated?.should be_true
@@ -385,7 +394,8 @@ describe 'AssemblyComponents Integration Tests' do
       find(:xpath, "//tr[@id=\"assembly_component_#{item_deact.id}\"]/td/a[@data-method=\"delete\"]").text.should =~ /\A#{I18n.translate('view_action.delete')}\z/
     end
     it 'should be able to list only active items when show_deactivated is off' do
-      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: @component)
+      component4 = FactoryGirl.create(:component_create, component_type: @component_type)
+      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: component4)
       item1.deactivated?.should be_false
       item_deact = FactoryGirl.create(:assembly_component_accessible_create, assembly: @assembly, component: @component)
       visit assembly_components_path(:show_deactivated => DB_FALSE.to_s) # dont show deactivated records for this test
@@ -451,7 +461,8 @@ describe 'AssemblyComponents Integration Tests' do
       page.should have_selector(:xpath, "//*[@id=\"assembly_component_deactivated_false\" and @checked]")
     end
     it 'controller should list items with deactivate/reactivate action/link/button depending upon status' do
-      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: @component)
+      component4 = FactoryGirl.create(:component_create, component_type: @component_type)
+      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: component4)
       item1.deactivated?.should be_false
       @item_deact = FactoryGirl.create(:assembly_component_accessible_create, assembly: @assembly, component: @component)
       AssemblyComponent.count.should > 1
@@ -518,7 +529,8 @@ describe 'AssemblyComponents Integration Tests' do
       @updated_item.deactivated?.should be_true
     end
     it 'should allow a item to be deactivated from the index page' do
-      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: @component)
+      component4 = FactoryGirl.create(:component_create, component_type: @component_type)
+      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: component4)
       item1.deactivated?.should be_false
       @item_deact = FactoryGirl.create(:assembly_component_accessible_create, assembly: @assembly, component: @component)
       @num_items = AssemblyComponent.count
@@ -539,7 +551,8 @@ describe 'AssemblyComponents Integration Tests' do
       @updated_item.deactivated?.should be_true
     end
     it 'should allow a item to be reactivated from the index page' do
-      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: @component)
+      component4 = FactoryGirl.create(:component_create, component_type: @component_type)
+      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: component4)
       item1.deactivated?.should be_false
       @item_deact = FactoryGirl.create(:assembly_component_accessible_create, assembly: @assembly, component: @component)
       @num_items = AssemblyComponent.count
@@ -562,7 +575,8 @@ describe 'AssemblyComponents Integration Tests' do
       @updated_item.deactivated?.should be_false
     end    
     it 'should not list deactivated items by assembly' do
-      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: @component)
+      component4 = FactoryGirl.create(:component_create, component_type: @component_type)
+      item1 = FactoryGirl.create(:assembly_component_create, assembly: @assembly, component: component4)
       item1.deactivated?.should be_false
       @item_deact = FactoryGirl.create(:assembly_component_accessible_create, assembly: @assembly, component: @component)
       AssemblyComponent.count.should > 1

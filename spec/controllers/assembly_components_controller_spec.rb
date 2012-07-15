@@ -15,12 +15,14 @@ describe AssemblyComponentsController do
       @parent = FactoryGirl.create(:assembly_create)
       @component_type = FactoryGirl.create(:component_type)
       @child = FactoryGirl.create(:component_min_create, :component_type => @component_type)
+      @child2 = FactoryGirl.create(:component_min_create, :component_type => @component_type)
+      @child3 = FactoryGirl.create(:component_min_create, :component_type => @component_type)
     end
     it 'should be able to GET the index page and see all items' do
       # user = FactoryGirl.create(:user_min_create_attr)
       item1 = FactoryGirl.create(:assembly_component_create, :assembly => @parent, :component => @child)
-      item2 = FactoryGirl.create(:assembly_component_create, :assembly => @parent, :component => @child)
-      item3 = FactoryGirl.create(:assembly_component_create, :assembly => @parent, :component => @child)
+      item2 = FactoryGirl.create(:assembly_component_create, :assembly => @parent, :component => @child2)
+      item3 = FactoryGirl.create(:assembly_component_create, :assembly => @parent, :component => @child3)
       get :index
       response.should be_success
       response.should render_template('/index')
@@ -102,6 +104,7 @@ describe AssemblyComponentsController do
       @parent = FactoryGirl.create(:assembly_create)
       @component_type = FactoryGirl.create(:component_type)
       @child = FactoryGirl.create(:component_min_create, :component_type => @component_type)
+      @child2 = FactoryGirl.create(:component_min_create, :component_type => @component_type)
     end
     
     it 'should be able to PUT deactivate an active item' do
@@ -210,7 +213,7 @@ describe AssemblyComponentsController do
     it 'should be able to set and clear the show_deactivated flag (item count should be reflected)' do
       item1 = FactoryGirl.create(:assembly_component_min_create, :assembly => @parent, :component => @child)
       item1.errors.count.should == 0
-      item2 = FactoryGirl.create(:assembly_component_min_create, :assembly => @parent, :component => @child)
+      item2 = FactoryGirl.create(:assembly_component_min_create, :assembly => @parent, :component => @child2)
       item2.errors.count.should == 0
       item1.deactivate
       item1.errors.count.should == 0

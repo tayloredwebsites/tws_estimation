@@ -19,19 +19,10 @@ class EstimatesController < SecureApplicationController
     @assemblies = Assembly.order(:sort_order)
     estimate_assemblies = EstimateAssembly.where('estimate_id = ?', est_id)
     @estimate_components = EstimateComponent.joins(:component => :component_type).where('estimate_components.estimate_id = ?', est_id ).order('component_types.sort_order, components.description')
-    Rails.logger.debug("****** EstimatesController.before_filter @assemblies: #{@assemblies.inspect.to_s}")
     @estimate_assemblies = Hash.new()
-    Rails.logger.debug("****** EstimatesController.before_filter @estimate_assemblies: #{@estimate_assemblies.inspect.to_s}")
     estimate_assemblies.each do |est_ass|
-      Rails.logger.debug("*** EstimatesController.before_filter got estimate_assembly: #{est_ass.inspect.to_s}")
       @estimate_assemblies[est_ass.assembly_id] = true if est_ass.selected
-      Rails.logger.debug("****** EstimatesController.before_filter @estimate_assemblies: #{@estimate_assemblies.inspect.to_s}")
     end
-    Rails.logger.debug("****** EstimatesController.before_filter @estimate_components each start")
-    @estimate_components.each do |est_comp|
-      Rails.logger.debug("*** EstimatesController.before_filter @estimate_components: #{est_comp.inspect.to_s}")
-    end
-    Rails.logger.debug("****** EstimatesController.before_filter @estimate_components each done")
   end
   
   def self.list(scope = nil)
