@@ -39,12 +39,7 @@ class EstimateAssembly < ActiveRecord::Base
   end
 
   def desc
-    ''+super.nil_to_s+self.description.nil_to_s
-  end
-
-  def field_nil_to_s(field_name)
-    # call to super here brings in deactivated feature
-    ret = ''+super(field_name).nil_to_s+self.send(field_name).nil_to_s
+    ''+super.nil_to_s+self.description
   end
 
 end
