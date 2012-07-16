@@ -2,9 +2,10 @@ class EstimateComponent < ActiveRecord::Base
 
   include Models::CommonMethods
   
-  attr_accessible :component, :assembly, :estimate, :value, :write_in_name, :component_id, :assembly_id, :estimate_id
+  attr_accessible :component, :assembly, :estimate, :value, :write_in_name, :component_id, :assembly_id, :estimate_id, :deactivated
   # todo ? remove these as accessible? -> attr_accessible :assembly_component, :estimate_assembly, :assembly_component_id, :estimate_assembly_id
 
+  belongs_to :estimate
   belongs_to :assembly
   belongs_to :component
 
@@ -30,7 +31,7 @@ class EstimateComponent < ActiveRecord::Base
 
   # methods
   def description
-    (write_in_name.nil?) ? self.assembly_component.description : write_in_name
+    (write_in_name.blank? ? self.component.description : self.write_in_name)
   end
   
   # def estimate_id
@@ -54,13 +55,7 @@ class EstimateComponent < ActiveRecord::Base
 
   def desc
     # ''+super.nil_to_s+self.write_in_name.nil_to_s
-    ''+self.write_in_name.nil_to_s
-  end
-
-  def field_nil_to_s(field_name)
-    # call to super here brings in deactivated feature
-    # ret = ''+super(field_name).nil_to_s+self.send(field_name).nil_to_s
-    ret = ''+self.send(field_name).nil_to_s
+    ''+super.nil_to_s+description
   end
 
 end

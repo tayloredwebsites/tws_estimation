@@ -20,7 +20,7 @@ class AssemblyComponent < ActiveRecord::Base
   def self.for_assembly(id)
     joins(:component => :component_type).where('assembly_components.assembly_id = ?', id).order('component_types.sort_order, assembly_components.required DESC, components.description')
   end
-
+  
   # methods
   def nil_to_s
     # call to super here brings in deactivated feature
@@ -29,11 +29,6 @@ class AssemblyComponent < ActiveRecord::Base
 
   def desc
     ''+super.nil_to_s+(description.blank? ? self.component.description : self.description)
-  end
-
-  def field_nil_to_s(field_name)
-    # call to super here brings in deactivated feature
-    ret = ''+super(field_name).nil_to_s+self.send(field_name).nil_to_s
   end
 
 end
