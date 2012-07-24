@@ -33,7 +33,7 @@ comp_type_totals = Hash.new()
 				</h4>
 <% 
 				last_component_type = ass_comp.component.component_type_id
-				comp_type_total = BigDecimal.new(0,2)
+				comp_type_total = BigDecimal.new('0',2)
 			end # end break by Component Type
 			# Rails.logger.debug("VVVV AssemblyComponent = #{ass_comp.inspect.to_s}")
 			
