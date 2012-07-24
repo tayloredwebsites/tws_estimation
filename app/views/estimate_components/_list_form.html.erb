@@ -5,7 +5,7 @@ comp_type_totals = Hash.new()
 @assemblies.each do |ass|
 	ea = (@estimate_assemblies[ass.id]) ? true : false
 	ea_checked = ea || ass.required
-	ea_total = BigDecimal.new(0,2)
+	ea_total = BigDecimal.new('0',2)
 	if true		# if ea_checked  # always create component type components (to display when Estimate Assembly is checked)
 		ass_deact = (ass.deactivated) ? ' * ' : ''
 %>
@@ -13,7 +13,7 @@ comp_type_totals = Hash.new()
 			<div>
 <% 
 		last_component_type = 0
-		comp_type_total = BigDecimal.new(0.00,2)
+		comp_type_total = BigDecimal.new('0',2)
 		AssemblyComponent.for_assembly(ass.id).each do |ass_comp|
 			# break by Component Type
 			if last_component_type != ass_comp.component.component_type_id	
