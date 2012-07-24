@@ -5,7 +5,7 @@ comp_type_totals = Hash.new()
 @assemblies.each do |ass|
 	ea = (@estimate_assemblies[ass.id]) ? true : false
 	ea_checked = ea || ass.required
-	ea_total = BigDecimal.new(0.00,2)
+	ea_total = BigDecimal.new(0,2)
 	if ea_checked
 		ass_deact = (ass.deactivated) ? ' * ' : ''
 %>
@@ -17,7 +17,6 @@ comp_type_totals = Hash.new()
 		AssemblyComponent.for_assembly(ass.id).each do |ass_comp|
 			# break by Component Type
 			if last_component_type != ass_comp.component.component_type_id
-				Rails.logger.debug("VVVV last_component_type = #{last_component_type}")
 				if last_component_type != 0
 %>
 				<div class="field component_type_total">
@@ -34,7 +33,7 @@ comp_type_totals = Hash.new()
 				</h4>
 <% 
 				last_component_type = ass_comp.component.component_type_id
-				comp_type_total = BigDecimal.new(0.00,2)
+				comp_type_total = BigDecimal.new(0,2)
 			end # end break by Component Type
 			# Rails.logger.debug("VVVV AssemblyComponent = #{ass_comp.inspect.to_s}")
 			
@@ -69,8 +68,8 @@ comp_type_totals = Hash.new()
 		<% 
 	end # ea_checked
 end # if table.each
-comp_type_totals.each do |key, val|
-	Rails.logger.debug("VVVVV comp_type_total[#{key}] (#{@component_types[key].description}) = #{sprintf('%.2f',val)}")
-end
+# comp_type_totals.each do |key, val|
+# 	Rails.logger.debug("VVVVV comp_type_total[#{key}] (#{@component_types[key].description}) = #{sprintf('%.2f',val)}")
+# end
 %>
 

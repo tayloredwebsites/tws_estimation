@@ -1,9 +1,11 @@
 
 <%
 # assume already in Estimate form tag
+comp_type_totals = Hash.new()
 @assemblies.each do |ass|
 	ea = (@estimate_assemblies[ass.id]) ? true : false
 	ea_checked = ea || ass.required
+	ea_total = BigDecimal.new(0,2)
 	if true		# if ea_checked  # always create component type components (to display when Estimate Assembly is checked)
 		ass_deact = (ass.deactivated) ? ' * ' : ''
 %>
@@ -11,15 +13,27 @@
 			<div>
 <% 
 		last_component_type = 0
+		comp_type_total = BigDecimal.new(0.00,2)
 		AssemblyComponent.for_assembly(ass.id).each do |ass_comp|
 			# break by Component Type
 			if last_component_type != ass_comp.component.component_type_id	
+				if last_component_type != 0
+%>
+				<div class="field component_type_total">
+					<%= label_tag '', 'Total '+@component_types[last_component_type].description, :class => 'label' %>
+					<span class="value"><%= sprintf('%.2f',comp_type_total) %></span>
+				</div>
+<%
+					comp_type_total = comp_type_total + comp_type_totals[last_component_type] if comp_type_totals[last_component_type]
+					comp_type_totals[last_component_type] = BigDecimal.new(comp_type_total,2)
+				end
 %>
 				<h4 class="margin_left_20">
 					<%= ass_comp.component.component_type.nil_to_s %>
 				</h4>
 <% 
 				last_component_type = ass_comp.component.component_type_id
+				comp_type_total = BigDecimal.new(0,2)
 			end # end break by Component Type
 			# Rails.logger.debug("VVVV AssemblyComponent = #{ass_comp.inspect.to_s}")
 			
@@ -31,11 +45,13 @@
 					<span class="value">
 				<%= text_field_tag "estimate_components[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_0]", '' %>
 				<%= hidden_field_tag("estimate_components_was[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_0]",  '') %>
-						</span>
-					</div>
+					</span>
+				</div>
 <%
 			else
 				# Rails.logger.debug("VVVV est_comp = #{est_comp.inspect.to_s}")
+				comp_type_total += BigDecimal.new(est_comp.value,2)
+				ea_total += BigDecimal.new(est_comp.value,2)
 %>
 			<div class="field">
 				<%= label_tag "estimate_components_[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_#{est_comp.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
@@ -50,7 +66,7 @@
 	   	end # AssemblyComponent.for_assembly(ass.id).each
 		%>
 				</div>
-				<div>Total <%= ass_deact + ass.description + ass_deact %> = </div>
+				<div class='assembly_total'>Total <%= ass_deact + ass.description + ass_deact %> = <%= sprintf('%.2f',ea_total) %></div>
 			</div> <!-- end of div id="assembly_<%= ass.id %>" -->
 		<% 
 	end # ea_checked
