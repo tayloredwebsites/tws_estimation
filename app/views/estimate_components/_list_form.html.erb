@@ -25,7 +25,7 @@ comp_type_totals = Hash.new()
 				</div>
 <%
 					comp_type_total = comp_type_total + comp_type_totals[last_component_type] if comp_type_totals[last_component_type]
-					comp_type_totals[last_component_type] = BigDecimal.new(comp_type_total,2)
+					comp_type_totals[last_component_type] = BigDecimal.new(sprintf('%.2f',comp_type_total),2)
 				end
 %>
 				<h4 class="margin_left_20">
@@ -50,8 +50,8 @@ comp_type_totals = Hash.new()
 <%
 			else
 				# Rails.logger.debug("VVVV est_comp = #{est_comp.inspect.to_s}")
-				comp_type_total += BigDecimal.new(est_comp.value,2)
-				ea_total += BigDecimal.new(est_comp.value,2)
+				comp_type_total += BigDecimal.new(sprintf('%.2f',est_comp.value),2)
+				ea_total += BigDecimal.new(sprintf('%.2f',est_comp.value),2)
 %>
 			<div class="field">
 				<%= label_tag "estimate_components_[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_#{est_comp.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
