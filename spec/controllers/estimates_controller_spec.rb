@@ -52,7 +52,9 @@ describe EstimatesController do
         Rails.logger.debug("T estimates_controller_spec minimum - match on:#{key.to_s}")
         assigns(:estimate).send(key.to_sym).should eq(new_attributes[key.to_sym])
       end
-      response.should render_template("show")
+      # response.should render_template("show")
+      # response.should redirect_to(:controller => 'estimates', :action => 'show')
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
       Estimate.count.should == (@num_items+1)
     end
     it "should create an item with the minimum valid parameters" do
@@ -66,7 +68,7 @@ describe EstimatesController do
         Rails.logger.debug("T estimates_controller_spec minimum - match on:#{key.to_s}")
         assigns(:estimate).send(key.to_sym).should eq(min_attr[key.to_sym])
       end
-      response.should render_template("show")
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
       Estimate.count.should == (@num_items+1)
     end
     it 'should not create an item missing any one of the minimum_attributes' do
@@ -112,8 +114,9 @@ describe EstimatesController do
         # assigns(:estimate).send(key.to_sym).should eq(new_attribs[key.to_sym])
         updated_item.send(key.to_sym).should eq(new_attribs[key.to_sym])
       end
-      response.should render_template("show")
-      # response.should redirect_to(:controller => 'assemblies', :action => 'show')
+      # response.should render_template("show")
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
+      response.should redirect_to(:controller => 'estimates', :action => 'show')
     end
     it 'should be able to GET show an item' do
       prep_estimate_create
@@ -291,6 +294,17 @@ describe EstimatesController do
       Estimate.count.should == 2
       assigns(:estimates).size.should  == 1
     end
+  end
+
+  context 'it should only let non-admin sales rep see, create or modify own estimates' do
+    it 'should not allow sales rep to new/create estimates for other sales reps'
+    it 'should only list own estimates in index'
+    it 'should not allow sales rep to view estimates for other sales reps'
+    it 'should not allow sales rep to edit/update estimates for other sales reps'
+  end
+  
+  context 'misc - ' do
+    it 'should have estimate calculations performed'
   end
 
 end

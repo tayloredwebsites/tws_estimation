@@ -51,6 +51,11 @@ module TwsAuth
       g.test_framework      :rspec, :fixture => true, :views => false
       g.fixture_replacement :factory_girl, :dir => "spec/factories"
     end
+    
+    # Enable IdentityMap for Active Record for Rails 3.1
+    config.active_record.identity_map = true  
+
+    
   end
 end
 

@@ -89,7 +89,7 @@ describe 'Estimates Integration Tests' do
         page.driver.status_code.should be 200
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
         page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
-        find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
+        # find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
         page.should have_selector(:xpath, '//span[@class="field_with_errors"]')
         num_items.should == Estimate.count
       end
@@ -673,5 +673,26 @@ describe 'Estimates Integration Tests' do
 
   end
 
-  context 'it should list estimate components - '
+  context 'it should list estimate components - ' do
+    before(:each) do    
+    end
+    it 'should list the components for the selected estimate assemblies in view'
+    it 'should list the components for the selected estimate assemblies in edit'
+    it 'should list the components for the selected estimate assemblies in view after update'
+  end
+  
+  context 'it should only let non-admin sales rep see, create or modify own estimates' do
+    it 'should have the salesrep not be a select box'
+    it 'should not allow sales rep to new/create estimates for other sales reps'
+    it 'should only list own estimates in index'
+    it 'should not see estimates by Sales Rep menu item'
+    it 'should not allow sales rep to view estimates for other sales reps'
+    it 'should not allow sales rep to edit/update estimates for other sales reps'
+  end
+  
+  context 'misc - ' do
+    it "should replace all :confirm options with :data => { :confirm => 'Text' }"
+    it 'should have estimate calculations performed'
+  end
+  
 end

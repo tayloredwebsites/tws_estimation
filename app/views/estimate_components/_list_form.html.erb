@@ -1,28 +1,14 @@
 
 <%
 # assume already in Estimate form tag
-%>
-
-<% 
-
-# # start loop through @estimate_components to match the Assembly Components
-# ec_idx = 0
-# ec_max =  @estimate_components.size
-# if ec_idx < ec_max
-# 	ec_next = @estimate_components[ec_idx]
-# 	ec_idx += 1
-# else
-# 	ec_next = nil
-# end
-
 @assemblies.each do |ass|
 	ea = (@estimate_assemblies[ass.id]) ? true : false
 	ea_checked = ea || ass.required
-	if ea_checked
+	if true		# if ea_checked  # always create component type components (to display when Estimate Assembly is checked)
 		ass_deact = (ass.deactivated) ? ' * ' : ''
 %>
-		<h3 class="show_hide"><%= ass_deact + ass.description + ass_deact %></h3>
-		<div id="assembly_<%= ass.id %>"><div>
+		<div id="assembly_<%= ass.id %>" class="show_hide<%= (ea_checked) ? '' : ' deselected' %>"><h3><%= ass_deact + ass.description + ass_deact %></h3>
+			<div>
 <% 
 		last_component_type = 0
 		AssemblyComponent.for_assembly(ass.id).each do |ass_comp|
@@ -38,11 +24,6 @@
 			# Rails.logger.debug("VVVV AssemblyComponent = #{ass_comp.inspect.to_s}")
 			
 			est_comp = EstimateComponent.for_estimate_assembly_component(@estimate.id, ass.id, ass_comp.component.id )
-			# if !ec_next.nil? && ass_comp.id = ec_next.assembly_component_id
-			# 	est_comp = ec_next
-			# 	ec_next = @estimate_components[ec_idx]
-			# 	ec_idx += 1
-			# end
 			if est_comp.nil?
 %>
 				<div class="field">
@@ -54,7 +35,7 @@
 					</div>
 <%
 			else
-				Rails.logger.debug("VVVV est_comp = #{est_comp.inspect.to_s}")
+				# Rails.logger.debug("VVVV est_comp = #{est_comp.inspect.to_s}")
 %>
 			<div class="field">
 				<%= label_tag "estimate_components_[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_#{est_comp.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
@@ -65,10 +46,12 @@
 			</div>
 <%
 						end
-						Rails.logger.debug("VVVV Estimate Component value = #{est_comp.inspect.to_s}")
+						# Rails.logger.debug("VVVV Estimate Component value = #{est_comp.inspect.to_s}")
 	   	end # AssemblyComponent.for_assembly(ass.id).each
 		%>
-				</div></div> <!-- end of div id="assembly_<%= ass.id %>" -->
+				</div>
+				<div>Total <%= ass_deact + ass.description + ass_deact %> = </div>
+			</div> <!-- end of div id="assembly_<%= ass.id %>" -->
 		<% 
 	end # ea_checked
 end # if table.each
