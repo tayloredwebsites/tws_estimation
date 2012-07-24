@@ -105,9 +105,14 @@
   .column_nav ul {margin:0;padding:0}
   .column_nav a:hover {text-decoration:none;background-color:#fdd;}
 
-  .show_hide:hover {background-color:#fee;}
-  .show_hide:after {content:' (Click to hide/show)';font-weight:normal;font-size:70%;color:#f00;}
-  .show_hide+div {border:1px solid black;padding:10px;}
+  .show_hide h3 {line-height:30px; padding:0 10px;}
+  .show_hide h3:hover {background-color:#fee;}
+  .show_hide h3:after {content:' (Click to hide/show)';font-weight:normal;font-size:70%;color:#f00;}
+  .show_hide > div:nth-child(2) {border:1px solid black;padding:10px;margin:0 10px;}
+
+  .deselected {display:none;}
+  .component_type_total {font-weight:bold;}
+  .assembly_total {padding:5px;margin:0 20px;font-weight:bold;}
 
 /* error styling */
 .error {color:#f00;font-size:larger;}

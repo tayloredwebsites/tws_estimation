@@ -8,16 +8,15 @@ class EstimateAssembly < ActiveRecord::Base
   belongs_to :estimate
   belongs_to :assembly
 
-  validates :estimate_id,
-    :presence => true
-  validates :assembly_id,
-    :presence => true
-  
-  # # scopes
-  # def self.for_estimate(id)
-  #   where("estimate_id = ?", id)
-  # end
-  # 
+  # validates :estimate_id,
+  #   :presence => { :message => "is missing estimate_id"}
+  validates_presence_of :estimate,
+    :message => "is missing estimate"
+  # validates :assembly_id,
+  #   :presence => { :message => "is missing assembly_id" }
+  validates_presence_of :assembly,
+    :message => "is missing assembly"
+
   # methods
   def description
     self.assembly.description

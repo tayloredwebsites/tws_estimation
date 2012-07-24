@@ -1,17 +1,11 @@
 require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
-  context 'finish up estimates - ' do
-    it 'should have clean spec tests'
-    it 'should have model tests'
-    it 'should have integration tests in with the estimation integration tests'
-    it 'should have assembly totals computed and always displayed at bottom of assembly'
-    it 'should have assembly/component type totals computed and always displayed at bottom of component type'
-    it 'should have estimate calculations performed'
-    it 'should allow sales reps to new/create estimates, and to edit/update/view/list their own estimates'
+  context 'Misc. estimates - ' do
     it 'should allow components to be updated on deactivated parent ? (component type select missing current id)'
     it 'should confirm all deactivations make sense and work and test out properly'
-    it 'should add the translations missing - context to integration specs for all resources'
+    it 'should add the tests for translations missing - context to integration specs for all resources'
+    it 'should prevent Active Record Error! after deactivating in hide deactivated mode'
   end
   context 'tws_auth cleanup' do
     it 'should add the translations missing - context to integration specs for all resources'

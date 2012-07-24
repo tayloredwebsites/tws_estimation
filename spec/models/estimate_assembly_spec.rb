@@ -99,4 +99,55 @@ describe EstimateAssembly do
       Estimate.count.should == num_parent - 1
     end
   end
+  
+  context "Estimate update attributes passed to EstimateAssembly - " do
+    before (:each) do
+      # @estimate = Estimate.create!(generate_estimate_accessible_attributes)
+      @assembly1 = FactoryGirl.create(:assembly_create) #Assembly.create!(generate_estimate_accessible_attributes)
+      @assembly2 = FactoryGirl.create(:assembly_create) #Assembly.create!(generate_estimate_accessible_attributes)
+    end
+    it "Estimate.create should create Estimate and estimate assemblies" do
+      attribs = generate_estimate_accessible_attributes
+      # attribs[:estimate_assembly_attributes]= {"#{@assembly1.id.to_s}"=>"#{@assembly1.id.to_s}", "#{@assembly2.id.to_s}"=>"#{@assembly2.id.to_s}"}
+      # attribs[:estimate_assemblies_was] = {"#{@assembly1.id.to_s}"=>"false", "#{@assembly2.id.to_s}"=>"false"}
+      Rails.logger.debug("T attribs = #{attribs.inspect.to_s}")
+      estimate = Estimate.new(attribs)
+      c_attribs1 = {:estimate_id=>"0", :assembly_id=>"#{@assembly1.id.to_s}", :selected => true}
+      Rails.logger.debug("T c_attribs1 = #{c_attribs1.inspect.to_s}")
+      estimate.estimate_assemblies.build(c_attribs1)
+      c_attribs2 = {:estimate_id=>"0", :assembly_id=>"#{@assembly2.id.to_s}", :selected => true}
+      Rails.logger.debug("T c_attribs2 = #{c_attribs2.inspect.to_s}")
+      estimate.estimate_assemblies.build(c_attribs2)
+      Rails.logger.debug("T estimate.estimate_assemblies = #{estimate.estimate_assemblies.inspect.to_s}")
+      estimate.save!
+      item1_updated = Estimate.find(estimate.id)
+      Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")
+      Rails.logger.debug("T item1_updated.estimate_assemblies = #{item1_updated.estimate_assemblies.inspect.to_s}")
+      item1_updated.estimate_assemblies.first.assembly_id.should == @assembly1.id
+      # item1_updated.estimate_components.first.component_id.should == @component1.id
+    end
+    it "Estimate.update_attributes should call the update_estimate_assemblies_attributes of Estimate" do
+      attribs = generate_estimate_accessible_attributes
+      Rails.logger.debug("T attribs = #{attribs.inspect.to_s}")
+      estimate = Estimate.create!(attribs)
+      # c_attribs = EstimateComponent.params_from_key_string("#{estimate.id}_#{@assembly.id}_#{@component1.id}_0").merge(:value => "123.48")
+      # Rails.logger.debug("T c_attribs = #{c_attribs.inspect.to_s}")
+      # estimate.estimate_components.build(c_attribs)
+      # estimate.update_attributes(@attribs)
+      # c_attribs = {"#{@assembly1.id.to_s}"=>"#{@assembly1.id.to_s}", "#{@assembly2.id.to_s}"=>"#{@assembly2.id.to_s}"}
+      # Rails.logger.debug("T c_attribs = #{c_attribs.inspect.to_s}")
+      # attribs[:estimate_assemblies] = c_attribs
+      c_attribs1 = {:estimate_id=>"0", :assembly_id=>"#{@assembly1.id.to_s}", :selected => true}
+      Rails.logger.debug("T c_attribs1 = #{c_attribs1.inspect.to_s}")
+      estimate.estimate_assemblies.build(c_attribs1)
+      c_attribs2 = {:estimate_id=>"0", :assembly_id=>"#{@assembly2.id.to_s}", :selected => true}
+      Rails.logger.debug("T c_attribs2 = #{c_attribs2.inspect.to_s}")
+      estimate.estimate_assemblies.build(c_attribs2)
+      estimate.save
+      item1_updated = Estimate.find(estimate.id)
+      Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")
+      Rails.logger.debug("T item1_updated.estimate_assemblies = #{item1_updated.estimate_assemblies.inspect.to_s}")
+      item1_updated.estimate_assemblies.first.assembly_id.should == @assembly1.id
+    end
+  end
 end
