@@ -30,7 +30,7 @@ end
   
 FactoryGirl.define do
   sequence :assembly_component_description do |n|
-    "AssemblyDescription#{n}"
+    "AssemblyComponentDescription#{n}"
   end
   # standard fields used to create an item
   factory :assembly_component_create, :class => AssemblyComponent do

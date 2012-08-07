@@ -31,20 +31,16 @@ class EstimatesController < SecureApplicationController
       @component_types[comp_type.id] = comp_type
       Rails.logger.debug("* EstimatesController.before_filter @component_types[#{comp_type.id}] = #{comp_type.description}")
     end
-    # @assembly_ids = Array.new()
-    # @assemblies.each do |ass|
-    #   @assembly_ids << ass.id
-    # end
   end
   
   def self.list(scope = nil)
     list_scope = (scope.nil?) ? self.new.get_scope() : scope
   end
 
-  # chain current scope with any modules that have set scope (e.g. DeactivatedController)
+  # chain current scope with any modules that have set scope (e.g. DeactivatedController, cancan auth)
   def get_scope(cur_scope = nil)
     # base default scope is set up here so that deactivated module can update this
-    cur_scope = Estimate.scoped if (cur_scope.nil?)
+    cur_scope = Estimate.scoped.accessible_by(current_ability) if cur_scope.nil?
     return (defined?(super)) ? super(cur_scope) : cur_scope
   end
 
@@ -54,12 +50,13 @@ class EstimatesController < SecureApplicationController
 
   # GET /estimates
   def index
-    @estimates = get_scope().joins(:sales_rep).joins('JOIN users ON sales_reps.user_id = users.id').order('users.last_name, users.first_name, title')
+    Rails.logger.debug("****** EstimatesController.index current_user = #{current_user.inspect.to_s}")
+    @estimates = get_scope.accessible_by(current_ability)
   end
 
   # GET /estimates/list
   def list
-    # @estimates = get_scope().joins(:sales_rep).order('title')
+    Rails.logger.debug("* EstimatesController.list current_user = #{current_user.inspect.to_s}")
     @estimates = get_scope().order('title')
   end
 
@@ -89,8 +86,11 @@ class EstimatesController < SecureApplicationController
     ActiveRecord::Base.transaction do
       begin
         Rails.logger.debug("* EstimatesController.create - params = #{params.inspect.to_s}")
+        # Rails.logger.debug("* EstimatesController.create - new")
         @estimate = Estimate.new(params[:estimate])
         authorize! :create, @estimate   # authorize from CanCan::ControllerAdditions
+        @estimate = Estimate.create(params[:estimate])
+        @estimate.save
         if !@estimate.errors.empty?
           # will this code ever be touched?
           @estimate.errors.each do |attr, msg|
@@ -101,8 +101,8 @@ class EstimatesController < SecureApplicationController
           if !params[:estimate_assemblies].nil?
             params[:estimate_assemblies].each do |ec_key, ec_value|
               if !ec_value.blank?
-                c_attribs = {:estimate_id=>nil, :assembly_id=> ec_key, :selected => true}
-                Rails.logger.debug("***** EstimatesController.create estimate_assemblies c_attribs = #{c_attribs.inspect.to_s}")
+                c_attribs = {:estimate_id=>@estimate.id, :assembly_id=> ec_key, :selected => true}
+                # Rails.logger.debug("* EstimatesController.create estimate_assemblies c_attribs = #{c_attribs.inspect.to_s}")
                 @estimate.estimate_assemblies.build(c_attribs)
               end
             end
@@ -110,23 +110,21 @@ class EstimatesController < SecureApplicationController
           if !params[:estimate_components].nil?
             params[:estimate_components].each do |ec_key, ec_value|
               if !ec_value.blank?
-                c_attribs = EstimateComponent.params_from_key_string(ec_key).merge(:value => ec_value)
-                Rails.logger.debug("***** EstimatesController.create estimate_components c_attribs = #{c_attribs.inspect.to_s}")
+                c_attribs = EstimateComponent.params_from_key_string(ec_key).merge(:value => ec_value, :estimate_id=>@estimate.id)
+                # Rails.logger.debug("* EstimatesController.create estimate_components c_attribs = #{c_attribs.inspect.to_s}")
                 @estimate.estimate_components.build(c_attribs)
               end
             end
           end
-          Rails.logger.debug("***** EstimatesController.create - save")
           @estimate.save
-          Rails.logger.debug("***** EstimatesController.create - save completed")
         end
       rescue ActiveRecord::ActiveRecordError => ex
         # capture the exceptions
-        Rails.logger.error("E EstimateController.create - Active Record Error ex - #{ex.to_s}")
-        Rails.logger.error("E EstimateController.create - Active Record Error $!- #{$!.to_s}")
+        Rails.logger.error("E EstimateController.create - Active Record Error ex = $! - #{ex.to_s}")
         notify_error( I18n.translate('errors.error_msg',
           :msg => ex.to_s )
         )
+        render :action => "new"
       else
         if @estimate.errors.empty?
           Rails.logger.debug("***** EstimatesController.create - no errors")
@@ -135,7 +133,7 @@ class EstimatesController < SecureApplicationController
             :obj => 'Estimate',
             :name => @estimate.desc )
           )
-          # using redirect because render is not showing updated associations.
+          # using redirect because render is not showing created associations.
           redirect_to @estimate, notice: 'Estimate was successfully created.'
           # render :action => 'show' # does not refresh all instance variables
         else
@@ -156,8 +154,10 @@ class EstimatesController < SecureApplicationController
     # updates are NOT passed to Controllers::DeactivatedController (via super) to handle the associations processing
     ActiveRecord::Base.transaction do
       begin
-        Rails.logger.debug("* EstimatesController.create - params = #{params.inspect.to_s}")
+        Rails.logger.debug("* EstimatesController.update - params = #{params.inspect.to_s}")
         @estimate = get_scope().find(params[:id])
+        # get non-read only version of estimate, so that it can be updated (read-only from accessible_by(current_ability) in get_scope() )
+        @estimate = can?(:edit, @estimate) ? Estimate.find(params[:id]) : Estimate.new()
         if (!@estimate.nil?)
           authorize! :update, @estimate   # authorize from CanCan::ControllerAdditions
           @estimate.update_attributes(params[:estimate])  # .dup) why?
@@ -205,27 +205,35 @@ class EstimatesController < SecureApplicationController
                 if was_before[is_id] != is_value
                   Rails.logger.debug("* Estimate.update - estimate_component - update estimate_component ( estimate_component_id:#{is_id} ) to #{is_value}")
                   est_comp_ids = is_id.split("_") # 
-                  if est_comp_ids.size != 4
+                  if est_comp_ids.size != 2
                     Rails.logger.error("E Estimate.update_estimate_component_attributes - invalid ids size")
                     @estimate.errors.add("invalid size of ids - #{est_comp_ids}")
                   else
-                    # [#{@estimate.id}_#{ass.id}_#{component.id}_#{est_comp.id.to_s}]
-                    est_comp = (est_comp_ids[3] == '0') ? nil : EstimateComponent.find(est_comp_ids[3])
+                    # [#{ass.id}_#{component.id}]
+                    Rails.logger.debug("* Estimate.update - try to find - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
+                    est_comp = EstimateComponent.for_estimate_assembly_component(@estimate.id, est_comp_ids[0].to_i, est_comp_ids[1].to_i )
                     if !est_comp
                       # create new estimate component
+                      Rails.logger.debug("* Estimate.update - create estimate_component - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
                       est_comp = EstimateComponent.new()
+                      est_comp.estimate_id = @estimate.id
+                      est_comp.assembly_id = est_comp_ids[0]
+                      est_comp.component_id = est_comp_ids[1]
+                    else
+                      Rails.logger.debug("* Estimate.update - found estimate_component - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
                     end
-                    # est_comp.estimate_id = est_comp_ids[0]
-                    est_comp.estimate_id = @estimate.id
-                    est_comp.assembly_id = est_comp_ids[1]
-                    est_comp.component_id = est_comp_ids[2]
                     est_comp.value = BigDecimal(is_value)
                     est_comp.save!
-                  end #  est_comp_ids.size != 4
-                else #  was_before[is_id] != is_value
+                  end #  est_comp_ids.size != 2
+                  #                 else #  was_before[is_id] != is_value
+                  # c_attribs = EstimateComponent.params_from_key_string(is_id).merge(:value => is_value, :estimate_id=>@estimate.id)
+                  # # Rails.logger.debug("* EstimatesController.update estimate_components c_attribs = #{c_attribs.inspect.to_s}")
+                  # @estimate.estimate_components.build(c_attribs)
+                  # # @estimate.estimate_components.save
                   Rails.logger.debug("* Estimate.update_estimate_component_attributes - no change ( estimate_component_id:#{is_id} ) == #{is_value}")
                 end #  was_before[is_id] != is_value
               end # is_now.each do
+              # @estimate.save
             end
           end # !@estimate.errors.empty?
         else
@@ -238,6 +246,7 @@ class EstimatesController < SecureApplicationController
         notify_error( I18n.translate('errors.error_msg',
           :msg => ex.to_s )
         )
+        render :action => "edit"
       else
         if @estimate.errors.empty?
           success_msg = I18n.translate('errors.success_method_obj_name',

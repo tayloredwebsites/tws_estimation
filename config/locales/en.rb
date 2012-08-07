@@ -9,6 +9,7 @@
       :app_name => 'Estimation of assembly/component costs',
       :app => 'tws_estimation'  # not used so far
     },
+    # these are the Left Menu item descriptions.  Top level is the MenuItems.each[:app_id].  below represents the menu tree structure
     :menu_items => {
       :guest => {
         :abbreviation => 'Common',
@@ -30,6 +31,17 @@
         :abbreviation => 'Estimation',
         :full_name => 'Estimation',
         :menu_items => {
+          :estim_admin => {
+            :abbreviation => 'Estimate Administration',
+            :full_name => 'Estimate Administration',
+            :menu_items => {
+              :estimates_index => 'Estimates by Sales Rep',
+              :estimates_list => 'Estimates by Title',
+              :estimates_new => 'New Estimate'
+            }
+          },
+          :estim_list => 'Estimates Listing by Title',
+          :estim_new => 'New Estimate',
           :defaults => 'Defaults',
           :component_types => 'Component Types',
           :components => {
@@ -66,6 +78,11 @@
         }
       },
       :estimuser => {
+        :abbreviation => 'Estim. Entry',
+        :full_name => 'Estimation Entry',
+        :menu_items => {} # see estim entry (this is for titles of systems with mutiple nav items)
+      },
+      :estimadmin => {
         :abbreviation => 'Estim. Entry',
         :full_name => 'Estimation Entry',
         :menu_items => {} # see estim entry (this is for titles of systems with mutiple nav items)
@@ -113,8 +130,8 @@
       :missing_msg => "Missing %{msg}",
       :obj_does_not_exist => "%{obj} user does not exist",
       :cannot_method_your_obj => "Cannot %{method} your own %{obj}",
-      :access_denied_msg_obj => "Access Denied! You have restrictions on doing a %{method} of %{obj}",
-      :access_denied_msg => "Access Denied! You have restrictions on doing a %{method} of %{obj}",
+      :access_denied_msg_obj => "Access Denied! You have restrictions on doing a %{msg} of %{obj}",
+      :access_denied_msg => "Access Denied! You have restrictions on doing a %{msg}",
       :active_record_error_msg => "Active Record Error! %{msg}",
       :fix_following_errors => "Please fix the following errors and save.",
       :note_errors_below => "Note the errors on specific fields below.",

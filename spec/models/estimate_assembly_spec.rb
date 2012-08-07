@@ -115,9 +115,9 @@ describe EstimateAssembly do
       c_attribs1 = {:estimate_id=>"0", :assembly_id=>"#{@assembly1.id.to_s}", :selected => true}
       Rails.logger.debug("T c_attribs1 = #{c_attribs1.inspect.to_s}")
       estimate.estimate_assemblies.build(c_attribs1)
-      c_attribs2 = {:estimate_id=>"0", :assembly_id=>"#{@assembly2.id.to_s}", :selected => true}
-      Rails.logger.debug("T c_attribs2 = #{c_attribs2.inspect.to_s}")
-      estimate.estimate_assemblies.build(c_attribs2)
+      # c_attribs2 = {:estimate_id=>"0", :assembly_id=>"#{@assembly2.id.to_s}", :selected => true}
+      # Rails.logger.debug("T c_attribs2 = #{c_attribs2.inspect.to_s}")
+      # estimate.estimate_assemblies.build(c_attribs2)
       Rails.logger.debug("T estimate.estimate_assemblies = #{estimate.estimate_assemblies.inspect.to_s}")
       estimate.save!
       item1_updated = Estimate.find(estimate.id)
@@ -130,19 +130,12 @@ describe EstimateAssembly do
       attribs = generate_estimate_accessible_attributes
       Rails.logger.debug("T attribs = #{attribs.inspect.to_s}")
       estimate = Estimate.create!(attribs)
-      # c_attribs = EstimateComponent.params_from_key_string("#{estimate.id}_#{@assembly.id}_#{@component1.id}_0").merge(:value => "123.48")
-      # Rails.logger.debug("T c_attribs = #{c_attribs.inspect.to_s}")
-      # estimate.estimate_components.build(c_attribs)
-      # estimate.update_attributes(@attribs)
-      # c_attribs = {"#{@assembly1.id.to_s}"=>"#{@assembly1.id.to_s}", "#{@assembly2.id.to_s}"=>"#{@assembly2.id.to_s}"}
-      # Rails.logger.debug("T c_attribs = #{c_attribs.inspect.to_s}")
-      # attribs[:estimate_assemblies] = c_attribs
       c_attribs1 = {:estimate_id=>"0", :assembly_id=>"#{@assembly1.id.to_s}", :selected => true}
       Rails.logger.debug("T c_attribs1 = #{c_attribs1.inspect.to_s}")
       estimate.estimate_assemblies.build(c_attribs1)
-      c_attribs2 = {:estimate_id=>"0", :assembly_id=>"#{@assembly2.id.to_s}", :selected => true}
-      Rails.logger.debug("T c_attribs2 = #{c_attribs2.inspect.to_s}")
-      estimate.estimate_assemblies.build(c_attribs2)
+      # c_attribs2 = {:estimate_id=>"0", :assembly_id=>"#{@assembly2.id.to_s}", :selected => true}
+      # Rails.logger.debug("T c_attribs2 = #{c_attribs2.inspect.to_s}")
+      # estimate.estimate_assemblies.build(c_attribs2)
       estimate.save
       item1_updated = Estimate.find(estimate.id)
       Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")

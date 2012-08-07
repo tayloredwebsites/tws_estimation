@@ -213,20 +213,10 @@ describe 'Users Layouts Links Tests - ' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
     end            
-    # it 'should list all authorized systems in the left nav' do
-    #   save_and_open_page
-    #   MENU_ITEMS.each do | app_id, app |
-    #     if @me.can_see_app?(app[:app_id].to_s)
-    #       page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
-    #     else
-    #       page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}\"]")
-    #     end
-    #   end
-    # end
     it 'should list all of the resources per system that the item can see and can? see' do
       # save_and_open_page
       MENU_ITEMS.each do | app_id, app |
-        if @me.can_see_app?(app[:app_id].to_s)
+        if ( @me.can_see_app?(app[:app_id].to_s) && @me.has_role_in?(app[:roles]) )
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
           app[:menu_items].each do | menu_key, menu_val |
             ability = Ability.new(@me)
@@ -261,9 +251,12 @@ describe 'Users Layouts Links Tests - ' do
     it 'should list all the systems the item can see in the left nav' do
       # save_and_open_page
       MENU_ITEMS.each do | app_id, app |
-        if @me.can_see_app?(app[:app_id].to_s)
+        # Rails.logger.debug("T MENU_ITEMS app_id = #{app_id.inspect.to_s}, app = #{app.inspect.to_s}")
+        if @me.can_see_app?(app[:app_id].to_s) && @me.has_role_in?(app[:roles])
+          # Rails.logger.debug("T admin should see #{app[:app_id].to_s}, #{@me.can_see_app?(app[:app_id].to_s)} ")
           page.should have_selector(:xpath, "//li[@id=\"lnav_#{app_id.to_s}\"]")
         else
+          # Rails.logger.debug("T admin should not see #{app[:app_id].to_s}, #{@me.can_see_app?(app[:app_id].to_s)} ")
           page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app_id.to_s}\"]")
         end
       end
@@ -271,7 +264,7 @@ describe 'Users Layouts Links Tests - ' do
     it 'should list all of the resources per system that the item can see and can? :read' do
       # save_and_open_page
       MENU_ITEMS.each do | app_id, app |
-        if @me.can_see_app?(app[:app_id].to_s)
+        if @me.can_see_app?(app[:app_id].to_s) && @me.has_role_in?(app[:roles])
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
           app[:menu_items].each do | menu_key, menu_val |
             ability = Ability.new(@me)
