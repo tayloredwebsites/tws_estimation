@@ -9,6 +9,16 @@ module Models::Deactivated
   included do
     before_save :validate_deactivated
   end
+  
+  module ClassMethods
+    def scope_not_deactivated
+      where('deactivated = false')
+    end
+  end
+  
+  def scope_not_deactivated
+    where('deactivated = false')
+  end
 
   # check to see if this module is loaded
   # if (defined? @model.deactivated_module) will be true if this module is included

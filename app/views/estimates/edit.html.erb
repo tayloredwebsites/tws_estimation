@@ -11,7 +11,7 @@
     <%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @estimate, :sys_errors => @errors  } %>
 
     <div class="fields_20_80">
-        <%= render :partial => 'form', :locals => { :f => f } %>
+        <%= render :partial => 'estimates/form', :locals => { :f => f } %>
 
 		<%= render :partial => 'estimate_assemblies/list_form', :locals => {:sys_errors => @errors  } %>
 

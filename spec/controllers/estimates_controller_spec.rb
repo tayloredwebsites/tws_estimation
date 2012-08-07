@@ -43,7 +43,7 @@ describe EstimatesController do
     it "should create an item using POST" do
       @num_items = Estimate.count
       prep_estimate_create
-      new_attributes = generate_estimate_accessible_attributes( :sales_rep => @sales_rep1, :job_type => @job_type, :state => @state )
+      new_attributes = generate_estimate_accessible_attributes( :sales_rep_id => @sales_rep1.id, :job_type_id => @job_type.id, :state_id => @state.id )
       post :create, :estimate => new_attributes
       assigns(:estimate).should_not be_nil
       assigns(:estimate).should be_instance_of(Estimate) 
@@ -68,6 +68,7 @@ describe EstimatesController do
         Rails.logger.debug("T estimates_controller_spec minimum - match on:#{key.to_s}")
         assigns(:estimate).send(key.to_sym).should eq(min_attr[key.to_sym])
       end
+      # response.should render_template("show")
       response.should redirect_to("/estimates/#{assigns(:estimate).id}")
       Estimate.count.should == (@num_items+1)
     end
@@ -296,11 +297,169 @@ describe EstimatesController do
     end
   end
 
+  context "Estimate update attributes passed to EstimateComponent - " do
+    before (:each) do
+      @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
+      @my_session = session_signin(FactoryGirl.attributes_for(:admin_user_full_create_attr)[:username], FactoryGirl.attributes_for(:admin_user_full_create_attr)[:password])
+      @my_session.signed_in?.should be_true
+      @my_session.current_user.has_role?('all_admins').should be_true
+    end
+    it "Estimate.create should create/update components from params" do
+      @assembly = Assembly.create!(FactoryGirl.attributes_for(:assembly_create))
+      component_type1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
+      @component1 = FactoryGirl.create(:component_create, component_type: component_type1)
+      @component2 = FactoryGirl.create(:component_create, component_type: component_type1)
+      item_count = Estimate.count
+      @attribs = Hash.new()
+      @attribs[:estimate] = generate_estimate_accessible_attributes
+      # Rails.logger.debug("T attribs = #{@attribs.inspect.to_s}")
+      a_attribs = {@assembly.id.to_s => @assembly.id.to_s}
+      # Rails.logger.debug("T @attribs1 = #{a_attribs.inspect.to_s}")
+      c_attribs = { "#{@assembly.id}_#{@component1.id}" => "123.48", "#{@assembly.id}_#{@component2.id}" => "543.21" }
+      # Rails.logger.debug("T c_attribs = #{c_attribs.inspect.to_s}")
+      @attribs["estimate_assemblies"] = a_attribs
+      @attribs["estimate_components"] = c_attribs
+      # Rails.logger.debug("T updated @attribs = #{@attribs.inspect.to_s}")
+      post :create, @attribs
+      Estimate.count.should == item_count + 1
+      assigns(:estimate).errors.count.should == 0
+      # response.should render_template("/show")
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
+      assigns(:estimate).should be_a(Estimate)
+      item1_updated = Estimate.find(assigns(:estimate).id)
+      # Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")
+      # Rails.logger.debug("T item1_updated.estimate_components = #{item1_updated.estimate_components.inspect.to_s}")
+      item1_updated.estimate_components.first.component_id.should == @component2.id
+    end
+    it "Estimate.update should create/update components from params" do
+      @assembly = Assembly.create!(FactoryGirl.attributes_for(:assembly_create))
+      component_type1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
+      @component1 = FactoryGirl.create(:component_create, component_type: component_type1)
+      @component2 = FactoryGirl.create(:component_create, component_type: component_type1)
+      item_count = Estimate.count
+      prep_estimate_create
+      estimate = FactoryGirl.create(:estimate, :sales_rep => @sales_rep1, :job_type => @job_type, :state => @state )
+      Rails.logger.debug("T assigns(:estimate) = #{estimate.inspect.to_s}")
+      @attribs = Hash.new()
+      @attribs[:id] = estimate.id
+      @attribs[:estimate] = estimate.attributes
+      Rails.logger.debug("T @attribs = #{@attribs.inspect.to_s}")
+      a_attribs = {@assembly.id.to_s => @assembly.id.to_s}
+      Rails.logger.debug("T a_attribs = #{a_attribs.inspect.to_s}")
+      c_attribs = { "#{@assembly.id}_#{@component1.id}" => "123.48", "#{@assembly.id}_#{@component2.id}" => "543.21" }
+      c_attribs_was = { "#{@assembly.id}_#{@component1.id}" => "", "#{@assembly.id}_#{@component2.id}" => "" }
+      Rails.logger.debug("T c_attribs = #{c_attribs.inspect.to_s}")
+      @attribs["estimate_assemblies"] = a_attribs
+      @attribs["estimate_components"] = c_attribs
+      @attribs["estimate_components_was"] = c_attribs_was
+      Rails.logger.debug("T @attribs = #{@attribs.inspect.to_s}")
+      put :update, @attribs
+      assigns(:estimate).should_not be_nil
+      assigns(:estimate).should be_a(Estimate)
+      assigns(:estimate).should be_persisted
+      Estimate.count.should == item_count + 1
+      item1_updated = Estimate.find(estimate.id)
+      Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")
+      Rails.logger.debug("T item1_updated.estimate_components = #{item1_updated.estimate_components.inspect.to_s}")
+      # item1_updated.estimate_components.first.assembly_id.should == @assembly.id
+      item1_updated.estimate_components.first.component_id.should == @component2.id
+      # response.should render_template("show")
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
+      response.should redirect_to(:controller => 'estimates', :action => 'show')
+    end
+  end
+
   context 'it should only let non-admin sales rep see, create or modify own estimates' do
-    it 'should not allow sales rep to new/create estimates for other sales reps'
-    it 'should only list own estimates in index'
-    it 'should not allow sales rep to view estimates for other sales reps'
-    it 'should not allow sales rep to edit/update estimates for other sales reps'
+    before(:each) do
+      @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
+      @my_session = session_signin(FactoryGirl.attributes_for(:reg_user_full_create_attr)[:username], FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password])
+      @my_session.signed_in?.should be_true
+      @my_session.current_user.has_role?('estim_users').should be_true
+      @job_type = JobType.create!(FactoryGirl.attributes_for(:job_type))
+      @state = State.create!(FactoryGirl.attributes_for(:state))
+      @sales_rep_me = SalesRep.create!(generate_sales_rep_accessible_attributes(user_id = @me.id))
+      @user_other = User.create!(FactoryGirl.attributes_for(:user_create))
+      @sales_rep_other = SalesRep.create!(generate_sales_rep_accessible_attributes(user_id = @user_other.id))
+      Rails.logger.debug("T assemblies_controller_spec non-admin working - before done")
+    end
+    it 'should be able to GET the index page and only see own estimates' do
+      # user = FactoryGirl.create(:user_min_create_attr)
+      estimate1 = FactoryGirl.create(:estimate, :sales_rep => @sales_rep_me, :job_type => @job_type, :state => @state )
+      estimate2 = FactoryGirl.create(:estimate, :sales_rep => @sales_rep_other, :job_type => @job_type, :state => @state )
+      Estimate.count.should == 2
+      get :index
+      response.should be_success
+      response.should render_template('/index')
+      assigns(:estimates).count.should == 1
+    end
+    it "should create an estimate as own salesrep using POST" do
+      @num_items = Estimate.count
+      new_attributes = generate_estimate_accessible_attributes( :sales_rep_id => @sales_rep_me.id, :job_type_id => @job_type.id, :state_id => @state.id )
+      # Rails.logger.debug("T estimates_controller_spec minimum - new_attributes :#{new_attributes.to_s}")
+      post :create, :estimate => new_attributes
+      assigns(:estimate).should_not be_nil
+      assigns(:estimate).should be_instance_of(Estimate) 
+      assigns(:estimate).should be_persisted
+      new_attributes.each  do |key, value|
+        Rails.logger.debug("T estimates_controller_spec minimum - match on:#{key.to_s}")
+        assigns(:estimate).send(key.to_sym).should eq(new_attributes[key.to_sym])
+      end
+      # response.should render_template("show")
+      # response.should redirect_to(:controller => 'estimates', :action => 'show')
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
+      Estimate.count.should == (@num_items+1)
+    end
+    it "should not create an estimate as another salesrep using POST" do
+      @num_items = Estimate.count
+      new_attributes = generate_estimate_accessible_attributes( :sales_rep_id => @sales_rep_other.id, :job_type_id => @job_type.id, :state_id => @state.id )
+      # Rails.logger.debug("T estimates_controller_spec minimum - new_attributes :#{new_attributes.to_s}")
+      post :create, :estimate => new_attributes
+      assigns(:estimate).should_not be_nil
+      assigns(:estimate).should be_instance_of(Estimate) 
+      assigns(:estimate).should_not be_persisted
+      # response.should render_template("new")
+      response.should redirect_to(:controller => 'home', :action => 'errors')
+      Estimate.count.should == (@num_items)
+    end
+    it 'should be able to PUT update on own estimate' do
+      estimate = FactoryGirl.create(:estimate, :sales_rep => @sales_rep_me, :job_type => @job_type, :state => @state )
+      Rails.logger.debug("TTTTTT estimate = #{estimate.inspect.to_s}")
+      Estimate.count.should == 1
+      new_attribs = FactoryGirl.attributes_for(:estimate_accessible)
+      Rails.logger.debug("TTTTTT new_attribs = #{new_attribs.inspect.to_s}")
+      put :update, :id => estimate.id, :estimate => new_attribs
+      updated_item = Estimate.find(estimate.id)
+      Rails.logger.debug("TTTTTT updated_item = #{updated_item.inspect.to_s}")
+      updated_item.should_not be_nil
+      new_attribs.each  do |key, value|
+        Rails.logger.debug("T assembly_controller_spec udpate - match on:#{key.to_s}")
+        updated_item.send(key.to_sym).should eq(new_attribs[key.to_sym])
+      end
+      # response.should render_template("show")
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
+      response.should redirect_to(:controller => 'estimates', :action => 'show')
+    end
+    it 'should not be able to PUT update an other salesreps estimate' do
+      prep_estimate_create
+      estimate = FactoryGirl.create(:estimate, :sales_rep => @sales_rep_other, :job_type => @job_type, :state => @state )
+      Estimate.count.should == 1
+      new_attribs = FactoryGirl.attributes_for(:estimate_accessible)
+      put :update, :id => estimate.id, :estimate => new_attribs
+      # response.should redirect_to(:controller => 'home', :action => 'errors')
+      response.should be_success
+      response.should render_template('/edit')
+    end
+    it 'should be able to GET show an item' do
+      estimate = FactoryGirl.create(:estimate, :sales_rep => @sales_rep_me, :job_type => @job_type, :state => @state )
+      Estimate.count.should == 1
+      get :show, :id => estimate.id
+      response.should be_success
+      response.should render_template('/show')
+      assigns(:estimate).should_not be_nil
+      assigns(:estimate).should be_a(Estimate)
+      assigns(:estimate).should be_instance_of(Estimate) 
+      assigns(:estimate).should eq(estimate)
+    end
   end
   
   context 'misc - ' do

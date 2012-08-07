@@ -41,7 +41,7 @@ comp_type_totals = Hash.new()
 			if est_comp.nil?
 %>
 				<div class="field">
-					<%= label_tag "estimate_components[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_0]", ass_comp.nil_to_s, :class => 'label' %>
+					<%= label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
 					<span class="value">
 					</span>
 				</div>
@@ -52,8 +52,8 @@ comp_type_totals = Hash.new()
 				ea_total += BigDecimal.new(sprintf('%.2f',est_comp.value),2)
 %>
 			<div class="field">
-				<%= label_tag "estimate_components_[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_#{est_comp.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
-				<span class="value">
+				<%= label_tag "estimate_components_[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
+				<span class="value" id="estimate_components_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
 				<%= sprintf('%.2f',est_comp.value) if (est_comp) %>
 				</span>
 			</div>
