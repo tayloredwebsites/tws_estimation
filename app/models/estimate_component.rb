@@ -40,26 +40,26 @@ class EstimateComponent < ActiveRecord::Base
   # end
   # 
   
-  # method to create new estimate component from these parameters, default value is from :key_string (passed in post)
-  # first pulls IDs from :key_string, then if any ids are passed, then they override the key string values
-  def params_from_keys(new_from_params = {})
-    key_string = new_from_params[:key_string].nil? ? "0_0_0_0" : new_from_params[:key_string]
-    est_comp_ids = key_string.split("_") # [#{@estimate.id}_#{ass.id}_#{component.id}_#{est_comp.id.to_s}]
-    estimate_id = new_from_params[:estimate_id].blank? ? (est_comp_ids[0].blank? ? "0" : est_comp_ids[0]) : new_from_params[:estimate_id]
-    assembly_id = new_from_params[:assembly_id].blank? ? (est_comp_ids[1].blank? ? "0" : est_comp_ids[1]) : new_from_params[:assembly_id]
-    component_id = new_from_params[:component_id].blank? ? (est_comp_ids[2].blank? ? "0" : est_comp_ids[2]) : new_from_params[:component_id]
-    new_from_params.delete(:key_string).merge(:estimate_id => estimate_id, :assembly_id => assembly_id, :component_id => component_id)
-    self.new(new_from_params)
-  end
+  # # method to create new estimate component from these parameters, default value is from :key_string (passed in post)
+  # # first pulls IDs from :key_string, then if any ids are passed, then they override the key string values
+  # def params_from_keys(estimate_id, new_from_params = {})
+  #   key_string = new_from_params[:key_string].nil? ? "0_0" : new_from_params[:key_string]  # [#{ass.id}_#{component.id}]
+  #   est_comp_ids = key_string.split("_")
+  #   # estimate_id = new_from_params[:estimate_id].blank? ? (est_comp_ids[0].blank? ? "0" : est_comp_ids[0]) : new_from_params[:estimate_id]
+  #   assembly_id = new_from_params[:assembly_id].blank? ? (est_comp_ids[0].blank? ? "0" : est_comp_ids[0]) : new_from_params[:assembly_id]
+  #   component_id = new_from_params[:component_id].blank? ? (est_comp_ids[1].blank? ? "0" : est_comp_ids[1]) : new_from_params[:component_id]
+  #   new_from_params.delete(:key_string).merge(:estimate_id => estimate_id, :assembly_id => assembly_id, :component_id => component_id)
+  #   self.new(new_from_params)
+  # end
   
   # method to create new estimate component from these parameters, default value is from :key_string (passed in post)
   # first pulls IDs from :key_string, then if any ids are passed, then they override the key string values
-  def self.params_from_key_string(key_string = "0_0_0_0")
-    ids = key_string.split("_") # [#{@estimate.id}_#{ass.id}_#{component.id}_#{est_comp.id.to_s}]
+  def self.params_from_key_string(key_string = "0_0")
+    ids = key_string.split("_") # [#{ass.id}_#{component.id}]
     ret = Hash.new
-    ret[:estimate_id] = ids[0] if !ids[0].blank?
-    ret[:assembly_id] = (ids[1].blank? ? "0" : ids[1])
-    ret[:component_id] = (ids[2].blank? ? "0" : ids[2])
+    # ret[:estimate_id] = ids[0] if !ids[0].blank?
+    ret[:assembly_id] = (ids[0].blank? ? "0" : ids[0])
+    ret[:component_id] = (ids[1].blank? ? "0" : ids[1])
     return ret
   end
 

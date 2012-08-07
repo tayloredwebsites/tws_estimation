@@ -3,9 +3,7 @@ class Estimate < ActiveRecord::Base
   include Models::Deactivated
   include Models::CommonMethods
   
-  attr_accessible :title, :customer_name, :customer_note, :prevailing_wage, :note, :deactivated, :sales_rep_id, :job_type_id, :state_id, :estimate_assemblies, :estimate_component_attributes
-
-  # attr_accessor :estimate_components_new
+  attr_accessible :title, :customer_name, :customer_note, :prevailing_wage, :note, :deactivated, :sales_rep_id, :job_type_id, :state_id, :estimate_assemblies, :estimate_components
 
   belongs_to :sales_rep
   belongs_to :job_type

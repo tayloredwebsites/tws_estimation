@@ -4,20 +4,22 @@ require 'spec_helper'
 include UserIntegrationHelper
 include ApplicationHelper
 
-describe 'Estimates Integration Tests' do
+describe 'Estimates Integration Tests', :js => false do
 
   before(:each) do
-    @user1 = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
+    @user1 = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
     @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
-    helper_signin(:admin_user_full_create_attr, @me.full_name)
-    visit home_index_path
-    Rails.logger.debug("T estimates_integration_spec Admin item logged in before - done")
     @sales_rep = SalesRep.create!(generate_sales_rep_accessible_attributes(user_id = @user1.id))
     @job_type = FactoryGirl.create(:job_type)
     @state = FactoryGirl.create(:state)
     @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
   end
   context 'it should have crud actions available and working' do
+    before(:each) do
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
+      visit home_index_path
+      Rails.logger.debug("T estimates_integration_spec Admin item logged in")
+    end
     it "should create a new item" do
       num_items = Estimate.count
       visit new_estimate_path()
@@ -189,6 +191,9 @@ describe 'Estimates Integration Tests' do
   end
   context 'component layouts - ' do
     before(:each) do
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
+      visit home_index_path
+      Rails.logger.debug("T estimates_integration_spec Admin item logged in")
       @item1 = Estimate.create!(@estimate_attributes)
     end
     context 'should have index/list row links working' do
@@ -232,28 +237,6 @@ describe 'Estimates Integration Tests' do
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
       end
     end
-    # context 'should have menu links working' do
-    #   before(:each) do
-    #     visit estimates_menu_path()
-    #     # save_and_open_page
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.menu.header')}$/
-    #     page.should have_selector(:xpath, "//span[@id='index_action']/a", :text => I18n.translate('estimates.index.action') )
-    #     page.should have_selector(:xpath, "//span[@id='list_action']/a", :text => I18n.translate('estimates.list.action') )
-    #     page.should have_selector(:xpath, "//span[@id='new_action']/a", :text => I18n.translate('estimates.new.action') )
-    #   end
-    #   it 'has clickable index link' do
-    #     find(:xpath, "//span[@id='index_action']/a", :text => I18n.translate('estimates.index.action') ).click
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.index.header')}$/
-    #   end
-    #   it 'has clickable list link' do
-    #     find(:xpath, "//span[@id='list_action']/a", :text => I18n.translate('estimates.list.action') ).click
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.list.header')}$/
-    #   end
-    #   it 'has clickable create new link' do
-    #     find(:xpath, "//span[@id='new_action']/a", :text => I18n.translate('estimates.new.action') ).click
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
-    #   end
-    # end
     context 'should have new/create links working' do
       before(:each) do
         visit new_estimate_path()
@@ -323,10 +306,9 @@ describe 'Estimates Integration Tests' do
   end
   context 'it should have deactivated actions available and working' do
     before(:each) do
-      # # have existing instance variables already available for testing: @sales_rep, @job_type, @state, @estimate_attributes
-      # all_attribs = @estimate_attributes
-      # item1 = Estimate.create!(@estimate_attributes)
-      # item1.deactivated?.should be_false
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
+      visit home_index_path
+      Rails.logger.debug("T estimates_integration_spec Admin item logged in")
       @user2 = User.create!(FactoryGirl.attributes_for(:user_create))
       @sales_rep2 = SalesRep.create!(generate_sales_rep_accessible_attributes(user_id = @user2.id))
       @estimate_deact_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep2.id, :job_type_id => @job_type.id, :state_id => @state.id, :deactivated => true )
@@ -408,6 +390,23 @@ describe 'Estimates Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
       page.should_not have_selector(:xpath, "//*[@id=\"estimate_deactivated_true\" and @checked]")
       page.should have_selector(:xpath, "//*[@id=\"estimate_deactivated_false\" and @checked]")
+    end
+    it 'should not be able to select a deactivated sales reps' do
+      # Rails.logger.debug("T Create @user_deact")
+      @user_deact = FactoryGirl.create(:user_create)
+      # Rails.logger.debug("T Create @sales_rep_deact")
+      @sales_rep_deact = FactoryGirl.create(:sales_rep_accessible_create, :user => @user_deact)
+      # Rails.logger.debug("T @sales_rep_deact = #{@sales_rep_deact.inspect.to_s}")
+      # Rails.logger.debug("T @sales_rep_deact.user = #{@sales_rep_deact.user.inspect.to_s}")
+      num_items = Estimate.count
+      visit new_estimate_path()
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      # save_and_open_page      
+      Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+      page.should have_selector(:xpath, "//select[@id=\"estimate_sales_rep_id\"]/option", :text => @user1.username)
+      page.should have_selector(:xpath, "//select[@id=\"estimate_sales_rep_id\"]/option", :text => @user2.username)
+      page.should_not have_selector(:xpath, "//select[@id=\"estimate_sales_rep_id\"]/option", :text => @user_deact.username)
     end
     it 'controller should list items with deactivate/reactivate action/link/button depending upon status' do
       item1 = Estimate.create!(@estimate_attributes)
@@ -591,6 +590,9 @@ describe 'Estimates Integration Tests' do
 
   context 'it should list estimate assemblies checkboxes - ' do
     before(:each) do
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
+      visit home_index_path
+      Rails.logger.debug("T estimates_integration_spec Admin item logged in")
       FactoryGirl.create(:assembly_create)
       FactoryGirl.create(:assembly_create)
       FactoryGirl.create(:assembly_create, :required => true)
@@ -674,20 +676,225 @@ describe 'Estimates Integration Tests' do
   end
 
   context 'it should list estimate components - ' do
-    before(:each) do    
+    before(:each) do
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
+      visit home_index_path
+      Rails.logger.debug("T estimates_integration_spec Admin item logged in")
+      helper_load_defaults
+      helper_load_component_types
+      helper_load_components
+      helper_load_assemblies
+      helper_load_assembly_components
     end
-    it 'should list the components for the selected estimate assemblies in view'
-    it 'should list the components for the selected estimate assemblies in edit'
-    it 'should list the components for the selected estimate assemblies in view after update'
+    it 'should list the components for the selected estimate assemblies in new/create view after create', :js => true do
+      num_items = Estimate.count
+      visit new_estimate_path()
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      # save_and_open_page      
+      Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+      within(".new_estimate") do
+        @estimate_attributes.each do |at_key, at_value|
+          if at_value.is_a?(TrueClass)
+            page.choose("estimate_#{at_key.to_s}_true")
+          elsif at_value.is_a?(FalseClass)
+            page.choose("estimate_#{at_key.to_s}_false")
+          elsif at_key =~ /_id$/
+            # do association selects manually (capybara select method only selects by value, not ID)
+          else
+            page.fill_in "estimate_#{at_key.to_s}", :with => at_value
+          end
+        end
+        page.select @sales_rep.username.to_s, :from => 'estimate_sales_rep_id'
+        page.select @job_type.name.to_s, :from => 'estimate_job_type_id'
+        page.select @state.name.to_s, :from => 'estimate_state_id'
+        page.check("estimate_assemblies_#{@assemblies[1].id.to_s}")
+        find("#assembly_#{@assemblies[1].id.to_s}/h3").click
+        page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}", :with => '876.12'
+        # save_and_open_page      
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      # page.driver.status_code.should be 200
+      # response.status.should be(200)  # status is not available with :js => true (selenium driver)
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
+      page.should_not have_selector(:xpath, '//*', :text => 'translation missing:')
+      @estimate_attributes.each do | at_key, at_val |
+        if at_key.to_s == 'deactivated'
+          Rails.logger.debug("T estimates_integration_spec updated attribs - deactivated")
+          find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(at_val)}\z/ 
+        elsif at_val.is_a?(TrueClass)
+          Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s} - TrueClass")
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /^true$/
+        elsif at_val.is_a?(FalseClass)
+          Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s} - FalseClass")
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /^false$/
+        elsif at_key =~ /_id$/
+          # do association selects manually (capybara select method only selects by value, not ID)
+        else
+          Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s}")
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/ 
+        end
+      end
+      find(:xpath, '//*[@id="estimate_sales_rep"]').text.should =~ /^#{@sales_rep.nil_to_s}$/
+      find(:xpath, '//*[@id="estimate_job_type"]').text.should =~ /\A#{@job_type.nil_to_s}\z/
+      find(:xpath, '//*[@id="estimate_state"]').text.should =~ /\A#{@state.nil_to_s}\z/
+      find("#assembly_#{@assemblies[1].id.to_s}/h3").click
+      find(:xpath, "//*[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}\"]").text.should =~ /\A876.12\z/ 
+      # find(:xpath, '//*[@id="estimate_description"]').text.should =~ /\AMy Description\z/  # be new value
+      num_items.should == Estimate.count - 1
+      # save_and_open_page
+    end
+    it 'should list the components for the selected estimate assemblies in edit/update, view after update', :js => true do
+      all_attribs = @estimate_attributes
+      estimate = Estimate.create!(@estimate_attributes)
+      num_items = Estimate.count
+      estimate.deactivated?.should be_false
+      visit edit_estimate_path (estimate.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      # save_and_open_page      
+      Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+      within(".edit_estimate") do
+        @estimate_attributes.each do |at_key, at_value|
+          if at_value.is_a?(TrueClass)
+            page.choose("estimate_#{at_key.to_s}_true")
+          elsif at_value.is_a?(FalseClass)
+            page.choose("estimate_#{at_key.to_s}_false")
+          elsif at_key =~ /_id$/
+            # do association selects manually (capybara select method only selects by value, not ID)
+          else
+            page.fill_in "estimate_#{at_key.to_s}", :with => at_value
+          end
+        end
+        page.select @sales_rep.username.to_s, :from => 'estimate_sales_rep_id'
+        page.select @job_type.name.to_s, :from => 'estimate_job_type_id'
+        page.select @state.name.to_s, :from => 'estimate_state_id'
+        page.check("estimate_assemblies_#{@assemblies[1].id.to_s}")
+        find("#assembly_#{@assemblies[1].id.to_s}/h3").click
+        page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}", :with => '876.12'
+        # save_and_open_page      
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      # page.driver.status_code.should be 200
+      # response.status.should be(200)  # status is not available with :js => true (selenium driver)
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
+      page.should_not have_selector(:xpath, '//*', :text => 'translation missing:')
+      @estimate_attributes.each do | at_key, at_val |
+        if at_key.to_s == 'deactivated'
+          Rails.logger.debug("T estimates_integration_spec updated attribs - deactivated")
+          find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(at_val)}\z/ 
+        elsif at_val.is_a?(TrueClass)
+          Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s} - TrueClass")
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /^true$/
+        elsif at_val.is_a?(FalseClass)
+          Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s} - FalseClass")
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /^false$/
+        elsif at_key =~ /_id$/
+          # do association selects manually (capybara select method only selects by value, not ID)
+        else
+          Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s}")
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/ 
+        end
+      end
+      find(:xpath, '//*[@id="estimate_sales_rep"]').text.should =~ /^#{@sales_rep.nil_to_s}$/
+      find(:xpath, '//*[@id="estimate_job_type"]').text.should =~ /\A#{@job_type.nil_to_s}\z/
+      find(:xpath, '//*[@id="estimate_state"]').text.should =~ /\A#{@state.nil_to_s}\z/
+      find("#assembly_#{@assemblies[1].id.to_s}/h3").click
+      find(:xpath, "//*[@id=\"assembly_#{@assemblies[1].id.to_s}\"]/h3").click
+      # find(:xpath, "//*[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}\"]").text.should =~ /\A876.12\z/ 
+      # find(:xpath, '//*[@id="estimate_description"]').text.should =~ /\AMy Description\z/  # be new value
+      num_items.should == Estimate.count
+      # save_and_open_page
+    end
   end
   
   context 'it should only let non-admin sales rep see, create or modify own estimates' do
-    it 'should have the salesrep not be a select box'
-    it 'should not allow sales rep to new/create estimates for other sales reps'
-    it 'should only list own estimates in index'
-    it 'should not see estimates by Sales Rep menu item'
-    it 'should not allow sales rep to view estimates for other sales reps'
-    it 'should not allow sales rep to edit/update estimates for other sales reps'
+    before(:each) do
+      helper_signin(:reg_user_full_create_attr, @user1.full_name)
+      Rails.logger.debug("T estimates_integration_spec regular user logged in")
+      visit home_index_path
+      Rails.logger.debug("T estimates_integration_spec User1 logged in")
+      @user2 = User.create!(FactoryGirl.attributes_for(:user_create))
+      @sales_rep2 = SalesRep.create!(generate_sales_rep_accessible_attributes(user_id = @user2.id))
+      @estimate_rep2_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep2.id, :job_type_id => @job_type.id, :state_id => @state.id)
+    end
+    it 'should only index own estimates' do
+      estimate_rep1 = Estimate.create!(@estimate_attributes)
+      estimate_rep2 = Estimate.create!(@estimate_rep2_attributes)
+      Estimate.count.should == 2
+      visit estimates_path()
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.index.header')}$/
+      page.should have_selector(:xpath, "//tr[@id=\"estimate_#{estimate_rep1.id.to_s}\"]")
+      page.should_not have_selector(:xpath, "//tr[@id=\"estimate_#{estimate_rep2.id.to_s}\"]")
+    end
+    it 'should only list own estimates' do
+      estimate_rep1 = Estimate.create!(@estimate_attributes)
+      estimate_rep2 = Estimate.create!(@estimate_rep2_attributes)
+      Estimate.count.should == 2
+      visit estimates_path()
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.index.header')}$/
+      page.should have_selector(:xpath, "//tr[@id=\"estimate_#{estimate_rep1.id.to_s}\"]")
+      page.should_not have_selector(:xpath, "//tr[@id=\"estimate_#{estimate_rep2.id.to_s}\"]")
+    end
+    it 'should not allow sales rep to new/create estimates for other sales reps' do
+      num_items = Estimate.count
+      visit new_estimate_path()
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      # save_and_open_page      
+      # Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+      page.should have_selector(:xpath, "//select[@id=\"estimate_sales_rep_id\"]/option", :text => @user1.username)
+      page.should_not have_selector(:xpath, "//select[@id=\"estimate_sales_rep_id\"]/option", :text => @user2.username)
+    end
+    it 'should not see estimates by Sales Rep menu item' do
+      visit new_estimate_path()
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      # save_and_open_page      
+      # Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+      page.should have_selector(:xpath, "//li[@id=\"lnav_estim_Estimate_list\"]")
+      page.should_not have_selector(:xpath, "//li[@id=\"lnav_estim_Estimate_menu_Estimate_index\"]")
+      page.should_not have_selector(:xpath, "//li[@id=\"lnav_estim_Estimate_menu_Estimate_list\"]")
+    end
+    it 'should allow sales rep to view own estimates' do
+      estimate_rep1 = Estimate.create!(@estimate_attributes)
+      Estimate.count.should == 1
+      visit estimate_path(estimate_rep1.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+    end
+    it 'should not allow sales rep to view estimates for other sales reps' do
+      estimate_rep2 = Estimate.create!(@estimate_rep2_attributes)
+      Estimate.count.should == 1
+      visit estimate_path(estimate_rep2.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('estimates.show.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
+    end
+    it 'should allow sales rep to edit own estimates' do
+      estimate_rep1 = Estimate.create!(@estimate_attributes)
+      Estimate.count.should == 1
+      visit edit_estimate_path(estimate_rep1.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+    end
+    it 'should not allow sales rep to edit estimates for other sales reps' do
+      estimate_rep2 = Estimate.create!(@estimate_rep2_attributes)
+      Estimate.count.should == 1
+      visit edit_estimate_path(estimate_rep2.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
+    end
   end
   
   context 'misc - ' do
