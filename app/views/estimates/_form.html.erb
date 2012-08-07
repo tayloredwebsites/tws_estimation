@@ -28,7 +28,7 @@
 <div class="field">
     <%= f.label :sales_rep, I18n.translate('estimates.field_name.sales_rep'), :class => 'label' %>
     <span class="value">
-        <%= collection_select( :estimate, :sales_rep_id, SalesRepsController.list, :id, :username, { :include_blank => true }) %>
+        <%= collection_select( :estimate, :sales_rep_id, SalesRep.scope_not_deactivated.accessible_by(current_ability, :index), :id, :username, { :include_blank => true }) %>
     </span>
 </div>
 

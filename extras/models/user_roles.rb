@@ -81,12 +81,22 @@ module Models::UserRoles
     end
   end
     
-    # public instance method to confirm if a user has been assigned a role.
-    def has_role? (role_in)
-      # Rails.logger.debug("* Models::UserRoles.has_role? self.roles:#{self.roles}, role_in:#{role_in}")
-        (to_array_if_not(self.roles)).index(role_in.to_s) != nil
+  # public instance method to confirm if a user has been assigned a role.
+  def has_role? (role_in)
+    # Rails.logger.debug("* Models::UserRoles.has_role? self.roles:#{self.roles}, role_in:#{role_in}")
+      (to_array_if_not(self.roles)).index(role_in.to_s) != nil
+  end
+  
+  # public instance method to confirm if a user has been assigned a role.
+  def has_role_in? (roles_in = [])
+    # Rails.logger.debug("* Models::UserRoles.has_role_in? self.roles:#{self.roles}, role_in:#{roles_in.inspect.to_s}")
+    ret_val = false
+    roles_in.each do |a_role|
+      ret_val = true if (to_array_if_not(self.roles)).index(a_role.to_s) != nil
     end
-    
+    ret_val
+  end
+  
     # method to return a string of validated roles from the roles passed in
     def validate_roles(new_roles)
     Rails.logger.debug("* UserRoles - validate_roles - #{self.username.to_s} new_roles:#{new_roles.inspect.to_s}")

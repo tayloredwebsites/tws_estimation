@@ -14,7 +14,7 @@
       <span class="value"><h4><%= I18n.translate('action', :scope => @page_scope) %></h4></span>
     </div>
 
-<% if can? :manage, Assembly %>
+<% if can? :manage, EstimateAssembly %>
 
     <div class="field">
         <span class="label"><label for="index_action"><%= I18n.translate('index.action', :scope => @controller_scope) %></span>
@@ -31,7 +31,7 @@
 
 <% else %>
 
-    <div class="error"><%= i18n.translate('errors.access_denied_msg', :msg => i18n.translate('title', :scope => @controller_scope) ) %></div>
+    <div class="error"><%= I18n.translate('errors.access_denied_msg', :msg => '' ) %></div>
     
     <div class="field">
       <label for="edit_action"><%= I18n.translate('users_sessions.signin.action') %></label>

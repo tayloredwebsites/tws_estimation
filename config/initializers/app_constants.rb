@@ -28,21 +28,26 @@ DB_VALUES = {
 MENU_ITEMS = {
 #  :all => {:id => 'all', :actual => 'false', :type => 'system', :resources => ['Home', 'User', 'Default']},
 #  :home => {:id => 'home', :actual => 'true', :type => 'shared'},
-  :guest => {:app_id => 'guest', :menu_items => {
+  :guest => {:app_id => 'guest', :roles => ['guest_users'], :menu_items => {
     :home => {:class_name => "UserSession", :action => :index, :start_uri => "/"},
     :user_signin => {:class_name => "UserSession", :action => :sign_in, :start_uri => "/signin"},
     :user_signout => {:class_name => "UserSession", :action => :sign_out, :start_uri => "/signout"}
   } },
-  :estimuser => {:app_id => 'estim', :menu_items => {
-    :estimates => {:class_name => "Estimate", :action => :menu, :start_uri => "/estimates/menu", :menu_items => {
-      :estimates_index => {:class_name => "Estimate", :action => :index, :start_uri => "/estimates"},
-      :estimates_list => {:class_name => "Estimate", :action => :list, :start_uri => "/estimates/list"}
-    } }
-  } },
-  :maint => {:app_id => 'maint', :menu_items => {
+  :maint => {:app_id => 'maint', :roles => ['maint_admins', 'all_admins'], :menu_items => {
     :users => {:class_name => "User", :action => :index, :start_uri => "/users"}
   } },
-  :estimmaint => {:app_id => 'estim', :menu_items => {
+  :estimuser => {:app_id => 'estim', :roles => ['estim_users'], :menu_items => {
+    :estim_list => {:class_name => "Estimate", :action => :list, :start_uri => "/estimates/list" },
+    :estim_new => {:class_name => "Estimate", :action => :new, :start_uri => "/estimates/new" }
+  } },
+  :estimadmin => {:app_id => 'estim', :roles => ['estim_admins', 'all_admins'], :menu_items => {
+    :estim_admin => {:class_name => "Estimate", :action => :menu, :start_uri => "/estimates/menu", :menu_items => {
+      :estimates_index => {:class_name => "Estimate", :action => :index, :start_uri => "/estimates"},
+      :estimates_list => {:class_name => "Estimate", :action => :list, :start_uri => "/estimates/list"},
+      :estimates_new => {:class_name => "Estimate", :action => :new, :start_uri => "/estimates/new"}
+    } },
+  } },
+  :estimmaint => {:app_id => 'estim', :roles => ['estim_admins', 'all_admins'], :menu_items => {
     :defaults => {:class_name => "Default", :action => :index, :start_uri => "/defaults"},
     :component_types => {:class_name => "ComponentType", :action => :index, :start_uri => "/component_types"},
     :components => {:class_name => "Component", :action => :menu, :start_uri => "/components/menu", :menu_items => {
@@ -61,7 +66,7 @@ MENU_ITEMS = {
     :job_types => {:class_name => "JobType", :action => :index, :start_uri => "/job_types"},
     :states => {:class_name => "State", :action => :index, :start_uri => "/states"}
   } },
-  :prevail => {:app_id => 'prevail', :menu_items => {
+  :prevail => {:app_id => 'prevail', :roles => ['prevail_users', 'prevail_admins', 'all_admins'], :menu_items => {
   } }
 }
 

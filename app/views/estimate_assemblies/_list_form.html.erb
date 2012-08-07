@@ -18,7 +18,7 @@
 				<%= check_box_tag "estimate_assemblies[#{ass.id.to_s}]", ass.id.to_s, ea_checked, :name => "estimate_assemblies[#{ass.id.to_s}]", :class => 'disable_when_off' %>
 				<%= hidden_field_tag("estimate_assemblies_was[#{ass.id.to_s}]",  ea_checked, :id => "estimate_assembly_#{ass.id.to_s}_was") %>
 			</span>
-		    <%= label_tag "assembly_#{ass.id.to_s}", ass.nil_to_s, :class => 'span_after_label' %>
+		    <%= label_tag "estimate_assemblies_#{ass.id.to_s}", ass.nil_to_s, :class => 'span_after_label' %>
 		</span>
 <% 	end # !deactivated or selected
 end # if table.each %>

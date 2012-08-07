@@ -116,51 +116,6 @@ describe EstimateComponent do
     end
   end
 
-  context "Estimate update attributes passed to EstimateComponent - " do
-    before (:each) do
-      @attribs = generate_estimate_accessible_attributes
-      @assembly = Assembly.create!(FactoryGirl.attributes_for(:assembly_create))
-      component_type1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
-      @component1 = FactoryGirl.create(:component_create, component_type: component_type1)
-      @component2 = FactoryGirl.create(:component_create, component_type: component_type1)
-    end
-    it "Estimate.create should call the update_estimate_component_attributes of Estimate" # do
-    #   Rails.logger.debug("T attribs = #{@attribs.inspect.to_s}")
-    #   estimate = Estimate.new(@attribs)
-    #   a_attribs1 = {:estimate_id=>"0", :assembly_id=>"#{@assembly.id.to_s}", :selected => true}
-    #   Rails.logger.debug("T a_attribs1 = #{a_attribs1.inspect.to_s}")
-    #   estimate.estimate_assemblies.build(a_attribs1)
-    #   # c_attribs = EstimateComponent.params_from_key_string("#{estimate.id}_#{@assembly.id}_#{@component1.id}_0").merge(:value => "123.48")
-    #   c_attribs = EstimateComponent.params_from_key_string("0_#{@assembly.id}_#{@component1.id}_0").merge(:value => "123.48")
-    #   Rails.logger.debug("T c_attribs = #{c_attribs.inspect.to_s}")
-    #   estimate.estimate_components.build(c_attribs)
-    #   Rails.logger.debug("T estimate.estimate_components = #{estimate.estimate_components.inspect.to_s}")
-    #   estimate.save!
-    #   # estimate.update_attributes(@attribs)
-    #   item1_updated = Estimate.find(estimate.id)
-    #   Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")
-    #   Rails.logger.debug("T item1_updated.estimate_components = #{item1_updated.estimate_components.inspect.to_s}")
-    #   # item1_updated.estimate_components.first.assembly_id.should == @assembly.id
-    #   item1_updated.estimate_components.first.component_id.should == @component1.id
-    # end
-    it "Estimate.update_attributes should call the update_estimate_component_attributes of Estimate" do
-      Rails.logger.debug("T attribs = #{@attribs.inspect.to_s}")
-      estimate = Estimate.create!(@attribs)
-      est_comp = EstimateComponent.new()
-      # est_comp.estimate_id = est_comp_ids[0]
-      est_comp.estimate_id = estimate.id
-      est_comp.assembly_id = @assembly.id
-      est_comp.component_id = @component2.id
-      est_comp.value = BigDecimal(123.48,2)
-      est_comp.save!
-      item1_updated = Estimate.find(estimate.id)
-      Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")
-      Rails.logger.debug("T item1_updated.estimate_components = #{item1_updated.estimate_components.inspect.to_s}")
-      # item1_updated.estimate_components.first.assembly_id.should == @assembly.id
-      item1_updated.estimate_components.first.component_id.should == @component2.id
-    end
-  end
-
   context 'misc - ' do
     it 'should have estimate calculations performed'
   end

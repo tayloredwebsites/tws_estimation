@@ -41,10 +41,10 @@ comp_type_totals = Hash.new()
 			if est_comp.nil?
 %>
 				<div class="field">
-					<%= label_tag "estimate_components[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_0]", ass_comp.nil_to_s, :class => 'label' %>
+					<%= label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
 					<span class="value">
-				<%= text_field_tag "estimate_components[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_0]", '' %>
-				<%= hidden_field_tag("estimate_components_was[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_0]",  '') %>
+				<%= text_field_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", '' %>
+				<%= hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  '') %>
 					</span>
 				</div>
 <%
@@ -54,10 +54,10 @@ comp_type_totals = Hash.new()
 				ea_total += BigDecimal.new(sprintf('%.2f',est_comp.value),2)
 %>
 			<div class="field">
-				<%= label_tag "estimate_components_[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_#{est_comp.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
+				<%= label_tag "estimate_components_[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
 				<span class="value">
-				<%= text_field_tag "estimate_components[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_#{est_comp.id.to_s}]", est_comp.value %>
-				<%= hidden_field_tag("estimate_components_was[#{@estimate.id.to_s}_#{ass.id.to_s}_#{ass_comp.component.id.to_s}_#{est_comp.id.to_s}]",  est_comp.value) %>
+				<%= text_field_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.value %>
+				<%= hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp.value) %>
 				</span>
 			</div>
 <%
