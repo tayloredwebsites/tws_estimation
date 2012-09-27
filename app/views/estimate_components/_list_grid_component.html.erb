@@ -1,0 +1,35 @@
+<%
+%>
+				<tr class="grid_row">
+					<td class="grid_row_label" id="grid_label_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>">
+<%
+# display_value = operation_value.bd_to_s(2)
+if editable && view_mode == 'edit'
+	concat label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label'
+	concat text_field_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str
+	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_str)
+else
+	concat ass_comp.nil_to_s+' ( '+ass_comp.component.op_scope+' '+ass_comp.component.op_operand+' '+est_comp_value_str+')'
+end
+%>
+					</td>
+<%
+row_total = BIG_DECIMAL_ZERO
+@component_types_list.each do |ct|
+	if ct.in_totals_grid
+		row_total += comp_calculations[ct.id] if !comp_calculations[ct.id].nil?
+		# only show calculations (debug_str) if hourly calculation on hours or dollar calculation on dollars
+		dollar_calc = ass_comp.component.op_scope != 'H' && is_in_dollars[ct.id]
+		hourly_calc = ass_comp.component.op_scope == 'H' && !is_in_dollars[ct.id]
+		show_debug = (dollar_calc || hourly_calc) ? true : false
+		Rails.logger.debug("VVVVShowDebug show_debug = #{show_debug}, dollar_calc = #{dollar_calc}, hourly_calc = #{hourly_calc}, ass_comp.component.op_scope = #{ass_comp.component.op_scope.inspect.to_s}, is_in_dollars[ct.id] = #{is_in_dollars[ct.id].inspect.to_s}, debug_inputs = #{debug_inputs.inspect.to_s}, comp_calculations = #{comp_calculations.inspect.to_s}")
+		debug_str = (defined?(debug_inputs) && show_debug) ? ( debug_inputs[ct.id].bd_to_s(2) )+debug_formula+' = ' : ''  #  && !debug_inputs[ct.id].nil?
+		
+%>
+					<td class="grid_row_calc" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_<%= ct.id.to_s %>"><%= debug_str+comp_calculations[ct.id].bd_to_s(2) %></td>
+<%
+	end
+end
+%>
+					<td class="grid_row_calc grid_row_sub_total" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_total"><%= row_total.bd_to_s(2) %></td>
+				</tr>

@@ -6,13 +6,51 @@ describe 'Miscellaneous items to do - ' do
     it 'should confirm all deactivations make sense and work and test out properly'
     it 'should add the tests for translations missing - context to integration specs for all resources'
     it 'should prevent Active Record Error! after deactivating in hide deactivated mode'
+    it 'should not list component type column in totals grid if not in estimate? note by hiding, may impact calculations if added, lose reminder, different estimate job types '
+    it 'should flag users that totals are wrong after some input'
+    it 'should not reference @model - effects tws_auth also'
+    it 'should list estimates by sales rep in proper order'
+    it 'should list estimates by title in proper order'
+    it 'should not have default values in unselected assemblies'
+    it 'should not accumulate values in unselected assemblies'
+    it 'should not show subtotals if all subtotal_group entries are blank'
+    it 'should not subtotal deactivated components'   
   end
+  context 'misc. tests - ' do
+    context 'i18n testing' do
+      context 'Logged Out user systems' do
+        it 'should have no translations missing'
+      end
+      context 'Regular user systems' do
+        before(:each) do
+          @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
+          helper_signin(:reg_user_full_create_attr, @me.full_name)
+          visit home_index_path
+          Rails.logger.debug("T System Tests - Regular user systems - before each is done.")
+        end
+        it 'should have no translations missing'
+      end
+      context 'Administrator user systems' do
+        before(:each) do
+          @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
+          helper_signin(:admin_user_full_create_attr, @me.full_name)
+          visit home_index_path
+        end
+        it 'should have no translations missing'
+      end
+    end
+  end
+  
   context 'tws_auth cleanup' do
     it 'should add the translations missing - context to integration specs for all resources'
+    it 'should not reference @model - effects tws_estimate also'
   end
   context 'resolve difference between role system and left menu systems' do
     it 'should resolve if the @systemc is needed'
     it 'should allow hide and show of left nav sub components'
+  end
+  context 'remove warnings' do
+    it "should replace all :confirm options with :data => { :confirm => 'Text' }"
   end
   context 'updates to tws_views generator - '
     it 'should have nil_to_s code in common model code (note need code for not deactivated models)'
@@ -25,7 +63,7 @@ describe 'Miscellaneous items to do - ' do
     it 'should ensure that username comes from name in email address (less @domain)'
     it 'should send user their reset password'
   end
-  context 'use paper trail instead of deactivated module' do
+  context 'use audit instead of deactivated module' do
     it 'should confirm that paper trail will easily provice reactivations'
     it 'should provide simple migration from deactivated to paper trail - including view generators'
     it 'should look into seeing if paper trail can provide an audit trail - listing using hash vs active object'

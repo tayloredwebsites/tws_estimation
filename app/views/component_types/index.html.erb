@@ -13,8 +13,8 @@
     <th><%= I18n.translate('component_types.field_name_short.has_costs') %></th>
     <th><%= I18n.translate('component_types.field_name_short.has_hours') %></th>
     <th><%= I18n.translate('component_types.field_name_short.has_vendor') %></th>
-    <th><%= I18n.translate('component_types.field_name_short.has_misc') %></th>
-    <th><%= I18n.translate('component_types.field_name_short.no_entry') %></th>
+    <th><%= I18n.translate('component_types.field_name_short.has_totals') %></th>
+    <th><%= I18n.translate('component_types.field_name_short.in_totals_grid') %></th>
         <% if (@deactivated_module) %>
             <% if show_deactivated? %>
             <th><%= I18n.translate('component_types.field_name_short.deactivated') %></th>
@@ -41,8 +41,8 @@
         <td id="<%= "component_type_#{item.id}_has_costs" %>"><%= item.has_costs %></td>
         <td id="<%= "component_type_#{item.id}_has_hours" %>"><%= item.has_hours %></td>
         <td id="<%= "component_type_#{item.id}_has_vendor" %>"><%= item.has_vendor %></td>
-        <td id="<%= "component_type_#{item.id}_has_misc" %>"><%= item.has_misc %></td>
-        <td id="<%= "component_type_#{item.id}_no_entry" %>"><%= item.no_entry %></td>
+        <td id="<%= "component_type_#{item.id}_has_totals" %>"><%= item.has_totals %></td>
+        <td id="<%= "component_type_#{item.id}_in_totals_grid" %>"><%= item.in_totals_grid %></td>
             <% if @deactivated_module && show_deactivated? %>
             <td id="<%= "component_type_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
             <% end %>

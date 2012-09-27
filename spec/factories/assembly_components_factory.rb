@@ -30,7 +30,7 @@ end
   
 FactoryGirl.define do
   sequence :assembly_component_description do |n|
-    "AssemblyComponentDescription#{n}"
+    "AssemblyComponentDescription#{n-1}"
   end
   # standard fields used to create an item
   factory :assembly_component_create, :class => AssemblyComponent do
@@ -42,7 +42,14 @@ FactoryGirl.define do
   end
   factory :assembly_component_min_create, :class => AssemblyComponent do
     association :assembly,  :factory => :assembly,  :strategy => :build
-    association :component, :factory => :component, :strategy => :build
+    association :component, :factory => :component_min_create, :strategy => :build
+    description {FactoryGirl.generate(:assembly_component_description)}
+    required false
+    deactivated false
+  end    
+  factory :assembly_component_totals_create, :class => AssemblyComponent do
+    association :assembly,  :factory => :assembly,  :strategy => :build
+    association :component, :factory => :component_totals_create, :strategy => :build
     description {FactoryGirl.generate(:assembly_component_description)}
     required false
     deactivated false

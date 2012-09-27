@@ -20,7 +20,6 @@ describe 'AssemblyComponents Integration Tests' do
     end
     it "should create a new item with parent association specified" do
       num_items = AssemblyComponent.count
-      num_items.should == 4
       component4 = FactoryGirl.create(:component_create, component_type: @component_type)
       attribs = FactoryGirl.attributes_for(:assembly_component_create, assembly: @assembly, component: component4)
       Rails.logger.debug("T assembly_components_integration_spec - attribs = #{attribs.inspect.to_s}")
@@ -44,7 +43,6 @@ describe 'AssemblyComponents Integration Tests' do
     end
     it "should not create a new item without parent association specified" do
       num_items = AssemblyComponent.count
-      num_items.should == 4
       visit new_assembly_component_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
@@ -67,7 +65,6 @@ describe 'AssemblyComponents Integration Tests' do
     end
     it "should not create a new item without child association specified" do
       num_items = AssemblyComponent.count
-      num_items.should == 4
       visit new_assembly_component_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
@@ -599,19 +596,20 @@ describe 'AssemblyComponents Integration Tests' do
     end
     context 'should be visible in the Assembly Edit page - ' do
       before(:each) do
-        visit edit_assembly_path(@assembly.id)
+        visit edit_assembly_path(@assembly_all.id)
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.edit.header')}$/
       end
-      it 'with the Assembly Components listing Title' do
-        page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+      it 'edit the Assembly Components listing Title' do
+        page.should have_selector(:xpath, "//h3", :text => @assembly_all.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
       end
-      it 'with all its Assembly Components listed' do
-        # page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
-        Rails.logger.debug("T @assembly.id = #{@assembly.id.to_s}")
-        @assembly_components.each do | assembly_component |
+      it 'edit should list all its Assembly Components listed' do
+        # save_and_open_page
+        # page.should have_selector(:xpath, "//h3", :text => @assembly_all.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+        Rails.logger.debug("T @assembly_all.id = #{@assembly_all.id.to_s}")
+        @assembly_all.assembly_components.each do | assembly_component |
           # page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
-          if assembly_component.id == @assembly.id
+          if assembly_component.id == @assembly_all.id
             Rails.logger.debug("T assembly_component = #{assembly_component.inspect.to_s}")
             page.should have_selector(:xpath, "//tr[@id=\"assembly_component_#{assembly_component.id.to_s}\"]")
           end
@@ -620,19 +618,19 @@ describe 'AssemblyComponents Integration Tests' do
     end
     context 'should be visible in the Assembly Show page' do
       before(:each) do
-        visit assembly_path(@assembly.id)
+        visit assembly_path(@assembly_all.id)
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.show.header')}$/
       end
-      it 'with the Assembly Components listing Title' do
-        page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+      it 'show the Assembly Components listing Title' do
+        page.should have_selector(:xpath, "//h3", :text => @assembly_all.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
       end
-      it 'with all its Assembly Components listed' do
-        # page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
-        Rails.logger.debug("T @assembly.id = #{@assembly.id.to_s}")
-        @assembly_components.each do | assembly_component |
-          # page.should have_selector(:xpath, "//h3", :text => @assembly.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
-          if assembly_component.id == @assembly.id
+      it 'show should list all its Assembly Components listed' do
+        # page.should have_selector(:xpath, "//h3", :text => @assembly_all.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+        Rails.logger.debug("T @assembly_all.id = #{@assembly_all.id.to_s}")
+        @assembly_all.assembly_components.each do | assembly_component |
+          # page.should have_selector(:xpath, "//h3", :text => @assembly_all.nil_to_s + ' ' + I18n.translate('assembly_components.title') )
+          if assembly_component.id == @assembly_all.id
             Rails.logger.debug("T assembly_component = #{assembly_component.inspect.to_s}")
             page.should have_selector(:xpath, "//tr[@id=\"assembly_component_#{assembly_component.id.to_s}\"]")
           end

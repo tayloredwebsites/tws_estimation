@@ -31,12 +31,12 @@
 
 
 <div class="field">
-      <%= f.label :calc_only, I18n.translate('components.field_name.calc_only'), :class => 'label' %>
+      <%= f.label :editable, I18n.translate('components.field_name.editable'), :class => 'label' %>
     <span class="value">
-        <%= f.radio_button :calc_only, true %>
-        <%= f.label "calc_only_true", "true", :class => 'span_after_label' %>
-        <%= f.radio_button :calc_only, false %>
-        <%= f.label "calc_only_false", "false", :class => 'span_after_label' %>
+        <%= f.radio_button :editable, true %>
+        <%= f.label "editable_true", "true", :class => 'span_after_label' %>
+        <%= f.radio_button :editable, false %>
+        <%= f.label "editable_false", "false", :class => 'span_after_label' %>
     </span>
 </div>
 

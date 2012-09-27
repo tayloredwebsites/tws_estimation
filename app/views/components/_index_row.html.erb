@@ -8,7 +8,7 @@
         
             <td id="<%= "component_#{item.id}_id" %>"><%= item.default.nil_to_s %></td>
         
-        <td id="<%= "component_#{item.id}_calc_only" %>"><%= item.calc_only %></td>
+        <td id="<%= "component_#{item.id}_editable" %>"><%= item.editable %></td>
                 <% if @deactivated_module && show_deactivated? %>
            <td id="<%= "component_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
         <% end %>

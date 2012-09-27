@@ -88,4 +88,22 @@ class EstimateComponent < ActiveRecord::Base
     ''+super.nil_to_s+description
   end
 
+  def value_or_default
+    if !value.nil?
+      Rails.logger.debug("***** EstimateComponent - value_or_default - value = #{self.value.bd_to_s(2)}")
+      BigDecimal.new(self.value.bd_to_s(2),2)
+    elsif !self.component.nil? && !self.component.default.nil?
+      Rails.logger.debug("***** EstimateComponent - value_or_default - default = #{self.component.default.value.bd_to_s(2)}")
+      BigDecimal.new(self.component.default.value.bd_to_s(2),2)
+    else
+      Rails.logger.debug("***** EstimateComponent - value_or_default - zero")
+      BIG_DECIMAL_ZERO
+    end
+  end
+  
+  # is deactivated if component or component type is deactivated
+  def deactivated?
+    
+  end
+  
 end

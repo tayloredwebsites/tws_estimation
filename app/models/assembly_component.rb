@@ -17,6 +17,8 @@ class AssemblyComponent < ActiveRecord::Base
     :scope => [:assembly_id] 
 
   # scopes
+  # list assembly_components for assembly.id = id
+  # sorts by component_type and description
   def self.for_assembly(id)
     joins(:component => :component_type).where('assembly_components.assembly_id = ?', id).order('component_types.sort_order, assembly_components.required DESC, components.description')
   end

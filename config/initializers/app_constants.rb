@@ -7,6 +7,8 @@ DB_TRUE = true
 DB_TRUE_VALUES = [true, 'T', 'true', 'True', 'TRUE', '1']
 DB_FALSE = false
 DB_FALSE_VALUES = [false, 'F', 'false', 'False', 'FALSE', '0']
+VIEWS_SCRIPTING = true
+BIG_DECIMAL_ZERO = BigDecimal.new('0.00',2)
 
 DB_VALUES = {
   :T => true,

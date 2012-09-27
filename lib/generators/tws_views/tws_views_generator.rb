@@ -16,7 +16,7 @@ class TwsViewsGenerator < Rails::Generators::NamedBase
   argument :attributes, :type => :array, :default => [], :banner => "field:type field:type"
   # argument :model_attributes, type: :array, default: [], banner: "model:attributes"
   
-  # argument :attributes, :type => :array, :default => ['description:string', 'calc_only:boolean', 'deactivated:boolean', 'component_type_id:integer', 'default_id:integer'], :banner => "field:type field:type"
+  # argument :attributes, :type => :array, :default => ['description:string', 'editable:boolean', 'deactivated:boolean', 'component_type_id:integer', 'default_id:integer'], :banner => "field:type field:type"
   # argument :attributes, :type => :array, :default => public_get_attributes, :banner => "field:type field:type"
   
   # access to validators through @model._validators

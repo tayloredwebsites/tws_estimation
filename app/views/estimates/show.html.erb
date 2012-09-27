@@ -75,9 +75,9 @@
 
 	<%= render :partial => 'estimate_assemblies/list_show', :locals => {:sys_errors => @errors  } %>
 
-	<%= render :partial => 'estimate_components/list_show', :locals => {:sys_errors => @errors  } %>
-
 </div>
+
+<%= render :partial => 'estimate_components/list', :locals => {:view_mode => 'show'} %>
 
 
 <% if can? :manage, @estimate %>

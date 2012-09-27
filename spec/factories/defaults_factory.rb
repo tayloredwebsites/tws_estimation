@@ -1,10 +1,10 @@
 FactoryGirl.define do
   
   sequence :default_name do |n|
-    "DefaultName#{n}"
+    "DefaultName#{n-1}"
   end
   sequence :default_value do |n|
-    BigDecimal.new("#{n}+.1")
+    BigDecimal.new("#{n}"+".12")
   end 
   factory :default, :class => Default do
     store       'Test Store'

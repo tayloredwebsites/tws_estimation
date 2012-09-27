@@ -15,9 +15,9 @@
 
 		<%= render :partial => 'estimate_assemblies/list_form', :locals => {:sys_errors => @errors  } %>
 
-		<%= render :partial => 'estimate_components/list_form', :locals => {:sys_errors => @errors  } %>
-
     </div>
+
+	<%= render :partial => 'estimate_components/list', :locals => {:view_mode => 'edit'} %>
 
     <div class="actions">
         <%= f.submit I18n.translate('view_action.update') %>

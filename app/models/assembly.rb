@@ -19,11 +19,6 @@ class Assembly < ActiveRecord::Base
   validates :required,
     :inclusion => { :in => [true, false] }
 
-  # # scopes
-  # def self.for_assembly(id)
-  #   joins(:assembly) & self.find(id)
-  # end
-  # 
   # methods
   def nil_to_s
     # call to super here brings in deactivated feature
