@@ -9,8 +9,8 @@
 <% 
 @assemblies.each do |ass|
 	ea = (@estimate_assemblies[ass.id]) ? true : false
-	ea_checked = ea || ass.required
-	ea_show = ea || !ass.deactivated
+	ea_checked = ea || ass.required		# check the assembly if checked in estimate already, or is a required assembly
+	ea_show = ea || !ass.deactivated 	# allow deactivated assemblies to still show if already in estimate
 	if ea_show
 %>
 		<span style='display:inline-block;'>    

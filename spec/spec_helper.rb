@@ -51,6 +51,9 @@ end
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+# turn off javascript for testing
+VIEWS_SCRIPTING = false
+
 RSpec.configure do |config|
   # == Mock Framework
   #
@@ -137,44 +140,87 @@ module UserIntegrationHelper
   def helper_load_defaults
     default1 = Default.create!(FactoryGirl.attributes_for(:default))
     default2 = Default.create!(FactoryGirl.attributes_for(:default))
-    @defaults = [default1, default2]
+    default_fixed = Default.create!(FactoryGirl.attributes_for(:default, :value => 2.78))
+    @defaults = [default1, default2, default_fixed]
     @default = default2
+    @default_fixed = default_fixed
     Rails.logger.debug("T UserTestHelper.helper_load_defaults - done")
   end
   def helper_load_component_types
-    component_type1 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
-    component_type2 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
-    @component_types = [component_type1, component_type2]
-    @component_type = component_type2
+    component_type0 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
+    component_type_hours = ComponentType.create!(FactoryGirl.attributes_for(:component_type_hours).merge(:description => 'Test Hours'))
+    component_type_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge(:deactivated => true))
+    component_type_not_in_grid = ComponentType.create!(FactoryGirl.attributes_for(:component_type_not_in_totals_grid).merge(:description => 'Test Not In Grid'))
+    component_type_x = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
+    component_type_totals = ComponentType.create!(FactoryGirl.attributes_for(:component_type_totals).merge(:description => 'Test Totals Grid'))
+    @component_types = [component_type0, component_type_hours, component_type_deact, component_type_not_in_grid, component_type_x, component_type_totals]
+    @component_type = component_type0
+    @component_type_totals = component_type_totals
     Rails.logger.debug("T UserTestHelper.helper_load_component_types - done")
   end
   def helper_load_components
     helper_load_defaults if !defined?(@defaults)
     helper_load_component_types if !defined?(@component_types)
-    component1 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
-    component2 = FactoryGirl.create(:component_create, component_type: @component_types[1], default: @defaults[1])
-    component3 = FactoryGirl.create(:component_create, component_type: @component_types[1])
-    @components = [component1, component2, component3]
-    @component = component2
+    component0 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
+    component1 = FactoryGirl.create(:component_create, component_type: @component_types[1], default: @defaults[1])
+    component2 = FactoryGirl.create(:component_create, component_type: @component_types[1])
+    component3 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
+    component4 = FactoryGirl.create(:component_create, component_type: @component_types[1], default: @defaults[1])
+    component5 = FactoryGirl.create(:component_create, component_type: @component_types[2]) # note that @component_types[2] is deactivated in helper_load_component_types
+    component6 = FactoryGirl.create(:component_create, component_type: @component_types[3], default: @defaults[0])
+    component7 = FactoryGirl.create(:component_create, component_type: @component_types[3], default: @defaults[1])
+    component8 = FactoryGirl.create(:component_create, component_type: @component_types[3])
+    # items in required (totals section), including a non-calculation entry (component9)
+    component9 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
+    component10 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "one", default: @defaults[0], operation: '*A')
+    component11 = FactoryGirl.create(:component_totals_create, component_type: @component_type_totals, subtotal_group: "one", default: @default_fixed, operation: '*I')
+    component12 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "two", operation: '*H')
+    component13 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "two", operation: '*S')
+    component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "two") # default operation should be *C
+    component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "two", operation: '*H')
+    component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "three", operation: '*A')
+    component_deact = FactoryGirl.create(:component_create, component_type: @component_types[0], deactivated: true)
+    @components = [component0, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10, component11, component12, component13, component14, component15, component16, component_deact]
+    @component = component1
+    @component_deact = component_deact
     Rails.logger.debug("T UserTestHelper.helper_load_components - done")
   end
   def helper_load_assemblies
+    assembly0 = FactoryGirl.create(:assembly_create)
     assembly1 = FactoryGirl.create(:assembly_create)
-    assembly2 = FactoryGirl.create(:assembly_create)
-    assembly3 = FactoryGirl.create(:assembly_create)
-    @assemblies = [assembly1, assembly2, assembly3]
-    @assembly = assembly2
+    assembly2 = FactoryGirl.create(:assembly_required_create)
+    assembly3 = FactoryGirl.create(:assembly_required_create)
+    assembly_deact = FactoryGirl.create(:assembly_required_create, deactivated: true)
+    @assemblies = [assembly0, assembly1, assembly2, assembly3, assembly_deact]
+    @assembly = assembly0
+    @assembly_all = assembly2
+    @assembly_total = assembly3
+    @assembly_deact = assembly_deact
     Rails.logger.debug("T UserTestHelper.helper_load_assemblies - done")
   end
   def helper_load_assembly_components
     helper_load_assemblies if !defined?(@assemblies)
     helper_load_components if !defined?(@components)
-    assembly_component1 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[0], component: @components[0])
-    assembly_component2 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[0])
-    assembly_component3 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[1])
-    assembly_component4 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[2])
-    @assembly_components = [assembly_component1, assembly_component2, assembly_component3, assembly_component4]
-    @assembly_component = assembly_component2
+    assembly_component0 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[0], component: @components[0])
+    assembly_component1 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @component_deact) # note @component_deact is deactivated -> @assembly_components[1] should not be listed in the new form
+    assembly_component2 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[1])
+    assembly_component3 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[2])
+    assembly_component4 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[3])
+    assembly_component5 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[4])
+    assembly_component6 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[5]) # note @components[5] has a component type that is deactivated -> @assembly_components[6] should not be listed in the new form
+    assembly_component7 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[6])
+    assembly_component8 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[7])
+    assembly_component9 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[9])
+    assembly_component10 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[10])
+    assembly_component11 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[11])
+    assembly_component12 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[12])
+    assembly_component13 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[13])
+    assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[14])
+    assembly_component15 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[15])
+    assembly_component16 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[16])
+    @assembly_components = [assembly_component0, assembly_component1, assembly_component2, assembly_component3, assembly_component4, assembly_component5, assembly_component6, assembly_component7, assembly_component8, assembly_component9, assembly_component10, assembly_component11, assembly_component12, assembly_component13, assembly_component14, assembly_component15, assembly_component16]
+    @assembly_component = assembly_component1
+    @assembly_component_deact = assembly_component5
     Rails.logger.debug("T UserTestHelper.helper_load_assembly_components - done")
   end
   

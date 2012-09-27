@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120711134519) do
+ActiveRecord::Schema.define(:version => 20120815190535) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -35,16 +35,16 @@ ActiveRecord::Schema.define(:version => 20120711134519) do
   end
 
   create_table "component_types", :force => true do |t|
-    t.string   "description", :default => "",    :null => false
-    t.integer  "sort_order",  :default => 0,     :null => false
-    t.boolean  "has_costs",   :default => true,  :null => false
-    t.boolean  "has_hours",   :default => false, :null => false
-    t.boolean  "has_vendor",  :default => false, :null => false
-    t.boolean  "has_misc",    :default => false, :null => false
-    t.boolean  "no_entry",    :default => false, :null => false
-    t.boolean  "deactivated", :default => false, :null => false
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.string   "description",    :default => "",    :null => false
+    t.integer  "sort_order",     :default => 0,     :null => false
+    t.boolean  "has_costs",      :default => true,  :null => false
+    t.boolean  "has_hours",      :default => false, :null => false
+    t.boolean  "has_vendor",     :default => false, :null => false
+    t.boolean  "has_totals",     :default => false, :null => false
+    t.boolean  "in_totals_grid", :default => false, :null => false
+    t.boolean  "deactivated",    :default => false, :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
   end
 
   add_index "component_types", ["description"], :name => "index_component_types_on_description", :unique => true
@@ -53,10 +53,12 @@ ActiveRecord::Schema.define(:version => 20120711134519) do
     t.integer  "component_type_id",                    :null => false
     t.string   "description",       :default => "",    :null => false
     t.integer  "default_id"
-    t.boolean  "calc_only",         :default => false, :null => false
+    t.boolean  "editable",          :default => false, :null => false
     t.boolean  "deactivated",       :default => false, :null => false
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
+    t.string   "operation"
+    t.string   "subtotal_group"
   end
 
   add_index "components", ["component_type_id", "description"], :name => "index_components_on_component_type_id_and_description", :unique => true

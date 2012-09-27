@@ -390,8 +390,8 @@
         :has_costs => 'Has Costs',
         :has_hours => 'Has Hours',
         :has_vendor => 'Has Vendor',
-        :has_misc => 'Has Misc',
-        :no_entry => 'No Entry',
+        :has_totals => 'Has Totals',
+        :in_totals_grid => 'In Totals Grid',
         :deactivated => 'Deactivated'
       },
       :field_name_short => {
@@ -401,8 +401,8 @@
         :has_costs => 'Costs?',
         :has_hours => 'Hours?',
         :has_vendor => 'Vendor?',
-        :has_misc => 'Misc?',
-        :no_entry => 'No Entry',
+        :has_totals => 'Has Totals Grid',
+        :in_totals_grid => 'In Totals Grid',
         :deactivated => 'Deact.'
       },
       :field_name_tip => {
@@ -412,8 +412,8 @@
         :has_costs => 'Has Costs',
         :has_hours => 'Has Hours',
         :has_vendor => 'Has Vendor (Keep track of vendor. Unused.)',
-        :has_misc => 'Has Misc (Has Misc costs ??)',
-        :no_entry => 'No Entry (Used for calculated fields.)',
+        :has_totals => 'Has Totals Grid, and perform calculations to add to totals.',
+        :in_totals_grid => 'Display in Totals Grid for calculations.',
         :deactivated => 'Deactivated'
       },
       :messages => {
@@ -460,7 +460,7 @@
         :description => 'Description',
         :default_id => 'Default ID',
         :default => 'Default Value',
-        :calc_only => 'Calculated using Default',
+        :editable => 'Calculated using Default',
         :deactivated => 'Deactivated',
         :created_at => 'Created',
         :updated_at => 'Updated'
@@ -472,7 +472,7 @@
         :description => 'Desc.',
         :default_id => 'Default ID',
         :default => 'Default Value',
-        :calc_only => 'Calc. of Default',
+        :editable => 'Calc. of Default',
         :deactivated => 'Deactivated',
         :created_at => 'Created',
         :updated_at => 'Updated'
@@ -484,7 +484,7 @@
         :description => 'Description.',
         :default_id => 'ID of the Default Value for this item.',
         :default => 'The Default Value for this item.',
-        :calc_only => 'Calculated using Default Value (with no Value change allowed).',
+        :editable => 'Calculated using Default Value (with no Value change allowed).',
         :deactivated => 'Is this field deactivated?',
         :created_at => 'Created at this Date and Time.',
         :updated_at => 'Last Updated at this date and time.'

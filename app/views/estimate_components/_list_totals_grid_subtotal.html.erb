@@ -1,0 +1,17 @@
+				<tr class="grid_row">
+					<td class="grid_row_label">
+						<%= label_tag total_id, total_label, :class => 'label' %>
+					</td>
+<%
+row_total = BIG_DECIMAL_ZERO
+@component_types_list.each do |ct|
+	if ct.in_totals_grid || (!in_totals_grid && !ct.has_totals)
+		row_total += total_values[ct.id] if !total_values[ct.id].nil?
+%>
+					<td class="grid_row_calc grid_row_sub_total" id="<%= total_id %>_<%= ct.id.to_s %>"><%= total_values[ct.id].bd_to_s(2) %></td>
+<%
+	end
+end
+%>
+					<td class="grid_row_calc grid_row_sub_total" id="<%= total_id %>_total"><%= row_total.bd_to_s(2) %></td>
+				</tr>

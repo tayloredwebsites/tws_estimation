@@ -92,7 +92,7 @@
 /* site wide table styles */
   .odd {background-color:#eee;}
   .even {background-color:#fff;}
-  table {border:1px solid #fdd;}  /* border-collapse:collapse;} */
+  table {border:1px solid #000}  /* border-collapse:collapse;} */
   table td, table th {border:1px solid #666; padding:1px 2px;}
 
 /* misc layout styles */
@@ -105,14 +105,18 @@
   .column_nav ul {margin:0;padding:0}
   .column_nav a:hover {text-decoration:none;background-color:#fdd;}
 
-  .show_hide h3 {line-height:30px; padding:0 10px;}
+  .show_hide h3, .only_show h3 {line-height:30px; }
   .show_hide h3:hover {background-color:#fee;}
   .show_hide h3:after {content:' (Click to hide/show)';font-weight:normal;font-size:70%;color:#f00;}
-  .show_hide > div:nth-child(2) {border:1px solid black;padding:10px;margin:0 10px;}
-
+  .show_hide > div:nth-child(2), .only_show > div:nth-child(2) {border:1px solid black;}
+  div.assembly {padding:10px}
   .deselected {display:none;}
-  .component_type_total {font-weight:bold;}
+  .component_type_total {font-weight:bold; margin-left:20px;margin}
   .assembly_total {padding:5px;margin:0 20px;font-weight:bold;}
+  .grid_row_label {font-weight:bold;}
+  .totals_grid {width:100%}
+  .grid_row_sub_total {font-weight:bold;}
+  .grid_row_label input {margin-left:5px;}
 
 /* error styling */
 .error {color:#f00;font-size:larger;}

@@ -19,15 +19,25 @@ class EstimatesController < SecureApplicationController
     @assemblies = Assembly.order(:sort_order)
     estimate_assemblies = EstimateAssembly.where('estimate_id = ?', est_id)
     @estimate_components = EstimateComponent.joins(:component => :component_type).where('estimate_components.estimate_id = ?', est_id ).order('component_types.sort_order, components.description')
-    @estimate_assemblies = Hash.new()
+    estimate_has_component_types = Hash.new()
+    @estimate_components.each do |ec|
+      if !ec.component.nil? && !ec.component.component_type.nil?
+        estimate_has_component_types[ec.component.component_type.id] = ec
+      end
+    end
+    @estimate_assemblies = Hash.new()   # Assemblies for an Estimate that have been selected/checked
     estimate_assemblies.each do |est_ass|
       # set true if this estimate has this estimate_assembly saved already
       @estimate_assemblies[est_ass.assembly_id] = true if est_ass.selected
     end
     component_types = ComponentType.order(:sort_order)
     # Rails.logger.debug("* EstimatesController.before_filter component_types = #{component_types.inspect.to_s}")
+    @component_types_list = Array.new()
     @component_types = Hash.new()
     component_types.each do |comp_type|
+      if estimate_has_component_types[comp_type.id] || !comp_type.deactivated
+        @component_types_list << comp_type
+      end
       @component_types[comp_type.id] = comp_type
       Rails.logger.debug("* EstimatesController.before_filter @component_types[#{comp_type.id}] = #{comp_type.description}")
     end

@@ -42,10 +42,10 @@ end
 
 FactoryGirl.define do
   sequence :estimate_component_write_in_name do |n|
-    n.odd? ? '' : "est_comp_desc_#{n/2}" # blank every other item
+    n.odd? ? '' : "write_in_#{n/2}" # blank every other item
   end
   sequence :estimate_component_value do |n|
-    rand(0.01..999.99).round(2)
+    rand(0.01..9.99).round(2)
   end
   # standard fields used to create an item
   factory :estimate_component, :class => EstimateComponent do

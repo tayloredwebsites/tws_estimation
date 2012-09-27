@@ -34,21 +34,21 @@
         </span>
   </div>
   <div class="field">
-    <%= f.label :has_misc, I18n.translate('component_types.field_name.has_misc'), :class => 'label' %>
+    <%= f.label :has_totals, I18n.translate('component_types.field_name.has_totals'), :class => 'label' %>
         <span class="value">
-            <%= f.radio_button :has_misc, true %>
-            <%= f.label "has_misc_true", "true", :class => 'span_after_label' %>
-            <%= f.radio_button :has_misc, false %>
-            <%= f.label "has_misc_false", "false", :class => 'span_after_label' %>
+            <%= f.radio_button :has_totals, true %>
+            <%= f.label "has_totals_true", "true", :class => 'span_after_label' %>
+            <%= f.radio_button :has_totals, false %>
+            <%= f.label "has_totals_false", "false", :class => 'span_after_label' %>
         </span>
   </div>
   <div class="field">
-    <%= f.label :no_entry, I18n.translate('component_types.field_name.no_entry'), :class => 'label' %>
+    <%= f.label :in_totals_grid, I18n.translate('component_types.field_name.in_totals_grid'), :class => 'label' %>
         <span class="value">
-            <%= f.radio_button :no_entry, true %>
-            <%= f.label "no_entry_true", "true", :class => 'span_after_label' %>
-            <%= f.radio_button :no_entry, false %>
-            <%= f.label "no_entry_false", "false", :class => 'span_after_label' %>
+            <%= f.radio_button :in_totals_grid, true %>
+            <%= f.label "in_totals_grid_true", "true", :class => 'span_after_label' %>
+            <%= f.radio_button :in_totals_grid, false %>
+            <%= f.label "in_totals_grid_false", "false", :class => 'span_after_label' %>
         </span>
   </div>
     <% if @deactivated_module && can?(:deactivate, @default) %>

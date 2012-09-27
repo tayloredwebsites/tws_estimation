@@ -1,0 +1,19 @@
+
+		<table class="totals_grid" id="totals_grid_<%= assembly.id.to_s %>_<%= assembly_component_id.to_s %>">
+			<thead>
+				<tr>
+					<th><%= assembly_component_title%></th>
+<%
+						@component_types_list.each do |ct|
+						if ct.in_totals_grid || (!in_totals_grid && !ct.has_totals)
+%>
+					<th class="grid_row_head"><%= ct.description %></th>
+<%
+						end # if ct.in_totals_grid
+					end # if show_totals_grid
+				%>
+					<th class="grid_row_head">Total</th>
+				</tr>
+			</thead>
+			<tbody>
+

@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   sequence :assembly_description do |n|
-    "Description#{n}"
+    "Description#{n-1}"
   end
   sequence :assembly_sort_order do |n|
     n*100
@@ -18,6 +18,12 @@ FactoryGirl.define do
     description             {FactoryGirl.generate(:assembly_description)}
     # sort_order              {FactoryGirl.generate(:assembly_sort_order)}
     # required                true
+  end    
+  # required assembly item
+  factory :assembly_required_create, :class => Assembly do
+    description             {FactoryGirl.generate(:assembly_description)}
+    sort_order              {FactoryGirl.generate(:assembly_sort_order)}
+    required                true
   end    
   # all fields defined and available as attributes
   factory :assembly_accessible, :class => Assembly do

@@ -45,8 +45,8 @@ namespace :legacy do
             :has_costs => old_component_type.has_costs,
             :has_hours => old_component_type.has_hours,
             :has_vendor => old_component_type.has_vendor,
-            :has_misc => old_component_type.has_misc,
-            :no_entry => old_component_type.no_entry,
+            :has_totals => old_component_type.has_misc,
+            :in_totals_grid => old_component_type.no_entry,
             :deactivated => old_component_type.deactivated
           }
           new_component_type.save!
@@ -74,7 +74,7 @@ namespace :legacy do
             :component_type_id => new_component_type.id,
             :description => old_component.description,
             :default_id => old_component.default_id,  # note this assumes that the default ID values have been retained !!
-            :calc_only => old_component.calc_only,
+            :editable => old_component.calc_only,
             :deactivated => old_component.deactivated
           }
           new_component.save!
