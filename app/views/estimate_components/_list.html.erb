@@ -27,7 +27,7 @@ end
 	ea = (@estimate_assemblies[ass.id]) ? true : false	# is Assembly for this Estimate selected/checked
 	ea_checked = ea || (ass.required && !ass.deactivated)	# make sure required assemblies are also selected/checked
 	ea_active = ea_checked || !ass.deactivated		# all active Assemblies are those selected in Estimate already, or those not deactivated - note deactivated assemblies show if already in estimate
-	ea_show = ea_active if !VIEWS_SCRIPTING	# always show all active assemblies if javascript is disabled
+ 	ea_show = (VIEWS_SCRIPTING) ? ea_active : true 	# always show all active assemblies if javascript is disabled
 	show_totals_grid = false
 	if ea_active && (view_mode == 'edit' || ea_checked)  # only show deactived assemblies if in estimate already
 		ass_deact = (ass.deactivated) ? ' * ' : ''
