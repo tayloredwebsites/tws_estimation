@@ -9,6 +9,7 @@ class Component < ActiveRecord::Base
   belongs_to :component_type
   belongs_to :default
   has_many :assembly_components
+  validates_associated :assembly_components
     
   validates :description,
     :presence => true,

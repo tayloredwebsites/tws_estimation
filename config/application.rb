@@ -52,8 +52,12 @@ module TwsAuth
       g.fixture_replacement :factory_girl, :dir => "spec/factories"
     end
     
-    # Enable IdentityMap for Active Record for Rails 3.1
-    config.active_record.identity_map = true  
+    # Don't # Enable IdentityMap for Active Record for Rails 3.1
+    # # Identity map is one way to fix this: validates :estimate_id, :presence => true
+    # - identity maps dont recognize associations on deletes, now using: validates_associated :model_name
+    # - identity maps are slower
+    # - better to use validates_associated in child association
+    # config.active_record.identity_map = true  
 
     
   end
