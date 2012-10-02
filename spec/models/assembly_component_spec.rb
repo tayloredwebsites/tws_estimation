@@ -166,8 +166,11 @@ describe AssemblyComponent do
       AssemblyComponent.count.should == num_items + 1
     end
     it 'should not allow destroy of assembly if there are assembly_components' do
-      FactoryGirl.create(:assembly_component_create, assembly: @parent, :component => @component1)
-      FactoryGirl.create(:assembly_component_create, assembly: @parent, :component => @component2)
+      assembly_component_1 = FactoryGirl.create(:assembly_component_create, assembly: @parent, :component => @component1)
+      Rails.logger.debug("TTTTAssemblyComponent assembly_component_1 = #{assembly_component_1.inspect.to_s}")
+      assembly_component_2 = FactoryGirl.create(:assembly_component_create, assembly: @parent, :component => @component2)
+      Rails.logger.debug("TTTTAssemblyComponent assembly_component_2 = #{assembly_component_2.inspect.to_s}")
+      Rails.logger.debug("TTTTAssemblyComponent @parent = #{@parent.inspect.to_s}")
       @parent.assembly_components.length.should == 2
       num_assemblies = Assembly.count
       @parent.deactivate()

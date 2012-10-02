@@ -116,8 +116,4 @@ describe EstimateComponent do
     end
   end
 
-  context 'misc - ' do
-    it 'should have estimate calculations performed'
-  end
-
 end
