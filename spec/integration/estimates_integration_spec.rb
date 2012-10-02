@@ -1001,11 +1001,10 @@ describe 'Estimates Integration Tests', :js => false do
       end
       # save_and_open_page
     end
-    it 'should not list deactivated components or deactivated assembly_components'
     it 'should show default value next to label' do #, :js => true do # see VIEWS_SCRIPTING = false in spec_helper.rb
-      @defaults.each do |df|
-        Rails.logger.debug("TXXXXXX default values = #{df.value.bd_to_s(2)}")
-      end
+      # @defaults.each do |df|
+      #   Rails.logger.debug("TXXXXXX default values = #{df.value.bd_to_s(2)}")
+      # end
       all_attribs = @estimate_attributes
       estimate = Estimate.create!(@estimate_attributes)
       Estimate.count.should == 1
@@ -1067,6 +1066,7 @@ describe 'Estimates Integration Tests', :js => false do
         page.fill_in "estimate_components_#{@assemblies[0].id.to_s}_#{@components[0].id.to_s}", :with => '2.34'
         # it 'should not list deactivate components'
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@component_deact.id.to_s}\"]")
+        page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_component_deact1.assembly_id.to_s}_#{@assembly_component_deact1.component_id.to_s}\"]")
         # page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[0].id.to_s}", :with => '3.45'
         page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}", :with => '4.56'
         page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}", :with => '5.67'
@@ -1074,11 +1074,14 @@ describe 'Estimates Integration Tests', :js => false do
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[4].id.to_s}", :with => '7.89'
         # it 'should not list components with deactivated component types'
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]")
+        page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_component_deact2.assembly_id.to_s}_#{@assembly_component_deact2.component_id.to_s}\"]")
         page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")        
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}", :with => '9.01'
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34'
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}", :with => '2.45'
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 2.5
+        # it 'should not list deactivated assembly_components'
+        page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_component_deact3.assembly_id.to_s}_#{@assembly_component_deact3.component_id.to_s}\"]")
         # save_and_open_page      
         find(:xpath, '//input[@type="submit"]').click
       end
@@ -1216,6 +1219,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^0.00$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^1466.86$/
     end
+    it 'should list operation on component descriptions (for both editable and not)'
   end
   
 end
