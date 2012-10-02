@@ -5,8 +5,9 @@
 <%
 # display_value = operation_value.bd_to_s(2)
 if editable && view_mode == 'edit'
-	concat label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label'
+	concat label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s+' ( '+ass_comp.component.op_scope+' '+ass_comp.component.op_operand+' ', :class => 'label'
 	concat text_field_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str
+	concat ')'
 	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_str)
 else
 	concat ass_comp.nil_to_s+' ( '+ass_comp.component.op_scope+' '+ass_comp.component.op_operand+' '+est_comp_value_str+')'
