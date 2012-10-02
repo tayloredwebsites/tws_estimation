@@ -1019,10 +1019,16 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//input[@id=\"estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[9].component.id.to_s}\"]").value.should =~ /^#{@assembly_components[9].component.default.value.bd_to_s(2)}$/
       find(:xpath, "//input[@id=\"estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[9].component.id.to_s}\"]").value.should =~ /^#{@defaults[0].value.bd_to_s(2)}$/
       # 10th is editable and 'has_totals' (grid component), with no default value
-      page.should have_selector(:xpath, "//label[@for=\"estimate_components_#{@assembly_components[10].assembly_id.to_s}_#{@assembly_components[10].component_id.to_s}\"]", :text => "#{@assembly_components[10].description}")
+      ac_10 = @assembly_components[10]
+      # it 'should list operation on component descriptions for editable components'
+      find(:xpath, "//td[@id=\"grid_label_#{ac_10.assembly_id.to_s}_#{@component_type_totals.id.to_s}_#{ac_10.component_id.to_s}\"]/label").text.should_not =~ /^#{ac_10.description}$/
+      find(:xpath, "//td[@id=\"grid_label_#{ac_10.assembly_id.to_s}_#{@component_type_totals.id.to_s}_#{ac_10.component_id.to_s}\"]/label").text.should =~ /#{ac_10.description}.*#{ac_10.component.op_scope} #{ac_10.component.op_operand}/
       find(:xpath, "//input[@id=\"estimate_components_#{@assembly_components[10].assembly_id.to_s}_#{@assembly_components[10].component_id.to_s}\"]").value.should =~ /#{@assembly_components[10].component.default.value.bd_to_s(2)}/
       # 11th is not editable totals grid
-      find(:xpath, "//td[@id=\"grid_label_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}\"]", :text => "#{@assembly_components[11].description} ( I * #{@assembly_components[11].component.default.value.bd_to_s(2)})")
+      ac_11 = @assembly_components[11]
+      # it 'should list operation on component descriptions for not editable components'
+      find(:xpath, "//td[@id=\"grid_label_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}\"]", :text => "#{@assembly_components[11].description} ( I * #{ac_11.component.default.value.bd_to_s(2)})")
+      find(:xpath, "//td[@id=\"grid_label_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}\"]", :text => "#{ac_11.description} ( #{ac_11.component.op_scope} #{ac_11.component.op_operand} #{ac_11.component.default.value.bd_to_s(2)})")
     end
     it 'should let user edit default value when editable in edit mode' do #, :js => true do # see VIEWS_SCRIPTING = false in spec_helper.rb
       all_attribs = @estimate_attributes
@@ -1219,7 +1225,6 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^0.00$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^1466.86$/
     end
-    it 'should list operation on component descriptions (for both editable and not)'
   end
   
 end
