@@ -9,10 +9,14 @@ class AssemblyComponent < ActiveRecord::Base
   belongs_to :assembly
   belongs_to :component
 
-  validates :assembly_id,
-    :presence => true
-  validates :component_id,
-    :presence => true
+  # validates :assembly_id,
+  #   :presence => true
+  validates_presence_of :assembly,
+    :message => "is missing assembly"
+  # validates :component_id,
+  #   :presence => true
+  validates_presence_of :component,
+    :message => "is missing component"
   validates_uniqueness_of :component_id,
     :scope => [:assembly_id] 
 

@@ -6,9 +6,9 @@ class Assembly < ActiveRecord::Base
   attr_accessible :description, :sort_order, :required, :deactivated
     
   has_many :assembly_components, :inverse_of=>:assembly
-  validates_associated :assembly_components
+  # validates_associated :assembly_components
   has_many :estimate_assemblies, :inverse_of=>:assembly
-  validates_associated :estimate_assemblies
+  # validates_associated :estimate_assemblies
   has_many :estimates, :through => :estimate_assemblies
   validates_associated :estimates
 
