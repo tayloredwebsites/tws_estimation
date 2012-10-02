@@ -69,8 +69,11 @@ describe EstimateAssembly do
       @assembly2 = FactoryGirl.create(:assembly_create) #Assembly.create!(generate_estimate_accessible_attributes)
     end
     it 'should not allow destroy of Estimate if there are estimate_assemblies' do
-      FactoryGirl.create(:estimate_assembly, estimate: @parent, assembly: @assembly1)
-      FactoryGirl.create(:estimate_assembly, estimate: @parent, assembly: @assembly2)
+      estimate_assembly_1 = FactoryGirl.create(:estimate_assembly, estimate: @parent, assembly: @assembly1)
+      Rails.logger.debug("TTTTEstimateAssembly estimate_assembly_1 = #{estimate_assembly_1.inspect.to_s}")
+      estimate_assembly_2 = FactoryGirl.create(:estimate_assembly, estimate: @parent, assembly: @assembly2)
+      Rails.logger.debug("TTTTEstimateAssembly estimate_assembly_2 = #{estimate_assembly_2.inspect.to_s}")
+      Rails.logger.debug("TTTTEstimateAssembly @parent = #{@parent.inspect.to_s}")
       @parent.estimate_assemblies.length.should == 2
       num_parent = Estimate.count
       @parent.deactivate()

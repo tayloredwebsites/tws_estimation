@@ -754,7 +754,7 @@ describe 'Estimates Integration Tests', :js => false do
       VIEWS_SCRIPTING = true # spec_helper clears this (turning off javascript dependent code), thus bypass the assembly check box status
       num_items = Estimate.count
       visit new_estimate_path()
-      save_and_open_page
+      # save_and_open_page
       page.should have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[0].id.to_s}\" and @class=\"assembly show_hide\"]")
       page.should_not have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[0].id.to_s}\" and @class=\"assembly only_show\"]")
       page.should have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[1].id.to_s}\" and @class=\"assembly show_hide\"]")
@@ -777,7 +777,7 @@ describe 'Estimates Integration Tests', :js => false do
       Rails.logger.debug ("VVVVSCRIPTING VIEWS_SCRIPTING before visit = #{VIEWS_SCRIPTING.inspect.to_s}")
       visit edit_estimate_path (estimate.id)
       Rails.logger.debug ("VVVVSCRIPTING VIEWS_SCRIPTING after visit = #{VIEWS_SCRIPTING.inspect.to_s}")
-      save_and_open_page
+      # save_and_open_page
       page.should have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[0].id.to_s}\" and @class=\"assembly show_hide\"]")
       page.should_not have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[0].id.to_s}\" and @class=\"assembly only_show\"]")
       page.should have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[1].id.to_s}\" and @class=\"assembly show_hide\"]")
@@ -836,10 +836,10 @@ describe 'Estimates Integration Tests', :js => false do
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34'
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}", :with => '2.45'
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 2.5
-        save_and_open_page      
+        # save_and_open_page      
         find(:xpath, '//input[@type="submit"]').click
       end
-      save_and_open_page
+      # save_and_open_page
       # page.driver.status_code.should be 200
       # response.status.should be(200)  # status is not available with :js => true (selenium driver)
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
@@ -1001,6 +1001,7 @@ describe 'Estimates Integration Tests', :js => false do
       end
       # save_and_open_page
     end
+    it 'should not list deactivated components or deactivated assembly_components'
     it 'should show default value next to label' do #, :js => true do # see VIEWS_SCRIPTING = false in spec_helper.rb
       @defaults.each do |df|
         Rails.logger.debug("TXXXXXX default values = #{df.value.bd_to_s(2)}")
@@ -1065,7 +1066,7 @@ describe 'Estimates Integration Tests', :js => false do
         # find("#assembly_#{@assemblies[1].id.to_s}/h3").click
         page.fill_in "estimate_components_#{@assemblies[0].id.to_s}_#{@components[0].id.to_s}", :with => '2.34'
         # it 'should not list deactivate components'
-        page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[0].id.to_s}\"]")
+        page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@component_deact.id.to_s}\"]")
         # page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[0].id.to_s}", :with => '3.45'
         page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}", :with => '4.56'
         page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}", :with => '5.67'

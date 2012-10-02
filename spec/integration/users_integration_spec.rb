@@ -667,28 +667,4 @@ describe 'Misc. Tests' do
     end
   end
 
-  context 'i18n testing' do
-    context 'Logged Out user systems' do
-      it 'should have no translations missing'
-    end
-    context 'Regular user systems' do
-      before(:each) do
-        @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
-        helper_signin(:reg_user_full_create_attr, @me.full_name)
-        visit home_index_path
-        Rails.logger.debug("T System Tests - Regular user systems - before each is done.")
-      end
-      it 'should have no translations missing'
-    end
-    context 'Administrator user systems' do
-      before(:each) do
-        @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
-        helper_signin(:admin_user_full_create_attr, @me.full_name)
-        visit home_index_path
-      end
-      it 'should have no translations missing'
-    end
-  end
-
-
 end

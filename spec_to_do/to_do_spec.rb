@@ -16,33 +16,30 @@ describe 'Miscellaneous items to do - ' do
     it 'should not show subtotals if all subtotal_group entries are blank'
     it 'should not subtotal deactivated components'   
   end
-  context 'misc. tests - ' do
-    context 'i18n testing' do
-      context 'Logged Out user systems' do
-        it 'should have no translations missing'
+  context 'i18n testing' do
+    context 'Logged Out user systems' do
+      it 'should have no translations missing'
+    end
+    context 'Regular user systems' do
+      before(:each) do
+        @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
+        helper_signin(:reg_user_full_create_attr, @me.full_name)
+        visit home_index_path
+        Rails.logger.debug("T System Tests - Regular user systems - before each is done.")
       end
-      context 'Regular user systems' do
-        before(:each) do
-          @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
-          helper_signin(:reg_user_full_create_attr, @me.full_name)
-          visit home_index_path
-          Rails.logger.debug("T System Tests - Regular user systems - before each is done.")
-        end
-        it 'should have no translations missing'
+      it 'should have no translations missing'
+    end
+    context 'Administrator user systems' do
+      before(:each) do
+        @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
+        helper_signin(:admin_user_full_create_attr, @me.full_name)
+        visit home_index_path
       end
-      context 'Administrator user systems' do
-        before(:each) do
-          @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
-          helper_signin(:admin_user_full_create_attr, @me.full_name)
-          visit home_index_path
-        end
-        it 'should have no translations missing'
-      end
+      it 'should have no translations missing'
     end
   end
   context 'heroku' do
-    it should fix deprecation warning DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:11)/
-    
+    it should fix deprecation warning DEPRECATION WARNING: You have Rails 2.3-style plugins in vendor/plugins! Support for these plugins will be removed in Rails 4.0. Move them out and bundle them in your Gemfile, or fold them in to your app as lib/myplugin/* and config/initializers/myplugin.rb. See the release notes for more on this: http://weblog.rubyonrails.org/2012/1/4/rails-3-2-0-rc2-has-been-released. (called from <top (required)> at /app/Rakefile:11)/ 
   end
   context 'tws_auth cleanup' do
     it 'should add the translations missing - context to integration specs for all resources'

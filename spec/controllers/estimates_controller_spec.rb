@@ -462,8 +462,4 @@ describe EstimatesController do
     end
   end
   
-  context 'misc - ' do
-    it 'should have estimate calculations performed'
-  end
-
 end
