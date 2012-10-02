@@ -179,8 +179,9 @@ module UserIntegrationHelper
     component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "two") # default operation should be *C
     component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "two", operation: '*H')
     component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "three", operation: '*A')
+    component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, subtotal_group: "three", operation: '*A')
     component_deact = FactoryGirl.create(:component_create, component_type: @component_types[0], deactivated: true)
-    @components = [component0, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10, component11, component12, component13, component14, component15, component16, component_deact]
+    @components = [component0, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10, component11, component12, component13, component14, component15, component16, component17, component_deact]
     @component = component1
     @component_deact = component_deact
     Rails.logger.debug("T UserTestHelper.helper_load_components - done")
@@ -218,9 +219,13 @@ module UserIntegrationHelper
     assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[14])
     assembly_component15 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[15])
     assembly_component16 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[16])
-    @assembly_components = [assembly_component0, assembly_component1, assembly_component2, assembly_component3, assembly_component4, assembly_component5, assembly_component6, assembly_component7, assembly_component8, assembly_component9, assembly_component10, assembly_component11, assembly_component12, assembly_component13, assembly_component14, assembly_component15, assembly_component16]
+    assembly_component17 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[17], deactivated: true)
+    @assembly_components = [assembly_component0, assembly_component1, assembly_component2, assembly_component3, assembly_component4, assembly_component5, assembly_component6, assembly_component7, assembly_component8, assembly_component9, assembly_component10, assembly_component11, assembly_component12, assembly_component13, assembly_component14, assembly_component15, assembly_component16, assembly_component17]
     @assembly_component = assembly_component1
-    @assembly_component_deact = assembly_component5
+    @assembly_component_deact1 = assembly_component1
+    @assembly_component_deact2 = assembly_component6
+    @assembly_component_deact3 = assembly_component17
+    Rails.logger.debug("TTTTTT @assembly_component_deact3 = #{@assembly_component_deact3.inspect.to_s}")
     Rails.logger.debug("T UserTestHelper.helper_load_assembly_components - done")
   end
   
