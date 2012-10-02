@@ -9,9 +9,9 @@ class Estimate < ActiveRecord::Base
   belongs_to :job_type
   belongs_to :state
   has_many :estimate_assemblies, :inverse_of=>:estimate
-  validates_associated :estimate_assemblies
+  # validates_associated :estimate_assemblies
   has_many :estimate_components, :inverse_of=>:estimate
-  validates_associated :estimate_components
+  # validates_associated :estimate_components
   # # has_many :assemblies, :through => :estimate_assemblies
   # accepts_nested_attributes_for :estimate_assemblies  # cannot use the automatic deletes (does not deactivate). requires association to be attr_accessible. does not impact params passed.
   # accepts_nested_attributes_for :estimate_components  # cannot use the automatic deletes (does not deactivate). requires association to be attr_accessible. does not impact params passed.
