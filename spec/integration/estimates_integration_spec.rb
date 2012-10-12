@@ -23,9 +23,9 @@ describe 'Estimates Integration Tests', :js => false do
     it "should create a new item" do
       num_items = Estimate.count
       visit new_estimate_path()
+      # save_and_open_page      
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
-      # save_and_open_page      
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
       within(".new_estimate") do
         @estimate_attributes.each do |at_key, at_value|
@@ -311,13 +311,14 @@ describe 'Estimates Integration Tests', :js => false do
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
       @user2 = User.create!(FactoryGirl.attributes_for(:user_create))
       @sales_rep2 = SalesRep.create!(generate_sales_rep_accessible_attributes(user_id = @user2.id))
-      @estimate_deact_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep2.id, :job_type_id => @job_type.id, :state_id => @state.id, :deactivated => true )
+      @estimate_deact_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep2.id, :job_type_id => @job_type.id, :state_id => @state.id, :deactivated => DB_TRUE )
     end
     it 'should be able to list all items when show_deactivated is set' do
       item1 = Estimate.create!(@estimate_attributes)
       item_deact = Estimate.create!(@estimate_deact_attributes)
+      Estimate.count.should == 2
       visit estimates_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
-      # save_and_open_page
+      save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.index.header')}$/
       find(:xpath, "//tr[@id=\"estimate_#{item1.id}\"]/td[@id=\"estimate_#{item1.id}_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       find(:xpath, "//tr[@id=\"estimate_#{item1.id}\"]").should have_selector(:xpath, "td/a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
@@ -595,10 +596,10 @@ describe 'Estimates Integration Tests', :js => false do
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
       FactoryGirl.create(:assembly_create)
       FactoryGirl.create(:assembly_create)
-      FactoryGirl.create(:assembly_create, :required => true)
+      FactoryGirl.create(:assembly_create, :required => DB_TRUE)
       FactoryGirl.create(:assembly_create)
-      FactoryGirl.create(:assembly_create, :deactivated => true)
-      FactoryGirl.create(:assembly_create, :deactivated => true, :required => true)
+      FactoryGirl.create(:assembly_create, :deactivated => DB_TRUE)
+      FactoryGirl.create(:assembly_create, :deactivated => DB_TRUE, :required => DB_TRUE)
       FactoryGirl.create(:assembly_create)
       FactoryGirl.create(:assembly_create)
       Rails.logger.debug("T estimates_integration_spec 'assemblies created' in before :each - done")

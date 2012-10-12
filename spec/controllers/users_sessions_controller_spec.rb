@@ -135,7 +135,7 @@ describe UsersSessionsController do
       end
     end
     it 'should not allow a user to sign in if deactivated' do
-      @me = User.create!(FactoryGirl.attributes_for(:user_min_create_attr).merge({:deactivated => true}))
+      @me = User.create!(FactoryGirl.attributes_for(:user_min_create_attr).merge({:deactivated => DB_TRUE}))
       post :create, :user_session => FactoryGirl.attributes_for(:user_session)
       response.should_not redirect_to(:controller => 'users_sessions', :action => 'index')
       response.should redirect_to('/signin')

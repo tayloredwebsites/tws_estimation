@@ -12,7 +12,7 @@ module Controllers::DeactivatedController
     # nust have scope here, from the controller child call to super inside get_scope
     Rails.logger.debug ("* Controllers::DeactivatedController.get_scope - cur_scope in: #{cur_scope}, show_deactivated?: #{show_deactivated?}")
     Rails.logger.debug ("* Controllers::DeactivatedController.get_scope - controller name: #{self.controller_name}")
-    return (show_deactivated?) ? cur_scope : cur_scope.where("#{self.controller_name}.deactivated = ? or #{self.controller_name}.deactivated IS NULL", false)
+    return (show_deactivated?) ? cur_scope : cur_scope.where("#{self.controller_name}.deactivated = ?", DB_FALSE)
   end
   
   # attempt to get model class name corresponding to this controller from the 1) scope, 2) @model instance or 3) from controller name

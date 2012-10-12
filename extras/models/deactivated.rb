@@ -12,12 +12,12 @@ module Models::Deactivated
   
   module ClassMethods
     def scope_not_deactivated
-      where('deactivated = false')
+      where('deactivated = '+DB_FALSE.to_s)
     end
   end
   
   def scope_not_deactivated
-    where('deactivated = false')
+    where('deactivated = '+DB_FALSE.to_s)
   end
 
   # check to see if this module is loaded

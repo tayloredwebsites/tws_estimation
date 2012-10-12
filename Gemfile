@@ -6,17 +6,25 @@ gem 'rails', '~>3.2.1'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem 'pg'
+# gem 'pg'
+gem 'tiny_tds'
+gem "activerecord-sqlserver-adapter", "~> 3.2.0"
+gem "ruby-odbc", "~> 0.99994"
 
 gem 'cancan'
 
-gem 'foreigner'	# foreign key handling
+gem 'foreigner' # foreign key handling
 
 gem 'rdiscount'	# markdown files display in view
 
 gem 'jquery-rails'
 
-# Use unicorn as the web server
+# don't use webbrick on windows, Use thin all environments
+# see http://www.psteiner.com/2012/04/how-to-replace-webrick-with-thin-for.html
+# c:>gem install eventmachine --pre
+# c:>gem install thin
+gem 'thin'  # makes thin the default web server
+# Use unicorn as the web server - *nix only?
 # gem 'unicorn'
 
 # Deploy with Capistrano
@@ -37,7 +45,7 @@ group :development do
 
   # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
   # gem 'ruby-debug'
-  gem 'ruby-debug19'
+  # gem 'ruby-debug19'  #removed for windows install
   
   gem 'rspec-rails'
   gem 'annotate'
@@ -75,7 +83,7 @@ group :test do
 
   # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
   # gem 'ruby-debug'
-  gem 'ruby-debug19'
+  # gem 'ruby-debug19' # removed for windows install
   
   # see spec/spec_helper.rb - for fix of test records not removed after capybara fill_in and click
   gem 'database_cleaner'

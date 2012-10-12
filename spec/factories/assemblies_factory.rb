@@ -11,33 +11,33 @@ FactoryGirl.define do
   factory :assembly_create, :class => Assembly do
     description             {FactoryGirl.generate(:assembly_description)}
     sort_order              {FactoryGirl.generate(:assembly_sort_order)}
-    required                false
+    required                DB_FALSE
   end
   # minimum fields defined to create an item
   factory :assembly_min_create, :class => Assembly do
     description             {FactoryGirl.generate(:assembly_description)}
     # sort_order              {FactoryGirl.generate(:assembly_sort_order)}
-    # required                true
+    # required                DB_TRUE
   end    
   # required assembly item
   factory :assembly_required_create, :class => Assembly do
     description             {FactoryGirl.generate(:assembly_description)}
     sort_order              {FactoryGirl.generate(:assembly_sort_order)}
-    required                true
+    required                DB_TRUE
   end    
   # all fields defined and available as attributes
   factory :assembly_accessible, :class => Assembly do
     description             'Changed Description'
     sort_order              5450
-    required                false
-    deactivated             true
+    required                DB_FALSE
+    deactivated             DB_TRUE
   end
   # factory to create an item that matches :assembly_accessible (happens to be the same here)
   # useful to create a deactivated item
   factory :assembly_accessible_create, :class => Assembly do
     description             'Changed Description'
     sort_order              5450
-    required                false
-    deactivated             true
+    required                DB_FALSE
+    deactivated             DB_TRUE
   end
 end

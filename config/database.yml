@@ -1,15 +1,24 @@
 # PostgreSQL 9.0
 development:
-#  adapter: sqlite3
-#  database: db/development.sqlite3
-#  pool: 5
-#  timeout: 5000
-    adapter: postgresql
-    database: tws_estim_development
-    username: RoR
-    password: synapse
-    host: localhost
-    port: 5432
+    adapter: sqlserver
+    mode: odbc
+    dsn: ca_estim_dev
+    # dataserver: localhost\SQLEXPRESS   # Name from freetds.conf, host or instance 'localhost\SQLEXPRESS'
+    # host: localhost
+    # port: 1501              # Used if host present. Default is 1433.
+    # database: ca_estim_dev
+    username: sa
+    password: synapse8net
+    #  adapter: sqlite3
+    #  database: db/development.sqlite3
+    #  pool: 5
+    #  timeout: 5000
+    # adapter: postgresql
+    # database: tws_estim_development
+    # username: RoR
+    # password: synapse
+    # host: localhost
+    # port: 5432
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -19,33 +28,61 @@ test:
 #  database: db/test.sqlite3
 #  pool: 5
 #  timeout: 5000
-    adapter: postgresql
-    database: tws_estim_test
-    username: RoR
-    password: synapse
-    host: localhost
-    port: 5432
+    # adapter: postgresql
+    # database: tws_estim_test
+    # username: RoR
+    # password: synapse
+    # host: localhost
+    # port: 5432
     # adapter: sqlite3
     # database: ":memory:"
     # verbosity: quiet
+    adapter: sqlserver
+    mode: odbc
+    dsn: ca_estim_test
+    # dataserver: localhost\SQLEXPRESS   # Name from freetds.conf, host or instance 'localhost\SQLEXPRESS'
+    # host: localhost
+    # port: 1501              # Used if host present. Default is 1433.
+    # specified database (even though using odbc/dsn), so rake db:test:prepare doesn't try to use (and drop) 'master' database
+    database: ca_estim_test
+    username: sa
+    password: synapse8net
 
 production:
 #  adapter: sqlite3
 #  database: db/production.sqlite3
 #  pool: 5
 #  timeout: 5000
-    adapter: postgresql
-    database: tws_estim_production
-    username: RoR
-    password: synapse
-    host: localhost
-    port: 5432
+    # adapter: postgresql
+    # database: tws_estim_production
+    # username: RoR
+    # password: synapse
+    # host: localhost
+    # port: 5432
+    adapter: sqlserver
+    mode: odbc
+    dsn: ca_estim_test
+    # dataserver: localhost\SQLEXPRESS   # Name from freetds.conf, host or instance 'localhost\SQLEXPRESS'
+    # host: localhost
+    # port: 1501              # Used if host present. Default is 1433.
+    # database: ca_estim_dev
+    username: sa
+    password: synapse8net
 
 legacy:
-    adapter: postgresql
-    database: EstimationMigration
-    username: RoR
-    password: synapse
-    host: localhost
-    port: 5432
+    # adapter: postgresql
+    # database: EstimationMigration
+    # username: RoR
+    # password: synapse
+    # host: localhost
+    # port: 5432
+    adapter: sqlserver
+    mode: odbc
+    dsn: ca_estim_old
+    # dataserver: localhost\SQLEXPRESS   # Name from freetds.conf, host or instance 'localhost\SQLEXPRESS'
+    # host: localhost
+    # port: 1501              # Used if host present. Default is 1433.
+    # database: ca_estim_dev
+    username: sa
+    password: synapse8net
     

@@ -149,7 +149,7 @@ module UserIntegrationHelper
   def helper_load_component_types
     component_type0 = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
     component_type_hours = ComponentType.create!(FactoryGirl.attributes_for(:component_type_hours).merge(:description => 'Test Hours'))
-    component_type_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge(:deactivated => true))
+    component_type_deact = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge(:deactivated => DB_TRUE))
     component_type_not_in_grid = ComponentType.create!(FactoryGirl.attributes_for(:component_type_not_in_totals_grid).merge(:description => 'Test Not In Grid'))
     component_type_x = ComponentType.create!(FactoryGirl.attributes_for(:component_type))
     component_type_totals = ComponentType.create!(FactoryGirl.attributes_for(:component_type_totals).merge(:description => 'Test Totals Grid'))

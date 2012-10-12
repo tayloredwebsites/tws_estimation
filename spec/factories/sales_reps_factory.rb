@@ -11,7 +11,7 @@ def generate_sales_rep_accessible_attributes(user_id = nil)
     :user_id => my_user_id,
     :min_markup_pct => 0.0,
     :max_markup_pct => 10.0,
-    :deactivated => false
+    :deactivated => DB_FALSE
   }
 end
 
@@ -43,12 +43,12 @@ FactoryGirl.define do
   factory :sales_rep_accessible, :class => SalesRep do
     min_markup_pct          1.0
     max_markup_pct          9.0
-    deactivated             true
+    deactivated             DB_TRUE
   end
   factory :sales_rep_accessible_create, :class => SalesRep do
     association             :user, :factory => :user, :strategy => :build
     min_markup_pct          1.0
     max_markup_pct          9.0
-    deactivated             true
+    deactivated             DB_TRUE
   end
 end

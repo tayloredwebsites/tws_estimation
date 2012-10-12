@@ -55,9 +55,9 @@ FactoryGirl.define do
     association       :sales_rep,  :factory => :sales_rep_create,  :strategy => :build
     association       :job_type,  :factory => :job_type,  :strategy => :build
     association       :state,  :factory => :state,  :strategy => :build
-    prevailing_wage   false
+    prevailing_wage   DB_FALSE
     note              {FactoryGirl.generate(:estimate_note)}
-    deactivated       false
+    deactivated       DB_FALSE
   end
   factory :estimate_min, :class => Estimate do
     title             {FactoryGirl.generate(:estimate_title)}
@@ -73,16 +73,16 @@ FactoryGirl.define do
     association       :sales_rep,  :factory => :sales_rep_create,  :strategy => :build
     association       :job_type,  :factory => :job_type,  :strategy => :build
     association       :state,  :factory => :state,  :strategy => :build
-    prevailing_wage   true
+    prevailing_wage   DB_TRUE
     note              'A note about the estimate'
-    deactivated       true
+    deactivated       DB_TRUE
   end    
   factory :estimate_accessible, :class => Estimate do
     title             'My Title'
     customer_name     'Customer Name'
     customer_note     'A note about the customer'
-    prevailing_wage   true
+    prevailing_wage   DB_TRUE
     note              'A note about the estimate'
-    deactivated       true
+    deactivated       DB_TRUE
   end    
 end
