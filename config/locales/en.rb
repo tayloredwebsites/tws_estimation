@@ -460,7 +460,7 @@
         :description => 'Description',
         :default_id => 'Default ID',
         :default => 'Default Value',
-        :editable => 'Calculated using Default',
+        :editable => 'Editable (in Totals Grid)',
         :deactivated => 'Deactivated',
         :created_at => 'Created',
         :updated_at => 'Updated'
@@ -472,7 +472,7 @@
         :description => 'Desc.',
         :default_id => 'Default ID',
         :default => 'Default Value',
-        :editable => 'Calc. of Default',
+        :editable => 'Editable',
         :deactivated => 'Deactivated',
         :created_at => 'Created',
         :updated_at => 'Updated'
@@ -484,7 +484,7 @@
         :description => 'Description.',
         :default_id => 'ID of the Default Value for this item.',
         :default => 'The Default Value for this item.',
-        :editable => 'Calculated using Default Value (with no Value change allowed).',
+        :editable => 'Editable (in Totals Grid - allows value change).',
         :deactivated => 'Is this field deactivated?',
         :created_at => 'Created at this Date and Time.',
         :updated_at => 'Last Updated at this date and time.'
