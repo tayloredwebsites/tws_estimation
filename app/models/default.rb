@@ -4,12 +4,36 @@ class Default < ActiveRecord::Base
   include Models::CommonMethods
   
   attr_accessible :store, :name, :value, :deactivated
-
+  
+  has_many :components, :inverse_of=>:default, :dependent => :restrict
+  
   validates :store,
       :presence => true
   validates :name,
       :presence => true,
       :uniqueness => {:scope => :store}
+
+  # methods
+
+  
+  def destroy(*params)
+     begin
+       super(*params)
+     rescue Exception=>ex
+       errors.add(:base, I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+       Rails.logger.error("ERROR Default.destroy - #{ex.to_s}")
+     end
+   end
+
+   def delete(*params)
+      begin
+        super(*params)
+      rescue Exception=>ex
+        self.errors.add( I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+        Rails.logger.error("ERROR Default.delete - #{ex.to_s}")
+      end
+    end
+
 
   def nil_to_s
     # call to super here brings in deactivated feature

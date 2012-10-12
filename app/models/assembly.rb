@@ -5,11 +5,12 @@ class Assembly < ActiveRecord::Base
   
   attr_accessible :description, :sort_order, :required, :deactivated
     
-  has_many :assembly_components, :inverse_of=>:assembly
+  has_many :assembly_components, :inverse_of=>:assembly, :dependent => :restrict
   # validates_associated :assembly_components
-  has_many :estimate_assemblies, :inverse_of=>:assembly
+  has_many :estimate_assemblies, :inverse_of=>:assembly, :dependent => :restrict
   # validates_associated :estimate_assemblies
-  has_many :estimates, :through => :estimate_assemblies
+  has_many :estimate_components, :inverse_of=>:assembly, :dependent => :restrict
+  has_many :estimates, :through => :estimate_assemblies, :dependent => :restrict
   validates_associated :estimates
 
   validates :description,
@@ -21,8 +22,28 @@ class Assembly < ActiveRecord::Base
     
   validates :required,
     :inclusion => { :in => [true, false] }
-
+  
   # methods
+  
+  def destroy(*params)
+     begin
+       super(*params)
+     rescue Exception=>ex
+       errors.add(:base, I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+       Rails.logger.error("ERROR Assembly.destroy - #{ex.to_s}")
+     end
+   end
+
+   def delete(*params)
+      begin
+        super(*params)
+      rescue Exception=>ex
+        self.errors.add( I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+        Rails.logger.error("ERROR Assembly.delete - #{ex.to_s}")
+      end
+    end
+
+  
   def nil_to_s
     # call to super here brings in deactivated feature
     desc
