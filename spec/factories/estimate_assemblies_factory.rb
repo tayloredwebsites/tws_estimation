@@ -26,19 +26,19 @@ FactoryGirl.define do
   factory :estimate_assembly, :class => EstimateAssembly do
     association :estimate, :factory => :estimate, :strategy => :build
     association :assembly,  :factory => :assembly_create,  :strategy => :build
-    selected false
+    selected DB_FALSE
   end
   factory :estimate_assembly_min_create, :class => EstimateAssembly do
     association :estimate, :factory => :estimate, :strategy => :build
     association :assembly,  :factory => :assembly_create,  :strategy => :build
-    selected false
+    selected DB_FALSE
   end
   factory :estimate_assembly_accessible_create, :class => EstimateAssembly do
     association :estimate, :factory => :estimate, :strategy => :build
     association :assembly,  :factory => :assembly_create,  :strategy => :build
-    selected true
+    selected DB_TRUE
   end    
   factory :estimate_assembly_accessible, :class => EstimateAssembly do
-    selected true
+    selected DB_TRUE
   end    
 end

@@ -3,10 +3,13 @@
 # Application Constants
 #######################
 
-DB_TRUE = true
-DB_TRUE_VALUES = [true, 'T', 'true', 'True', 'TRUE', '1']
-DB_FALSE = false
-DB_FALSE_VALUES = [false, 'F', 'false', 'False', 'FALSE', '0']
+# set depending upon database storage of booleans (postgres) or not (sql server)
+# DB_TRUE = true
+DB_TRUE = 1
+DB_TRUE_VALUES = [true, 't', 'T', 'true', 'True', 'TRUE', '1', 1]
+# DB_FALSE = false
+DB_FALSE = 0
+DB_FALSE_VALUES = [false, 'f', 'F', 'false', 'False', 'FALSE', '0', 0]
 VIEWS_SCRIPTING = true
 BIG_DECIMAL_ZERO = BigDecimal.new('0.00',2)
 

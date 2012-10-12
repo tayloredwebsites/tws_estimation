@@ -19,8 +19,8 @@ namespace :legacy do
           new_default = Default.new
           new_default.attributes = {
             :store => 'Installation Rates',
-            :name => old_default.name,
-            :value => old_default.value
+            :name => old_default.co_name,
+            :value => old_default.co_value
           }
           new_default.save!
           puts "Successfully migrated Defaults table."
@@ -40,14 +40,13 @@ namespace :legacy do
         begin
           new_component_type = ComponentType.new
           new_component_type.attributes = {
-            :description => old_component_type.description,
-            :sort_order => old_component_type.sort_order,
-            :has_costs => old_component_type.has_costs,
-            :has_hours => old_component_type.has_hours,
-            :has_vendor => old_component_type.has_vendor,
-            :has_totals => old_component_type.has_misc,
-            :in_totals_grid => old_component_type.no_entry,
-            :deactivated => old_component_type.deactivated
+            :description => old_component_type.comp_type_desc,
+            :sort_order => old_component_type.comp_type_sort_order,
+            :has_costs => old_component_type.comp_type_has_costs,
+            :has_hours => old_component_type.comp_type_has_hours,
+            :has_vendor => old_component_type.comp_type_has_vendor,
+            :has_totals => old_component_type.comp_type_has_misc,
+            :in_totals_grid => old_component_type.comp_type_no_entry
           }
           new_component_type.save!
           puts "Successfully migrated component_types table."
@@ -60,22 +59,30 @@ namespace :legacy do
     
     desc 'import components table from legacy data'
     task :components => :setups do
-      # untested.  recreated code
       #ActiveRecord::Base.record_timestamps = false # turn off timestamps
       include Legacy::LegacyClasses
       # loop through the legacy records
       LegacyComponent.all.each do |old_component|
         begin
           # unique component_type found by description
-          old_component_type = LegacyComponentType.find(old_component.component_type_id)
-          new_component_type = ComponentType.find_by_description(old_component_type.description)
+          # old_component_type = LegacyComponentType.find(old_component.component_type_id)
+          old_component_type = LegacyComponentType.find(old_component.comp_type_id)
+          # new_component_type = ComponentType.find_by_description(old_component_type.description)
+          new_component_type = ComponentType.find_by_description(old_component_type.comp_type_desc)
+          if old_component.comp_lu_def_id.blank?
+            new_default_id = nil
+          else
+            old_default = LegacyDefaults.find(old_component.comp_lu_def_id)
+            new_default = Default.find_by_name(old_component_type.co_name)
+            new_default_id = new_default.id
+          end
           new_component = Component.new
           new_component.attributes = {
             :component_type_id => new_component_type.id,
-            :description => old_component.description,
-            :default_id => old_component.default_id,  # note this assumes that the default ID values have been retained !!
-            :editable => old_component.calc_only,
-            :deactivated => old_component.deactivated
+            :description => old_component.comp_desc,
+            :default_id => new_default_id,
+            :editable => old_component.comp_calc_only,
+            :deactivated => old_component.comp_deleted
           }
           new_component.save!
           puts "Successfully migrated Components table."
@@ -95,10 +102,10 @@ namespace :legacy do
         begin
           new_table = Assembly.new
           new_table.attributes = {
-            :description => old_table.description,
-            :sort_order => old_table.sort_order,
-            :required => old_table.required,
-            :deactivated => old_table.deactivated
+            :description => old_table.sys_desc,
+            :sort_order => old_table.sys_sort_order,
+            :required => old_table.sys_required,
+            :deactivated => old_table.sys_deleted
           }
           new_table.save!
           puts "Successfully migrated Assemblies table."
@@ -116,28 +123,30 @@ namespace :legacy do
       # loop through the legacy records
       LegacyAssemblyComponent.all.each do |old_table|
         # unique component found by component_type and description
-        old_component = LegacyComponent.find(old_table.component_id)
+        old_component = LegacyComponent.find(old_table.sys_comp_comp_id)
         # unique component_type found by description
-        old_component_type = LegacyComponentType.find(old_component.component_type_id)
-        new_component_type = ComponentType.scoped_by_description(old_component_type.description).first
-        new_component = Component.where(:component_type_id => new_component_type.id, :description => old_component.description).first
+        # old_component_type = LegacyComponentType.find(old_component.component_type_id)
+        old_component_type = LegacyComponentType.find(old_component.comp_type_id)
+        # new_component_type = ComponentType.scoped_by_description(old_component_type.description).first
+        new_component_type = ComponentType.scoped_by_description(old_component_type.comp_type_desc).first
+        new_component = Component.where(:component_type_id => new_component_type.id, :description => old_component.comp_desc).first
         # unique assembly found by description
-        old_assembly = LegacyAssembly.find(old_table.assembly_id)
-        new_assembly = Assembly.scoped_by_description(old_assembly.description).first
+        old_assembly = LegacyAssembly.find(old_table.sys_comp_sys_id)
+        new_assembly = Assembly.scoped_by_description(old_assembly.sys_desc).first
         begin
           new_table = AssemblyComponent.new
-          Rails.logger.debug("M migrating assembly_components AssemblyComponent component_id = #{new_component.id.to_s}, assembly_id = #{new_assembly.id.to_s}")
+          # Rails.logger.debug("M migrating assembly_components AssemblyComponent component_id = #{new_component.id.to_s}, assembly_id = #{new_assembly.id.to_s}")
           new_table.attributes = {
             :component_id => new_component.id,
             :assembly_id => new_assembly.id,
-            :description => (old_table.description.nil?) ? '' : old_table.description,
-            :required => old_table.required,
-            :deactivated => old_table.deactivated
+            :description => (old_table.sys_comp_desc.nil?) ? '' : old_table.sys_comp_desc,
+            :required => old_table.sys_comp_req,
+            :deactivated => old_table.sys_comp_deleted
           }
           new_table.save!
           puts "Successfully migrated assembly_components record."
         rescue Exception => e
-          Rails.logger.debug("M Error migrating assembly_components record #{old_table.id.to_s},  #{e.inspect.to_s}")
+          Rails.logger.error("M Error migrating assembly_components record #{old_table.id.to_s},  #{e.inspect.to_s}")
         end
       end
       #ActiveRecord::Base.record_timestamps = true # turn timestamps back on
@@ -151,10 +160,9 @@ namespace :legacy do
         begin
           new_table = JobType.new
           new_table.attributes = {
-            :name => old_table.name,
-            :description => old_table.description,
-            :sort_order => old_table.sort_order,
-            :deactivated => old_table.deactivated
+            :name => old_table.tax_type_desc,
+            :description => old_table.tax_type_desc,
+            :sort_order => old_table.tax_type_sort_order
           }
           new_table.save!
           puts "Successfully migrated job_types table."

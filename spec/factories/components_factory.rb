@@ -9,8 +9,8 @@ def generate_component_accessible_attributes
     :component_type_id => component_type.id,
     :description => FactoryGirl.generate(:component_description),
     :default_id => default.id,
-    :editable => false,
-    :deactivated => false
+    :editable => DB_FALSE,
+    :deactivated => DB_FALSE
   }
 end
   
@@ -54,7 +54,7 @@ FactoryGirl.define do
     description             {FactoryGirl.generate(:component_description)}
     # association             :default, :factory => :default, :strategy => :build
     default_id              nil
-    editable                true
+    editable                DB_TRUE
   end
   factory :component_in_totals_grid_create, :class => Component do
     association             :component_type, :factory => :component_type_in_totals_grid, :strategy => :build
@@ -63,13 +63,13 @@ FactoryGirl.define do
   end    
   factory :component_accessible, :class => Component do
     description             'Changed Description'
-    editable               true
-    deactivated             true
+    editable               DB_TRUE
+    deactivated             DB_TRUE
   end
   factory :component_accessible_create, :class => Component do
     association             :component_type, :factory => :component_type, :strategy => :build
     description             'Changed Description'
-    editable               true
-    deactivated             true
+    editable               DB_TRUE
+    deactivated             DB_TRUE
   end
 end

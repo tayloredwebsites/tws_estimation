@@ -19,6 +19,6 @@ FactoryGirl.define do
     store         'Test Store Changed'
     name          {FactoryGirl.generate(:default_name)}
     value         {FactoryGirl.generate(:default_value)}
-    deactivated   true
+    deactivated   DB_TRUE
   end    
 end

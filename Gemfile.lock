@@ -23,6 +23,8 @@ GEM
       activesupport (= 3.2.8)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-sqlserver-adapter (3.2.9)
+      activerecord (~> 3.2.0)
     activeresource (3.2.8)
       activemodel (= 3.2.8)
       activesupport (= 3.2.8)
@@ -32,7 +34,6 @@ GEM
     addressable (2.3.2)
     annotate (2.5.0)
       rake
-    archive-tar-minitar (0.5.2)
     arel (3.0.2)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
@@ -53,23 +54,26 @@ GEM
       xpath (~> 0.1.4)
     childprocess (0.3.5)
       ffi (~> 1.0, >= 1.0.6)
+    code_analyzer (0.2.0)
+      sexp_processor
     colored (1.2)
-    columnize (0.3.6)
+    daemons (1.1.9)
     database_cleaner (0.8.0)
     diff-lcs (1.1.3)
     erubis (2.7.0)
+    eventmachine (1.0.0.rc.4-x86-mingw32)
     factory_girl (4.1.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.1.0)
       factory_girl (~> 4.1.0)
       railties (>= 3.0.0)
-    ffi (1.1.5)
+    ffi (1.1.5-x86-mingw32)
     foreigner (1.2.1)
       activerecord (>= 3.0.0)
     hike (1.2.1)
     i18n (0.6.1)
     journey (1.0.4)
-    jquery-rails (2.1.2)
+    jquery-rails (2.1.3)
       railties (>= 3.1.0, < 5.0)
       thor (~> 0.14)
     json (1.7.5)
@@ -77,16 +81,13 @@ GEM
       addressable (~> 2.3)
     libwebsocket (0.1.5)
       addressable
-    linecache19 (0.5.12)
-      ruby_core_source (>= 0.1.4)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.19)
     multi_json (1.3.6)
-    nokogiri (1.5.5)
-    pg (0.14.1)
+    nokogiri (1.5.5-x86-mingw32)
     polyglot (0.3.3)
     progressbar (0.11.0)
     rack (1.4.1)
@@ -94,7 +95,7 @@ GEM
       rack (>= 0.4)
     rack-ssl (1.3.2)
       rack
-    rack-test (0.6.1)
+    rack-test (0.6.2)
       rack (>= 1.0)
     rails (3.2.8)
       actionmailer (= 3.2.8)
@@ -104,14 +105,14 @@ GEM
       activesupport (= 3.2.8)
       bundler (~> 1.0)
       railties (= 3.2.8)
-    rails_best_practices (1.10.1)
+    rails_best_practices (1.11.1)
       activesupport
       awesome_print
+      code_analyzer
       colored
       erubis
       i18n
       progressbar
-      sexp_processor
     railties (3.2.8)
       actionpack (= 3.2.8)
       activesupport (= 3.2.8)
@@ -130,22 +131,13 @@ GEM
     rspec-core (2.11.1)
     rspec-expectations (2.11.3)
       diff-lcs (~> 1.1.3)
-    rspec-mocks (2.11.2)
+    rspec-mocks (2.11.3)
     rspec-rails (2.11.0)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec (~> 2.11.0)
-    ruby-debug-base19 (0.11.25)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby_core_source (>= 0.1.4)
-    ruby-debug19 (0.11.6)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby-debug-base19 (>= 0.11.19)
-    ruby_core_source (0.1.5)
-      archive-tar-minitar (>= 0.5.2)
+    ruby-odbc (0.99994)
     rubyzip (0.9.9)
     selenium-webdriver (2.25.0)
       childprocess (>= 0.2.5)
@@ -158,10 +150,14 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sys-uname (0.9.0)
-      ffi (>= 1.0.0)
+    sys-uname (0.9.0-x86-mingw32)
+    thin (1.5.0)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     thor (0.16.0)
     tilt (1.3.3)
+    tiny_tds (0.5.1-x86-mingw32)
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
@@ -170,10 +166,11 @@ GEM
       nokogiri (~> 1.3)
 
 PLATFORMS
-  ruby
+  x86-mingw32
 
 DEPENDENCIES
   ZenTest
+  activerecord-sqlserver-adapter (~> 3.2.0)
   annotate
   autotest
   autotest-fsevent
@@ -186,11 +183,12 @@ DEPENDENCIES
   foreigner
   jquery-rails
   launchy
-  pg
   rails (~> 3.2.1)
   rails_best_practices
   rdiscount
   rspec
   rspec-rails
-  ruby-debug19
+  ruby-odbc (~> 0.99994)
   spork
+  thin
+  tiny_tds
