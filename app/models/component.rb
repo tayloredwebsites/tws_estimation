@@ -8,8 +8,9 @@ class Component < ActiveRecord::Base
 
   belongs_to :component_type
   belongs_to :default
-  has_many :assembly_components
+  has_many :assembly_components, :inverse_of => :component, :dependent => :restrict
   validates_associated :assembly_components
+  has_many :estimate_components, :inverse_of => :component, :dependent => :restrict
     
   validates :description,
     :presence => true,
@@ -20,6 +21,26 @@ class Component < ActiveRecord::Base
 
   validates :component_type_id,
     :presence => true
+
+  # methods
+
+  def destroy(*params)
+     begin
+       super(*params)
+     rescue Exception=>ex
+       errors.add(:base, I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+       Rails.logger.error("ERROR Component.destroy - #{ex.to_s}")
+     end
+   end
+
+   def delete(*params)
+      begin
+        super(*params)
+      rescue Exception=>ex
+        self.errors.add( I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+        Rails.logger.error("ERROR Component.delete - #{ex.to_s}")
+      end
+    end
 
   def nil_to_s
     # call to super here brings in deactivated feature

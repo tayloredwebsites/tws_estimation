@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :email, :username, :deactivated, :password, :password_confirmation, :old_password, :roles
   attr_accessor :password, :old_password
 
-  has_one :sales_rep
+  has_one :sales_rep, :dependent => :restrict
   # has_many :estimates, :through => :sales_rep
 
   validates :username,
@@ -61,9 +61,26 @@ class User < ActiveRecord::Base
     # validate_save
     super if errors.empty? && self.id != 0  # don't save the guest user
   end
+  
+  def destroy(*params)
+     begin
+       super(*params)
+     rescue Exception=>ex
+       errors.add(:base, I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+       Rails.logger.error("ERROR User.destroy - #{ex.to_s}")
+     end
+   end
 
+   def delete(*params)
+      begin
+        super(*params)
+      rescue Exception=>ex
+        self.errors.add( I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+        Rails.logger.error("ERROR User.delete - #{ex.to_s}")
+      end
+    end
 
-  # class level valid_password to check password against user in database
+   # class level valid_password to check password against user in database
   def self.valid_password? (username, password_in, password_confirmation=nil)
     password_confirmation = password_in if password_confirmation==nil
     # auth_user = User.where("username = ?", username) if !username.nil?

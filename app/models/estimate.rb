@@ -8,9 +8,9 @@ class Estimate < ActiveRecord::Base
   belongs_to :sales_rep
   belongs_to :job_type
   belongs_to :state
-  has_many :estimate_assemblies, :inverse_of=>:estimate
+  has_many :estimate_assemblies, :inverse_of=>:estimate, :dependent => :restrict
   # validates_associated :estimate_assemblies
-  has_many :estimate_components, :inverse_of=>:estimate
+  has_many :estimate_components, :inverse_of=>:estimate, :dependent => :restrict
   # validates_associated :estimate_components
   # # has_many :assemblies, :through => :estimate_assemblies
   # accepts_nested_attributes_for :estimate_assemblies  # cannot use the automatic deletes (does not deactivate). requires association to be attr_accessible. does not impact params passed.
@@ -27,6 +27,27 @@ class Estimate < ActiveRecord::Base
     :presence => { :message => "requires a job type ID"}
   validates :state_id,
     :presence => { :message => "requires a state type ID"}
+  
+  # methods
+  
+  def destroy(*params)
+     begin
+       super(*params)
+     rescue Exception=>ex
+       errors.add(:base, I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+       Rails.logger.error("ERROR Estimate.destroy - #{ex.to_s}")
+     end
+   end
+
+   def delete(*params)
+      begin
+        super(*params)
+      rescue Exception=>ex
+        self.errors.add( I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+        Rails.logger.error("ERROR Estimate.delete - #{ex.to_s}")
+      end
+    end
+
 
   # self describe this object instance
   def nil_to_s
