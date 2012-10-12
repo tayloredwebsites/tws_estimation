@@ -10,13 +10,13 @@
   Some limitations on background-colors because of the use of margins for positioning the columns.
 */
   body {font-family: Georgia, "Times New Roman", Times, serif;}
-  #header {width:100%;min-height:100px;}
+  #header {/*width:100%;*/min-height:100px;}
   #middle_content {margin-left:200px;} /* margin-right:200px;} - for right hand column */
   #left_content {width:199px;float:left;margin-left:-200px;overflow:hidden;}
-  #center_content {width:100%;overflow:hidden;}
-  #content_header {display:block;width:100%;}
-  #content_body {display:block;width:100%;overflow:hidden;}
-  #content_footer {display:block;width:100%;}
+  #center_content {/*width:100%;*/overflow:hidden;}
+  #content_header {display:block;/*width:100%;*/}
+  #content_body {display:block;/*width:100%;*/overflow:hidden;}
+  #content_footer {display:block;/*width:100%;*/}
   #content {/* width:100%; */}
   #right_content {width:190px;padding:5px;float:right;margin-right:-200px;}
   #footer {clear:both;}
