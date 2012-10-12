@@ -329,7 +329,13 @@ describe EstimatesController do
       item1_updated = Estimate.find(assigns(:estimate).id)
       # Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")
       # Rails.logger.debug("T item1_updated.estimate_components = #{item1_updated.estimate_components.inspect.to_s}")
-      item1_updated.estimate_components.first.component_id.should == @component2.id
+      item1_updated.estimate_components.each do |ec|
+        if ec.component_id == @component1.id
+          ec.value.bd_to_s(2).should == "123.48"
+        elsif ec.component_id == @component2.id
+          ec.value.bd_to_s(2).should == "543.21"
+        end
+      end
     end
     it "Estimate.update should create/update components from params" do
       @assembly = Assembly.create!(FactoryGirl.attributes_for(:assembly_create))
@@ -362,7 +368,13 @@ describe EstimatesController do
       Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")
       Rails.logger.debug("T item1_updated.estimate_components = #{item1_updated.estimate_components.inspect.to_s}")
       # item1_updated.estimate_components.first.assembly_id.should == @assembly.id
-      item1_updated.estimate_components.first.component_id.should == @component2.id
+      item1_updated.estimate_components.each do |ec|
+        if ec.component_id == @component1.id
+          ec.value.bd_to_s(2).should == "123.48"
+        elsif ec.component_id == @component2.id
+          ec.value.bd_to_s(2).should == "543.21"
+        end
+      end
       # response.should render_template("show")
       response.should redirect_to("/estimates/#{assigns(:estimate).id}")
       response.should redirect_to(:controller => 'estimates', :action => 'show')

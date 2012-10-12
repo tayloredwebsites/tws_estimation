@@ -154,22 +154,22 @@ describe Component do
       @parent = FactoryGirl.create(:component_type)
       @default = FactoryGirl.create(:default)
     end
-    it 'should not allow destroy of parent if there are items' do
+    it 'should not allow destroy of component_type if there are components' do
       FactoryGirl.create(:component_min_create, component_type: @parent)
       FactoryGirl.create(:component_create, component_type: @parent, default: @default)
       @parent.components.length.should == 2
-      num_parent = Component.count
+      num_parent = ComponentType.count
       @parent.deactivate()
       @parent.destroy()
       @parent.errors.count.should > 0
-      Component.count.should == num_parent
+      ComponentType.count.should == num_parent
     end
-    it 'should allow destroy of component_type if there are no items' do
+    it 'should allow destroy of component_type if there are components' do
       num_parent = ComponentType.count
       @parent.deactivate()
       @parent.destroy()
       @parent.errors.count.should == 0
-      Component.count.should == num_parent - 1
+      ComponentType.count.should == num_parent - 1
     end
   end
 end

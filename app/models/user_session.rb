@@ -180,6 +180,7 @@ class UserSession
   
   def expire_user_session
     @time_last_accessed = SESSION_TIMEOUT_SECONDS.seconds.ago
+    self.sign_out
   end
   
 end

@@ -9,7 +9,7 @@
     If need a parent association for breaks by parent, try $ rails generate tws_views estimate all <parent_association>:parent
     Note: if child association is not the current table (e.g. join table), add <child_association>:child to the tws_views generate
 -->
-<table cellspacing="0">
+<!-- table cellspacing="0" -->
 <%
 last_parent_assoc_id = 0
 parent_association = ""
@@ -21,8 +21,12 @@ last_parent_association = ""
         parent_association = item.send('sales_rep')
         # Rails.logger.debug("G index.html.erb parent_association = #{parent_association.inspect.to_s}")
         if last_parent_assoc_id != parent_association.id
+			if last_parent_association != ""
 %>
             </table>
+<%
+			end
+%>
             <!-- use this first link if has many association -->
             <!-- use this second link if has many association and this class is a join table -->
             <%= link_to "New #{last_parent_association.nil_to_s} Estimate", new_estimate_path(:sales_rep_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
