@@ -54,7 +54,7 @@ FactoryGirl.define do
     association :component,  :factory => :component_create,  :strategy => :build
     write_in_name {FactoryGirl.generate(:estimate_component_write_in_name)}
     value {FactoryGirl.generate(:estimate_component_value)}
-    deactivated DB_FALSE
+    deactivated false
   end
   # factory :estimate_component_min_create, :class => EstimateComponent do
   #   association :estimate, :factory => :estimate, :strategy => :build

@@ -101,10 +101,8 @@ module Models::Deactivated
 
   def deactivated?
     if db_value_true?(self.deactivated)
-      Rails.logger.debug("??  Models::Deactivated.deactivated? self.deactivated == DB_TRUE")
       return true
     else
-      Rails.logger.debug("??  Models::Deactivated.deactivated? self.deactivated == DB_FALSE")
       return false
     end
   end

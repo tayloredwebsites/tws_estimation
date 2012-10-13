@@ -113,7 +113,9 @@ describe User do
   
     it 'should have deactivated set to DB_FALSE or DB_TRUE (during create, ... see logger.debug)' do
       @user1.deactivated?.should be_false
-      @user1.deactivated.should == DB_FALSE
+      # boolean field in model (not the database data type)
+      # @user1.deactivated.should == DB_FALSE
+      @user1.deactivated.should == false
     end
   
   end

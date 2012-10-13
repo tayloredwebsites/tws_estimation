@@ -9,7 +9,7 @@ FactoryGirl.define do
   factory :component_type, :class => ComponentType do
     description       {FactoryGirl.generate(:component_type_description)}
     sort_order        {FactoryGirl.generate(:sort_order)}
-    in_totals_grid    DB_TRUE
+    in_totals_grid    true
   end
   factory :component_type_min, :class => ComponentType do
     description       {FactoryGirl.generate(:component_type_description)}
@@ -17,27 +17,27 @@ FactoryGirl.define do
   factory :component_type_accessible, :class => ComponentType do
     description       {FactoryGirl.generate(:component_type_description)}
     sort_order        {FactoryGirl.generate(:sort_order)}
-    has_costs         DB_FALSE
-    has_hours         DB_TRUE
-    has_vendor        DB_TRUE
-    has_totals        DB_FALSE
-    in_totals_grid    DB_FALSE
-    deactivated       DB_TRUE
+    has_costs         false
+    has_hours         true
+    has_vendor        true
+    has_totals        false
+    in_totals_grid    false
+    deactivated       true
   end    
   factory :component_type_totals, :class => ComponentType do
     description       {FactoryGirl.generate(:component_type_description)}
     sort_order        {FactoryGirl.generate(:sort_order)}
-    has_totals        DB_TRUE
+    has_totals        true
   end    
   factory :component_type_not_in_totals_grid, :class => ComponentType do
     description       {FactoryGirl.generate(:component_type_description)}
     sort_order        {FactoryGirl.generate(:sort_order)}
-    in_totals_grid    DB_FALSE
+    in_totals_grid    false
   end    
   factory :component_type_hours, :class => ComponentType do
     description       {FactoryGirl.generate(:component_type_description)}
     sort_order        {FactoryGirl.generate(:sort_order)}
-    has_hours         DB_TRUE
-    in_totals_grid    DB_TRUE
+    has_hours         true
+    in_totals_grid    true
   end    
 end

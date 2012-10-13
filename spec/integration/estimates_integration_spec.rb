@@ -318,7 +318,7 @@ describe 'Estimates Integration Tests', :js => false do
       item_deact = Estimate.create!(@estimate_deact_attributes)
       Estimate.count.should == 2
       visit estimates_path(:show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
-      save_and_open_page
+      # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.index.header')}$/
       find(:xpath, "//tr[@id=\"estimate_#{item1.id}\"]/td[@id=\"estimate_#{item1.id}_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       find(:xpath, "//tr[@id=\"estimate_#{item1.id}\"]").should have_selector(:xpath, "td/a[text()=\"#{I18n.translate('view_action.deactivate')}\"]")
