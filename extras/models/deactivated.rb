@@ -8,6 +8,8 @@ module Models::Deactivated
   
   included do
     before_save :validate_deactivated
+    # before_create :validate_deactivated
+    # before_update :validate_deactivated
   end
   
   module ClassMethods
@@ -27,9 +29,9 @@ module Models::Deactivated
   end
   
   def validate_deactivated
-    # Rails.logger.debug("* User.validate_deactivated:#{deactivated.inspect.to_s}")
-    self.deactivated = db_value_true?(self.deactivated)
-    # Rails.logger.debug("* User.validate_deactivated done => #{deactivated.inspect.to_s}")
+    # Rails.logger.debug("* Models::Deactivated.validate_deactivated:#{deactivated.inspect.to_s}")
+    self.deactivated = db_value_true?(self.deactivated) ? DB_TRUE : DB_FALSE
+    # Rails.logger.debug("* Models::Deactivated..validate_deactivated done => #{deactivated.inspect.to_s}")
     return true # always update
   end
     
@@ -98,17 +100,12 @@ module Models::Deactivated
   end
 
   def deactivated?
-    # Rails.logger.debug("* Models::Deactivated.deactivated? self.deactivated:#{self.deactivated.inspect.to_s}")
-    if self.deactivated == DB_TRUE
-      # Rails.logger.debug("* Models::Deactivated.deactivated? self.deactivated == DB_TRUE")
+    if db_value_true?(self.deactivated)
+      Rails.logger.debug("??  Models::Deactivated.deactivated? self.deactivated == DB_TRUE")
       return true
-    elsif self.deactivated == DB_FALSE
-      # Rails.logger.debug("* Models::Deactivated.deactivated? self.deactivated == DB_FALSE")
-      return false
     else
-      # Rails.logger.warn("! User.deactivated? - invalid value for deactivated:#{self.deactivated.inspect.to_s}")
-      validate_deactivated
-      return self.deactivated == DB_TRUE
+      Rails.logger.debug("??  Models::Deactivated.deactivated? self.deactivated == DB_FALSE")
+      return false
     end
   end
   

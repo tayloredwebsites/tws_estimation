@@ -1,6 +1,8 @@
 ###########################
 # Internationalize Configs
 ###########################
+  
+include Application::CommonMethods
 
 module I18n
   class << self
@@ -12,7 +14,7 @@ module I18n
       end
     end
     def is_deactivated_or_not(true_false_value)
-      if (true_false_value == true)
+      if ( db_value_true?(true_false_value) )
         I18n.translate('view_field_value.deactivated')
       else
         I18n.translate('view_field_value.reactivated')
