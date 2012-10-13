@@ -18,7 +18,7 @@
         
         <td id="<%= "estimate_#{item.id}_note" %>"><%= item.note %></td>
                 <% if @deactivated_module && show_deactivated? %>
-           <td id="<%= "estimate_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
+           <td id="<%= "estimate_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated) %></td>
         <% end %>
        <td><%= link_to I18n.translate('view_action.view'), estimate_path(item.id) %></td>
        <td><%= link_to I18n.translate('view_action.edit'), edit_estimate_path(item.id) %></td>
