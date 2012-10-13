@@ -22,6 +22,6 @@ FactoryGirl.define do
     name              {FactoryGirl.generate(:job_type_name)}
     description       {FactoryGirl.generate(:job_type_description)}
     sort_order        {FactoryGirl.generate(:job_type_sort_order)}
-    deactivated       DB_TRUE
+    deactivated       true
   end    
 end

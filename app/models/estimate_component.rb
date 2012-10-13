@@ -101,9 +101,9 @@ class EstimateComponent < ActiveRecord::Base
     end
   end
   
-  # is deactivated if component or component type is deactivated
-  def deactivated?
-    
-  end
-  
+  # # is deactivated if component or component type is deactivated
+  # def deactivated?
+  #   
+  # end
+  # 
 end

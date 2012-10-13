@@ -38,7 +38,7 @@ describe AssembliesController do
       assigns(:assembly).should be_instance_of(Assembly) 
       assigns(:assembly).should be_persisted
       new_attributes.each  do |key, value|
-        Rails.logger.debug("T assemblies_controller_spec minimum - match on:#{key.to_s}")
+        Rails.logger.debug("T assemblies_controller_spec - match on:#{key.to_s} #{assigns(:assembly).send(key.to_sym)} == #{new_attributes[key.to_sym]}")
         assigns(:assembly).send(key.to_sym).should eq(new_attributes[key.to_sym])
       end
       response.should render_template("show")

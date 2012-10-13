@@ -9,8 +9,8 @@ def generate_assembly_component_accessible_attributes
     :assembly_id => assembly.id,
     :description => FactoryGirl.generate(:assembly_component_description),
     :component_id => component.id,
-    :required => DB_FALSE,
-    :deactivated => DB_FALSE
+    :required => false,
+    :deactivated => false
   }
 end
   
@@ -23,8 +23,8 @@ def generate_assembly_component_min_attributes
     :assembly_id => assembly.id,
     # :description => FactoryGirl.generate(:assembly_component_description),
     :component_id => component.id
-    # :required => DB_FALSE,
-    # :deactivated => DB_FALSE
+    # :required => false,
+    # :deactivated => false
   }
 end
   
@@ -37,33 +37,33 @@ FactoryGirl.define do
     association :assembly,  :factory => :assembly,  :strategy => :build
     association :component, :factory => :component, :strategy => :build
     description {FactoryGirl.generate(:assembly_component_description)}
-    required DB_FALSE
-    deactivated DB_FALSE
+    required false
+    deactivated false
   end
   factory :assembly_component_min_create, :class => AssemblyComponent do
     association :assembly,  :factory => :assembly,  :strategy => :build
     association :component, :factory => :component_min_create, :strategy => :build
     description {FactoryGirl.generate(:assembly_component_description)}
-    required DB_FALSE
-    deactivated DB_FALSE
+    required false
+    deactivated false
   end    
   factory :assembly_component_totals_create, :class => AssemblyComponent do
     association :assembly,  :factory => :assembly,  :strategy => :build
     association :component, :factory => :component_totals_create, :strategy => :build
     description {FactoryGirl.generate(:assembly_component_description)}
-    required DB_FALSE
-    deactivated DB_FALSE
+    required false
+    deactivated false
   end    
   factory :assembly_component_accessible, :class => AssemblyComponent do
     description             'My Description'
-    required DB_TRUE
-    deactivated DB_TRUE
+    required true
+    deactivated true
   end
   factory :assembly_component_accessible_create, :class => AssemblyComponent do
     association :assembly,  :factory => :assembly,  :strategy => :build
     association :component, :factory => :component, :strategy => :build
     description             'My Description'
-    required DB_TRUE
-    deactivated DB_TRUE
+    required true
+    deactivated true
   end
 end
