@@ -7,13 +7,13 @@ gem 'rails', '~>3.2.1'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 
-# for Postgres
-gem 'pg'
+# # for Postgres
+# gem 'pg'
 #
 # for SQL Server
-# gem 'tiny_tds'
-# gem "activerecord-sqlserver-adapter", "~> 3.2.0"
-# gem "ruby-odbc", "~> 0.99994"
+gem 'tiny_tds'
+gem "activerecord-sqlserver-adapter", "~> 3.2.0"
+gem "ruby-odbc", "~> 0.99994"
 
 gem 'cancan'
 
