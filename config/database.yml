@@ -8,7 +8,7 @@ development:
     # port: 1501              # Used if host present. Default is 1433.
     # database: ca_estim_dev
     username: sa
-    password: synapse8net
+    password: change_me
     #  adapter: sqlite3
     #  database: db/development.sqlite3
     #  pool: 5
@@ -46,7 +46,7 @@ test:
     # specified database (even though using odbc/dsn), so rake db:test:prepare doesn't try to use (and drop) 'master' database
     database: ca_estim_test
     username: sa
-    password: synapse8net
+    password: change_me
 
 production:
 #  adapter: sqlite3
@@ -67,7 +67,7 @@ production:
     # port: 1501              # Used if host present. Default is 1433.
     # database: ca_estim_dev
     username: sa
-    password: synapse8net
+    password: changeme
 
 legacy:
     # adapter: postgresql
@@ -84,5 +84,5 @@ legacy:
     # port: 1501              # Used if host present. Default is 1433.
     # database: ca_estim_dev
     username: sa
-    password: synapse8net
+    password: change_me
     
