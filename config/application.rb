@@ -59,6 +59,10 @@ module TwsAuth
     # - better to use validates_associated in child association
     # config.active_record.identity_map = true  
 
+
+    # Foreigner hack to add SQL Server
+    # see also config/initializers/extensions/sqlserver_adapter.rb
+    Foreigner::Adapter.register 'sqlserver', 'foreigner/connection_adapters/sqlserver_adapter'
     
   end
 end
