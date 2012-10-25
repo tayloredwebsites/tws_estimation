@@ -1,7 +1,7 @@
 # PostgreSQL 9.0
 development:
     adapter: postgresql
-    database: tws_estim_development
+    database: tws_estim_dev
     username: RoR
     password: change_me
     host: localhost
@@ -71,7 +71,7 @@ production:
 
 legacy:
     adapter: postgresql
-    database: EstimationMigration
+    database: Estimation
     username: RoR
     password: change_me
     host: localhost
