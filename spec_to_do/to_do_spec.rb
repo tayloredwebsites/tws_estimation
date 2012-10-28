@@ -1,6 +1,19 @@
 require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
+  context 'important changes' do
+    it 'should allow user resetting of password (admin overwrite?)'
+    it 'should have no translations missing for user authorized systems'
+    it 'should have no translations missing'
+    it 'should have proper email validations'
+    it 'should confirm that an email is correct'
+    it 'should let users specify system minimum and maximum markup percent (10 max now)'
+    it 'should prevent entering values outside of minimum and maximum values (general solution for all components?)'
+    it 'should ensure required components are entered'
+  end
+  context 'important documentation' do
+    it 'should have grid calculations documented'
+  end
   context 'Misc. estimates - ' do
     it 'should allow components to be updated on deactivated parent ? (component type select missing current id)'
     it 'should confirm all deactivations make sense and work and test out properly'
@@ -13,7 +26,7 @@ describe 'Miscellaneous items to do - ' do
     it 'should list estimates by title in proper order'
     it 'should not have default values in unselected assemblies'
     it 'should not accumulate values in unselected assemblies'
-    it 'should not show subtotals if all subtotal_group entries are blank'
+    it 'should not show subtotals if all grid_subtotal entries are blank'
     it 'should not subtotal deactivated components'   
   end
   context 'i18n testing' do
@@ -44,6 +57,7 @@ describe 'Miscellaneous items to do - ' do
   context 'tws_auth cleanup' do
     it 'should add the translations missing - context to integration specs for all resources'
     it 'should not reference @model - effects tws_estimate also'
+    it 'should have field errors on label and field or just on field, not a mix (see estimate entry)'
   end
   context 'resolve difference between role system and left menu systems' do
     it 'should resolve if the @systemc is needed'

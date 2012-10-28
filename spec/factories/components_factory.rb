@@ -10,7 +10,10 @@ def generate_component_accessible_attributes
     :description => FactoryGirl.generate(:component_description),
     :default_id => default.id,
     :editable => false,
-    :deactivated => false
+    :deactivated => false,
+    :grid_operand => '%',
+    :grid_scope => 'A',
+    :grid_subtotal => 'First'
   }
 end
   
@@ -65,11 +68,17 @@ FactoryGirl.define do
     description             'Changed Description'
     editable               true
     deactivated             true
+    grid_operand              '%'
+    grid_scope                'A'
+    grid_subtotal          'First'
   end
   factory :component_accessible_create, :class => Component do
     association             :component_type, :factory => :component_type, :strategy => :build
     description             'Changed Description'
     editable               true
     deactivated             true
+    # grid_operand              '%'
+    # grid_scope                'A'
+    # grid_subtotal          'First'
   end
 end

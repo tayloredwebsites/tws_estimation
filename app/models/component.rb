@@ -3,7 +3,7 @@ class Component < ActiveRecord::Base
   include Models::Deactivated
   include Models::CommonMethods
   
-  attr_accessible :description, :editable, :deactivated, :component_type_id, :default_id
+  attr_accessible :description, :editable, :deactivated, :component_type_id, :default_id, :grid_operand, :grid_scope, :grid_subtotal
   # todo ? remove these as accessible? -> attr_accessible :component_type_id, :default_id
 
   belongs_to :component_type
@@ -21,9 +21,23 @@ class Component < ActiveRecord::Base
 
   validates :component_type_id,
     :presence => true
+  
+  validates :grid_operand,
+    :allow_nil => true,
+    :allow_blank => true,
+    :inclusion => { :in => VALID_GRID_OPERANDS, :message => "operand must be '+' - add. '-' - subtract, '*' - multiply, '/' - divide, '%' - percent"}
 
-  # methods
+  validates :grid_scope,
+    :allow_nil => true,
+    :allow_blank => true,
+    :inclusion => { :in => VALID_GRID_SCOPES, :message => "scope must be 'A' - Assembly break, 'I' - Grid initial, 'S' - latest subtotal, 'C' - cumulative, 'H' - hours (cumulative)"}
+    
+  before_save :nil_grid_values
 
+  # class methods
+  
+  # instance methods
+  
   def destroy(*params)
      begin
        super(*params)
@@ -56,18 +70,30 @@ class Component < ActiveRecord::Base
     ret = ''+super(field_name).nil_to_s+self.send(field_name).nil_to_s
   end
   
-	# get the operand of the operation (first character)
-  def op_operand
-		#	- first character of operation = operand ('+' - add. '-' - subtract from scope, '*' - multiply, '/' - divide scope by value)
-		# - default operand = *
-		op_operand = ( !operation.nil? && operation.length > 1 && %w( + - / * ).include?(operation[0]) ) ? operation[0] : '*'
+  def is_valid_grid_operand?
+    VALID_GRID_OPERANDS.has_key?(grid_operand) ? true : false
   end
-
-	# get the scope of the operation (second character)
-  def op_scope
-		#	- ('A' - use Assembly break, 'I' - Grid initial totals, 'S' - use latest subtotal, 'C' - use cumulative value, 'H' - use cumulative hours)
-		# - default scope - C
-		op_scope = ( !operation.nil? && operation.length > 1 && %w( A I S C H ).include?(operation[1]) ) ? operation[1] : 'C'
+  def get_grid_operand_or_warn
+    is_valid_grid_operand? ? grid_operand : '?'
+  end
+  def grid_operand_key_value
+     grid_operand + ' - ' + VALID_GRID_OPERANDS[grid_operand] if is_valid_grid_operand?
   end
   
+  def is_valid_grid_scope?
+    VALID_GRID_SCOPES.has_key?(grid_scope) ? true : false
+  end
+  def get_grid_scope_or_warn
+    is_valid_grid_scope? ? grid_scope : '?'
+  end
+  def grid_scope_key_value
+     grid_scope + ' - ' + VALID_GRID_SCOPES[grid_scope] if is_valid_grid_scope?
+  end
+  
+  def nil_grid_values
+    grid_operand = nil if grid_scope == ''
+    grid_scope = nil if grid_scope == ''
+    grid_subtotal = nil if grid_scope == ''
+  end
+
 end

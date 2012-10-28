@@ -42,6 +42,28 @@
 
 
 <div class="field">
+    <%= f.label :grid_operand, I18n.translate('components.field_name.grid_operand'), :class => 'label' %>
+    <span class="value">
+        <%= select( :component, :grid_operand, VALID_GRID_OPERANDS.collect { |key,val| [key+' - '+val,key]}, { :include_blank => true }) %>
+    </span>
+</div>
+
+
+<div class="field">
+    <%= f.label :grid_scope, I18n.translate('components.field_name.grid_scope'), :class => 'label' %>
+    <span class="value">
+        <%= select( :component, :grid_scope, VALID_GRID_SCOPES.collect { |key,val| [key+' - '+val,key]}, { :include_blank => true }) %>
+    </span>
+</div>
+
+
+<div class="field">
+    <%= f.label :grid_subtotal, I18n.translate('components.field_name.grid_subtotal'), :class => 'label' %>
+    <span class="value"><%= f.text_field :grid_subtotal %></span>
+</div>
+
+
+<div class="field">
       <%= f.label :deactivated, I18n.translate('components.field_name.deactivated'), :class => 'label' %>
     <span class="value">
         <%= f.radio_button :deactivated, true %>

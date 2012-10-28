@@ -20,11 +20,11 @@ describe Component do
       # Rails.logger.debug("T attribs_whitelist: #{attribs_whitelist.inspect.to_s}")
       acc_attribs = generate_component_accessible_attributes()
       # Rails.logger.debug("T generate_component_accessible_attributes: #{acc_attribs.inspect.to_s}")
-      attribs_whitelist.size.should == acc_attribs.size
       attribs_whitelist.each do |key, val|
-        Rails.logger.debug ("T Accessible attribute #{key.to_s} = #{acc_attribs[key.to_sym].inspect.to_s}")
+        Rails.logger.debug ("T Accessible attribute #{key.to_s}/#{val.to_s} = #{acc_attribs[key.to_sym].inspect.to_s}")
         acc_attribs[key.to_sym].should_not be_nil
       end
+      attribs_whitelist.size.should == acc_attribs.size
     end
     it 'should create Component when created with the minimum_attributes' do
       num_items = Component.count
@@ -60,7 +60,41 @@ describe Component do
         item1.errors.count.should > 0
         Component.count.should == num_items
       end
-    end   
+    end
+    it 'should only allow updates of valid operation operands and scopes' do
+      Component.count.should == 0
+      attribs = generate_component_min_attributes()
+      Rails.logger.debug("TTTTT Component attribs = #{attribs.inspect.to_s}")
+      item1 = Component.create!(attribs)  # create component with no additional attributes
+      item1.id.should_not be_nil
+      item1.errors.count.should == 0
+      Component.count.should == 1
+      # it 'should allow nil grid_operand, nil grid_scope and nil grid_subtotal'
+      item1.grid_operand.should == nil
+      item1.grid_scope.should == nil
+      item1.grid_subtotal.should == nil
+      VALID_GRID_OPERANDS.each do |operand_key, operand_val|
+        VALID_GRID_SCOPES.each do |scope_key, scope_val|
+          Rails.logger.debug("T Testing operand: #{operand_key}, scope: #{scope_key}")
+          attribs_work = attribs.merge({:grid_operand => operand_key, :grid_scope => scope_key})
+          Rails.logger.debug("T Testing attribs_work: #{attribs_work.inspect.to_s}")
+          item1.update_attributes!(attribs_work)  # create component with additional attributes
+          Rails.logger.debug("T Testing attribute item1.send(:grid_operand):#{item1.send(:grid_operand)} should == #{operand_key}")
+          item1.send(:grid_operand).should == operand_key
+          Rails.logger.debug("T Testing attribute item1.send(:grid_scope):#{item1.send(:grid_scope)} should == #{scope_key}")
+          item1.send(:grid_scope).should == scope_key
+        end
+      end
+      attribs_work = attribs.merge({:grid_operand => '@', :grid_scope => 'Q'})
+      # try to create component with invalid attributes
+      lambda {item1.update_attributes!(attribs_work)}.should raise_error(ActiveRecord::RecordInvalid)
+      # item1.update_attributes!(attribs_work)  # create component with additional attributes
+      updated_item = Component.find(item1.id)
+      Rails.logger.debug("T Testing attribute updated_item.send(:grid_operand):#{item1.send(:grid_operand)} should_not == '@'")
+      updated_item.send(:grid_operand).should_not == '@'
+      Rails.logger.debug("T Testing attribute updated_item.send(:grid_scope):#{item1.send(:grid_scope)} should_not == 'Q'")
+      updated_item.send(:grid_scope).should_not == 'Q'
+    end
   end
   context 'it should have deactivated actions available and working' do
     it 'should be able to deactivate an active record' do
