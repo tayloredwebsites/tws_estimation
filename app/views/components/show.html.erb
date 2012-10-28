@@ -35,6 +35,21 @@
       <span class="value" id="component_editable"><%= @component.editable %></span>
     </div>
 
+    <div class="field">
+      <span class="label"><%= I18n.translate('components.field_name.grid_operand') %></span>
+      <span class="value" id="component_grid_operand"><% concat @component.grid_operand_key_value %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('components.field_name.grid_scope') %></span>
+      <span class="value" id="component_grid_scope"><% concat @component.grid_scope_key_value %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('components.field_name.grid_subtotal') %></span>
+      <span class="value" id="component_grid_subtotal"><%= @component.grid_subtotal %></span>
+    </div>
+
 <% if (@deactivated_module) %>
      <div class="field">
        <span class="label"><%= I18n.translate('components.field_name.deactivated') %></span>
