@@ -108,6 +108,28 @@
         :full_name => 'Administrator'
       }
     },
+    :systems => {
+      :all => {
+        :abbreviation => 'All',
+        :full_name => 'All Systems'
+      },
+      :guest => {
+        :abbreviation => 'Guest',
+        :full_name => 'System Guest'
+      },
+      :maint => {
+        :abbreviation => 'Maint.',
+        :full_name => 'System Maintenance'
+      },
+      :estim => {
+        :abbreviation => 'Estim.',
+        :full_name => 'Estimation System'
+      },
+      :prevail => {
+        :abbreviation => 'Prevail.',
+        :full_name => 'Prevailing Wages System'
+      }
+    },
     :warning => {
       :sure? => 'Are you sure?',
       :sure_action? => 'Are you sure you want to %{action}?',
@@ -461,6 +483,9 @@
         :default_id => 'Default ID',
         :default => 'Default Value',
         :editable => 'Editable (in Totals Grid)',
+        :grid_operand => 'Grid Operand',
+        :grid_scope => 'Grid Operand Scope',
+        :grid_subtotal => 'Grid Subtotal Group',
         :deactivated => 'Deactivated',
         :created_at => 'Created',
         :updated_at => 'Updated'
@@ -473,6 +498,9 @@
         :default_id => 'Default ID',
         :default => 'Default Value',
         :editable => 'Editable',
+        :grid_operand => 'Operand',
+        :grid_scope => 'Scope',
+        :grid_subtotal => 'Subtotal',
         :deactivated => 'Deactivated',
         :created_at => 'Created',
         :updated_at => 'Updated'
@@ -485,6 +513,9 @@
         :default_id => 'ID of the Default Value for this item.',
         :default => 'The Default Value for this item.',
         :editable => 'Editable (in Totals Grid - allows value change).',
+        :grid_operand => 'The calculation to be performed on the value',
+        :grid_scope => 'The Scope the operand is to work on',
+        :grid_subtotal => 'Name of Grid Subtotal Group',
         :deactivated => 'Is this field deactivated?',
         :created_at => 'Created at this Date and Time.',
         :updated_at => 'Last Updated at this date and time.'

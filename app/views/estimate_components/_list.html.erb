@@ -36,7 +36,7 @@ end
 	<div class="show_hide_assembly">
 <% 
 		# break detectors
-		last_subtotal_group = ''
+		last_grid_subtotal = ''
 		ea_ct_last_id = 0
 		ea_ct_last_name = ''
 		# loop through the Component Types and Components that are defined for this Assembly
@@ -60,9 +60,9 @@ end
 			comp_active = (comp.nil? || comp.deactivated || comp.component_type.nil? || comp.component_type.deactivated) ? false : true
 			if comp_active
 				# break by Subtotal ( and Component Type)
-				if (ea_ct_last_id != ass_comp.component.component_type_id || last_subtotal_group != ass_comp.component.subtotal_group)
+				if (ea_ct_last_id != ass_comp.component.component_type_id || last_grid_subtotal != ass_comp.component.grid_subtotal)
 					if show_totals_grid
-						concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Sub-total '+last_subtotal_group.to_s+' ( S )' , :total_values =>  ea_ct_subtotals, :total_id => "subtotal_#{ass.id.to_s}_#{ea_ct_last_id.to_s}_#{last_subtotal_group}", :in_totals_grid => show_totals_grid }
+						concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Sub-total '+last_grid_subtotal.to_s+' ( S )' , :total_values =>  ea_ct_subtotals, :total_id => "subtotal_#{ass.id.to_s}_#{ea_ct_last_id.to_s}_#{last_grid_subtotal}", :in_totals_grid => show_totals_grid }
 					end
 				end
 				# break by Component Type
@@ -70,7 +70,7 @@ end
 					if ea_ct_last_id != 0
 						# don't print component headers, unless there are components to be processed
 						if show_totals_grid
-							concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Sub-total '+last_subtotal_group.to_s+' ( S )' , :total_values =>  ea_ct_subtotals, :total_id => "subtotal_#{ass.id.to_s}_#{ea_ct_last_id.to_s}_#{last_subtotal_group}", :in_totals_grid => show_totals_grid }
+							concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Sub-total '+last_grid_subtotal.to_s+' ( S )' , :total_values =>  ea_ct_subtotals, :total_id => "subtotal_#{ass.id.to_s}_#{ea_ct_last_id.to_s}_#{last_grid_subtotal}", :in_totals_grid => show_totals_grid }
 							concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => ea_ct_last_name+' Grid Totals', :total_values => ea_ct_totals, :total_id => "component_type_total_#{ass.id.to_s}_#{ea_ct_last_id.to_s}", :in_totals_grid => show_totals_grid }
 							concat raw "</table>" # end of Totals Grid Table
 						end
@@ -83,8 +83,8 @@ end
 						concat raw '<div>'
 						# print initial values 
 						concat render :partial => 'estimate_components/list_totals_grid_head', :locals => { :assembly => ass, :assembly_component_id =>  'total', :assembly_component_title =>  "Grid Initial Values", :in_totals_grid => show_totals_grid }
-						concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Initial Assembly Values ( A )' , :total_values =>  ea_break, :total_id => "subtotal_#{ass.id.to_s}__#{last_subtotal_group}", :in_totals_grid => show_totals_grid }
-						concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Initial Component Type Values ( I / S)' , :total_values =>  e_totals, :total_id => "subtotal_#{ass.id.to_s}_#{ass_comp.component.component_type.id.to_s}_#{last_subtotal_group}", :in_totals_grid => show_totals_grid }
+						concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Initial Assembly Values ( A )' , :total_values =>  ea_break, :total_id => "subtotal_#{ass.id.to_s}__#{last_grid_subtotal}", :in_totals_grid => show_totals_grid }
+						concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Initial Component Type Values ( I / S)' , :total_values =>  e_totals, :total_id => "subtotal_#{ass.id.to_s}_#{ass_comp.component.component_type.id.to_s}_#{last_grid_subtotal}", :in_totals_grid => show_totals_grid }
 						concat raw "</table>" # end of Totals Grid Table
 						# print grid header
 						concat render :partial => 'estimate_components/list_totals_grid_head', :locals => { :assembly => ass, :assembly_component_id =>  ass_comp.component.component_type.id.to_s, :assembly_component_title =>  ass_comp.component.nil_to_s, :in_totals_grid => show_totals_grid  }
@@ -104,10 +104,11 @@ end
 
 				end # end break by t- if ea_ct_last_id != ass_comp.component.component_type_id
 				# reset subtotals if break on subtotal or on component type
-				if (ea_ct_last_id != ass_comp.component.component_type_id || last_subtotal_group != ass_comp.component.subtotal_group)
+				if (ea_ct_last_id != ass_comp.component.component_type_id || last_grid_subtotal != ass_comp.component.grid_subtotal)
 					ea_ct_subtotal_holds = ea_ct_subtotals.dup
 					ea_ct_subtotals = Hash.new
-					last_subtotal_group = ass_comp.component.subtotal_group
+					last_grid_subtotal = ass_comp.component.grid_subtotal
+
 				end
 			
 				show_totals_grid = ass_comp.component.component_type.has_totals
@@ -116,38 +117,43 @@ end
 					# get scope totals for the calculation
 					#	- ('A' - use Assembly break, 'I' - Grid initial totals, 'S' - use latest subtotal, 'C' - use cumulative value, 'H' - use cumulative hours)
 					# Load up totals specified by the component operation for calculation
-					Rails.logger.debug("VVVVSetScope = #{comp.op_scope.inspect.to_s}")
-					case comp.op_scope.to_s
+					Rails.logger.debug("VVVVSetScope = #{comp.grid_scope.inspect.to_s}")
+					case comp.grid_scope.to_s
 					when 'A' then work_totals = ea_break.dup
 					when 'I' then work_totals = ea_ct_break.dup
 					when 'S' then work_totals = ea_ct_subtotal_holds.dup
-					else work_totals = e_totals.dup	# 'C', 'H', or undefined default to use cumulative totals
+					when 'C', 'H' then work_totals = e_totals.dup
+					else work_totals = 	e_totals = Hash.new # dont use accumulations if undefined calculation to use cumulative totals
 					end
 				
 					@component_types_list.each do |ct|
 						if ct.in_totals_grid
 							ct_id = ct.id
 							ct_val = (work_totals[ct_id].nil?) ? BIG_DECIMAL_ZERO : work_totals[ct_id]
-							# make sure only hours are operated on if op_scope = 'H', is an hourly component type that has not been converted to dollars yet
-							if comp.op_scope != 'H' && is_in_dollars[ct_id]
-								case comp.op_operand
+							# make sure only hours are operated on if grid_scope = 'H', is an hourly component type that has not been converted to dollars yet
+							if comp.grid_scope != 'H' && is_in_dollars[ct_id]
+								case comp.grid_operand
 								when '+' then new_val = ct_val + est_comp_value
 								when '-' then new_val = ct_val - est_comp_value
 								when '*' then new_val = ct_val * est_comp_value
 								when '/' then new_val =  (est_comp_value != BIG_DECIMAL_ZERO) ? ct_val / est_comp_value : BIG_DECIMAL_ZERO
+								when '%' then new_val = ct_val * est_comp_value / BigDecimal.new('100.00',2)
 								end
-							elsif comp.op_scope == 'H' && !is_in_dollars[ct_id]
+							elsif comp.grid_scope == 'H' && !is_in_dollars[ct_id]
 								# only * is available for conversion of hours to dollars.
-								case comp.op_operand
+								case comp.grid_operand
 								when '*' then new_val = ct_val * est_comp_value
 								end
-							end # if comp.op_scope != 'H' || ct.has_hours
+							end # if comp.grid_scope != 'H' || ct.has_hours
 							if !new_val.nil?
 								e_current[ct_id] = new_val
 							end
 						end # if ct.in_totals_grid
 					end # @component_types_list.each do |ct|
-					concat render :partial => 'estimate_components/list_grid_component', :locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :editable => comp.editable, :comp_calculations => e_current, :view_mode => view_mode, :debug_inputs => work_totals, :is_in_dollars => is_in_dollars, :debug_formula => ' '+comp.op_operand+' '+est_comp_value_str }
+					Rails.logger.debug("VIEWDEBUG comp = #{comp.inspect.to_s}")
+					Rails.logger.debug("VIEWDEBUG est_comp_value_str = #{est_comp_value_str.inspect.to_s}")
+					concat render :partial => 'estimate_components/list_grid_component',
+					:locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :editable => comp.editable, :comp_calculations => e_current, :view_mode => view_mode, :debug_inputs => work_totals, :is_in_dollars => is_in_dollars, :debug_formula => ' '+comp.get_grid_operand_or_warn+' '+est_comp_value_str }
 				
 				else
 					ct_id = ass_comp.component.component_type.id
@@ -168,9 +174,9 @@ end
 							ea_ct_totals[ct_id] = (ea_ct_totals[ct_id].nil?) ? new_val : ea_ct_totals[ct_id] + new_val
 							ea_totals[ct_id] = (ea_totals[ct_id].nil?) ? new_val : ea_totals[ct_id] + new_val
 							e_totals[ct_id] = (e_totals[ct_id].nil?) ? new_val : e_totals[ct_id] + new_val							
-							if (comp.op_scope != 'H' && is_in_dollars[ct_id])
+							if (comp.grid_scope != 'H' && is_in_dollars[ct_id])
 								est_comp_total += new_val
-							elsif comp.op_scope == 'H' && !is_in_dollars[ct_id]
+							elsif comp.grid_scope == 'H' && !is_in_dollars[ct_id]
 								est_comp_total += new_val
 								# flag this hourly component type is now converted to dollars
 								is_in_dollars[ct_id] = true
@@ -187,7 +193,7 @@ end
 		if ea_ct_last_id != 0
 			# don't print component headers, unless there are components to be processed
 			if show_totals_grid
-				concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Sub-total '+last_subtotal_group.to_s+' ( S )' , :total_values =>  ea_ct_subtotals, :total_id => "subtotal_#{ass.id.to_s}_#{ea_ct_last_id.to_s}_#{last_subtotal_group}", :in_totals_grid => show_totals_grid }
+				concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Sub-total '+last_grid_subtotal.to_s+' ( S )' , :total_values =>  ea_ct_subtotals, :total_id => "subtotal_#{ass.id.to_s}_#{ea_ct_last_id.to_s}_#{last_grid_subtotal}", :in_totals_grid => show_totals_grid }
 				concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => ea_ct_last_name+' Grid Totals', :total_values => ea_ct_totals, :total_id => "component_type_total_#{ass.id.to_s}_#{ea_ct_last_id.to_s}", :in_totals_grid => show_totals_grid }
 				concat raw "</table>" # end of Totals Grid Table
 			end

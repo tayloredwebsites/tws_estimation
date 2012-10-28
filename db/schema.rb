@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120815190535) do
+ActiveRecord::Schema.define(:version => 20121026142145) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -57,8 +57,9 @@ ActiveRecord::Schema.define(:version => 20120815190535) do
     t.boolean  "deactivated",       :default => false, :null => false
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
-    t.string   "operation"
-    t.string   "subtotal_group"
+    t.string   "grid_operand"
+    t.string   "grid_scope"
+    t.string   "grid_subtotal"
   end
 
   add_index "components", ["component_type_id", "description"], :name => "index_components_on_component_type_id_and_description", :unique => true

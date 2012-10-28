@@ -8,7 +8,14 @@
         
             <td id="<%= "component_#{item.id}_id" %>"><%= item.default.nil_to_s %></td>
         
-        <td id="<%= "component_#{item.id}_editable" %>"><%= item.editable %></td>
+        <td id="<%= "component_#{item.id}_editable" %>"><%= item.editable.nil_to_s %></td>
+
+	    <td id="<%= "component_#{item.id}_grid_operand" %>"><%= item.grid_operand.nil_to_s %></td>
+
+	    <td id="<%= "component_#{item.id}_grid_scope" %>"><%= item.grid_scope.nil_to_s %></td>
+
+	    <td id="<%= "component_#{item.id}_grid_subtotal" %>"><%= item.grid_subtotal.nil_to_s %></td>
+
                 <% if @deactivated_module && show_deactivated? %>
            <td id="<%= "component_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
         <% end %>
