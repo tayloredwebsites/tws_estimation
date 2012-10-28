@@ -100,6 +100,10 @@ describe 'Components Integration Tests' do
             Rails.logger.debug("T components_integration_spec edit update - FalseClass")
             page.choose("component_#{at_key.to_s}_false")
             page.should have_selector(:xpath, "//*[@id=\"component_#{at_key.to_s}_false\" and @checked]")
+          elsif  ['grid_operand', 'grid_scope'].include?(at_key.to_s)
+            Rails.logger.debug("T components_integration_spec edit update - select box")
+            page.select(at_val.to_s, :from => "component_#{at_key.to_s}")
+            find(:xpath, "//select[@id=\"component_#{at_key.to_s}\"]").value.should == at_val.to_s
           else
             # simply fill in the field
             Rails.logger.debug("T components_integration_spec edit update - other class")
@@ -123,6 +127,16 @@ describe 'Components Integration Tests' do
         elsif at_val.is_a?(FalseClass)
           Rails.logger.debug("T components_integration_spec edit updated show #{at_key.to_s} - FalseClass")
           find(:xpath, "//*[@id=\"component_#{at_key.to_s}\"]").text.should =~ /^false$/
+        elsif  'grid_operand' == at_key.to_s
+          Rails.logger.debug("T components_integration_spec show grid selected values")
+          key_lookup = VALID_GRID_OPERANDS[at_val.to_s]
+          Rails.logger.debug("T components_integration_spec show #{key_lookup}")
+          find(:xpath, "//*[@id=\"component_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s} - #{key_lookup}\z/ 
+        elsif  'grid_scope' == at_key.to_s
+          Rails.logger.debug("T components_integration_spec show grid selected values")
+          key_lookup = VALID_GRID_SCOPES[at_val.to_s]
+          Rails.logger.debug("T components_integration_spec show #{key_lookup}")
+          find(:xpath, "//*[@id=\"component_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s} - #{key_lookup}\z/ 
         else
           find(:xpath, "//*[@id=\"component_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/ 
         end
@@ -134,7 +148,7 @@ describe 'Components Integration Tests' do
     end
     it 'should be able to show all accessible fields of an item' do
       all_attribs = FactoryGirl.attributes_for(:component_accessible)
-      item1 = FactoryGirl.create(:component_accessible_create, component_type: @component_type, default: @default)
+      item1 = FactoryGirl.create(:component_accessible, component_type: @component_type, default: @default)
       item1.deactivated?.should be_true
       # visit (component_path, item1, :show_deactivated => DB_TRUE.to_s) # show deactivated records for this test
       visit "/components/#{item1.id}?show_deactivated=true" # show deactivated records for this test
@@ -150,6 +164,16 @@ describe 'Components Integration Tests' do
         elsif at_val.is_a?(FalseClass)
           Rails.logger.debug("T components_integration_spec edit updated show #{at_key.to_s} - FalseClass")
           find(:xpath, "//*[@id=\"component_#{at_key.to_s}\"]").text.should =~ /^false$/
+        elsif  'grid_operand' == at_key.to_s
+          Rails.logger.debug("T components_integration_spec show grid selected values")
+          key_lookup = VALID_GRID_OPERANDS[at_val.to_s]
+          Rails.logger.debug("T components_integration_spec show #{key_lookup}")
+          find(:xpath, "//*[@id=\"component_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s} - #{key_lookup}\z/ 
+        elsif  'grid_scope' == at_key.to_s
+          Rails.logger.debug("T components_integration_spec show grid selected values #{at_key.to_s}, #{at_val.to_s}")
+          key_lookup = VALID_GRID_SCOPES[at_val.to_s]
+          Rails.logger.debug("T components_integration_spec show #{key_lookup}")
+          find(:xpath, "//*[@id=\"component_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s} - #{key_lookup}\z/ 
         else
           find(:xpath, "//*[@id=\"component_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/ 
         end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120815190535) do
+ActiveRecord::Schema.define(:version => 20121026142145) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -57,8 +57,9 @@ ActiveRecord::Schema.define(:version => 20120815190535) do
     t.boolean  "deactivated",       :default => false, :null => false
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
-    t.string   "operation"
-    t.string   "subtotal_group"
+    t.string   "grid_operand"
+    t.string   "grid_scope"
+    t.string   "grid_subtotal"
   end
 
   add_index "components", ["component_type_id", "description"], :name => "index_components_on_component_type_id_and_description", :unique => true
@@ -154,5 +155,24 @@ ActiveRecord::Schema.define(:version => 20120815190535) do
     t.datetime "updated_at",         :null => false
     t.boolean  "deactivated"
   end
+
+  add_foreign_key "assembly_components", "assemblies", :name => "assembly_components_assembly_id_fk"
+  add_foreign_key "assembly_components", "components", :name => "assembly_components_component_id_fk"
+
+  add_foreign_key "components", "component_types", :name => "components_component_type_id_fk"
+  add_foreign_key "components", "defaults", :name => "components_default_id_fk"
+
+  add_foreign_key "estimate_assemblies", "assemblies", :name => "estimate_assemblies_assembly_id_fk"
+  add_foreign_key "estimate_assemblies", "estimates", :name => "estimate_assemblies_estimate_id_fk"
+
+  add_foreign_key "estimate_components", "assemblies", :name => "estimate_components_assembly_id_fk"
+  add_foreign_key "estimate_components", "components", :name => "estimate_components_component_id_fk"
+  add_foreign_key "estimate_components", "estimates", :name => "estimate_components_estimate_id_fk"
+
+  add_foreign_key "estimates", "job_types", :name => "estimates_job_type_id_fk"
+  add_foreign_key "estimates", "sales_reps", :name => "estimates_sales_rep_id_fk"
+  add_foreign_key "estimates", "states", :name => "estimates_state_id_fk"
+
+  add_foreign_key "sales_reps", "users", :name => "sales_reps_user_id_fk"
 
 end
