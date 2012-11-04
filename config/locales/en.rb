@@ -24,7 +24,8 @@
         :abbreviation => 'Maint.',
         :full_name => 'System Maintenance',
         :menu_items => {
-          :users => 'Users'
+          :users => 'Users',
+          :edit_password => 'Edit Password'
         }
       },
       :estim => {
@@ -76,6 +77,11 @@
               :estimates_list => 'Estimates by Title'
           } }
         }
+      },
+      :maintuser => {
+        :abbreviation => 'Maint.',
+        :full_name => 'Maintenance',
+        :menu_items => {} # see estim entry (this is for titles of systems with mutiple nav items)
       },
       :estimuser => {
         :abbreviation => 'Estim. Entry',
@@ -193,7 +199,9 @@
       :new => 'New',
       :create => 'Create',
       :edit => 'Edit',
+      :edit_password => 'Edit Password',
       :update => 'Update',
+      :update_password => 'Update Password',
       :show => 'View',
       :view => 'View',
       :deactivate => 'Deactivate',

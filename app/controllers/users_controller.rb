@@ -74,6 +74,11 @@ class UsersController< SecureApplicationController
     @user = User.new(params[:user])
     @user.save
     if @user.errors.count == 0
+      notify_success( I18n.translate('errors.success_method_obj_name',
+        :method => params[:action],
+        :obj => @model.class.name,
+        :name => @user.username )
+      )
       render :action => 'show'
     else
       render :action => "new"
