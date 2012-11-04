@@ -116,6 +116,23 @@ describe User do
       updated_user = User.find(user.id)
       updated_user.has_password?(FactoryGirl.attributes_for(:user_update_password_attr)[:password]).should be_true
     end
+    it 'should allow the user to update their passwords' do
+      # check that update_password does
+      user = FactoryGirl.create(:user_min_create_attr)
+      user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
+      password_attribs = {
+        :old_password => FactoryGirl.attributes_for(:user_min_create_attr)[:password],
+        :password => 'NewPass',
+        :password_confirmation => 'NewPass'
+      }
+      user.valid_password_change?(password_attribs).should be_true
+      user.errors.count.should == 0
+      # process that both update_password and update use
+      user.update_attributes(password_attribs)
+      user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_false
+      updated_user = User.find(user.id)
+      updated_user.has_password?('NewPass').should be_true
+    end
     it 'should be able to reset_password' do
       user = User.create(FactoryGirl.attributes_for(:user_min_create_attr))
       user.reset_password
@@ -199,35 +216,6 @@ describe User do
       @user1.should respond_to(:encrypted_password)
       @user1.should respond_to(:password_salt)
       User.should respond_to(:valid_password?)
-    end
-
-  end
-
-  context 'logged in regular user -' do
-
-    before(:each) do
-      @me = User.create!(FactoryGirl.attributes_for(:reg_user_min_create_attr))
-      @model = User.new
-      @user_session = UserSession.new
-      @user_session.sign_in(FactoryGirl.attributes_for(:reg_user_session)[:username], FactoryGirl.attributes_for(:reg_user_session)[:password])
-      @user_session.current_user_id.should == @me.id
-    end
-    it 'should allow the user to update their passwords' do
-      # check that update_password does
-      user = FactoryGirl.create(:user_min_create_attr)
-      user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
-      password_attribs = {
-        :old_password => FactoryGirl.attributes_for(:user_min_create_attr)[:password],
-        :password => 'NewPass',
-        :password_confirmation => 'NewPass'
-      }
-      user.valid_password_change?(password_attribs).should be_true
-      user.errors.count.should == 0
-      # process that both update_password and update use
-      user.update_attributes(password_attribs)
-      user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_false
-      updated_user = User.find(user.id)
-      updated_user.has_password?('NewPass').should be_true
     end
 
   end

@@ -109,6 +109,29 @@ module UserTestHelper
     Rails.logger.debug("T UserTestHelper.session_signin - done")
     return @user_session
   end
+  def allow_admin_set_password(true_or_false)
+    # allows tests to test both of the valid ADMIN_SET_USER_PASSWORD application constant settings
+    if true_or_false.is_a?(FalseClass) || true_or_false.is_a?(TrueClass)
+      @saved_ADMIN_SET_USER_PASSWORD = ADMIN_SET_USER_PASSWORD
+      # Rails.logger.debug("TTT @saved_ADMIN_SET_USER_PASSWORD = #{@saved_ADMIN_SET_USER_PASSWORD}")
+      begin
+        Object.send(:remove_const, :ADMIN_SET_USER_PASSWORD)
+        Object.const_set(:ADMIN_SET_USER_PASSWORD, true_or_false)
+      rescue
+      end
+    else
+      Rails.logger.error("T UserTestHelper.allow_admin_set_password sent an invalid value")
+    end
+  end
+  def reset_admin_set_password()
+    begin
+      # Rails.logger.debug("TTT @saved_ADMIN_SET_USER_PASSWORD = #{@saved_ADMIN_SET_USER_PASSWORD}")
+      Object.send(:remove_const, :ADMIN_SET_USER_PASSWORD)
+      Object.const_set(:ADMIN_SET_USER_PASSWORD, @saved_ADMIN_SET_USER_PASSWORD)
+    rescue
+    end
+  end
+    
   
 end
 module UserIntegrationHelper

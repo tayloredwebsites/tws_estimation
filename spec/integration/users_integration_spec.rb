@@ -1,6 +1,7 @@
 # users_integration_spec.rb
 
 require 'spec_helper'
+include UserTestHelper
 include UserIntegrationHelper
 include ApplicationHelper
 
@@ -70,18 +71,19 @@ describe 'Users Integration Tests' do
         page.fill_in 'user_email', :with => 'my.email@example.com'
         page.fill_in 'user_first_name', :with => 'first'
         page.fill_in 'user_last_name', :with => 'last'
-        page.fill_in 'user_password', :with => 'password'
-        page.fill_in 'user_password_confirmation', :with => 'password'
+        if ADMIN_SET_USER_PASSWORD
+          page.fill_in 'user_password', :with => 'password'
+          page.fill_in 'user_password_confirmation', :with => 'password'
+        end
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
-      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
+      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'create', :obj => @model.class.name, :name => 'me' )}$/
       page.should_not have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
-      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
-        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       @num_users.should == User.count - 1
     end
     it 'should notify user when trying to create a user with an invalid email address' do
@@ -95,8 +97,10 @@ describe 'Users Integration Tests' do
         page.fill_in 'user_email', :with => 'bad_email'
         page.fill_in 'user_first_name', :with => 'first'
         page.fill_in 'user_last_name', :with => 'last'
-        page.fill_in 'user_password', :with => 'password'
-        page.fill_in 'user_password_confirmation', :with => 'password'
+        if ADMIN_SET_USER_PASSWORD
+          page.fill_in 'user_password', :with => 'password'
+          page.fill_in 'user_password_confirmation', :with => 'password'
+        end
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -120,8 +124,10 @@ describe 'Users Integration Tests' do
         page.fill_in 'user_email', :with => 'my.email@example.com'
         page.fill_in 'user_first_name', :with => 'first'
         page.fill_in 'user_last_name', :with => 'last'
-        page.fill_in 'user_password', :with => 'password'
-        page.fill_in 'user_password_confirmation', :with => 'password'
+        if ADMIN_SET_USER_PASSWORD
+          page.fill_in 'user_password', :with => 'password'
+          page.fill_in 'user_password_confirmation', :with => 'password'
+        end
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -134,7 +140,8 @@ describe 'Users Integration Tests' do
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       @num_users.should == User.count
     end
-    it 'should notify user when trying to create a user without a password' do
+    it 'should notify user when trying to create a user with mismatched passwords (when admin sets password)' do
+      UserTestHelper.allow_admin_set_password(true)
       @num_users = User.count
       visit new_user_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
@@ -145,33 +152,10 @@ describe 'Users Integration Tests' do
         page.fill_in 'user_email', :with => 'my.email@example.com'
         page.fill_in 'user_first_name', :with => 'first'
         page.fill_in 'user_last_name', :with => 'last'
-        page.fill_in 'user_password', :with => ''
-        page.fill_in 'user_password_confirmation', :with => ''
-        find(:xpath, '//input[@type="submit"]').click
-      end
-      # save_and_open_page
-      page.driver.status_code.should be 200
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
-      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
-      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
-      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
-      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
-        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
-      @num_users.should == User.count
-    end
-    it 'should notify user when trying to create a user with mismatched passwords' do
-      @num_users = User.count
-      visit new_user_path()
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
-      # save_and_open_page
-      within(".new_user") do
-        page.fill_in 'user_username', :with => 'me'
-        page.fill_in 'user_email', :with => 'my.email@example.com'
-        page.fill_in 'user_first_name', :with => 'first'
-        page.fill_in 'user_last_name', :with => 'last'
-        page.fill_in 'user_password', :with => 'xxx'
-        page.fill_in 'user_password_confirmation', :with => 'yyyzzz'
+        if ADMIN_SET_USER_PASSWORD
+          page.fill_in 'user_password', :with => 'xxx'
+          page.fill_in 'user_password_confirmation', :with => 'yyyzzz'
+        end
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -184,12 +168,266 @@ describe 'Users Integration Tests' do
       find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       @num_users.should == User.count
+      UserTestHelper.reset_admin_set_password()
     end
+    it 'should notify user when trying to create a user without a password (when admin sets password)' do
+      Rails.logger.debug("TTT initial ADMIN_SET_USER_PASSWORD = #{ADMIN_SET_USER_PASSWORD}")
+      UserTestHelper.allow_admin_set_password(true)
+      Rails.logger.debug("TTT testing ADMIN_SET_USER_PASSWORD = #{ADMIN_SET_USER_PASSWORD}")
+      @num_users = User.count
+      visit new_user_path()
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      # save_and_open_page
+      within(".new_user") do
+        page.fill_in 'user_username', :with => 'me'
+        page.fill_in 'user_email', :with => 'my.email@example.com'
+        page.fill_in 'user_first_name', :with => 'first'
+        page.fill_in 'user_last_name', :with => 'last'
+        # it 'should show the user password and password confirmation when admin sets password'
+        page.fill_in 'user_password', :with => ''
+        page.fill_in 'user_password_confirmation', :with => ''
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      UserTestHelper.reset_admin_set_password()
+    end
+    it 'should create user when trying to create a user without a password (when admin does not set password)' do
+      # Rails.logger.debug("TTT initial ADMIN_SET_USER_PASSWORD = #{ADMIN_SET_USER_PASSWORD}")
+      UserTestHelper.allow_admin_set_password(false)
+      # Rails.logger.debug("TTT testing ADMIN_SET_USER_PASSWORD = #{ADMIN_SET_USER_PASSWORD}")
+      @num_users = User.count
+      visit new_user_path()
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      # save_and_open_page
+      within(".new_user") do
+        page.fill_in 'user_username', :with => 'me'
+        page.fill_in 'user_email', :with => 'my.email@example.com'
+        page.fill_in 'user_first_name', :with => 'first'
+        page.fill_in 'user_last_name', :with => 'last'
+        page.should_not have_selector(:xpath, "//input[@id=\"user_password\"]")
+        page.should_not have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+        # it 'should only show the user password and password confirmation when admin sets password'
+        # page.fill_in 'user_password', :with => ''
+        # page.fill_in 'user_password_confirmation', :with => ''
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'create', :obj => @model.class.name, :name => 'me' )}$/
+      @num_users.should == User.count - 1
+      page.should_not have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
+      # Rails.logger.debug("TTT testing ADMIN_SET_USER_PASSWORD = #{ADMIN_SET_USER_PASSWORD}")
+      UserTestHelper.reset_admin_set_password()
+      # Rails.logger.debug("TTT reset ADMIN_SET_USER_PASSWORD = #{ADMIN_SET_USER_PASSWORD}")
+    end
+    it 'should show password fields on Edit when when admin sets password flag is set' do
+      UserTestHelper.allow_admin_set_password(true)
+      visit edit_user_path (@user1.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
+      page.should have_selector(:xpath, "//input[@id=\"user_password\"]")
+      page.should have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+      UserTestHelper.reset_admin_set_password()
+    end
+    
+    it 'should not show password fields on Edit when when admin sets password is not set' do
+      UserTestHelper.allow_admin_set_password(false)
+      visit edit_user_path (@user1.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
+      page.should_not have_selector(:xpath, "//input[@id=\"user_password\"]")
+      page.should_not have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+      UserTestHelper.reset_admin_set_password()
+    end
+    it 'should allow an administrator to edit a users password if allowed' do
+      UserTestHelper.allow_admin_set_password(true)
+      visit edit_user_path (@user1.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
+      page.should have_selector(:xpath, "//input[@id=\"user_password\"]")
+      page.should have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+      within(".edit_user") do
+        page.fill_in 'user_password', :with => 'new_pass'
+        page.fill_in 'user_password_confirmation', :with => 'new_pass'
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      # @updated_user = User.find(@user1.id)
+      # @updated_user.email.should_not =~ /bad_email/
+      UserTestHelper.reset_admin_set_password()
+    end
+    it 'should allow an administrator to not change a users password if allowed and none entered' do
+      UserTestHelper.allow_admin_set_password(true)
+      visit edit_user_path (@user1.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
+      page.should have_selector(:xpath, "//input[@id=\"user_password\"]")
+      page.should have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+      within(".edit_user") do
+        page.fill_in 'user_password', :with => ''
+        page.fill_in 'user_password_confirmation', :with => ''
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      @updated_user = User.find(@user1.id)
+      @updated_user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
+      @updated_user.has_password?('notit').should be_false
+      UserTestHelper.reset_admin_set_password()
+    end
+    it 'should give an administrator errors when edit a users mismatched passwords' do
+      UserTestHelper.allow_admin_set_password(true)
+      visit edit_user_path (@user1.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
+      page.should have_selector(:xpath, "//input[@id=\"user_password\"]")
+      page.should have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+      within(".edit_user") do
+        page.fill_in 'user_password', :with => 'new_pass'
+        page.fill_in 'user_password_confirmation', :with => 'xnew_passx'
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
+      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+        /^#{I18n.translate('errors.cannot_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/label[@for="user_password"]')
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/label[@for="user_password_confirmation"]')
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password_confirmation"]')
+      @updated_user = User.find(@user1.id)
+      @updated_user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
+      @updated_user.has_password?('notit').should be_false
+      UserTestHelper.reset_admin_set_password()
+    end
+  end
 
-
+  context 'Regular user logged in' do
+    before(:each) do
+      @model = User.new
+      @user1 = User.create!(FactoryGirl.attributes_for(:user_min_create_attr))
+      @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
+      helper_signin(:reg_user_full_create_attr, @me.full_name)
+      visit home_index_path
+      Rails.logger.debug("T users_integration_spec Regular user logged in before - done")
+    end
+    it 'should allow a regular user to edit their own password if allowed' do
+      UserTestHelper.allow_admin_set_password(true)
+      visit edit_password_path
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
+      page.should have_selector(:xpath, "//input[@id=\"user_password\"]")
+      page.should have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+      within(".edit_user") do
+        page.fill_in 'user_password', :with => 'new_pass'
+        page.fill_in 'user_password_confirmation', :with => 'new_pass'
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+        /^#{I18n.translate('errors.success_method_obj_name', :method => 'update_password', :obj => @model.class.name, :name => @me.username )}$/
+      # @updated_user = User.find(@user1.id)
+      # @updated_user.email.should_not =~ /bad_email/
+      @updated_user = User.find(@me.id)
+      @updated_user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_false
+      @updated_user.has_password?('new_pass').should be_true
+      UserTestHelper.reset_admin_set_password()
+    end
+    it 'should give a regular user errors when edit_password has mismatched passwords' do
+      UserTestHelper.allow_admin_set_password(true)
+      visit edit_password_path
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
+      page.should have_selector(:xpath, "//input[@id=\"user_password\"]")
+      page.should have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+      within(".edit_user") do
+        page.fill_in 'user_password', :with => 'new_pass'
+        page.fill_in 'user_password_confirmation', :with => 'xnew_passx'
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
+      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+        /^#{I18n.translate('errors.cannot_method_obj_name', :method => 'update_password', :obj => @model.class.name, :name => @me.username )}$/
+      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/label[@for="user_password"]')
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/label[@for="user_password_confirmation"]')
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password_confirmation"]')
+      @updated_user = User.find(@me.id)
+      @updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password]).should be_true
+      @updated_user.has_password?('notit').should be_false
+      UserTestHelper.reset_admin_set_password()
+    end
+    it 'should give a regular user errors when edit_password has no password' do
+      UserTestHelper.allow_admin_set_password(true)
+      visit edit_password_path
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
+      page.should have_selector(:xpath, "//input[@id=\"user_password\"]")
+      page.should have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+      within(".edit_user") do
+        page.fill_in 'user_password', :with => ''
+        page.fill_in 'user_password_confirmation', :with => ''
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
+      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+        /^#{I18n.translate('errors.cannot_method_obj_name', :method => 'update_password', :obj => @model.class.name, :name => @me.username )}$/
+      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/label[@for="user_password"]')
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
+      # note no error on password confirmation if blanks
+      # page.should have_selector(:xpath, '//span[@class="field_with_errors"]/label[@for="user_password_confirmation"]')
+      # page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password_confirmation"]')
+      @updated_user = User.find(@me.id)
+      @updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password]).should be_true
+      @updated_user.has_password?('notit').should be_false
+      UserTestHelper.reset_admin_set_password()
+    end
+    it 'should not allow a regular user to edit their own password if not allowed' do
+      UserTestHelper.allow_admin_set_password(false)
+      visit edit_password_path
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
+      page.should_not have_selector(:xpath, "//input[@id=\"user_password\"]")
+      page.should_not have_selector(:xpath, "//input[@id=\"user_password_confirmation\"]")
+      UserTestHelper.reset_admin_set_password()
+    end
+    # it 'should not allow a regular user to edit another users password even if edits allowed' do
+    #   UserTestHelper.allow_admin_set_password(true)
+    #   visit edit_password_path
+    #   # save_and_open_page
+    #   find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
+    #   find(:xpath, '//*[@id="header_status"]/p').text.should =~
+    #     /^#{I18n.translate('errors.access_denied_msg_obj', :msg => 'edit_password', :obj => 'users' )}$/
+    #   UserTestHelper.reset_admin_set_password()
+    # end
   end
 
 end
+
 
 describe 'Users Sessions Integration Tests' do
 
@@ -233,10 +471,10 @@ describe 'Users Sessions Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.index.header')}$/
       find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
         /#{I18n.translate('view_labels.welcome_user', :user => @admin.full_name) }/
-        find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
-          /#{I18n.translate('view_labels.welcome_user', :user => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:first_name]+' '+FactoryGirl.attributes_for(:admin_user_full_create_attr)[:last_name] ) }/
-          # user should have a signout link in the top nav
-          page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signout.action') )
+      find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
+        /#{I18n.translate('view_labels.welcome_user', :user => FactoryGirl.attributes_for(:admin_user_full_create_attr)[:first_name]+' '+FactoryGirl.attributes_for(:admin_user_full_create_attr)[:last_name] ) }/
+      # user should have a signout link in the top nav
+      page.should have_selector('ul#header_nav_bar//a', :text => I18n.translate('users_sessions.signout.action') )
     end
 
     it 'logout - should log the user out' do
@@ -284,6 +522,10 @@ describe 'Users Roles Tests - ' do
     it 'should see the Edit User page for other' do
       visit edit_user_path (@user1.id)
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
+    end
+    it 'should see the Edit User Password page for self' do
+      visit edit_password_path
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
     end
     it 'should see the List User page (index)' do
       visit users_path()
@@ -445,6 +687,10 @@ describe 'Users Roles Tests - ' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
     end
+    it 'should see the Edit User Password page for self' do
+      visit edit_password_path
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
+    end
     it 'should not see the List User page (index) - sees home errors page' do
       visit users_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.index.header')}$/
@@ -510,10 +756,12 @@ describe 'Users Roles Tests - ' do
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
-      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
-      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
+      find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should_not =~ /\A\s*\z/  # be whitespace
       find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
+      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+        /^#{I18n.translate('errors.cannot_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @reg.username )}$/
+      page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
       @updated_user = User.find(@reg.id)
       @updated_user.email.should_not =~ /bad_email/
     end
@@ -548,6 +796,12 @@ describe 'Users Roles Tests - ' do
     end
     it 'should not see the Edit User page' do
       visit edit_user_path (@user1.id)
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
+    end
+    it 'should not see the Edit Password page' do
+      visit edit_password_path
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('users.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users_sessions.signin.header')}$/
@@ -599,13 +853,16 @@ describe 'Systems Tests' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
       helper_signin(:reg_user_full_create_attr, @me.full_name)
-      visit home_index_path
+      # visit home_index_path
       Rails.logger.debug("T System Tests - Regular user systems - before each is done.")
     end
     it 'should have home system for home page' do
       visit home_index_path
+      # save_and_open_page
       find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.guest.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.index.header')}$/
+      find(:xpath, '//li[@id="lnav_maint_User_edit_password"]/a/span').text.should =~ /^#{I18n.translate('menu_items.maint.menu_items.edit_password')}$/ 
+      
     end
     it 'should have home system for errors page' do
       visit home_errors_path
@@ -617,18 +874,17 @@ describe 'Systems Tests' do
       find('#header_tagline_system_header').text.should =~ /^#{I18n.translate('menu_items.maint.full_name')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
     end
-    # it 'should see the maintenance menu sub items if currently in that system'
-    # it 'should see the estimation menu sub items if currently in that system'
   end
   context 'Administrator user systems' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:admin_user_full_create_attr))
       helper_signin(:admin_user_full_create_attr, @me.full_name)
-      visit home_index_path
+      # visit home_index_path
     end
     it 'should have home system for home page' do
       visit home_index_path
       helper_user_on_page?('menu_items.guest.full_name', 'home.index.header', @me.full_name)
+      find(:xpath, '//li[@id="lnav_maint_User_edit_password"]/a/span').text.should =~ /^#{I18n.translate('menu_items.maint.menu_items.edit_password')}$/ 
     end
     it 'should have home system for errors page' do
       visit home_errors_path
