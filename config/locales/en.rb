@@ -24,7 +24,8 @@
         :abbreviation => 'Maint.',
         :full_name => 'System Maintenance',
         :menu_items => {
-          :users => 'Users'
+          :users => 'Users',
+          :edit_password => 'Edit My Password'
         }
       },
       :estim => {
@@ -76,6 +77,11 @@
               :estimates_list => 'Estimates by Title'
           } }
         }
+      },
+      :maintuser => {
+        :abbreviation => 'Maint.',
+        :full_name => 'Maintenance',
+        :menu_items => {} # see estim entry (this is for titles of systems with mutiple nav items)
       },
       :estimuser => {
         :abbreviation => 'Estim. Entry',
@@ -145,7 +151,9 @@
       :success_method_obj_name => "Successful %{method} of %{obj} %{name}",
       :success_method_obj_msg => "Successful %{method} of %{obj} %{msg}",
       :success_method => "Successful %{method}",
-      :cannot_method_obj_id => "Cannot %{method} of %{obj} with ID %{id}",
+      :cannot_method_obj_id => "Cannot %{method} %{obj} with ID %{id}",
+      :cannot_method_obj_name => "Cannot %{method} %{obj} %{name}",
+      :cannot_method_obj_msg => "Cannot %{method} %{obj} - %{msg}",
       :cannot_method_msg => "Cannot %{method} - %{msg}",
       :invalid_call => 'invalid call to %{method}',
       :invalid_method_argument => 'Method %{method} has invalid argument %{argument}',
@@ -193,7 +201,9 @@
       :new => 'New',
       :create => 'Create',
       :edit => 'Edit',
+      :edit_password => 'Edit Password',
       :update => 'Update',
+      :update_password => 'Update Password',
       :show => 'View',
       :view => 'View',
       :deactivate => 'Deactivate',

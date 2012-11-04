@@ -1,20 +1,46 @@
 require 'spec_helper'
 
+describe 'Multiple assemblies with same assembly_id in an estimate (awaiting quote)' do
+  it 'should have an add assembly button in the estimate assemblies section'
+  it 'should have a remove assembly button in the estimate assemblies section'
+  it 'should allow duplicate assemblies in an estimate, and allow the user to name it'
+  it 'should have estimate components reference an estimate assembly, to ensure updates to estimate component go to correct estimate assembly'
+  it 'should make sure that updates to an estimate assembly component does not update the duplicate'
+  it 'should make sure that updates to an estimate assembly component updates itself'
+end
+
+describe "Taxability flag by Job Type and Component Type" do
+  it 'should have a new taxability table (foreign key pointers to job type and component type)'
+  it 'should allow the user to specify which component types are taxable for each job type (yes or no flag)'
+  it 'should specify the tax rate for a component by the taxable table flag and the state tax rate'
+  it 'should allow the user to override the state tax rate by the value in the taxability table'
+  it 'should allow the user to override the tax rate for each estimate component (on same line in estimate as amount and note)'
+  it 'should accumulate tax totals at component type, assemby and grand totals'
+end
+
 describe 'Miscellaneous items to do - ' do
   context 'important changes' do
-    it 'should allow user resetting of password (admin overwrite?)'
-    it 'should have no translations missing for user authorized systems'
-    it 'should have no translations missing'
-    it 'should have proper email validations'
-    it 'should confirm that an email is correct'
+    it 'should have a one line text box next to (or below) estimate components for notes'
+    it 'should list the component type in the AssemblyComponent entry form component listing (since components are assigned to component types)'
+    it "should indicate 'component name already exists' in addition to 'component xxx has already been taken' when adding a component"
+    it "should indicate 'estimate component already exists with that assembly and component', in addition to 'component xxx has already been taken' when adding an estimate component"
+    it 'should not have user lose extimate numbers on new estimate errors (validate before save, or save estimate with warnings)'
+    it 'should warn the user if hours have not been converted to dollars (at the end of the estimate)'
+    it 'should not accumulate hours into the dollar totals column - add an hours totals column?'
+    it 'should ensure that required components have amounts entered and give a warning on that line'
+    it 'should separate required components from unrequired components (second column?, listed below required?)'
     it 'should let users specify system minimum and maximum markup percent (10 max now)'
-    it 'should prevent entering values outside of minimum and maximum values (general solution for all components?)'
-    it 'should ensure required components are entered'
+    it 'should only total $ amounts in totals'
+    it 'should warn if there are unconverted hours'
   end
   context 'important documentation' do
     it 'should have grid calculations documented'
   end
   context 'Misc. estimates - ' do
+    it 'should prevent entering values outside of minimum and maximum values (general solution for markup % checks)'
+    it 'should have no translations missing'
+    it 'should have proper email validations'
+    it 'should confirm that an email is correct'
     it 'should allow components to be updated on deactivated parent ? (component type select missing current id)'
     it 'should confirm all deactivations make sense and work and test out properly'
     it 'should add the tests for translations missing - context to integration specs for all resources'
