@@ -2,14 +2,15 @@ require 'spec_helper'
 
 describe 'Miscellaneous items to do - ' do
   context 'important changes' do
-    it 'should allow user resetting of password (admin overwrite?)'
-    it 'should have no translations missing for user authorized systems'
     it 'should have no translations missing'
     it 'should have proper email validations'
     it 'should confirm that an email is correct'
     it 'should let users specify system minimum and maximum markup percent (10 max now)'
     it 'should prevent entering values outside of minimum and maximum values (general solution for all components?)'
     it 'should ensure required components are entered'
+    it 'should only total $ amounts in totals'
+    it 'should warn if there are unconverted hours'
+    it 'should prevent the user clicking enter on an estimate without required fields (or else update everything else!, or allow go back to re-enter)'
   end
   context 'important documentation' do
     it 'should have grid calculations documented'
