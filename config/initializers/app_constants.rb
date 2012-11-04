@@ -39,9 +39,13 @@ MENU_ITEMS = {
     :home => {:class_name => "UserSession", :action => :index, :start_uri => "/"},
     :user_signin => {:class_name => "UserSession", :action => :sign_in, :start_uri => "/signin"},
     :user_signout => {:class_name => "UserSession", :action => :sign_out, :start_uri => "/signout"}
-  } },
+    } },
+  :maintuser => {:app_id => 'maint', :roles => ['maint_users'], :menu_items => {
+    :edit_password => {:class_name => "User", :action => :edit_password, :start_uri => "/users/edit_password"}
+    } },
   :maint => {:app_id => 'maint', :roles => ['maint_admins', 'all_admins'], :menu_items => {
-    :users => {:class_name => "User", :action => :index, :start_uri => "/users"}
+    :users => {:class_name => "User", :action => :index, :start_uri => "/users"},
+    :edit_password => {:class_name => "User", :action => :edit_password, :start_uri => "/users/edit_password"}
   } },
   :estimuser => {:app_id => 'estim', :roles => ['estim_users'], :menu_items => {
     :estim_list => {:class_name => "Estimate", :action => :list, :start_uri => "/estimates/list" },
@@ -81,7 +85,7 @@ VALID_ROLES = %w{ guest_users all_admins maint_users maint_admins estim_users es
 DEFAULT_ROLES = %w{ guest_users }
 USER_SELF_NO_UPDATE_FIELDS = %w{ roles deactivated }  # fields that normal users cannot update for themself
 USER_SELF_UPDATE_ROLES = %w{ all_admins maint_admins }  # users with these roles can update 'no update' fields regardless of USER_SELF_NO_UPDATE_FIELDS
-
+ADMIN_SET_USER_PASSWORD = true
 VALID_EMAIL_EXPR = /^[a-zA-Z0-9!#$\%&'*+-\/=?^_`{|}~\-]*@(?:controlledair\.com|me\.com|gmail\.com|example\.com)$/
 
 SESSION_TIMEOUT_SECONDS = 30*60    # 30 minutes

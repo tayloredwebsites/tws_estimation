@@ -157,17 +157,19 @@ class User < ActiveRecord::Base
   def update_attributes(params)
     # Rails.logger.debug("* User - update_attributes - params=#{params.inspect.to_s}")
     # Rails.logger.error("* UserRoles - update_attributes - roles is an array !!!") if params[:roles].instance_of?(Array)
-    if valid_password_change?(params)
-      # valid password change, set it
-      self.password = params[:password]
-      self.password_confirmation = params[:password_confirmation]
-      params.delete(:old_password)
-      encrypt_password
-    else
-      # not a valid password change, clear them out
-      params.delete(:old_password)
-      params.delete(:password)
-      params.delete(:password_confirmation)
+    if ADMIN_SET_USER_PASSWORD
+      if valid_password_change?(params)
+        # valid password change, set it
+        self.password = params[:password]
+        self.password_confirmation = params[:password_confirmation]
+        params.delete(:old_password)
+        encrypt_password
+      else
+        # not a valid password change, clear them out
+        params.delete(:old_password)
+        params.delete(:password)
+        params.delete(:password_confirmation)
+      end
     end
     if !params[:roles].nil?
       # Rails.logger.debug("* User.update_attributes call validate_roles on params:#{params.inspect.to_s}")
@@ -193,8 +195,10 @@ class User < ActiveRecord::Base
         super(name,value)
       end
     else
-      errors.add(:password, I18n.translate('error_messages.password_mismatch') )
-      errors.add(:password_confirmation, I18n.translate('error_messages.password_mismatch') )
+      if ADMIN_SET_USER_PASSWORD
+        errors.add(:password, I18n.translate('error_messages.password_mismatch') )
+        errors.add(:password_confirmation, I18n.translate('error_messages.password_mismatch') )
+      end
     end
   end
 
@@ -238,10 +242,12 @@ class User < ActiveRecord::Base
   def validate_save
     # self.validate_roles(self.roles)
     # self.validate_deactivated
-    self.validate_password
-    Rails.logger.error("E* User.validate_save errors on validate_password errors:#{errors.inspect.to_s}") if errors.count > 0
+    if ADMIN_SET_USER_PASSWORD
+      self.validate_password
+      Rails.logger.error("E* User.validate_save errors on validate_password errors:#{errors.inspect.to_s}") if errors.count > 0
+    end
     if errors.count == 0
-      encrypt_password
+      encrypt_password if ADMIN_SET_USER_PASSWORD
       return true
     else
       return false
