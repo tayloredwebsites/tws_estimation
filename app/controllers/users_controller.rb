@@ -74,6 +74,11 @@ class UsersController< SecureApplicationController
     @user = User.new(params[:user])
     @user.save
     if @user.errors.count == 0
+      notify_success( I18n.translate('errors.success_method_obj_name',
+        :method => params[:action],
+        :obj => @model.class.name,
+        :name => @user.username )
+      )
       render :action => 'show'
     else
       render :action => "new"
@@ -95,6 +100,11 @@ class UsersController< SecureApplicationController
         )
         render :action => 'show'
       else
+        notify_error( I18n.translate('errors.cannot_method_obj_name',
+          :method => params[:action],
+          :obj => @model.class.name,
+          :name => @user.username )
+        )
         render :action => "edit"
       end
     else
@@ -125,7 +135,7 @@ class UsersController< SecureApplicationController
 
   # GET /users/1/edit_password
   def edit_password
-    @user = get_scope().find(params[:id])
+    @user = get_scope().find(current_user.id)
     authorize! :edit_password, @user   # authorize from CanCan::ControllerAdditions
   end
 
@@ -134,11 +144,18 @@ class UsersController< SecureApplicationController
     @user = get_scope().find(params[:id])
     if (!@user.nil?)
       authorize! :update_password, @user   # authorize from CanCan::ControllerAdditions
-      if !@user.valid_password_change?(params[:user])
-        Rails.logger.error("E UsersController - update_password - not valid_password_change - params:#{params[:user]}")
+      @user.valid_password_change?(params[:user])
+      if @user.errors.count > 0
+        Rails.logger.error("E UsersController - update_password - not valid_password_change")
+        notify_error( I18n.translate('errors.cannot_method_obj_name',
+          :method => params[:action],
+          :obj => @model.class.name,
+          :name => @user.username )
+        )
         render :action => 'edit_password'
       else
-        if @user.update_attributes(params[:user])
+        @user.update_attributes(params[:user])
+        if @user.errors.count == 0
           notify_success( I18n.translate('errors.success_method_obj_name',
             :method => params[:action],
             :obj => @model.class.name,
@@ -146,11 +163,16 @@ class UsersController< SecureApplicationController
           )
           render :action => 'show'
         else
+          notify_error( I18n.translate('errors.cannot_method_obj_name',
+            :method => params[:action],
+            :obj => @model.class.name,
+            :name => @user.username )
+          )
           render :action => "edit_password"
         end
       end
     else
-      Rails.logger.error("E Attempt to #{params[:action]} #{@model.class.name}.id:#{params[:id]} when not in scope")
+      Rails.logger.error("ERROR Attempt to #{params[:action]} #{@model.class.name}.id:#{params[:id]} - User Not Found")
     end
   end
 
