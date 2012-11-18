@@ -20,16 +20,8 @@ end
 
 describe 'Miscellaneous items to do - ' do
   context 'important changes' do
-<<<<<<< HEAD
     it 'should allow user resetting of password (admin overwrite?)'
     it 'should have no translations missing for user authorized systems'
-    it 'should have no translations missing'
-    it 'should have proper email validations'
-    it 'should confirm that an email is correct'
-    it 'should let users specify system minimum and maximum markup percent (10 max now)'
-    it 'should prevent entering values outside of minimum and maximum values (general solution for all components?)'
-    it 'should ensure required components are entered'
-=======
     it 'should have a one line text box next to (or below) estimate components for notes'
     it 'should list the component type in the AssemblyComponent entry form component listing (since components are assigned to component types)'
     it "should indicate 'component name already exists' in addition to 'component xxx has already been taken' when adding a component"
@@ -42,7 +34,9 @@ describe 'Miscellaneous items to do - ' do
     it 'should let users specify system minimum and maximum markup percent (10 max now)'
     it 'should only total $ amounts in totals'
     it 'should warn if there are unconverted hours'
->>>>>>> master
+    it 'should only total $ amounts in totals'
+    it 'should warn if there are unconverted hours'
+    it 'should prevent the user clicking enter on an estimate without required fields (or else update everything else!, or allow go back to re-enter)'
   end
   context 'important documentation' do
     it 'should have grid calculations documented'
