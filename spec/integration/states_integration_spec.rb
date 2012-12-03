@@ -241,7 +241,7 @@ describe 'States Integration Tests' do
   #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
   #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('states.edit.header')}$/
   #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('states.show.header')}$/
-  #     find(:xpath, '//*[@id="header_status"]/p').text.should =~
+  #     find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
   #       /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => @updated_item.id )}/
   #     State.count.should == (@num_items)
   #     find(:xpath, "//*[@id=\"state_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -265,7 +265,7 @@ describe 'States Integration Tests' do
   #     # save_and_open_page
   #     page.driver.status_code.should be 200
   #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('states.show.header')}$/
-  #     find(:xpath, '//*[@id="header_status"]/p').text.should =~
+  #     find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
   #       /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => item1.id )}$/
   #     State.count.should == (@num_items)
   #     find(:xpath, "//*[@id=\"state_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
@@ -287,7 +287,7 @@ describe 'States Integration Tests' do
   #     # save_and_open_page
   #     page.driver.status_code.should be 200
   #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('states.show.header')}$/
-  #     find(:xpath, '//*[@id="header_status"]/p').text.should =~
+  #     find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
   #       /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => item1.class.name, :id => item1.id )}$/
   #     State.count.should == (@num_items)
   #     @updated_item = State.find(item1.id)
@@ -309,7 +309,7 @@ describe 'States Integration Tests' do
   #     # save_and_open_page
   #     page.driver.status_code.should be 200
   #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('states.show.header')}$/
-  #     find(:xpath, '//*[@id="header_status"]/p').text.should =~
+  #     find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
   #       /^#{I18n.translate('errors.success_method_obj_id', :method => 'reactivate', :obj => item1.class.name, :id => @item_deact.id )}$/
   #     State.count.should == (@num_items)
   #     find(:xpath, "//*[@id=\"state_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/

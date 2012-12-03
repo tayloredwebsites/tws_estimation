@@ -20,6 +20,7 @@ end
 
 describe 'Miscellaneous items to do - ' do
   context 'important changes' do
+    it 'should have should - mass_assignment_sanitizer = strict - see: users_controller_spec/ignore unsafe parameters in create user'
     it 'should have a one line text box next to (or below) estimate components for notes'
     it 'should list the component type in the AssemblyComponent entry form component listing (since components are assigned to component types)'
     it "should indicate 'component name already exists' in addition to 'component xxx has already been taken' when adding a component"
@@ -37,6 +38,7 @@ describe 'Miscellaneous items to do - ' do
     it 'should have grid calculations documented'
   end
   context 'Misc. estimates - ' do
+    it '-should find the title with exactly correct content - test reinstated into layout_integration test'
     it 'should prevent entering values outside of minimum and maximum values (general solution for markup % checks)'
     it 'should have no translations missing'
     it 'should have proper email validations'

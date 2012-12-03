@@ -2,8 +2,8 @@
 <html>
 <head>
   <title><%= I18n.translate('config.company_name') %> - <%= I18n.translate('config.app_name') %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :all %>
+  <%= stylesheet_link_tag "application", :cache => false, :concat => false %>
+  <%= javascript_include_tag "application", :cache => false, :concat => false %>
   <%= csrf_meta_tag %>
 </head>
 <body>

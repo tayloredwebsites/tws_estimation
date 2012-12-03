@@ -277,20 +277,21 @@ describe 'Assemblies Integration Tests' do
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.list.action') )
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.new.action') )
       end
-      it 'has clickable show button' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('assemblies.show.action') ).click
+      it 'edit has clickable show button' do
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href=\"/assemblies/#{@item1.id}\"]", :text =>  I18n.translate('assemblies.show.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.show.header')}$/
       end
-      it 'has clickable index link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.index.action') ).click
+      it 'edit has clickable index link' do
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href='/assemblies']", :text => I18n.translate('assemblies.index.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.index.header')}$/
       end
-      it 'has clickable list link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.list.action') ).click
+      it 'edit has clickable list link' do
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href='/assemblies/list']", :text => I18n.translate('assemblies.list.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.list.header')}$/
       end
-      it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.new.action') ).click
+      it 'edit has clickable create new link' do
+        # save_and_open_page
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href='/assemblies/new']").click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.new.header')}$/
       end
     end
@@ -304,20 +305,20 @@ describe 'Assemblies Integration Tests' do
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.list.action') )
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.new.action') )
       end
-      it 'has clickable edit button' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('assemblies.edit.action') ).click
+      it 'show has clickable edit button' do
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href=\"/assemblies/#{@item1.id}/edit\"]", :text =>  I18n.translate('assemblies.edit.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.edit.header')}$/
       end
-      it 'has clickable index link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.index.action') ).click
+      it 'show has clickable index link' do
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href='/assemblies']", :text => I18n.translate('assemblies.index.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.index.header')}$/
       end
-      it 'has clickable list link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.list.action') ).click
+      it 'show has clickable list link' do
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href='/assemblies/list']", :text => I18n.translate('assemblies.list.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.list.header')}$/
       end
-      it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('assemblies.new.action') ).click
+      it 'show has clickable create new link' do
+        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href='/assemblies/new']", :text => I18n.translate('assemblies.new.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.new.header')}$/
       end
     end
@@ -433,7 +434,7 @@ describe 'Assemblies Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('assemblies.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => @updated_item.id )}/
       Assembly.count.should == (@num_items)
       find(:xpath, "//*[@id=\"assembly_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -458,7 +459,7 @@ describe 'Assemblies Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => item1.id )}$/
       Assembly.count.should == (@num_items)
       find(:xpath, "//*[@id=\"assembly_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
@@ -480,7 +481,7 @@ describe 'Assemblies Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => item1.class.name, :id => item1.id )}$/
       Assembly.count.should == (@num_items)
       @updated_item = Assembly.find(item1.id)
@@ -502,7 +503,7 @@ describe 'Assemblies Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assemblies.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'reactivate', :obj => item1.class.name, :id => @item_deact.id )}$/
       Assembly.count.should == (@num_items)
       find(:xpath, "//*[@id=\"assembly_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
