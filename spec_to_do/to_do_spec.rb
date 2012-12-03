@@ -20,8 +20,6 @@ end
 
 describe 'Miscellaneous items to do - ' do
   context 'important changes' do
-    it 'should allow user resetting of password (admin overwrite?)'
-    it 'should have no translations missing for user authorized systems'
     it 'should have should - mass_assignment_sanitizer = strict - see: users_controller_spec/ignore unsafe parameters in create user'
     it 'should have a one line text box next to (or below) estimate components for notes'
     it 'should list the component type in the AssemblyComponent entry form component listing (since components are assigned to component types)'
