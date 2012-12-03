@@ -81,7 +81,7 @@ describe 'Users Integration Tests' do
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'create', :obj => @model.class.name, :name => 'me' )}$/
       page.should_not have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
       @num_users.should == User.count - 1
@@ -109,7 +109,7 @@ describe 'Users Integration Tests' do
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
-      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should_not =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       @num_users.should == User.count
     end
@@ -136,7 +136,7 @@ describe 'Users Integration Tests' do
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_username"]')
-      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should_not =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       @num_users.should == User.count
     end
@@ -165,7 +165,7 @@ describe 'Users Integration Tests' do
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
       # page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password_confirmation"]')
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
-      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should_not =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       @num_users.should == User.count
       UserTestHelper.reset_admin_set_password()
@@ -216,7 +216,7 @@ describe 'Users Integration Tests' do
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'create', :obj => @model.class.name, :name => 'me' )}$/
       @num_users.should == User.count - 1
       page.should_not have_selector(:xpath, '//span[@class="field_with_errors"]/input[@id="user_password"]')
@@ -259,7 +259,7 @@ describe 'Users Integration Tests' do
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       # @updated_user = User.find(@user1.id)
       # @updated_user.email.should_not =~ /bad_email/
@@ -281,7 +281,7 @@ describe 'Users Integration Tests' do
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       @updated_user = User.find(@user1.id)
       @updated_user.has_password?(FactoryGirl.attributes_for(:user_min_create_attr)[:password]).should be_true
@@ -303,7 +303,7 @@ describe 'Users Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.cannot_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/label[@for="user_password"]')
@@ -342,7 +342,7 @@ describe 'Users Integration Tests' do
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update_password', :obj => @model.class.name, :name => @me.username )}$/
       # @updated_user = User.find(@user1.id)
       # @updated_user.email.should_not =~ /bad_email/
@@ -366,7 +366,7 @@ describe 'Users Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.cannot_method_obj_name', :method => 'update_password', :obj => @model.class.name, :name => @me.username )}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/label[@for="user_password"]')
@@ -393,7 +393,7 @@ describe 'Users Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit_password.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.cannot_method_obj_name', :method => 'update_password', :obj => @model.class.name, :name => @me.username )}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/label[@for="user_password"]')
@@ -420,7 +420,7 @@ describe 'Users Integration Tests' do
     #   visit edit_password_path
     #   # save_and_open_page
     #   find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
-    #   find(:xpath, '//*[@id="header_status"]/p').text.should =~
+    #   find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
     #     /^#{I18n.translate('errors.access_denied_msg_obj', :msg => 'edit_password', :obj => 'users' )}$/
     #   UserTestHelper.reset_admin_set_password()
     # end
@@ -757,9 +757,9 @@ describe 'Users Roles Tests - ' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.edit.header')}$/
       page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should_not =~ /\A\s*\z/  # be whitespace
-      find(:xpath, '//*[@id="header_status"]/p').text.should_not =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should_not =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @user1.username )}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.cannot_method_obj_name', :method => 'update', :obj => @model.class.name, :name => @reg.username )}$/
       page.should have_selector(:xpath, '//span[@class="field_with_errors"]/input[@value="bad_email"]')
       @updated_user = User.find(@reg.id)

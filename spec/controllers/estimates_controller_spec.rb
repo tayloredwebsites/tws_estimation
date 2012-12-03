@@ -348,7 +348,8 @@ describe EstimatesController do
       Rails.logger.debug("T assigns(:estimate) = #{estimate.inspect.to_s}")
       @attribs = Hash.new()
       @attribs[:id] = estimate.id
-      @attribs[:estimate] = estimate.attributes
+      # @attribs[:estimate] = estimate.attributes
+      @attribs[:estimate] = FactoryGirl.attributes_for(:estimate)
       Rails.logger.debug("T @attribs = #{@attribs.inspect.to_s}")
       a_attribs = {@assembly.id.to_s => @assembly.id.to_s}
       Rails.logger.debug("T a_attribs = #{a_attribs.inspect.to_s}")

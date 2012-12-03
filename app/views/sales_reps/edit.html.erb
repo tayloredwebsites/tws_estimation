@@ -22,6 +22,5 @@
 <%= link_to I18n.translate('sales_reps.show.action'), sales_rep_path(@sales_rep.id) %>
 <% if can? :manage, @sales_rep %>
     | <%= link_to I18n.translate('sales_reps.index.action'), sales_reps_path %>
-    | <%= link_to I18n.translate('sales_reps.list.action'), list_sales_reps_path %>
     | <%= link_to I18n.translate('sales_reps.new.action'), new_sales_rep_path %>
 <% end %>

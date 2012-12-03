@@ -83,8 +83,8 @@ describe 'Components Integration Tests' do
     end
     it 'should be able to edit and update all of an items accessible fields' do
       all_attribs = FactoryGirl.attributes_for(:component_accessible)
-      item1 = FactoryGirl.create(:component_min_create, component_type: @component_type, default: @default)
-      item1.deactivated?.should be_false
+      item1 = FactoryGirl.create(:component_accessible, component_type: @component_type, default: @default)
+      # item1.deactivated?.should be_true
       # visit edit_component_path (item1.id)
       visit ("/components/#{item1.id}/edit?show_deactivated=true")
       # save_and_open_page
@@ -100,9 +100,13 @@ describe 'Components Integration Tests' do
             Rails.logger.debug("T components_integration_spec edit update - FalseClass")
             page.choose("component_#{at_key.to_s}_false")
             page.should have_selector(:xpath, "//*[@id=\"component_#{at_key.to_s}_false\" and @checked]")
-          elsif  ['grid_operand', 'grid_scope'].include?(at_key.to_s)
-            Rails.logger.debug("T components_integration_spec edit update - select box")
-            page.select(at_val.to_s, :from => "component_#{at_key.to_s}")
+          elsif at_key.to_s == 'grid_operand' # ['grid_operand', 'grid_scope'].include?(at_key.to_s)
+            Rails.logger.debug("T components_integration_spec edit update - select box - grid_operand")
+            page.select(at_val.to_s + ' - ' + VALID_GRID_OPERANDS[at_val], :from => "component_#{at_key.to_s}")
+            find(:xpath, "//select[@id=\"component_#{at_key.to_s}\"]").value.should == at_val.to_s
+          elsif at_key.to_s == 'grid_scope' # ['grid_operand', 'grid_scope'].include?(at_key.to_s)
+            Rails.logger.debug("T components_integration_spec edit update - select box - grid_scope")
+            page.select(at_val.to_s + ' - ' + VALID_GRID_SCOPES[at_val], :from => "component_#{at_key.to_s}")
             find(:xpath, "//select[@id=\"component_#{at_key.to_s}\"]").value.should == at_val.to_s
           else
             # simply fill in the field
@@ -253,29 +257,21 @@ describe 'Components Integration Tests' do
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
       end
     end
-    context 'should have index links working' do
-      before(:each) do
-        visit components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
-        # save_and_open_page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
-        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('components.new.action') )
-      end
-      it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('components.new.action') ).click
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
-      end
+    it 'should have index links working with clickable create new link' do
+      visit components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.index.header')}$/
+      page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('components.new.action') )
+      find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href=\"/components/new\"]", :text =>  I18n.translate('components.new.action') ).click
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
     end
-    context 'should have list links working' do
-      before(:each) do
-        visit list_components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
-        # save_and_open_page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.list.header')}$/
-        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('components.new.action') )
-      end
-      it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('components.new.action') ).click
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
-      end
+    it 'should have list links working with clickable create new link' do
+      visit list_components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.list.header')}$/
+      page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('components.new.action') )
+      find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a[@href=\"/components/new\"]", :text => I18n.translate('components.new.action') ).click
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
     end
     context 'should have menu links working' do
       before(:each) do
@@ -475,7 +471,7 @@ describe 'Components Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('components.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => @updated_item.id )}/
       Component.count.should == (@num_items)
       find(:xpath, "//*[@id=\"component_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -500,7 +496,7 @@ describe 'Components Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => item1.id )}$/
       Component.count.should == (@num_items)
       find(:xpath, "//*[@id=\"component_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
@@ -522,7 +518,7 @@ describe 'Components Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => item1.class.name, :id => item1.id )}$/
       Component.count.should == (@num_items)
       @updated_item = Component.find(item1.id)
@@ -544,7 +540,7 @@ describe 'Components Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'reactivate', :obj => item1.class.name, :id => @item_deact.id )}$/
       Component.count.should == (@num_items)
       find(:xpath, "//*[@id=\"component_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/

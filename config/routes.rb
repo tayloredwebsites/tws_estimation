@@ -57,9 +57,9 @@ TwsAuth::Application.routes.draw do
       put 'deactivate'      # route:          deactivate_sales_rep PUT    /sales_reps/:id/deactivate(.:format)          sales_reps#deactivate
       put 'reactivate'      # route:          reactivate_sales_rep PUT    /sales_reps/:id/reactivate(.:format)          sales_reps#reactivate
     end
-    collection do
-      get 'list'            # route:               list_sales_reps GET    /sales_reps/list(.:format)                    sales_reps#list
-    end
+    # collection do
+    #   get 'list'            # route:               list_sales_reps GET    /sales_reps/list(.:format)                    sales_reps#list
+    # end
   end
   match "sales_reps/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
   match "sales_reps/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
@@ -170,7 +170,6 @@ TwsAuth::Application.routes.draw do
 
   # match '/readme', :to => redirect('/README.markdown')
 
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -220,11 +219,11 @@ TwsAuth::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => "welcome#index"
+  # root :to => 'welcome#index'
 
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
+  # match ':controller(/:action(/:id))(.:format)'
 end

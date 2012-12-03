@@ -174,7 +174,7 @@ describe 'SalesReps Integration Tests' do
           find(:xpath, "//*[@id=\"sales_rep_#{at_key.to_s}\"]").text.should =~ /^false$/
         elsif at_val.is_a?(ActiveRecord::Base)
           Rails.logger.debug("T sales_reps_integration_spec edit updated show - Active Record Model - #{at_val.class.name}")
-          page.should have_selector(:xpath, "//*[@id=\"sales_rep_#{at_val.class.name.downcase}\"]", :value => at_val.last_name.nil_to_s+', '+at_val.first_name.nil_to_s)
+          page.should have_selector(:xpath, "//*[@id=\"sales_rep_#{at_val.class.name.downcase}\"]", :text => at_val.last_name.nil_to_s+', '+at_val.first_name.nil_to_s)
         else
           Rails.logger.debug("T sales_reps_integration_spec edit updated show #{at_key.to_s} - #{at_val.to_s} - other")
           find(:xpath, "//*[@id=\"sales_rep_#{at_key.to_s}\"]").text.should =~ /^#{at_val.to_s}$/
@@ -235,22 +235,6 @@ describe 'SalesReps Integration Tests' do
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.index.header')}$/
         page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
       end
-      it 'should send list page with correct show/hide link in table header' do
-        visit list_sales_reps_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
-        # save_and_open_page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.list.header')}$/
-        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
-        # hide deactivated records
-        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') ).click
-        # save_and_open_page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.list.header')}$/
-        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') )
-        # show deactivated records
-        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') ).click
-        # save_and_open_page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.list.header')}$/
-        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
-      end
     end
     context 'should have index/list row links working' do
       before(:each) do
@@ -269,24 +253,6 @@ describe 'SalesReps Integration Tests' do
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.edit.header')}$/
       end
     end
-    # User is not really a parent here - is really a simple foreign key lookup
-    # context 'should have index parent links working' do
-    #   before(:each) do
-    #     visit sales_reps_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
-    #     save_and_open_page
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.index.header')}$/
-    #     page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/h3/a", :text => "#{@item1.sales_rep_type.nil_to_s}" )
-    #     page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  "New #{@item1.sales_rep_type.nil_to_s} SalesRep" )
-    #   end
-    #   it 'has clickable parent view link' do
-    #     find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/h3/a", :text => "#{@item1.sales_rep_type.nil_to_s}" ).click
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('users.show.header')}$/
-    #   end
-    #   it 'has clickable parent new child button' do
-    #     find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  "New #{@item1.sales_rep_type.nil_to_s} SalesRep" ).click
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.new.header')}$/
-    #   end
-    # end
     context 'should have index links working' do
       before(:each) do
         visit sales_reps_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
@@ -299,36 +265,6 @@ describe 'SalesReps Integration Tests' do
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.new.header')}$/
       end
     end
-    context 'should have list links working' do
-      before(:each) do
-        visit list_sales_reps_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
-        # save_and_open_page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.list.header')}$/
-        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.new.action') )
-      end
-      it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.new.action') ).click
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.new.header')}$/
-      end
-    end
-    # no main menu here - list and index are the same
-    # context 'should have menu links working' do
-    #   before(:each) do
-    #     visit sales_reps_menu_path()
-    #     # save_and_open_page
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.menu.header')}$/
-    #     page.should have_selector(:xpath, "//span[@id='index_action']/a", :text => I18n.translate('sales_reps.index.action') )
-    #     page.should have_selector(:xpath, "//span[@id='list_action']/a", :text => I18n.translate('sales_reps.list.action') )
-    #   end
-    #   it 'has clickable index link' do
-    #     find(:xpath, "//span[@id='index_action']/a", :text => I18n.translate('sales_reps.index.action') ).click
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.index.header')}$/
-    #   end
-    #   it 'has clickable list link' do
-    #     find(:xpath, "//span[@id='list_action']/a", :text => I18n.translate('sales_reps.list.action') ).click
-    #     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.list.header')}$/
-    #   end
-    # end
     context 'should have new/create links working' do
       before(:each) do
         visit new_sales_rep_path()
@@ -348,23 +284,19 @@ describe 'SalesReps Integration Tests' do
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.edit.header')}$/
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('sales_reps.show.action') )
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.index.action') )
-        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.list.action') )
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.new.action') )
       end
       it 'has clickable show button' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('sales_reps.show.action') ).click
+        find(:xpath, "//div[@id='content_body_content']/a", :text =>  I18n.translate('sales_reps.show.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.show.header')}$/
       end
       it 'has clickable index link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.index.action') ).click
+        # save_and_open_page
+        find(:xpath, "//div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.index.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.index.header')}$/
       end
-      it 'has clickable list link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.list.action') ).click
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.list.header')}$/
-      end
       it 'has clickable create new link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.new.action') ).click
+        find(:xpath, "//div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.new.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.new.header')}$/
       end
     end
@@ -375,7 +307,6 @@ describe 'SalesReps Integration Tests' do
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.show.header')}$/
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('sales_reps.edit.action') )
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.index.action') )
-        page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.list.action') )
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.new.action') )
       end
       it 'has clickable edit button' do
@@ -385,10 +316,6 @@ describe 'SalesReps Integration Tests' do
       it 'has clickable index link' do
         find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.index.action') ).click
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.index.header')}$/
-      end
-      it 'has clickable list link' do
-        find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.list.action') ).click
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.list.header')}$/
       end
       it 'has clickable create new link' do
         find(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('sales_reps.new.action') ).click
@@ -513,7 +440,7 @@ describe 'SalesReps Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('sales_reps.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => @updated_item.id )}/
       SalesRep.count.should == (@num_items)
       find(:xpath, "//*[@id=\"sales_rep_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -538,7 +465,7 @@ describe 'SalesReps Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => item1.id )}$/
       SalesRep.count.should == (@num_items)
       find(:xpath, "//*[@id=\"sales_rep_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
@@ -561,7 +488,7 @@ describe 'SalesReps Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => item1.class.name, :id => item1.id )}$/
       SalesRep.count.should == (@num_items)
       @updated_item = SalesRep.find(item1.id)
@@ -584,7 +511,7 @@ describe 'SalesReps Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('sales_reps.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'reactivate', :obj => item1.class.name, :id => @item_deact.id )}$/
       SalesRep.count.should == (@num_items)
       find(:xpath, "//*[@id=\"sales_rep_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/

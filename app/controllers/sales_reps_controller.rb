@@ -35,11 +35,6 @@ class SalesRepsController < SecureApplicationController
     @sales_reps = get_scope().joins(:user).order('users.last_name, users.first_name')
   end
 
-  # GET /sales_reps/list
-  def list
-    index
-  end
-
   # GET /sales_reps/:id
   def show
     @sales_rep = get_scope().find(params[:id])

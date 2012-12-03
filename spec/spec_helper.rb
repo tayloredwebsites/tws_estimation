@@ -31,6 +31,7 @@ end
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+# require 'rspec/autorun'
  
 # Add this to load Capybara integration:
 require 'capybara/rspec'
@@ -71,7 +72,7 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   #config.use_transactional_fixtures = true
-  
+
   # fix for records not being removed after capybara fill in and click
   # per http://stackoverflow.com/questions/6576592/failing-to-test-devise-with-capybara
   # requires the database_cleaner gem
@@ -85,7 +86,25 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-  
+
+  # doesn't work under rails 3.2 new configuration
+  # specify logger and set to debug
+  # config.logger = Logger.new(STDOUT)
+  # config.log_level = :debug
+
+  # per: http://stackoverflow.com/questions/8862967/visit-method-not-found-in-my-rspec
+  # to solve: Failure/Error: helper_signin(:admin_user_full_create_attr, @me.full_name)
+  #           NoMethodError:
+  #             undefined method `visit' for #<RSpec::Core::ExampleGroup::Nested_10::Nested_1:0x007f8782cb2850>
+  config.include Capybara::DSL
+  config.include Capybara::RSpecMatchers
+
+  # precompile assets before running test suite
+  # see: http://stackoverflow.com/questions/13484808/save-and-open-page-not-working-with-capybara-2-0
+  config.before (scope = :suite) do
+    %x[bundle exec rake assets:precompile]
+  end
+
 end
 
 module UserTestHelper
@@ -154,6 +173,9 @@ module UserIntegrationHelper
     Rails.logger.debug("T UserTestHelper.helper_signin_form_submit - done")
   end
   def helper_user_on_page?(sys_header_arg, page_header_arg, user_full_name)
+    # Rails.logger.debug("T helper_user_on_page - sys_header_arg = #{sys_header_arg} = #{I18n.translate(sys_header_arg)}")
+    # Rails.logger.debug("T helper_user_on_page - page_header_arg = #{page_header_arg} =  page_header_arg = #{I18n.translate(page_header_arg)}")
+    # Rails.logger.debug("T helper_user_on_page - user_full_name = #{user_full_name}")
     find('#header_tagline_system_header').text.should =~ /^#{I18n.translate(sys_header_arg)}$/ if !sys_header_arg.nil?
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate(page_header_arg)}$/ if !page_header_arg.nil?
     find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
