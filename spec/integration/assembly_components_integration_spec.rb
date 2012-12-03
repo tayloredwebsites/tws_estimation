@@ -198,17 +198,21 @@ describe 'AssemblyComponents Integration Tests' do
         visit assembly_components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
-        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
-        # hide deactivated records
-        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') ).click
-        # save_and_open_page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
-        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') )
-        # show deactivated records
-        find(:xpath, "//th/a", :text =>  I18n.translate('view_action.show_deactivated') ).click
-        # save_and_open_page
-        find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
-        page.should have_selector(:xpath, "//th/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+        @assemblies.each do |assem|
+          if !assem.deactivated
+            page.should have_selector(:xpath, "//th[@id = \"assembly_#{assem.id}_head\"]/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+            # hide deactivated records
+            find(:xpath, "//th[@id = \"assembly_#{assem.id}_head\"]/a", :text =>  I18n.translate('view_action.hide_deactivated') ).click
+            # save_and_open_page
+            find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
+            page.should have_selector(:xpath, "//th[@id = \"assembly_#{assem.id}_head\"]/a", :text =>  I18n.translate('view_action.show_deactivated') )
+            # show deactivated records
+            find(:xpath, "//th[@id = \"assembly_#{assem.id}_head\"]/a", :text =>  I18n.translate('view_action.show_deactivated') ).click
+            # save_and_open_page
+            find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.index.header')}$/
+            page.should have_selector(:xpath, "//th[@id = \"assembly_#{assem.id}_head\"]/a", :text =>  I18n.translate('view_action.hide_deactivated') )
+          end
+        end
       end
       it 'should send list page with correct show/hide link in table header' do
         visit list_assembly_components_path(:show_deactivated => DB_TRUE.to_s) # to show deactivated records
@@ -493,7 +497,7 @@ describe 'AssemblyComponents Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('assembly_components.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => @updated_item.id )}/
       AssemblyComponent.count.should == (@num_items)
       find(:xpath, "//*[@id=\"assembly_component_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -518,7 +522,7 @@ describe 'AssemblyComponents Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => item1.id )}$/
       AssemblyComponent.count.should == (@num_items)
       find(:xpath, "//*[@id=\"assembly_component_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
@@ -541,7 +545,7 @@ describe 'AssemblyComponents Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => item1.class.name, :id => item1.id )}$/
       AssemblyComponent.count.should == (@num_items)
       @updated_item = AssemblyComponent.find(item1.id)
@@ -564,7 +568,7 @@ describe 'AssemblyComponents Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('assembly_components.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'reactivate', :obj => item1.class.name, :id => @item_deact.id )}$/
       AssemblyComponent.count.should == (@num_items)
       find(:xpath, "//*[@id=\"assembly_component_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/

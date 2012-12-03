@@ -15,10 +15,11 @@ describe 'Home Integration Tests - ' do
       visit home_index_path
     end
     it 'should find the content from the home index page' do        # capybara find
-      find('h4').text.should =~ /^#{pageHeader}$/
+      # save_and_open_page
+      find('h4[@id="header_tagline_page_header"]').text.should =~ /^#{pageHeader}$/
     end
     #it 'should find the content from the home help page' do        # capybara find
-    #  find('h4').should have_content('Home#help')
+    #  find('h4[@id="header_tagline_page_header"]').should have_content('Home#help')
     #end
     it 'should match a span tag with class label with the exact value' do        # capybara find
       find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
@@ -38,10 +39,11 @@ describe 'Home Integration Tests - ' do
       visit home_contact_path
     end
     it 'should find the exact content to match an h4 tag' do        # capybara find
-      find('div#content_body').find('h4').text.should =~ /^#{pageHeader}$/
+      # save_and_open_page
+      find('h4[@id="header_tagline_page_header"]').text.should =~ /^#{pageHeader}$/
     end
     #it 'should find the content from the home help page' do        # capybara find
-    #  find('h4').should have_content('Home#help')
+    #  find('h4[@id="header_tagline_page_header"]').should have_content('Home#help')
     #end
     it 'should match a span tag with class label with the exact value' do        # capybara find
       find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
@@ -61,10 +63,10 @@ describe 'Home Integration Tests - ' do
       visit home_help_path
     end
     it 'should find the exact content to match an h4 tag' do        # capybara find
-      find('div#content_body').find('h4').text.should =~ /^#{pageHeader}$/
+      find('h4[@id="header_tagline_page_header"]').text.should =~ /^#{pageHeader}$/
     end
     #it 'should find the content from the home help page' do        # capybara find
-    #  find('h4').should have_content('Home#help')
+    #  find('h4[@id="header_tagline_page_header"]').should have_content('Home#help')
     #end
     it 'should match a span tag with class label with the exact value' do        # capybara find
       find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
@@ -84,10 +86,10 @@ describe 'Home Integration Tests - ' do
       visit home_news_path
     end
     it 'should find the exact content to match an h4 tag' do        # capybara find
-      find('div#content_body').find('h4').text.should =~ /^#{pageHeader}$/
+      find('h4[@id="header_tagline_page_header"]').text.should =~ /^#{pageHeader}$/
     end
     #it 'should find the content from the home help page' do        # capybara find
-    #  find('h4').should have_content('Home#help')
+    #  find('h4[@id="header_tagline_page_header"]').should have_content('Home#help')
     #end
     it 'should match a span tag with class label with the exact value' do        # capybara find
       find('div#content_body').find('div.field[1]/span.label').text.should =~ /\ATo Do\z/
@@ -109,9 +111,9 @@ describe 'Home Integration Tests - ' do
       end
       
       it 'should go to the site_map page' do        # capybara find
-        @user1 = FactoryGirl.create(:user_min_create_attr)
+        @user1 = FactoryGirl.create(:reg_user_full_create_attr)
         @model = User.new
-        helper_signin(:user_min_create_attr, @user1.full_name)
+        helper_signin(:reg_user_full_create_attr, @user1.full_name)
         visit home_site_map_path
         #save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
@@ -132,7 +134,7 @@ describe 'Home Integration Tests - ' do
       visit home_status_path
     end
     it 'should find the content from the home index page' do        # capybara find
-      find('h4').text.should =~ /^#{pageHeader}$/
+      find('h4[@id="header_tagline_page_header"]').text.should =~ /^#{pageHeader}$/
     end
     it 'should match a span tag with class label with value "APP_NAME"' do        # capybara find
       find('div#content_body').find('div.field[2]/span.label').text.should =~ /\AAPP_NAME\z/

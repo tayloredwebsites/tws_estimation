@@ -447,7 +447,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('estimates.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => 'Estimate', :name => @updated_item.desc )}/
       Estimate.count.should == (@num_items)
       find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -475,7 +475,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
       @updated_item = Estimate.find(item1.id)
       @updated_item.deactivated?.should be_true
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => 'Estimate', :name => @updated_item.desc )}$/
       Estimate.count.should == (@num_items)
       find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
@@ -496,7 +496,7 @@ describe 'Estimates Integration Tests', :js => false do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => 'Estimate', :id => @updated_item.id )}$/
       Estimate.count.should == (num_items + 1)
     end
@@ -519,7 +519,7 @@ describe 'Estimates Integration Tests', :js => false do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'reactivate', :obj => 'Estimate', :id => @updated_item.id )}$/
       Estimate.count.should == num_items + 2
       find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -1043,7 +1043,7 @@ describe 'Estimates Integration Tests', :js => false do
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
       # following tests dependent upon helper_load_assemblies, spec_helper.rb helper_load_component_types and helper_load_components
       page.should have_selector(:xpath, "//label[@for=\"estimate_components_#{@assembly_components[10].assembly_id.to_s}_#{@assembly_components[10].component_id.to_s}\"]", :text => "#{@assembly_components[10].description}")
-      page.should have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_components[10].assembly_id.to_s}_#{@assembly_components[10].component_id.to_s}\"]", :value => "#{BIG_DECIMAL_ZERO.bd_to_s(2)}")
+      page.should have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_components[10].assembly_id.to_s}_#{@assembly_components[10].component_id.to_s}\"]") #, :text => "#{BIG_DECIMAL_ZERO.bd_to_s(2)}")
       within(".edit_estimate") do
         page.fill_in "estimate_components_#{@assembly_components[10].assembly_id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 987.65
         # save_and_open_page
@@ -1053,7 +1053,7 @@ describe 'Estimates Integration Tests', :js => false do
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
       @updated_item = Estimate.find(estimate.id)
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~ /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => 'Estimate', :name => @updated_item.desc )}$/
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~ /^#{I18n.translate('errors.success_method_obj_name', :method => 'update', :obj => 'Estimate', :name => @updated_item.desc )}$/
       find(:xpath, "//td[@id=\"grid_label_#{@assembly_components[10].assembly_id.to_s}_#{@component_type_totals.id.to_s}_#{@assembly_components[10].component_id.to_s}\"]").text.should =~ /#{@assembly_components[10].description}.*(987.65)/  # note wildcard to handle space ???      
     end
     it 'should accumulate component totals to component types and assemblies' do #, :js => true do # see VIEWS_SCRIPTING = false in spec_helper.rb

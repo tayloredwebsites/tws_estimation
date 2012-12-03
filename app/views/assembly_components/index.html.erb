@@ -29,7 +29,7 @@ last_parent_association = ""
             <br>
             <h3><%= link_to parent_association.nil_to_s, assembly_path(parent_association.id) %> (Assembly)</h3>
             <table cellspacing="0">
-            <%= render :partial => 'assembly_components/index_head' %>
+            <%= render :partial => 'assembly_components/index_head', :locals => { :assembly_id => parent_association.id } %>
 <%
             last_parent_assoc_id = parent_association.id
             last_parent_association = parent_association

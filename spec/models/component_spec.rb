@@ -20,11 +20,11 @@ describe Component do
       # Rails.logger.debug("T attribs_whitelist: #{attribs_whitelist.inspect.to_s}")
       acc_attribs = generate_component_accessible_attributes()
       # Rails.logger.debug("T generate_component_accessible_attributes: #{acc_attribs.inspect.to_s}")
-      attribs_whitelist.each do |key, val|
-        Rails.logger.debug ("T Accessible attribute #{key.to_s}/#{val.to_s} = #{acc_attribs[key.to_sym].inspect.to_s}")
-        acc_attribs[key.to_sym].should_not be_nil
+      attribs_whitelist.size.should >= acc_attribs.size # accounting for blank entry in whitelist
+      attribs_whitelist.each do |key|
+        Rails.logger.debug ("T Accessible attribute #{key.to_s} = #{acc_attribs[key.to_sym].inspect.to_s}")
+        acc_attribs[key.to_sym].should_not be_nil if !key.blank?
       end
-      attribs_whitelist.size.should == acc_attribs.size
     end
     it 'should create Component when created with the minimum_attributes' do
       num_items = Component.count

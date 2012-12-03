@@ -162,6 +162,12 @@ describe UsersController do
     it "should ignore unsafe parameters in create user" do
       FactoryGirl.attributes_for(:user_unsafe_attr).each do |key, value|
         @num_users = User.count
+        # lambda {User.create!()}.should raise_error(ActiveRecord::RecordInvalid)
+        # lambda {post :create, :user => FactoryGirl.attributes_for(:user_create).merge({key => value})}.should raise_error(ActiveModel::MassAssignmentSecurity::Error:)
+        # user_attribs = FactoryGirl.attributes_for(:user_create).merge({key => value})
+        # Rails.logger.debug("TEST user_attribs = #{user_attribs.inspect.to_s}")
+        # Rails.logger.debug("TEST user_attribs 2 = #{FactoryGirl.attributes_for(:user_create).merge({key => value}).inspect.to_s}")
+        # post :create, user_attribs
         post :create, :user => FactoryGirl.attributes_for(:user_create).merge({key => value})
         assigns(:user).should_not be_nil
         assigns(:user)[key].should_not == value

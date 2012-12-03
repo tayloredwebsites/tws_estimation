@@ -34,7 +34,7 @@
             <% end %>
           <span class="width_40"><%= check_box_tag "user[roles][#{role.to_s}]", role.to_s, @user.has_role?(role), :name => "user[roles][]" %></span>
           <!-- span class="margin_right_10"><%= cur_role.role_name %></span -->
-                <%= label_tag "roles_#{role}", cur_role.role_name, :class => 'span_after_label' %>
+                <%= label_tag "user_roles_#{role}", cur_role.role_name, :class => 'span_after_label' %>
             <% end %>
             </span>
         </div>
