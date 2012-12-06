@@ -792,7 +792,20 @@ describe 'Estimates Integration Tests', :js => false do
       page.should_not have_selector(:xpath, "//div[@id=\"assembly_#{@assembly_deact.id.to_s}\" and @class=\"assembly only_show\"]")
       num_items.should == Estimate.count
     end
+  end
+
   
+  context 'Regular non-grid Components - ' do
+    before(:each) do
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
+      visit home_index_path
+      Rails.logger.debug("T estimates_integration_spec Admin item logged in")
+      helper_load_defaults
+      helper_load_component_types
+      helper_load_components
+      helper_load_assemblies
+      helper_load_assembly_components
+    end
     it 'should list the components for the selected estimate assemblies in new/create view after create' do #, :js => true do # scripting off for testing in spec_helper.rb
       all_attribs = @estimate_attributes
       estimate = Estimate.create!(@estimate_attributes)
@@ -821,22 +834,27 @@ describe 'Estimates Integration Tests', :js => false do
         page.select @job_type.name.to_s, :from => 'estimate_job_type_id'
         page.select @state.name.to_s, :from => 'estimate_state_id'
         page.check("estimate_assemblies_#{@assemblies[1].id.to_s}")
-        find("#assembly_#{@assemblies[1].id.to_s}/h3").click
-        page.fill_in "estimate_components_#{@assemblies[0].id.to_s}_#{@components[0].id.to_s}", :with => '2.34'
+        # must specify all of the defaulted values for calculation to be predictable (factory values change with different runs)
+        find("#assembly_#{@assemblies[1].id.to_s}/h3").click # note this assembly will not be checked in save_and_open_page due to no javascript testing here
+        # changes to an unchecked assembly - should not be updated or accumulated
+        page.fill_in "estimate_components_#{@assemblies[0].id.to_s}_#{@components[0].id.to_s}", :with => '2.34' #1_1
         # it 'should not list deactivate components'
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[0].id.to_s}\"]")
-        # page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[0].id.to_s}", :with => '3.45'
-        page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}", :with => '4.56'
-        page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}", :with => '5.67'
-        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[3].id.to_s}", :with => '6.78'
-        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[4].id.to_s}", :with => '7.89'
+        # deactivated component - should not show up
+        # page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[0].id.to_s}", :with => '3.45' # 2_1
+        page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}", :with => '4.56' # 2_2
+        page.fill_in "estimate_components_note_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}", :with => 'Component 1 Note' # 2_2
+        # make sure blank overrides default with 0.00
+        page.fill_in "estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}", :with => '' # 2_3
+        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[3].id.to_s}", :with => '6.78' # 3_4
+        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[4].id.to_s}", :with => '7.89' # 3_5
         # it 'should not list components with deactivated component types'
-        page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]")
-        page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")        
-        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}", :with => '9.01'
-        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34'
-        page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}", :with => '2.45'
-        page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 2.5
+        page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]") # 3_6
+        page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
+        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}", :with => '9.01' # 3_7
+        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34' # 3_8
+        page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}", :with => '2.45' # 4_10
+        page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 2.5 # 4_11
         # save_and_open_page      
         find(:xpath, '//input[@type="submit"]').click
       end
@@ -848,31 +866,34 @@ describe 'Estimates Integration Tests', :js => false do
       page.should_not have_selector(:xpath, '//*', :text => 'translation missing:')
       # it 'should not list components with unchecked assemblies'
       page.should_not have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[0].id.to_s}\"]")
-      # page.should_not have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[1].id.to_s}\"]")
-      page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assemblies[0].id.to_s}_#{@components[0].id.to_s}\"]")
+      page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assemblies[0].id.to_s}_#{@components[0].id.to_s}\"]") # 1_1
+      # it 'should not list deactivated components
+      page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[0].id.to_s}\"]") # 2_1
+      page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[1].id.to_s}\"]")
       # it 'should not list deactivated components'
       page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@component_deact.id.to_s}\"]")
-      find(:xpath, "//span[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}\"]").text.should =~ /4.56/
-      find(:xpath, "//span[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}\"]").text.should =~ /5.67/
-      find(:xpath, "//span[@id=\"component_type_total_#{@assemblies[1].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /10.23/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assemblies[1].id.to_s}_total\"]").text.should =~/^10.23$/
-      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[3].id.to_s}\"]").text.should =~ /6.78/
+      find(:xpath, "//span[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}\"]").text.should =~ /4.56/ # 2_2
+      find(:xpath, "//span[@id=\"estimate_components_note_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}\"]").text.should =~ /Component 1 Note/ # 2_2
+      find(:xpath, "//span[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}\"]").text.should =~ /0.00/ # 2_3
+      find(:xpath, "//span[@id=\"component_type_total_#{@assemblies[1].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /4.56/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assemblies[1].id.to_s}_total\"]").text.should =~/^4.56$/
+      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[3].id.to_s}\"]").text.should =~ /6.78/ # 3_4
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /6.78/
-      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[4].id.to_s}\"]").text.should =~ /7.89/
+      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[4].id.to_s}\"]").text.should =~ /7.89/ # 3_5
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /7.89/
       # it 'should not list components with deactivated component types'
-      page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]")
+      page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]") # 3_6
       page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")        
-      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}\"]").text.should =~ /9.01/
-      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}\"]").text.should =~ /1.34/
+      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}\"]").text.should =~ /9.01/ # 3_7
+      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}\"]").text.should =~ /1.34/ # 3_8
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[3].id.to_s}\"]").text.should =~ /10.35/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_all.id.to_s}_total\"]").text.should =~/^25.02$/
-      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}\"]").text.should =~ /2.45/
+      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}\"]").text.should =~ /2.45/ # 4_10
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /2.45/
-      find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}\"]").text.should =~ /^42.61$/
+      find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}\"]").text.should =~ /^42.61$/ # grid total
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^45.06$/
       # grand totals
-      find(:xpath, "//span[@id=\"grand_total\"]").text.should =~ /^80.31$/
+      find(:xpath, "//span[@id=\"grand_total\"]").text.should =~ /^74.64$/
       num_items.should == Estimate.count
     end
   end

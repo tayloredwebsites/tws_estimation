@@ -2,7 +2,7 @@ class EstimateComponent < ActiveRecord::Base
 
   include Models::CommonMethods
   
-  attr_accessible :value, :write_in_name, :component_id, :assembly_id, :estimate_id, :deactivated #, :component, :assembly, :estimate
+  attr_accessible :value, :write_in_name, :component_id, :assembly_id, :estimate_id, :deactivated, :note #, :component, :assembly, :estimate
   # todo ? remove these as accessible? -> attr_accessible :assembly_component, :estimate_assembly, :assembly_component_id, :estimate_assembly_id
 
   belongs_to :estimate

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121026142145) do
+ActiveRecord::Schema.define(:version => 20121203231356) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20121026142145) do
     t.boolean  "deactivated",                                  :default => false, :null => false
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
+    t.string   "note",                                         :default => "",    :null => false
   end
 
   add_index "estimate_components", ["assembly_id"], :name => "index_estimate_components_on_assembly_id"

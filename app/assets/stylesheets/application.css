@@ -117,6 +117,9 @@
   .totals_grid {width:100%}
   .grid_row_sub_total {font-weight:bold;}
   .grid_row_label input {margin-left:5px;}
+  .component_value input {width:70px;}
+  .component_note:before {margin-left:20px;content:'Note: '}
+  .component_note input {width:400px;}
 
 /* error styling */
 .error {color:#f00;font-size:larger;}
