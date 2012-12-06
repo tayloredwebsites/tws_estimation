@@ -41,7 +41,7 @@ class ComponentsController < SecureApplicationController
 
   # GET /components/list
   def list
-    @components = get_scope().joins(:component_type).order('components.description')
+    @components = get_scope().joins(:component_type).order('components.description, component_types.sort_order')
   end
 
   # GET /components/:id

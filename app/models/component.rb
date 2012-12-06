@@ -35,6 +35,11 @@ class Component < ActiveRecord::Base
   before_save :nil_grid_values
 
   # class methods
+
+  def self.list_by_desc_with_type
+    joins(:component_type).order('components.description, component_types.description')
+  end
+  
   
   # instance methods
   
@@ -63,6 +68,10 @@ class Component < ActiveRecord::Base
   
   def desc
     ''+super.nil_to_s+self.description.nil_to_s
+  end
+  
+  def desc_plus_type
+    desc + ' (' + self.component_type.description + ')'
   end
 
   def field_nil_to_s(field_name)
