@@ -6,16 +6,33 @@
 if view_mode == 'edit'
 %>
 			<span class="value">
+				<span class='component_value'>
 <%
 	concat text_field_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str
-	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_str)
+	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
+%>
+				</span>
+				<span class='component_note'>
+<%
+	concat text_field_tag "estimate_components_note[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_note
+	concat hidden_field_tag("estimate_components_note_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_note)
+%>
+				</span>
+<%
 else
 %>
-			<span class="value" id="estimate_components_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
+			<span class="value">
+				<span class='component_value' id="estimate_components_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
 <%
 	concat est_comp_value_str
+%>
+				</span>
+				<span class='component_note' id="estimate_components_note_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
+<%
+	concat est_comp_note
 end
 %>
+				</span>
 			</span>
 		</div>
 <%

@@ -16,6 +16,7 @@ def generate_estimate_component_accessible_attributes(attribs = {})
     # :component => component,
     :write_in_name => FactoryGirl.generate(:estimate_component_write_in_name),
     :value => FactoryGirl.generate(:estimate_component_value),
+    :note => 'a component note',
     :deactivated => deactivated
   }
 end
@@ -54,6 +55,7 @@ FactoryGirl.define do
     association :component,  :factory => :component_create,  :strategy => :build
     write_in_name {FactoryGirl.generate(:estimate_component_write_in_name)}
     value {FactoryGirl.generate(:estimate_component_value)}
+    note ''
     deactivated false
   end
   # factory :estimate_component_min_create, :class => EstimateComponent do

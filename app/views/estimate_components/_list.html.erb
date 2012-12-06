@@ -46,9 +46,11 @@ end
 			est_comp = EstimateComponent.for_estimate_assembly_component(@estimate.id, ass.id, ass_comp.component.id )
 			Rails.logger.debug("VVVV Estimate Component = #{est_comp.inspect.to_s}")
 			# calculations
+			est_comp_value_was_str = 'nil'
 			if !est_comp.nil?
 				# comp = est_comp.component
 				est_comp_value = est_comp.value_or_default
+				est_comp_value_was_str = est_comp_value.bd_to_s(2)
 			elsif !ass_comp.component.default.nil?
 				est_comp_value = ass_comp.component.default.value
 			else
@@ -159,7 +161,8 @@ end
 					ct_id = ass_comp.component.component_type.id
 					e_totals[ct_id] = (e_totals[ct_id].nil?) ? est_comp_value : e_totals[ct_id] + est_comp_value
 					ea_totals[ct_id] = (ea_totals[ct_id].nil?) ? est_comp_value : ea_totals[ct_id] + est_comp_value
-					concat render :partial => 'estimate_components/list_component', :locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :editable => comp.editable, :view_mode => view_mode }
+					est_comp_note = (est_comp.nil?) ? '' : est_comp.note
+					concat render :partial => 'estimate_components/list_component', :locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :est_comp_note => est_comp_note, :editable => comp.editable, :view_mode => view_mode }
 				
 				end # end if show_totals_grid
 				last_ct_id = ct_id
