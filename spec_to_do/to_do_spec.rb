@@ -33,6 +33,8 @@ describe 'Miscellaneous items to do - ' do
     it 'should let users specify system minimum and maximum markup percent (10 max now)'
     it 'should only total $ amounts in totals'
     it 'should warn if there are unconverted hours'
+    it 'should show dollars or hours on input fields???'
+    it 'should not update, show or accumulate unchecked assemblies'
   end
   context 'important documentation' do
     it 'should have grid calculations documented'
