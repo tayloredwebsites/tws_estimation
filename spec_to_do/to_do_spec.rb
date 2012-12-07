@@ -23,7 +23,6 @@ describe 'Miscellaneous items to do - ' do
     it 'should have should - mass_assignment_sanitizer = strict - see: users_controller_spec/ignore unsafe parameters in create user'
     it "should indicate 'component name already exists' in addition to 'component xxx has already been taken' when adding a component"
     it "should indicate 'estimate component already exists with that assembly and component', in addition to 'component xxx has already been taken' when adding an estimate component"
-    it 'should not have user lose extimate numbers on new estimate errors (validate before save, or save estimate with warnings)'
     it 'should warn the user if hours have not been converted to dollars (at the end of the estimate)'
     it 'should not accumulate hours into the dollar totals column - add an hours totals column?'
     it 'should ensure that required components have amounts entered and give a warning on that line'
