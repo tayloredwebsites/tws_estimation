@@ -29,7 +29,8 @@ describe 'AssemblyComponents Integration Tests' do
       # save_and_open_page      
       within("#new_assembly_component") do
         page.select @assembly.description, :from => 'assembly_component_assembly_id'
-        page.select component4.description, :from => 'assembly_component_component_id'
+        # it 'should show component type in component dropdown in assembly components entry form'
+        page.select component4.desc_plus_type, :from => 'assembly_component_component_id'
         page.fill_in 'assembly_component_description', :with => attribs[:description]
         find(:xpath, '//input[@type="submit"]').click
       end
@@ -50,8 +51,8 @@ describe 'AssemblyComponents Integration Tests' do
       attribs = FactoryGirl.attributes_for(:assembly_component_create, assembly: @assembly, component: @component)
       Rails.logger.debug("T assembly_components_integration_spec - attribs = #{attribs.inspect.to_s}")
       within(".new_assembly_component") do
-        # page.select @assembly.description, :from => 'assembly_component_assembly_id'
-        page.select @component.description, :from => 'assembly_component_component_id'
+        # it 'should show component type in component dropdown in assembly components entry form'
+        page.select @component.desc_plus_type, :from => 'assembly_component_component_id'
         page.fill_in 'assembly_component_description', :with => attribs[:description]
         find(:xpath, '//input[@type="submit"]').click
       end
