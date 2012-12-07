@@ -101,41 +101,41 @@ class EstimatesController < SecureApplicationController
         authorize! :create, @estimate   # authorize from CanCan::ControllerAdditions
         @estimate = Estimate.create(params[:estimate])
         @estimate.save
-        if !@estimate.errors.empty?
-          # will this code ever be touched?
-          @estimate.errors.each do |attr, msg|
-            Rails.logger.error("E EstimatesController.create - Estimate.new - got error = #{attr} - #{msg}")
-          end
-          raise ActiveRecord::Rollback, "Estimate Create error on new()"
-        else
-          if !params[:estimate_assemblies].nil?
-            params[:estimate_assemblies].each do |ec_key, ec_value|
-              if !ec_value.blank?
-                c_attribs = {:estimate_id=>@estimate.id, :assembly_id=> ec_key, :selected => true}
-                # Rails.logger.debug("* EstimatesController.create estimate_assemblies c_attribs = #{c_attribs.inspect.to_s}")
-                @estimate.estimate_assemblies.build(c_attribs)
-              end
-            end
-          end
-          if !params[:estimate_components].nil?
-            is_now = params[:estimate_components]
-            is_now_note = params[:estimate_components_note]
-            # Rails.logger.debug("*VIVALADIFFERENCE Estimate.create - is_now:#{is_now.inspect.to_s}")
-            is_now.each do |ec_key, ec_value|
-              ec_note = (is_now_note.nil? ? '' :( is_now_note[ec_key].nil? ? '' : is_now_note[ec_key]))
-              # Rails.logger.debug("*VIVALADIFFERENCE Estimate.create - estimate_component - ec_key:#{ec_key} - ec_value:#{ec_value} - ec_note:#{ec_note}")
-              if ec_value == '0.00' && ec_note == ''
-                # Rails.logger.debug("DONTADDRECORD EstimatesController.update dont add record if empty")
-              else
-                c_attribs = EstimateComponent.params_from_key_string(ec_key).merge(:value => ec_value, :note => ec_note, :estimate_id=>@estimate.id)
-                # Rails.logger.debug("ADDTHISRECORD EstimatesController.create estimate_components c_attribs = #{c_attribs.inspect.to_s}")
-                @estimate.estimate_components.build(c_attribs)
-              end
-            end
-          end
-          Rails.logger.debug("* EstimatesController.update save")
-          @estimate.save
-        end
+        # if !@estimate.errors.empty?
+        #   # will this code ever be touched?
+        #   @estimate.errors.each do |attr, msg|
+        #     Rails.logger.error("E EstimatesController.create - Estimate.new - got error = #{attr} - #{msg}")
+        #   end
+        #   raise ActiveRecord::Rollback, "Estimate Create error on new()"
+        # else
+        #   if !params[:estimate_assemblies].nil?
+        #     params[:estimate_assemblies].each do |ec_key, ec_value|
+        #       if !ec_value.blank?
+        #         c_attribs = {:estimate_id=>@estimate.id, :assembly_id=> ec_key, :selected => true}
+        #         # Rails.logger.debug("* EstimatesController.create estimate_assemblies c_attribs = #{c_attribs.inspect.to_s}")
+        #         @estimate.estimate_assemblies.build(c_attribs)
+        #       end
+        #     end
+        #   end
+        #   if !params[:estimate_components].nil?
+        #     is_now = params[:estimate_components]
+        #     is_now_note = params[:estimate_components_note]
+        #     # Rails.logger.debug("*VIVALADIFFERENCE Estimate.create - is_now:#{is_now.inspect.to_s}")
+        #     is_now.each do |ec_key, ec_value|
+        #       ec_note = (is_now_note.nil? ? '' :( is_now_note[ec_key].nil? ? '' : is_now_note[ec_key]))
+        #       # Rails.logger.debug("*VIVALADIFFERENCE Estimate.create - estimate_component - ec_key:#{ec_key} - ec_value:#{ec_value} - ec_note:#{ec_note}")
+        #       if ec_value == '0.00' && ec_note == ''
+        #         # Rails.logger.debug("DONTADDRECORD EstimatesController.update dont add record if empty")
+        #       else
+        #         c_attribs = EstimateComponent.params_from_key_string(ec_key).merge(:value => ec_value, :note => ec_note, :estimate_id=>@estimate.id)
+        #         # Rails.logger.debug("ADDTHISRECORD EstimatesController.create estimate_components c_attribs = #{c_attribs.inspect.to_s}")
+        #         @estimate.estimate_components.build(c_attribs)
+        #       end
+        #     end
+        #   end
+        #   Rails.logger.debug("* EstimatesController.create save")
+        #   @estimate.save
+        # end
       rescue ActiveRecord::ActiveRecordError => ex
         # capture the exceptions
         Rails.logger.error("E EstimateController.create - Active Record Error ex = $! - #{ex.to_s}")
@@ -152,7 +152,7 @@ class EstimatesController < SecureApplicationController
             :name => @estimate.desc )
           )
           # using redirect because render is not showing created associations.
-          redirect_to @estimate, notice: 'Estimate was successfully created.'
+          redirect_to edit_estimate_path(@estimate.id), notice: 'Estimate was successfully created.'
           # render :action => 'show' # does not refresh all instance variables
         else
           Rails.logger.debug("***** EstimatesController.create - errors")

@@ -50,6 +50,34 @@ describe 'Estimates Integration Tests', :js => false do
       # save_and_open_page
       page.driver.status_code.should be 200
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      page.should_not have_selector(:xpath, '//*', :text => 'translation missing:')
+      @estimate_attributes.each do | at_key, at_val |
+        # if at_key.to_s == 'deactivated'
+        #   Rails.logger.debug("T estimates_integration_spec updated attribs - deactivated")
+        #   find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(at_val)}\z/
+        if at_val.is_a?(TrueClass)
+          Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s} - TrueClass")
+          page.should have_selector(:xpath, "//*[@id=\"estimate_#{at_key.to_s}_true\"]")
+        elsif at_val.is_a?(FalseClass)
+          Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s} - FalseClass")
+          page.should have_selector(:xpath, "//*[@id=\"estimate_#{at_key.to_s}_false\"]")
+        elsif at_key =~ /_id$/
+          # do association selects manually (capybara select method only selects by value, not ID)
+        else
+          Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s}")
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").value.should =~ /\A#{at_val.to_s}\z/
+        end
+      end
+      find(:xpath, '//*[@id="estimate_sales_rep_id"]').text.should =~ /\A#{@sales_rep.username}\z/
+      find(:xpath, '//*[@id="estimate_job_type_id"]').value.should =~ /\A#{@job_type.id.to_s}\z/
+      find(:xpath, '//*[@id="estimate_state_id"]').value.should =~ /\A#{@state.id.to_s}\z/
+      find(:xpath, '//input[@type="submit"]').click
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
       page.should_not have_selector(:xpath, '//*', :text => 'translation missing:')
       @estimate_attributes.each do | at_key, at_val |
@@ -89,6 +117,7 @@ describe 'Estimates Integration Tests', :js => false do
         end
         # save_and_open_page
         page.driver.status_code.should be 200
+        # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
         page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
         # find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\z/  # be whitespace
@@ -687,20 +716,13 @@ describe 'Estimates Integration Tests', :js => false do
       helper_load_assemblies
       helper_load_assembly_components
     end
-    it 'should list the estimate assemblies in new/create view after create' do #, :js => true do # scripting off for testing in spec_helper.rb
+    it 'should list the estimate assemblies in new/create, edit/update and view after' do #, :js => true do # scripting off for testing in spec_helper.rb
       num_items = Estimate.count
       visit new_estimate_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       # save_and_open_page      
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
-      # input form should show all components for all (not deactivated) assemblies
-      page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[0].id.to_s}\"]")
-      page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[1].id.to_s}\"]")
-      page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[2].id.to_s}\"]")
-      page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[3].id.to_s}\"]")
-      # it 'should not list deactivated assemblies'
-      page.should_not have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[4].id.to_s}\"]")
       # fill in estimate form with estimate attributes for create
       within(".new_estimate") do
         @estimate_attributes.each do |at_key, at_value|
@@ -721,7 +743,24 @@ describe 'Estimates Integration Tests', :js => false do
         # page.check("estimate_assemblies_#{@assemblies[2].id.to_s}")
         # page.check("estimate_assemblies_#{@assemblies[3].id.to_s}")
         # save_and_open_page      
-        page.fill_in "estimate_components_#{@assemblies[2].id.to_s}_#{@components[3].id.to_s}", :with => '876.12'
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      # page.driver.status_code.should be 200
+      # response.status.should be(200)  # status is not available with :js => true (selenium driver)
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      page.should_not have_selector(:xpath, '//*', :text => 'translation missing:')
+      # input form should show all components for all (not deactivated) assemblies
+      page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[0].id.to_s}\"]")
+      page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[1].id.to_s}\"]")
+      page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[2].id.to_s}\"]")
+      page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[3].id.to_s}\"]")
+      # it 'should not list deactivated assemblies'
+      page.should_not have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[4].id.to_s}\"]")
+      # note @assemblies[2] and @assemblies[3] are checked because they are required
+      within(".edit_estimate") do
+        # page.fill_in "estimate_components_#{@assemblies[2].id.to_s}_#{@components[3].id.to_s}", :with => '876.12'
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -730,7 +769,6 @@ describe 'Estimates Integration Tests', :js => false do
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
       page.should_not have_selector(:xpath, '//*', :text => 'translation missing:')
-      # note @assemblies[2] and @assemblies[3] are checked because they are required
       page.should have_selector(:xpath, "//*[@id=\"estimate_assemblies_#{@assemblies[0].id.to_s}\"]")
       page.should_not have_selector(:xpath, "//*[@id=\"estimate_assemblies_#{@assemblies[0].id.to_s}\" and @checked]")
       page.should have_selector(:xpath, "//*[@id=\"estimate_assemblies_#{@assemblies[1].id.to_s}\"]")
@@ -750,24 +788,6 @@ describe 'Estimates Integration Tests', :js => false do
       # find(:xpath, "//*[@id=\"estimate_components_#{@assemblies[2].id.to_s}_#{@components[3].id.to_s}\"]").text.should_not =~ /\s*876.12\s*/ 
       # find(:xpath, '//*[@id="estimate_description"]').text.should =~ /\AMy Description\z/  # be new value
       num_items.should == Estimate.count - 1
-    end
-    it 'should show the Assembly Components section for the required assemblies in new/create' do #, :js => true do # scripting off for testing in spec_helper.rb
-      VIEWS_SCRIPTING = true # spec_helper clears this (turning off javascript dependent code), thus bypass the assembly check box status
-      num_items = Estimate.count
-      visit new_estimate_path()
-      # save_and_open_page
-      page.should have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[0].id.to_s}\" and @class=\"assembly show_hide\"]")
-      page.should_not have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[0].id.to_s}\" and @class=\"assembly only_show\"]")
-      page.should have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[1].id.to_s}\" and @class=\"assembly show_hide\"]")
-      page.should_not have_selector(:xpath, "//div[@id=\"assembly_#{@assemblies[1].id.to_s}\" and @class=\"assembly only_show\"]")
-      page.should have_selector(:xpath, "//div[@id=\"assembly_#{@assembly_all.id.to_s}\" and @class=\"assembly show_hide\"]")
-      page.should_not have_selector(:xpath, "//div[@id=\"assembly_#{@assembly_all.id.to_s}\" and @class=\"assembly only_show\"]")
-      page.should have_selector(:xpath, "//div[@id=\"assembly_#{@assembly_total.id.to_s}\" and @class=\"assembly show_hide\"]")
-      page.should_not have_selector(:xpath, "//div[@id=\"assembly_#{@assembly_total.id.to_s}\" and @class=\"assembly only_show\"]")
-      # it 'should not show Assembly Component sections for deactivated assemblies'
-      page.should_not have_selector(:xpath, "//div[@id=\"assembly_#{@assembly_deact.id.to_s}\" and @class=\"assembly show_hide\"]")
-      page.should_not have_selector(:xpath, "//div[@id=\"assembly_#{@assembly_deact.id.to_s}\" and @class=\"assembly only_show\"]")
-      num_items.should == Estimate.count
     end
     it 'should show the Assembly Components section for the required assemblies in edit/update' do #, :js => true do # scripting off for testing in spec_helper.rb
       VIEWS_SCRIPTING = true # spec_helper clears this (turning off javascript dependent code), thus bypass the assembly check box status
