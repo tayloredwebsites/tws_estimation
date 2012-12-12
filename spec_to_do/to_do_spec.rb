@@ -26,12 +26,13 @@ describe 'Miscellaneous items to do - ' do
     it 'should warn the user if hours have not been converted to dollars (at the end of the estimate)'
     it 'should not accumulate hours into the dollar totals column - add an hours totals column?'
     it 'should ensure that required components have amounts entered and give a warning on that line'
-    it 'should separate required components from unrequired components (second column?, listed below required?)'
+    it 'should separate required components from unrequired components and indicate it is required on the form and show'
     it 'should let users specify system minimum and maximum markup percent (10 max now)'
     it 'should only total $ amounts in totals'
     it 'should warn if there are unconverted hours'
     it 'should show dollars or hours on input fields???'
     it 'should not update, show or accumulate unchecked assemblies'
+    it 'should not allow assembly components to be required if the component is not editable.'
   end
   context 'important documentation' do
     it 'should have grid calculations documented'

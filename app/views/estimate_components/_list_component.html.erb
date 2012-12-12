@@ -1,4 +1,9 @@
 <%
+	if ass_comp.required
+		ass_comp_req = 'component_value required'
+	else
+		ass_comp_req = 'component_value not_required'
+	end
 %>
 		<div class="field">
 			<%= label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
@@ -6,7 +11,7 @@
 if view_mode == 'edit'
 %>
 			<span class="value">
-				<span class='component_value'>
+				<span class="<%= ass_comp_req %>">
 <%
 	concat text_field_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str
 	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
@@ -22,7 +27,7 @@ if view_mode == 'edit'
 else
 %>
 			<span class="value">
-				<span class='component_value' id="estimate_components_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
+				<span class='<%= ass_comp_req %>' id="estimate_components_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
 <%
 	concat est_comp_value_str
 %>
