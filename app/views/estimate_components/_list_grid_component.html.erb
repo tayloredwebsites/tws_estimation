@@ -1,5 +1,10 @@
 <%
 warn_class = (ass_comp.component.is_valid_grid_operand? && ass_comp.component.is_valid_grid_scope?) ? '' : ' warning'
+if ass_comp.required
+	ass_comp_req = 'component_value required'
+else
+	ass_comp_req = 'component_value not_required'
+end
 %>
 				<tr class="grid_row<%= warn_class %>">
 					<td class="grid_row_label" id="grid_label_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>">
@@ -7,11 +12,11 @@ warn_class = (ass_comp.component.is_valid_grid_operand? && ass_comp.component.is
 # display_value = operation_value.bd_to_s(2)
 if editable && view_mode == 'edit'
 	concat label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' ', :class => 'label'
-	concat text_field_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str
+	concat content_tag(:span, text_field_tag("estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str), :class => ass_comp_req)
 	concat ')'
 	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_str)
 else
-	concat ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' '+est_comp_value_str+')'
+	concat content_tag(:span, ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' '+est_comp_value_str+')', :class => ass_comp_req)
 end
 %>
 					</td>

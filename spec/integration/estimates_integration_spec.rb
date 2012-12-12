@@ -1032,16 +1032,44 @@ describe 'Estimates Integration Tests', :js => false do
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}\"]//th[@class=\"grid_row_head\"]", :text => @component_types[4].description)  # regular
       page.should_not have_selector(:xpath, "//table[@id=\"totals_grid_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}\"]//th[@class=\"grid_row_head\"]", :text => @component_types[5].description)  # regular
       page.should_not have_selector(:xpath, "//table[@id=\"totals_grid_#{@assembly_total.id.to_s}\"]//th[@class=\"grid_row_head\"]", :text => @component_types[4].description)  # totals component type
-      within(".edit_estimate") do
-        # save_and_open_page
-        # check assemblies so they are seen in show after update
-        page.check("estimate_assemblies_#{@assemblies[0].id.to_s}")
-        page.check("estimate_assemblies_#{@assemblies[1].id.to_s}")
-        page.check("estimate_assemblies_#{@assemblies[2].id.to_s}")
-        # save_and_open_page
-        find(:xpath, '//input[@type="submit"]').click
-      end
+      # within(".edit_estimate") do
+      #   # save_and_open_page
+      #   # check assemblies so they are seen in show after update
+      #   page.check("estimate_assemblies_#{@assemblies[0].id.to_s}")
+      #   page.check("estimate_assemblies_#{@assemblies[1].id.to_s}")
+      #   page.check("estimate_assemblies_#{@assemblies[2].id.to_s}")
+      #   save_and_open_page
+      #   find(:xpath, '//input[@type="submit"]').click
+      # end
       # save_and_open_page
+    end
+    it 'should have required class on required components, and not_required class on others' do
+      all_attribs = @estimate_attributes
+      estimate = Estimate.create!(@estimate_attributes)
+      Estimate.count.should == 1
+      estimate.deactivated?.should be_false
+      visit edit_estimate_path (estimate.id)
+      save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+      # following tests dependent upon helper_load_assemblies, spec_helper.rb helper_load_component_types and helper_load_components
+      # 9th component type is not 'has_totals', so it is a regular component with a default value (note the not editable flag is ignored here)
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[0].assembly.id.to_s}_#{@assembly_components[0].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[2].assembly.id.to_s}_#{@assembly_components[2].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value required']/input[@id=\"estimate_components_#{@assembly_components[3].assembly.id.to_s}_#{@assembly_components[3].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[4].assembly.id.to_s}_#{@assembly_components[4].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[5].assembly.id.to_s}_#{@assembly_components[5].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value required']/input[@id=\"estimate_components_#{@assembly_components[7].assembly.id.to_s}_#{@assembly_components[7].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[8].assembly.id.to_s}_#{@assembly_components[8].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[9].assembly.id.to_s}_#{@assembly_components[9].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[10].assembly.id.to_s}_#{@assembly_components[10].component.id.to_s}\"]")
+      # should not have required flag, because it is not an input field
+      # page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[11].assembly.id.to_s}_#{@assembly_components[11].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[12].assembly.id.to_s}_#{@assembly_components[12].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[13].assembly.id.to_s}_#{@assembly_components[13].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value not_required']/input[@id=\"estimate_components_#{@assembly_components[14].assembly.id.to_s}_#{@assembly_components[14].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//span[@class='component_value required']/input[@id=\"estimate_components_#{@assembly_components[15].assembly.id.to_s}_#{@assembly_components[15].component.id.to_s}\"]")
     end
     it 'should show default value next to label' do #, :js => true do # see VIEWS_SCRIPTING = false in spec_helper.rb
       # @defaults.each do |df|
