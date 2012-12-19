@@ -25,8 +25,8 @@
 /* top level layout styles */
   html {background-color:#666;font-size:.8em;}
   body {min-width:600px;background-color:#fff;border-width:10px 20px 10px 20px;border-color:#666;border-style:solid;
-    background-image:url(../images/header/corner_top_right.gif);background-position:top right;background-repeat:no-repeat;}
-  #body_content {background-image:url(../images/header/corner_top_left.gif);background-position:top left;background-repeat:no-repeat;}
+    background-image:url(header/corner_top_right.gif);background-position:top right;background-repeat:no-repeat;}
+  #body_content {background-image:url(header/corner_top_left.gif);background-position:top left;background-repeat:no-repeat;}
   #header {border-bottom:1px solid black;}
   #header_logo {padding:5px;}
   #middle_content {}
@@ -38,9 +38,9 @@
   #content_footer {padding:5px;} /* border-top:1px solid black; } */
   #right_content {}
   #footer {border-top:1px solid black;background-color:#fff;
-    background-image:url(../images/header/corner_bottom_left.gif);background-position:bottom left;background-repeat:no-repeat;}
+    background-image:url(header/corner_bottom_left.gif);background-position:bottom left;background-repeat:no-repeat;}
   #footer_content {padding:10px 20px;
-    background-image:url(../images/header/corner_bottom_right.gif);background-position:bottom right;background-repeat:no-repeat;}
+    background-image:url(header/corner_bottom_right.gif);background-position:bottom right;background-repeat:no-repeat;}
 
 
 /* mid level layouts */
@@ -69,7 +69,7 @@
   #header_tagline {padding:5px;}
   #header_logo_right {padding:5px;}
   #header_bottom_bar {border-top:1px solid black;}
-  #header_nav_bar {background-image:url(../images/bg/nav_bg.gif);height:25px;}
+  #header_nav_bar {background-image:url(bg/nav_bg.gif);height:25px;}
   #header_nav_bar li {}
   #header_nav_bar li a {border-left:1px solid #666;border-right:1px solid #666;margin:2px 0;color:#fff;line-height:21px;text-decoration:none;}
   #header_nav_bar li a:hover {color:#e98;}
@@ -120,6 +120,8 @@
   .component_value input {width:70px;}
   .component_note:before {margin-left:20px;content:'Note: '}
   .component_note input {width:400px;}
+  .required:after {content:'\0000a0 *'}
+  .not_required:after {content:'\0000a0\0000a0'} /* &nbsp; in unicode */
 
 /* error styling */
 .error {color:#f00;font-size:larger;}
@@ -131,8 +133,7 @@
 #error_explanation ul {margin:5px 15px;padding:0px;}
 #error_explanation li {margin:0;padding:0;}
 /* .field_with_errors {display:inline;} - see fix in environment.rb */
-.field_with_errors, .field_with_errors label {border:1px solid #f00;color:#f00;}
-.field_with_errors .field_error {padding:0 5px;}
+.field_with_errors label, .field_with_errors .field_error, .field_with_errors .required:after, .field_with_errors td {color:#f00;}
 
 /* helper styles */
   .block {display:block;}

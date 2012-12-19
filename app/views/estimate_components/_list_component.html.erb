@@ -1,28 +1,38 @@
 <%
+est_comp_errors = ''
+if ass_comp.required
+	ass_comp_req = 'component_value required'
+	if est_comp_value_was_str != '' &&  est_comp_value_str == '0.00'
+		# estimate component existed already, and has a zero value now
+		est_comp_errors = ' * ' + I18n.translate('error_messages.missing_required_field')
+	end
+else
+	ass_comp_req = 'component_value not_required'
+end
+
+# estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}] != 
 %>
 		<div class="field">
-			<%= label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label' %>
 <%
-if view_mode == 'edit'
+if !est_comp_errors.blank?
+	concat content_tag(:span, label_tag("estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label' ), :class => "field_with_errors")
+else
+	concat (label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label')
+end
 %>
 			<span class="value">
-				<span class='component_value'>
 <%
-	concat text_field_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str
-	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
+if !est_comp_errors.blank?
 %>
-				</span>
-				<span class='component_note'>
+				<span class="field_with_errors">
 <%
-	concat text_field_tag "estimate_components_note[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_note
-	concat hidden_field_tag("estimate_components_note_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_note)
-%>
-				</span>
-<%
+end
+if view_mode == 'edit'
+	concat content_tag(:span, text_field_tag("estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str), :class => ass_comp_req)
+	concat content_tag(:span, text_field_tag("estimate_components_note[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_note), :class => 'component_note')
 else
 %>
-			<span class="value">
-				<span class='component_value' id="estimate_components_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
+				<span class='<%= ass_comp_req %>' id="estimate_components_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
 <%
 	concat est_comp_value_str
 %>
@@ -31,9 +41,15 @@ else
 <%
 	concat est_comp_note
 end
+if !est_comp_errors.blank?
+%>
+					<span class="field_error"><%= est_comp_errors %></span>
+				</span class="field_with_errors">
+<%
+end
+concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
+concat hidden_field_tag("estimate_components_note_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_note)
 %>
 				</span>
 			</span>
 		</div>
-<%
-%>
