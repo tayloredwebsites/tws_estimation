@@ -217,14 +217,14 @@ module UserIntegrationHelper
     component8 = FactoryGirl.create(:component_create, component_type: @component_types[3])
     # items in required (totals section), including a non-calculation entry (component9)
     component9 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
-    component10 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "one", default: @defaults[0], grid_operand: '*', grid_scope: 'A')
-    component11 = FactoryGirl.create(:component_totals_create, component_type: @component_type_totals, grid_subtotal: "one", default: @default_fixed, grid_operand: '*', grid_scope: 'I')
-    component12 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "two", grid_operand: '*', grid_scope: 'H')
-    component13 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "two", grid_operand: '*', grid_scope: 'S')
-    component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "two") # default grid_operand should be %, grid_scope should be C
-    component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "two", grid_operand: '*', grid_scope: 'S')
-    component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "three", grid_operand: '*', grid_scope: 'A')
-    component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "three", grid_operand: '%', grid_scope: 'A')
+    component10 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_1", default: @defaults[0], grid_operand: '*', grid_scope: 'A')
+    component11 = FactoryGirl.create(:component_totals_create, component_type: @component_type_totals, grid_subtotal: "stot_1", default: @default_fixed, grid_operand: '*', grid_scope: 'I')
+    component12 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'H')
+    component13 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'S')
+    component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2") # default grid_operand should be %, grid_scope should be C
+    component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'S')
+    component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '*', grid_scope: 'A')
+    component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '%', grid_scope: 'A')
     component_deact = FactoryGirl.create(:component_create, component_type: @component_types[0], deactivated: true)
     @components = [component0, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10, component11, component12, component13, component14, component15, component16, component17, component_deact]
     @component = component1

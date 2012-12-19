@@ -1,12 +1,29 @@
 <%
-warn_class = (ass_comp.component.is_valid_grid_operand? && ass_comp.component.is_valid_grid_scope?) ? '' : ' warning'
+est_comp_errors = ''
+row_class = ''
+ass_comp_req = 'component_value'
 if ass_comp.required
-	ass_comp_req = 'component_value required'
+	ass_comp_req += ' required'
+	if est_comp_value_was_str != '' &&  est_comp_value_str == '0.00'
+		# estimate component existed already, and has a zero value now
+		est_comp_errors += ' - ' + I18n.translate('error_messages.missing_required_field')
+		row_class = "field_with_errors"
+	end
 else
-	ass_comp_req = 'component_value not_required'
+	ass_comp_req += ' not_required'
+end
+if !ass_comp.component.is_valid_grid_operand? && !ass_comp.component.is_valid_grid_scope?
+	row_class = "field_with_errors"
+	est_comp_errors += ' - ' + I18n.translate('error_messages.missing_component_scope_operand')
+elsif !ass_comp.component.is_valid_grid_operand?
+	row_class = "field_with_errors"
+	est_comp_errors += ' - ' + I18n.translate('error_messages.missing_component_operand')
+elsif !ass_comp.component.is_valid_grid_scope?
+	row_class = "field_with_errors"
+	est_comp_errors += ' - ' + I18n.translate('error_messages.missing_component_scope')
 end
 %>
-				<tr class="grid_row<%= warn_class %>">
+				<tr class="grid_row<%= row_class %>">
 					<td class="grid_row_label" id="grid_label_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>">
 <%
 # display_value = operation_value.bd_to_s(2)
@@ -14,9 +31,12 @@ if editable && view_mode == 'edit'
 	concat label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' ', :class => 'label'
 	concat content_tag(:span, text_field_tag("estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str), :class => ass_comp_req)
 	concat ')'
-	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_str)
+	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
 else
 	concat content_tag(:span, ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' '+est_comp_value_str+')', :class => ass_comp_req)
+end
+if !est_comp_errors.blank?
+	concat content_tag(:span, est_comp_errors, :class => 'field_error')
 end
 %>
 					</td>
