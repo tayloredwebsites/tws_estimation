@@ -151,6 +151,7 @@
       :success_method_obj_name => "Successful %{method} of %{obj} %{name}",
       :success_method_obj_msg => "Successful %{method} of %{obj} %{msg}",
       :success_method => "Successful %{method}",
+      :warn_method_obj_name_warn => "WARNING: %{method} of %{obj} %{name} successful, but with warning: %{warn}",
       :cannot_method_obj_id => "Cannot %{method} %{obj} with ID %{id}",
       :cannot_method_obj_name => "Cannot %{method} %{obj} %{name}",
       :cannot_method_obj_msg => "Cannot %{method} %{obj} - %{msg}",
@@ -181,7 +182,12 @@
       :no_password_update => 'cannot update password here',
       :invalid_password => 'invalid username or password, try AdminUser/test or TestUser/test',
       :check_email => 'check your email for next step',
-      :is_not_string => 'is not a string'
+      :is_not_string => 'is not a string',
+      :is_required => 'is required',
+      :missing_required_field => 'Required field is missing.',
+      :missing_component_scope_operand => 'Component is missing Scope and Operand.',
+      :missing_component_operand => 'Component is missing Operand.',
+      :missing_component_scope => 'Component is missing Scope.'
     },
     :view_field_value => {
       :true => 'truly',

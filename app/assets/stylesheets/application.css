@@ -133,8 +133,7 @@
 #error_explanation ul {margin:5px 15px;padding:0px;}
 #error_explanation li {margin:0;padding:0;}
 /* .field_with_errors {display:inline;} - see fix in environment.rb */
-.field_with_errors, .field_with_errors label {border:1px solid #f00;color:#f00;}
-.field_with_errors .field_error {padding:0 5px;}
+.field_with_errors label, .field_with_errors .field_error, .field_with_errors .required:after, .field_with_errors td {color:#f00;}
 
 /* helper styles */
   .block {display:block;}
