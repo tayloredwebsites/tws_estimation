@@ -24,7 +24,8 @@
         :abbreviation => 'Maint.',
         :full_name => 'System Maintenance',
         :menu_items => {
-          :users => 'Users'
+          :users => 'Users',
+          :edit_password => 'Edit My Password'
         }
       },
       :estim => {
@@ -76,6 +77,11 @@
               :estimates_list => 'Estimates by Title'
           } }
         }
+      },
+      :maintuser => {
+        :abbreviation => 'Maint.',
+        :full_name => 'Maintenance',
+        :menu_items => {} # see estim entry (this is for titles of systems with mutiple nav items)
       },
       :estimuser => {
         :abbreviation => 'Estim. Entry',
@@ -145,7 +151,10 @@
       :success_method_obj_name => "Successful %{method} of %{obj} %{name}",
       :success_method_obj_msg => "Successful %{method} of %{obj} %{msg}",
       :success_method => "Successful %{method}",
-      :cannot_method_obj_id => "Cannot %{method} of %{obj} with ID %{id}",
+      :warn_method_obj_name_warn => "WARNING: %{method} of %{obj} %{name} successful, but with warning: %{warn}",
+      :cannot_method_obj_id => "Cannot %{method} %{obj} with ID %{id}",
+      :cannot_method_obj_name => "Cannot %{method} %{obj} %{name}",
+      :cannot_method_obj_msg => "Cannot %{method} %{obj} - %{msg}",
       :cannot_method_msg => "Cannot %{method} - %{msg}",
       :invalid_call => 'invalid call to %{method}',
       :invalid_method_argument => 'Method %{method} has invalid argument %{argument}',
@@ -173,7 +182,12 @@
       :no_password_update => 'cannot update password here',
       :invalid_password => 'invalid username or password, try AdminUser/test or TestUser/test',
       :check_email => 'check your email for next step',
-      :is_not_string => 'is not a string'
+      :is_not_string => 'is not a string',
+      :is_required => 'is required',
+      :missing_required_field => 'Required field is missing.',
+      :missing_component_scope_operand => 'Component is missing Scope and Operand.',
+      :missing_component_operand => 'Component is missing Operand.',
+      :missing_component_scope => 'Component is missing Scope.'
     },
     :view_field_value => {
       :true => 'truly',
@@ -193,7 +207,9 @@
       :new => 'New',
       :create => 'Create',
       :edit => 'Edit',
+      :edit_password => 'Edit Password',
       :update => 'Update',
+      :update_password => 'Update Password',
       :show => 'View',
       :view => 'View',
       :deactivate => 'Deactivate',
@@ -272,7 +288,7 @@
       :edit_password => {
         :action => "Edit Password",
         :title => "Edit Password",
-        :header => "Edit your User Password "
+        :header => "Edit your User Password"
       },
       :reset_password => {
         :action => "Reset Password",
@@ -598,8 +614,8 @@
       },
       :index => {
         :action => "List Assembly Components by Assembly",
-        :title => "List Assembly Components by Assembly ",
-        :header => "List of all Assembly Components by Assembly "
+        :title => "List Assembly Components by Assembly",
+        :header => "List of all Assembly Components by Assembly"
       },
       :list => {
         :action => "List Assembly Components by Description",
@@ -667,32 +683,32 @@
       :title => 'Sales Representatives',
       :system => 'estimmaint',
       :menu => {
-        :action => "Sales Representatives Actions Menu",
+        :action => "Sales Reps Actions Menu",
         :title => "Estimation Sales Representatives Action Menu",
         :header => "Estimation Sales Representatives Action Menu"
       },
       :index => {
-        :action => "List Sales Representatives",
+        :action => "List Sales Reps by Last Name, First Name",
+        :title => "List Sales Representatives by Last Name, First Name",
+        :header => "List of all Sales Representatives by Last Name, First Name"
+      },
+      :list => {
+        :action => "List Sales Reps",
         :title => "List Sales Representatives",
         :header => "List of all Sales Representatives"
       },
-      :list => {
-        :action => "List Sales Representatives",
-        :title => "List Sales Representatives ",
-        :header => "List of all Sales Representatives"
-      },
       :edit => {
-        :action => "Edit Sales Representative",
+        :action => "Edit Sales Rep",
         :title => "Edit Sales Representative",
         :header => "Edit an Sales Representative"
       },
       :new => {
-        :action => "New Sales Representative",
+        :action => "New Sales Rep",
         :title => "New Sales Representative",
         :header => "Create an Sales Representative"
       },
       :show => {
-        :action => "View Sales Representative",
+        :action => "View Sales Rep",
         :title => "View Sales Representative",
         :header => "View an Sales Representative"
       },
@@ -730,35 +746,35 @@
       }
     }, # end Sales Rep Resource
     :job_types => {
-      :title => 'Job Taxability Types',
+      :title => 'Job Tax Types',
       :system => 'estimmaint',
       :menu => {
-        :action => "Job Taxability Types Actions Menu",
+        :action => "Job Tax Types Actions Menu",
         :title => "Estimation Job Taxability Types Action Menu",
         :header => "Estimation Job Taxability Types Action Menu"
       },
       :index => {
-        :action => "List Job Taxability Types",
+        :action => "List Job Tax Types in Sort order",
+        :title => "List Job Taxability Types in Sort order",
+        :header => "List of all Job Taxability Types in Sort order"
+      },
+      :list => {
+        :action => "List Job Tax Types",
         :title => "List Job Taxability Types",
         :header => "List of all Job Taxability Types"
       },
-      :list => {
-        :action => "List Job Taxability Types",
-        :title => "List Job Taxability Types ",
-        :header => "List of all Job Taxability Types"
-      },
       :edit => {
-        :action => "Edit Job Taxability Type",
+        :action => "Edit Job Tax Type",
         :title => "Edit Job Taxability Type",
         :header => "Edit an Job Taxability Type"
       },
       :new => {
-        :action => "New Job Taxability Type",
+        :action => "New Job Tax Type",
         :title => "New Job Taxability Type",
         :header => "Create an Job Taxability Type"
       },
       :show => {
-        :action => "View Job Taxability Type",
+        :action => "View Job Tax Type",
         :title => "View Job Taxability Type",
         :header => "View an Job Taxability Type"
       },
@@ -938,37 +954,6 @@
     }, # end Estimate Resource
     :estimate_assemblies => {
       :title => 'Estimate Assemblies',
-      # :system => 'estimmaint',
-      # :menu => {
-      #   :action => "Estimates Actions Menu",
-      #   :title => "Estimation Estimates Action Menu",
-      #   :header => "Estimation Estimates Action Menu"
-      # },
-      # :index => {
-      #   :action => "List Estimates",
-      #   :title => "List Estimates",
-      #   :header => "List of all Estimates"
-      # },
-      # :list => {
-      #   :action => "List Estimates by Code",
-      #   :title => "List Estimates by Code",
-      #   :header => "List of all Estimates by Code"
-      # },
-      # :edit => {
-      #   :action => "Edit Estimate",
-      #   :title => "Edit Estimate",
-      #   :header => "Edit an Estimate"
-      # },
-      # :new => {
-      #   :action => "New Estimate",
-      #   :title => "New Estimate",
-      #   :header => "Create an Estimate"
-      # },
-      # :show => {
-      #   :action => "View Estimate",
-      #   :title => "View Estimate",
-      #   :header => "View an Estimate"
-      # },
       :field_name => {
         :id => 'ID',
         :estimate_id => 'Estimate ID',

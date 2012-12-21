@@ -162,6 +162,12 @@ describe UsersController do
     it "should ignore unsafe parameters in create user" do
       FactoryGirl.attributes_for(:user_unsafe_attr).each do |key, value|
         @num_users = User.count
+        # lambda {User.create!()}.should raise_error(ActiveRecord::RecordInvalid)
+        # lambda {post :create, :user => FactoryGirl.attributes_for(:user_create).merge({key => value})}.should raise_error(ActiveModel::MassAssignmentSecurity::Error:)
+        # user_attribs = FactoryGirl.attributes_for(:user_create).merge({key => value})
+        # Rails.logger.debug("TEST user_attribs = #{user_attribs.inspect.to_s}")
+        # Rails.logger.debug("TEST user_attribs 2 = #{FactoryGirl.attributes_for(:user_create).merge({key => value}).inspect.to_s}")
+        # post :create, user_attribs
         post :create, :user => FactoryGirl.attributes_for(:user_create).merge({key => value})
         assigns(:user).should_not be_nil
         assigns(:user)[key].should_not == value
@@ -186,6 +192,7 @@ describe UsersController do
       assigns(:user).should_not be_persisted
       response.should render_template("new")
     end
+    # it 'should allow the admin user to update passwords without old password'
     it 'should be able to GET edit another user as @user' do
       user = FactoryGirl.create(:user_min_create_attr)
       get :edit, :id => user.id.to_s
@@ -297,6 +304,41 @@ describe UsersController do
       put :update, :id => user.id, :user => (FactoryGirl.attributes_for(:user_min_create_attr)).merge(FactoryGirl.attributes_for(:user_safe_attr))
       response.should redirect_to(:controller => 'home', :action => 'errors')
     end
+    it 'should be able to GET edit_password for self' do
+      get :edit_password
+      response.should be_success
+      response.should render_template('/edit_password')
+      assigns(:user).should eq(@me)
+    end
+    it 'should be able to PUT update_password for self' do
+      put :update_password, :id => @me.id, :user => {:password => 'changed', :password_confirmation => 'changed'}
+      assigns(:user).should eq(@me)
+      assigns(:user).has_password?('changed').should be_true
+      updated_user = User.find(@me.id)
+      updated_user.has_password?('changed').should be_true
+      response.should render_template("show")
+    end
+    it 'should not be able to PUT update_password for self with mismatched passwords' do
+      put :update_password, :id => @me.id, :user => {:password => 'changed', :password_confirmation => 'xchangedx'}
+      assigns(:user).should eq(@me)
+      assigns(:user).has_password?('changed').should be_false
+      updated_user = User.find(@me.id)
+      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password]).should be_true
+      response.should render_template('/edit_password')
+    end
+    it 'should not be able to PUT update_password for self with blank passwords' do
+      put :update_password, :id => @me.id, :user => {:password => '', :password_confirmation => ''}
+      assigns(:user).should eq(@me)
+      assigns(:user).has_password?('changed').should be_false
+      updated_user = User.find(@me.id)
+      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_full_create_attr)[:password]).should be_true
+      response.should render_template('/edit_password')
+    end
+    it 'should not be able to PUT update_password for another user' do
+      user = FactoryGirl.create(:user_min_create_attr)
+      put :update_password, :id => user.id, :user => {:password => 'changed', :password_confirmation => 'changed'}
+      response.should redirect_to(:controller => 'home', :action => 'errors')
+    end
     it 'should not be able to GET show user (not be able to view other users)' do
       user = FactoryGirl.create(:user_min_create_attr)
       get :show, :id => user.id
@@ -377,26 +419,26 @@ describe UsersController do
       updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:password]).should be_true
     end
     
-    it 'should not allow the user to update_passwords (for themself) with bad old password' do
-      # user = FactoryGirl.create(:user_min_create_attr)
-      get :edit_password, :id => @me.id
-      response.should be_success
-      response.should render_template('edit_password')
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).should eq(@me)
-      put :update_password, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr).merge({:old_password => 'bad_value'})
-      response.should be_success
-      response.should_not render_template(home_errors_path)
-      response.should render_template('edit_password')
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).username.should eq(@me.username)
-      assigns(:user).has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
-      updated_user = User.find(@me.id)
-      updated_user.username.should eq(@me.username)
-      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
-    end
+    # it 'should not allow the user to update_passwords (for themself) with bad old password' do
+    #   # user = FactoryGirl.create(:user_min_create_attr)
+    #   get :edit_password, :id => @me.id
+    #   response.should be_success
+    #   response.should render_template('edit_password')
+    #   assigns(:user).should_not be_nil
+    #   assigns(:user).should be_a(User)
+    #   assigns(:user).should eq(@me)
+    #   put :update_password, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr).merge({:old_password => 'bad_value'})
+    #   response.should be_success
+    #   response.should_not render_template(home_errors_path)
+    #   response.should render_template('edit_password')
+    #   assigns(:user).should_not be_nil
+    #   assigns(:user).should be_a(User)
+    #   assigns(:user).username.should eq(@me.username)
+    #   assigns(:user).has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
+    #   updated_user = User.find(@me.id)
+    #   updated_user.username.should eq(@me.username)
+    #   updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
+    # end
     
     it 'should not allow the user to update_passwords (for themself) with mismatched new passwords' do
       # user = FactoryGirl.create(:user_min_create_attr)
@@ -467,27 +509,27 @@ describe UsersController do
       updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:password]).should be_true
     end
     
-    it 'should not allow the user to change passwords in update with bad old password' do
-      # user = FactoryGirl.create(:user_min_create_attr)
-      get :edit_password, :id => @me.id
-      response.should be_success
-      response.should render_template('edit')
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).should eq(@me)
-      put :update_password, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr).merge( \
-        FactoryGirl.attributes_for(:user_safe_attr).merge({:old_password => 'bad_value'}) )
-      response.should be_success
-      response.should_not render_template(home_errors_path)
-      response.should render_template('edit')
-      assigns(:user).should_not be_nil
-      assigns(:user).should be_a(User)
-      assigns(:user).username.should eq(@me.username)
-      assigns(:user).has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
-      updated_user = User.find(@me.id)
-      updated_user.username.should eq(@me.username)
-      updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
-    end
+    # it 'should not allow the user to change passwords in update with bad old password' do
+    #   # user = FactoryGirl.create(:user_min_create_attr)
+    #   get :edit_password, :id => @me.id
+    #   response.should be_success
+    #   response.should render_template('edit')
+    #   assigns(:user).should_not be_nil
+    #   assigns(:user).should be_a(User)
+    #   assigns(:user).should eq(@me)
+    #   put :update_password, :id => @me.id, :user => FactoryGirl.attributes_for(:reg_user_update_password_attr).merge( \
+    #     FactoryGirl.attributes_for(:user_safe_attr).merge({:old_password => 'bad_value'}) )
+    #   response.should be_success
+    #   response.should_not render_template(home_errors_path)
+    #   response.should render_template('edit')
+    #   assigns(:user).should_not be_nil
+    #   assigns(:user).should be_a(User)
+    #   assigns(:user).username.should eq(@me.username)
+    #   assigns(:user).has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
+    #   updated_user = User.find(@me.id)
+    #   updated_user.username.should eq(@me.username)
+    #   updated_user.has_password?(FactoryGirl.attributes_for(:reg_user_update_password_attr)[:old_password]).should be_true
+    # end
     
     it 'should not allow the user to change passwords in update with mismatched new passwords' do
       # user = FactoryGirl.create(:user_min_create_attr)
@@ -538,16 +580,16 @@ describe UsersController do
     it "routes to #deactivate" do
       { :put => '/users/1/deactivate' }.should route_to("users#deactivate", :id => "1")
     end
-    it "routes to #destroy" do
+    it "routes to #reactivate" do
       { :put => '/users/1/reactivate' }.should route_to("users#reactivate", :id => "1")
     end
-    it "routes to #destroy" do
-      { :get => '/users/1/edit_password' }.should route_to("users#edit_password", :id => "1")
+    it "routes to #edit_password" do
+      { :get => '/edit_password' }.should route_to("users#edit_password")
     end
-    it "routes to #destroy" do
+    it "routes to #update_password" do
       { :put => '/users/1/update_password' }.should route_to("users#update_password", :id => "1")
     end
-    #it "routes to #destroy" do
+    #it "routes to #reset_password" do
     #  { :put => '/users/1/reset_password' }.should route_to("users#reset_password", :id => "1")
     #end
   end

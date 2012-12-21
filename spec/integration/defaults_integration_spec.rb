@@ -255,7 +255,7 @@ describe 'Defaults Integration Tests' do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('defaults.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => @updated_item.class.name, :id => @updated_item.id )}/
       Default.count.should == (@num_items)
       find(:xpath, '//*[@id="default_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
@@ -280,7 +280,7 @@ describe 'Defaults Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'update', :obj => item1.class.name, :id => item1.id )}$/
       Default.count.should == (@num_items)
       find(:xpath, '//*[@id="default_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(true)}\z/
@@ -302,7 +302,7 @@ describe 'Defaults Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'deactivate', :obj => item1.class.name, :id => item1.id )}$/
       Default.count.should == (@num_items)
       @updated_item = Default.find(item1.id)
@@ -324,7 +324,7 @@ describe 'Defaults Integration Tests' do
       # save_and_open_page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('defaults.show.header')}$/
-      find(:xpath, '//*[@id="header_status"]/p').text.should =~
+      find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'reactivate', :obj => @item_deact.class.name, :id => @item_deact.id )}$/
       Default.count.should == (@num_items)
       find(:xpath, '//*[@id="default_deactivated"]').text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/

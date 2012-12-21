@@ -19,7 +19,7 @@
 <div class="field">
     <%= f.label :component, I18n.translate('assembly_components.field_name.component'), :class => 'label' %>
     <span class="value">
-        <%= collection_select( :assembly_component, :component_id, ComponentsController.list, :id, :desc, { :include_blank => true }) %>
+        <%= collection_select( :assembly_component, :component_id, Component.list_by_desc_with_type, :id, :desc_plus_type, { :include_blank => true }) %>
     </span>
 </div>
 

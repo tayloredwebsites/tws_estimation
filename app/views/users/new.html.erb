@@ -1,6 +1,5 @@
 <%
   @page_scope = 'users.new'
-  #page_title I18n.translate('title', :scope => @page_scope)
 %>
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
@@ -8,10 +7,16 @@
 <%= form_for(@user, :action => 'create') do |f| %>
 
     <%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @user, :sys_errors => @errors  } %>
+
     <div class="fields_20_80">
-        <%= render :partial => 'form', :locals => { :f => f } %>
-        <%= render :partial => 'password_form', :locals => { :f => f } %>
+<%
+		concat render :partial => 'form', :locals => { :f => f }
+       	if ADMIN_SET_USER_PASSWORD
+			concat render :partial => 'password_form', :locals => { :f => f }
+		end
+%>
     </div>
+
     <div class="actions">
         <%= f.submit I18n.translate('view_action.create') %>
     </div>

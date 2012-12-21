@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~>3.2.1'
+gem 'rails', '3.2.6'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -42,7 +42,7 @@ gem 'thin'  # makes thin the default web server
 
 group :development, :test do
   # gem 'rspec'
-  # gem 'rspec-rails'
+  gem 'rspec-rails', "~> 2.0"
 end
 
 group :development do
@@ -51,19 +51,17 @@ group :development do
   # gem 'ruby-debug'
   # gem 'ruby-debug19'  #removed for windows install
   
-  gem 'rspec-rails'
   gem 'annotate'
-  gem "rails_best_practices"
 
 end
 
 group :test do
 
-  gem 'rspec'
-  
-  gem 'capybara'
+  # gem 'capybara', '~> 1.1' 
+  gem 'capybara', '~> 2.0' 
+  # gem 'capybara-screenshot'
   gem 'launchy'
-  
+    
   # autotest config
   gem 'autotest'
   gem 'ZenTest'

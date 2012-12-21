@@ -52,9 +52,8 @@ describe EstimatesController do
         Rails.logger.debug("T estimates_controller_spec minimum - match on:#{key.to_s}")
         assigns(:estimate).send(key.to_sym).should eq(new_attributes[key.to_sym])
       end
-      # response.should render_template("show")
-      # response.should redirect_to(:controller => 'estimates', :action => 'show')
-      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
+      # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}/edit")
       Estimate.count.should == (@num_items+1)
     end
     it "should create an item with the minimum valid parameters" do
@@ -68,8 +67,9 @@ describe EstimatesController do
         Rails.logger.debug("T estimates_controller_spec minimum - match on:#{key.to_s}")
         assigns(:estimate).send(key.to_sym).should eq(min_attr[key.to_sym])
       end
-      # response.should render_template("show")
-      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
+      # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
+      # response.should render_template("edit")
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}/edit")
       Estimate.count.should == (@num_items+1)
     end
     it 'should not create an item missing any one of the minimum_attributes' do
@@ -323,8 +323,8 @@ describe EstimatesController do
       post :create, @attribs
       Estimate.count.should == item_count + 1
       assigns(:estimate).errors.count.should == 0
-      # response.should render_template("/show")
-      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
+      # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}/edit")
       assigns(:estimate).should be_a(Estimate)
       item1_updated = Estimate.find(assigns(:estimate).id)
       # Rails.logger.debug("T item1_updated = #{item1_updated.inspect.to_s}")
@@ -348,7 +348,8 @@ describe EstimatesController do
       Rails.logger.debug("T assigns(:estimate) = #{estimate.inspect.to_s}")
       @attribs = Hash.new()
       @attribs[:id] = estimate.id
-      @attribs[:estimate] = estimate.attributes
+      # @attribs[:estimate] = estimate.attributes
+      @attribs[:estimate] = FactoryGirl.attributes_for(:estimate)
       Rails.logger.debug("T @attribs = #{@attribs.inspect.to_s}")
       a_attribs = {@assembly.id.to_s => @assembly.id.to_s}
       Rails.logger.debug("T a_attribs = #{a_attribs.inspect.to_s}")
@@ -416,9 +417,8 @@ describe EstimatesController do
         Rails.logger.debug("T estimates_controller_spec minimum - match on:#{key.to_s}")
         assigns(:estimate).send(key.to_sym).should eq(new_attributes[key.to_sym])
       end
-      # response.should render_template("show")
-      # response.should redirect_to(:controller => 'estimates', :action => 'show')
-      response.should redirect_to("/estimates/#{assigns(:estimate).id}")
+      # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
+      response.should redirect_to("/estimates/#{assigns(:estimate).id}/edit")
       Estimate.count.should == (@num_items+1)
     end
     it "should not create an estimate as another salesrep using POST" do

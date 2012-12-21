@@ -57,9 +57,9 @@ TwsAuth::Application.routes.draw do
       put 'deactivate'      # route:          deactivate_sales_rep PUT    /sales_reps/:id/deactivate(.:format)          sales_reps#deactivate
       put 'reactivate'      # route:          reactivate_sales_rep PUT    /sales_reps/:id/reactivate(.:format)          sales_reps#reactivate
     end
-    collection do
-      get 'list'            # route:               list_sales_reps GET    /sales_reps/list(.:format)                    sales_reps#list
-    end
+    # collection do
+    #   get 'list'            # route:               list_sales_reps GET    /sales_reps/list(.:format)                    sales_reps#list
+    # end
   end
   match "sales_reps/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
   match "sales_reps/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
@@ -131,10 +131,10 @@ TwsAuth::Application.routes.draw do
     # match 'deactivate'  # route:      user_deactivate        /users/:user_id/deactivate(.:format) {:action=>"deactivate", :controller=>"users"}
     # match 'reactivate'  # route:      user_reactivate        /users/:user_id/reactivate(.:format) {:action=>"reactivate", :controller=>"users"}
     member do
-      put 'deactivate'      # route:              deactivate_user PUT    /users/:id/deactivate(.:format)      {:action=>"deactivate", :controller=>"users"}
-      put 'reactivate'      # route:              reactivate_user PUT    /users/:id/reactivate(.:format)      {:action=>"reactivate", :controller=>"users"}
-      get 'edit_password'   # route:           edit_password_user GET    /users/:id/edit_password(.:format)   {:action=>"edit_password", :controller=>"users"}
-      put 'update_password' # route:         update_password_user PUT    /users/:id/update_password(.:format) {:action=>"update_password", :controller=>"users"}
+      put 'deactivate'      # route:                deactivate_user PUT    /users/:id/deactivate(.:format)      {:action=>"deactivate", :controller=>"users"}
+      put 'reactivate'      # route:                reactivate_user PUT    /users/:id/reactivate(.:format)      {:action=>"reactivate", :controller=>"users"}
+      # get 'edit_password'   # route:           edit_password_user GET    /users/:id/edit_password(.:format)   {:action=>"edit_password", :controller=>"users"}
+      put 'update_password' # route:           update_password_user PUT    /users/:id/update_password(.:format)          users#update_password
     #   put 'reset_password'  # route:          reset_password_user PUT    /users/:id/reset_password(.:format)          {:action=>"reset_password", :controller=>"users"}
     end
     collection do
@@ -144,6 +144,7 @@ TwsAuth::Application.routes.draw do
   match "users/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
   match "users/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
   match "users/:id/update_password", :via => :get, :to => 'home#errors', :status => 405
+  match 'edit_password' => 'users#edit_password'  # don't pass the user id for edit password - must edit own password
 
   resources :defaults do
     member do
@@ -168,7 +169,6 @@ TwsAuth::Application.routes.draw do
   match '/home', :to => "home#index"    # route:         home        /home(.:format)                      {:controller=>"home", :action=>"index"}
 
   # match '/readme', :to => redirect('/README.markdown')
-
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -219,11 +219,11 @@ TwsAuth::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => "welcome#index"
+  # root :to => 'welcome#index'
 
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
+  # match ':controller(/:action(/:id))(.:format)'
 end

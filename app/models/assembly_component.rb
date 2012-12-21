@@ -21,13 +21,13 @@ class AssemblyComponent < ActiveRecord::Base
     :scope => [:assembly_id] 
 
   # scopes
-  # list assembly_components for assembly.id = id
+  # list assembly_components for assembly.id = id ( used in app/views/estimate_components/_list.html.erb)
   # sorts by component_type and description
+  # note subtotal is added to sort, so that required components sort within the subtotal as well.
   def self.for_assembly(id)
     # joins(:component => :component_type).where('assembly_components.assembly_id = ?', id).order('component_types.sort_order, assembly_components.required DESC, components.description')
     # dont include deactivated assembly components
-    joins(:component => :component_type).where("assembly_components.deactivated = ? AND assembly_components.assembly_id = ?", DB_FALSE, id).order('component_types.sort_order, assembly_components.required DESC, components.description')
-    
+    joins(:component => :component_type).where("assembly_components.deactivated = ? AND assembly_components.assembly_id = ?", DB_FALSE, id).order('component_types.sort_order, components.grid_subtotal, assembly_components.required DESC, components.description')
   end
   
   # methods

@@ -2,8 +2,8 @@
 <html>
 <head>
   <title><%= I18n.translate('config.company_name') %> - <%= I18n.translate('config.app_name') %> - <%= I18n.translate('.title', :scope => @page_scope) %></title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :all %>
+  <%= stylesheet_link_tag "application", :cache => false, :concat => false %>
+  <%= javascript_include_tag "application", :cache => false, :concat => false %>
   <%= csrf_meta_tag %>
 </head>
 <body>
@@ -13,7 +13,7 @@
       <div id="header_logo_bar">
         <div id="header_logo_left">
           <div id="header_logo">
-            <%= link_to image_tag("../../images/header/header_logo.png", :alt => "Home"), root_path %>
+            <%= link_to image_tag("header/header_logo.png", :alt => "Home"), root_path %>
           </div>
           <div id="header_tagline">
             <!-- h2 id="header_tagline_company_name" class="nowrap"><%= I18n.translate('config.company_name') %></h2 -->
@@ -50,7 +50,7 @@
         </ul><!-- end header_nav_bar -->
       </div><!-- end header_bottom_bar -->
       <div id="header_status">
-                <noscript class="script_notice">Javascript it turned off!  Some features of this site are not be available!</noscript>
+                <noscript class="script_notice">Javascript it turned off!  Some features of this site will not be available!</noscript>
         <p class="notice"><%= notice %></span>
         <p class="alert"><%= alert %></span>
       </div>

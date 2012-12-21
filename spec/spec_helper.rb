@@ -31,6 +31,7 @@ end
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+# require 'rspec/autorun'
  
 # Add this to load Capybara integration:
 require 'capybara/rspec'
@@ -71,7 +72,7 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   #config.use_transactional_fixtures = true
-  
+
   # fix for records not being removed after capybara fill in and click
   # per http://stackoverflow.com/questions/6576592/failing-to-test-devise-with-capybara
   # requires the database_cleaner gem
@@ -85,7 +86,25 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-  
+
+  # doesn't work under rails 3.2 new configuration
+  # specify logger and set to debug
+  # config.logger = Logger.new(STDOUT)
+  # config.log_level = :debug
+
+  # per: http://stackoverflow.com/questions/8862967/visit-method-not-found-in-my-rspec
+  # to solve: Failure/Error: helper_signin(:admin_user_full_create_attr, @me.full_name)
+  #           NoMethodError:
+  #             undefined method `visit' for #<RSpec::Core::ExampleGroup::Nested_10::Nested_1:0x007f8782cb2850>
+  config.include Capybara::DSL
+  config.include Capybara::RSpecMatchers
+
+  # precompile assets before running test suite
+  # see: http://stackoverflow.com/questions/13484808/save-and-open-page-not-working-with-capybara-2-0
+  config.before (scope = :suite) do
+    %x[bundle exec rake assets:precompile]
+  end
+
 end
 
 module UserTestHelper
@@ -109,6 +128,29 @@ module UserTestHelper
     Rails.logger.debug("T UserTestHelper.session_signin - done")
     return @user_session
   end
+  def allow_admin_set_password(true_or_false)
+    # allows tests to test both of the valid ADMIN_SET_USER_PASSWORD application constant settings
+    if true_or_false.is_a?(FalseClass) || true_or_false.is_a?(TrueClass)
+      @saved_ADMIN_SET_USER_PASSWORD = ADMIN_SET_USER_PASSWORD
+      # Rails.logger.debug("TTT @saved_ADMIN_SET_USER_PASSWORD = #{@saved_ADMIN_SET_USER_PASSWORD}")
+      begin
+        Object.send(:remove_const, :ADMIN_SET_USER_PASSWORD)
+        Object.const_set(:ADMIN_SET_USER_PASSWORD, true_or_false)
+      rescue
+      end
+    else
+      Rails.logger.error("T UserTestHelper.allow_admin_set_password sent an invalid value")
+    end
+  end
+  def reset_admin_set_password()
+    begin
+      # Rails.logger.debug("TTT @saved_ADMIN_SET_USER_PASSWORD = #{@saved_ADMIN_SET_USER_PASSWORD}")
+      Object.send(:remove_const, :ADMIN_SET_USER_PASSWORD)
+      Object.const_set(:ADMIN_SET_USER_PASSWORD, @saved_ADMIN_SET_USER_PASSWORD)
+    rescue
+    end
+  end
+    
   
 end
 module UserIntegrationHelper
@@ -131,6 +173,9 @@ module UserIntegrationHelper
     Rails.logger.debug("T UserTestHelper.helper_signin_form_submit - done")
   end
   def helper_user_on_page?(sys_header_arg, page_header_arg, user_full_name)
+    # Rails.logger.debug("T helper_user_on_page - sys_header_arg = #{sys_header_arg} = #{I18n.translate(sys_header_arg)}")
+    # Rails.logger.debug("T helper_user_on_page - page_header_arg = #{page_header_arg} =  page_header_arg = #{I18n.translate(page_header_arg)}")
+    # Rails.logger.debug("T helper_user_on_page - user_full_name = #{user_full_name}")
     find('#header_tagline_system_header').text.should =~ /^#{I18n.translate(sys_header_arg)}$/ if !sys_header_arg.nil?
     find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate(page_header_arg)}$/ if !page_header_arg.nil?
     find(:xpath, '//div[@id="left_content"]/div/div[@class="module_header"]').text.should =~
@@ -172,14 +217,14 @@ module UserIntegrationHelper
     component8 = FactoryGirl.create(:component_create, component_type: @component_types[3])
     # items in required (totals section), including a non-calculation entry (component9)
     component9 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
-    component10 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "one", default: @defaults[0], grid_operand: '*', grid_scope: 'A')
-    component11 = FactoryGirl.create(:component_totals_create, component_type: @component_type_totals, grid_subtotal: "one", default: @default_fixed, grid_operand: '*', grid_scope: 'I')
-    component12 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "two", grid_operand: '*', grid_scope: 'H')
-    component13 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "two", grid_operand: '*', grid_scope: 'S')
-    component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "two") # default grid_operand should be %, grid_scope should be C
-    component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "two", grid_operand: '*', grid_scope: 'S')
-    component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "three", grid_operand: '*', grid_scope: 'A')
-    component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "three", grid_operand: '%', grid_scope: 'A')
+    component10 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_1", default: @defaults[0], grid_operand: '*', grid_scope: 'A')
+    component11 = FactoryGirl.create(:component_totals_create, component_type: @component_type_totals, grid_subtotal: "stot_1", default: @default_fixed, grid_operand: '*', grid_scope: 'I')
+    component12 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'H')
+    component13 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'S')
+    component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2") # default grid_operand should be %, grid_scope should be C
+    component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'S')
+    component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '*', grid_scope: 'A')
+    component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '%', grid_scope: 'A')
     component_deact = FactoryGirl.create(:component_create, component_type: @component_types[0], deactivated: true)
     @components = [component0, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10, component11, component12, component13, component14, component15, component16, component17, component_deact]
     @component = component1
@@ -205,19 +250,19 @@ module UserIntegrationHelper
     assembly_component0 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[0], component: @components[0])
     assembly_component1 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @component_deact) # note @component_deact is deactivated -> @assembly_components[1] should not be listed in the new form
     assembly_component2 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[1])
-    assembly_component3 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[2])
+    assembly_component3 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[1], component: @components[2], required: true)
     assembly_component4 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[3])
     assembly_component5 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[4])
     assembly_component6 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[5]) # note @components[5] has a component type that is deactivated -> @assembly_components[6] should not be listed in the new form
-    assembly_component7 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[6])
+    assembly_component7 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[6], required: true)
     assembly_component8 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[7])
     assembly_component9 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[9])
     assembly_component10 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[10])
-    assembly_component11 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[11])
+    assembly_component11 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[11]) # not editable
     assembly_component12 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[12])
     assembly_component13 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[13])
     assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[14])
-    assembly_component15 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[15])
+    assembly_component15 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[15], required: true)
     assembly_component16 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[16], deactivated: true)
     assembly_component17 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[17])
     @assembly_components = [assembly_component0, assembly_component1, assembly_component2, assembly_component3, assembly_component4, assembly_component5, assembly_component6, assembly_component7, assembly_component8, assembly_component9, assembly_component10, assembly_component11, assembly_component12, assembly_component13, assembly_component14, assembly_component15, assembly_component16, assembly_component17]
