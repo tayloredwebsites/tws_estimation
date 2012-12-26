@@ -50,7 +50,7 @@ test:
 
 production:
     adapter: postgresql
-    database: tws_estim_production
+    database: tws_estim_prod
     username: RoR
     password: change_me
     host: localhost
