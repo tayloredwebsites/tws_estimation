@@ -40,6 +40,11 @@ gem 'thin'  # makes thin the default web server
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'aws-s3', :require => 'aws/s3'
 
+# added for heroku
+group :production do
+    gem 'uglifier'
+end
+
 group :development, :test do
   # gem 'rspec'
   gem 'rspec-rails', "~> 2.0"
