@@ -43,6 +43,7 @@ gem 'thin'  # makes thin the default web server
 group :assets do
   gem 'uglifier'
 end
+
 group :development, :test do
   # gem 'rspec'
   gem 'rspec-rails', "~> 2.0"
