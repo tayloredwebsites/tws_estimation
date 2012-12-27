@@ -71,6 +71,10 @@ module TwsAuth
     config.assets.version = '1.0'
 
     # Custom config settings # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    
+    # for heroku production
+    config.assets.initialize_on_precompile = false
+    
     # start of additional custom configurations # #
     # set up cache store to memory
     # config.cache_store = :memory_store  #, :size => 64.megabytes
