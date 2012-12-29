@@ -25,8 +25,6 @@ describe 'Miscellaneous items to do - ' do
     it "should indicate 'estimate component already exists with that assembly and component', in addition to 'component xxx has already been taken' when adding an estimate component"
     it 'should warn the user if hours have not been converted to dollars (at the end of the estimate)'
     it 'should not accumulate hours into the dollar totals column - add an hours totals column?'
-    it 'should ensure that required components have amounts entered and give a warning on that line'
-    it 'should separate required components from unrequired components and indicate it is required on the form and show'
     it 'should let users specify system minimum and maximum markup percent (10 max now)'
     it 'should only total $ amounts in totals'
     it 'should warn if there are unconverted hours'
