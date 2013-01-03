@@ -126,7 +126,7 @@ describe 'SalesReps Integration Tests' do
       end
     end
     it 'should be able to edit and update all of an items accessible fields' do
-      all_attribs = generate_sales_rep_accessible_attributes(@user1)
+      all_attribs = generate_sales_rep_accessible_attributes(@user1.id)
       item1 = SalesRep.create(all_attribs)
       item1.deactivated?.should be_false
       visit edit_sales_rep_path (item1.id)
@@ -147,6 +147,12 @@ describe 'SalesReps Integration Tests' do
             Rails.logger.debug("T sales_reps_integration_spec edit update - Active Record Model - #{at_val.class.name}")
             page.select(at_val.username.to_s, :from => "sales_rep_#{at_key.to_s}")
             # page.should have_selector(:xpath, "//*[@id=\"sales_rep_#{at_key.to_s}\"]", :value => at_val.id.to_s)
+          elsif at_key =~ /_id$/
+            Rails.logger.debug("T sales_reps_integration_spec edit updated show #{at_key.to_s} - #{at_val.to_s} - Customize ID fields select option")
+           if at_key == 'user_id'
+             Rails.logger.debug("T sales_reps_integration_spec edit updated show #{at_key.to_s} - #{at_val.to_s} - Check the user_id field")
+              page.select item1.username.to_s, :from => 'sales_rep_user_id'
+            end
           else
             # simply fill in the field
             Rails.logger.debug("T sales_reps_integration_spec edit update - other class")
@@ -175,6 +181,12 @@ describe 'SalesReps Integration Tests' do
         elsif at_val.is_a?(ActiveRecord::Base)
           Rails.logger.debug("T sales_reps_integration_spec edit updated show - Active Record Model - #{at_val.class.name}")
           page.should have_selector(:xpath, "//*[@id=\"sales_rep_#{at_val.class.name.downcase}\"]", :text => at_val.last_name.nil_to_s+', '+at_val.first_name.nil_to_s)
+        elsif at_key =~ /_id$/
+          Rails.logger.debug("T sales_reps_integration_spec edit updated show #{at_key.to_s} - #{at_val.to_s} - Customize ID fields validations")
+          if at_key.to_s == 'user_id'
+            Rails.logger.debug("T sales_reps_integration_spec edit updated show #{at_key.to_s} - #{at_val.to_s} - Validate the user_id field")
+            find(:xpath, '//span[@id="sales_rep_user"]').text.should =~ /\A#{item1.nil_to_s}\z/
+          end
         else
           Rails.logger.debug("T sales_reps_integration_spec edit updated show #{at_key.to_s} - #{at_val.to_s} - other")
           find(:xpath, "//*[@id=\"sales_rep_#{at_key.to_s}\"]").text.should =~ /^#{at_val.to_s}$/

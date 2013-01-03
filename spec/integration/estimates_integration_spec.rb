@@ -896,7 +896,9 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"estimate_components_note_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}\"]").text.should =~ /Component 1 Note/ # 2_2
       find(:xpath, "//span[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}\"]").text.should =~ /0.00/ # 2_3
       find(:xpath, "//span[@id=\"component_type_total_#{@assemblies[1].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /4.56/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assemblies[1].id.to_s}_total\"]").text.should =~/^4.56$/
+      # it 'should not accumulate hours to totals column'
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assemblies[1].id.to_s}_total\"]").text.should_not =~/^4.56$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assemblies[1].id.to_s}_total\"]").text.should =~/^0.00$/
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[3].id.to_s}\"]").text.should =~ /6.78/ # 3_4
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /6.78/
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[4].id.to_s}\"]").text.should =~ /7.89/ # 3_5
@@ -907,13 +909,20 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}\"]").text.should =~ /9.01/ # 3_7
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}\"]").text.should =~ /1.34/ # 3_8
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[3].id.to_s}\"]").text.should =~ /10.35/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_all.id.to_s}_total\"]").text.should =~/^25.02$/
+      # it 'should not accumulate hours to totals column'
+      # find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_all.id.to_s}_total\"]").text.should =~/^25.02$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_all.id.to_s}_total\"]").text.should =~/^17.13$/
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}\"]").text.should =~ /2.45/ # 4_10
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /2.45/
-      find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}\"]").text.should =~ /^42.61$/ # grid total
+      # find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}\"]").text.should =~ /^42.61$/ # grid total
+      # it 'should not accumulate hours to totals column'
+      find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_total\"]").text.should =~ /^42.61$/ # grid total
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^45.06$/
       # grand totals
-      find(:xpath, "//span[@id=\"grand_total\"]").text.should =~ /^74.64$/
+      # it should not show single total lines, except at component type breaks
+      # find(:xpath, "//span[@id=\"grand_total\"]").text.should =~ /^62.19$/
+      # it should show subtotals and grand totals by component types.
+      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^62.19$/
       num_items.should == Estimate.count
     end
   end
@@ -1127,6 +1136,72 @@ describe 'Estimates Integration Tests', :js => false do
       # grid has label field in first td (column) of tr (row)
       page.should have_selector(:xpath, "//tr[contains(@class, 'field_with_errors')]/td[@id=\"grid_label_#{@assembly_components[15].assembly.id.to_s}_#{@assembly_components[15].component.component_type.id.to_s}_#{@assembly_components[15].component.id.to_s}\"]/span[@class=\"field_error\"]")
     end
+    it 'should give an warning on unconverted hours' do
+      all_attribs = @estimate_attributes
+      estimate = Estimate.create!(@estimate_attributes)
+      Estimate.count.should == 1
+      estimate.deactivated?.should be_false
+      visit edit_estimate_path (estimate.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      page.should have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_components[12].assembly.id.to_s}_#{@assembly_components[12].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//td[contains(@class, 'warning') and @id='grand_totals_type_2']")
+      within(".edit_estimate") do
+        # save_and_open_page
+        # check assemblies so they are seen in show after update
+        page.check("estimate_assemblies_#{@assemblies[0].id.to_s}")
+        page.check("estimate_assemblies_#{@assemblies[1].id.to_s}")
+        page.check("estimate_assemblies_#{@assemblies[2].id.to_s}")
+        page.fill_in "estimate_components_#{@assembly_components[12].assembly.id.to_s}_#{@assembly_components[12].component.id.to_s}", :with => '0'
+        # save_and_open_page
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      page.should have_selector(:xpath, "//td[contains(@class, 'warning') and @id='grand_totals_type_2']")
+      visit edit_estimate_path (estimate.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      page.should have_selector(:xpath, "//td[contains(@class, 'warning') and @id='grand_totals_type_2']")
+    end
+    it 'should give no warning when hours are converted' do
+      all_attribs = @estimate_attributes
+      estimate = Estimate.create!(@estimate_attributes)
+      Estimate.count.should == 1
+      estimate.deactivated?.should be_false
+      visit edit_estimate_path (estimate.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      page.should have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_components[12].assembly.id.to_s}_#{@assembly_components[12].component.id.to_s}\"]")
+      page.should have_selector(:xpath, "//td[contains(@class, 'warning') and @id='grand_totals_type_2']")
+      # find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[12].id.to_s}_total\"]").text.should =~ /^0.00$/
+      # page.should have_selector(:xpath, "//span[@class='component_value required']/input[@id=\"estimate_components_#{@assembly_components[12].assembly.id.to_s}_#{@assembly_components[12].component.id.to_s}\"]")
+      within(".edit_estimate") do
+        # save_and_open_page
+        # check assemblies so they are seen in show after update
+        page.check("estimate_assemblies_#{@assemblies[0].id.to_s}")
+        page.check("estimate_assemblies_#{@assemblies[1].id.to_s}")
+        page.check("estimate_assemblies_#{@assemblies[2].id.to_s}")
+        page.fill_in "estimate_components_#{@assembly_components[12].assembly.id.to_s}_#{@assembly_components[12].component.id.to_s}", :with => '25.00'
+        # save_and_open_page
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      page.should_not have_selector(:xpath, "//td[contains(@class, 'warning') and @id='grand_totals_type_2']")
+      page.should have_selector(:xpath, "//td[@id='grand_totals_type_2']")
+      visit edit_estimate_path (estimate.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      page.should_not have_selector(:xpath, "//td[contains(@class, 'warning') and @id='grand_totals_type_2']")
+      page.should have_selector(:xpath, "//td[@id='grand_totals_type_2']")
+    end
     it 'should show default value next to label' do #, :js => true do # see VIEWS_SCRIPTING = false in spec_helper.rb
       # @defaults.each do |df|
       #   Rails.logger.debug("TXXXXXX default values = #{df.value.bd_to_s(2)}")
@@ -1232,7 +1307,8 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[1].id.to_s}\"]").text.should =~ /4.56/
       find(:xpath, "//span[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[2].id.to_s}\"]").text.should =~ /5.67/
       find(:xpath, "//span[@id=\"component_type_total_#{@assemblies[1].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /10.23/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assemblies[1].id.to_s}_total\"]").text.should =~/^10.23$/
+      # dont add hours into totals
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assemblies[1].id.to_s}_total\"]").text.should =~/^0.00$/
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[3].id.to_s}\"]").text.should =~ /6.78/
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /6.78/
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[4].id.to_s}\"]").text.should =~ /7.89/
@@ -1243,13 +1319,15 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}\"]").text.should =~ /9.01/
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}\"]").text.should =~ /1.34/
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[3].id.to_s}\"]").text.should =~ /10.35/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_all.id.to_s}_total\"]").text.should =~/^25.02$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_all.id.to_s}_total\"]").text.should =~/^17.13$/
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}\"]").text.should =~ /2.45/
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /2.45/
-      find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}\"]").text.should =~ /42.61/
+      # find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}\"]").text.should =~ /42.61/
+      find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_total\"]").text.should =~ /42.61/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^45.06$/
       # grand totals
-      find(:xpath, "//span[@id=\"grand_total\"]").text.should =~ /80.31/
+      # find(:xpath, "//span[@id=\"grand_total\"]").text.should =~ /80.31/
+      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^62.19$/  # note unconverted hours difference
     end
     it 'should perform the component operation for each column' do #, :js => true do # see VIEWS_SCRIPTING = false in spec_helper.rb
       all_attribs = @estimate_attributes
@@ -1298,11 +1376,11 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[0].id.to_s}\"]").text.should =~/^6.78$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[1].id.to_s}\"]").text.should =~/^18.12$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[4].id.to_s}\"]").text.should =~/^0.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___total\"]").text.should =~/^24.90$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___total\"]").text.should =~/^6.78$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__#{@component_types[0].id.to_s}\"]").text.should =~/^9.23$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__#{@component_types[1].id.to_s}\"]").text.should =~/^18.12$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__#{@component_types[4].id.to_s}\"]").text.should =~/^0.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__total\"]").text.should =~/^27.35$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__total\"]").text.should =~/^9.23$/
       # "One" Sub-totals Group
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[10].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /.*= 16.95$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[10].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /^0.00$/ # zero because not an hourly operation
