@@ -20,15 +20,12 @@ end
 
 describe 'Miscellaneous items to do - ' do
   context 'important changes' do
+    it 'should only total $ amounts in totals'
+    it 'should show dollars or hours on input fields'
     it 'should have should - mass_assignment_sanitizer = strict - see: users_controller_spec/ignore unsafe parameters in create user'
     it "should indicate 'component name already exists' in addition to 'component xxx has already been taken' when adding a component"
     it "should indicate 'estimate component already exists with that assembly and component', in addition to 'component xxx has already been taken' when adding an estimate component"
-    it 'should warn the user if hours have not been converted to dollars (at the end of the estimate)'
-    it 'should not accumulate hours into the dollar totals column - add an hours totals column?'
     it 'should let users specify system minimum and maximum markup percent (10 max now)'
-    it 'should only total $ amounts in totals'
-    it 'should warn if there are unconverted hours'
-    it 'should show dollars or hours on input fields???'
     it 'should not update, show or accumulate unchecked assemblies'
     it 'should not allow assembly components to be required if the component is not editable.'
   end
