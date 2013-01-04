@@ -8,18 +8,20 @@ warn_hours = defined?(warn_unconverted_hours) ?  warn_unconverted_hours : false
 @component_types_list.each do |ct|
     err_str = ''
     err_style = ''
+    is_in_dollars[ct.id] = false if is_in_dollars[ct.id].nil?
+    hours_label = is_in_dollars[ct.id] ? '' : I18n.translate('view_field_labels.in_hours')
     # Show it if component type is flagged to show in the component grid
     #    or (!in_totals_grid (generate general subtotals) && !ct.has_totals (not a grid component type) )
 	if ct.in_totals_grid || (!in_totals_grid && !ct.has_totals)
 	    ct_value = total_values[ct.id].nil? ? BIG_DECIMAL_ZERO : total_values[ct.id]
-	    if !is_in_dollars[ct.id].nil? && is_in_dollars[ct.id] == true
+	    if is_in_dollars[ct.id] == true
 	        row_total += ct_value
     	elsif warn_hours && ct.has_hours && ct_value != BIG_DECIMAL_ZERO   # and is_in_dollars is false
     	    err_str = I18n.translate('warning.hrs_unconverted', :hrs => ct_value.bd_to_s(2)) # " ( * #{ct_value.bd_to_s(2)} Unconverted Hours)"
     	    err_style = " warning"
     	end
 %>
-					<td class="grid_row_calc grid_row_sub_total<%= err_style %>" id="<%= total_id %>_<%= ct.id.to_s %>"><%= ct_value.bd_to_s(2) %><%= err_str %></td>
+					<td class="grid_row_calc grid_row_sub_total<%= err_style %>" id="<%= total_id %>_<%= ct.id.to_s %>"><%= ct_value.bd_to_s(2) %><%= hours_label %><%= err_str %></td>
 <%
 	end
 end

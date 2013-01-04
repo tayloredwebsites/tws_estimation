@@ -189,7 +189,8 @@
       :missing_component_scope_operand => 'Component is missing Scope and Operand.',
       :missing_component_operand => 'Component is missing Operand.',
       :missing_component_scope => 'Component is missing Scope.',
-      :unconverted_hours => 'Some hours are not converted.'
+      :unconverted_hours => 'Some hours are not converted.',
+      :invalid_hourly_conversion => 'Extra hourly conversion'
     },
     :view_field_value => {
       :true => 'truly',
@@ -197,6 +198,9 @@
       :deactivated => 'Deactivated',
       :reactivated => 'Active',
       :active => 'Active'
+    },
+    :view_field_labels => {
+      :in_hours => ' hrs.'
     },
     :view_labels => {
       :phone => 'Phone:',

@@ -20,8 +20,6 @@ end
 
 describe 'Miscellaneous items to do - ' do
   context 'important changes' do
-    it 'should only total $ amounts in totals'
-    it 'should show dollars or hours on input fields'
     it 'should have should - mass_assignment_sanitizer = strict - see: users_controller_spec/ignore unsafe parameters in create user'
     it "should indicate 'component name already exists' in addition to 'component xxx has already been taken' when adding a component"
     it "should indicate 'estimate component already exists with that assembly and component', in addition to 'component xxx has already been taken' when adding an estimate component"

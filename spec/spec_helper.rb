@@ -221,13 +221,15 @@ module UserIntegrationHelper
     component11 = FactoryGirl.create(:component_totals_create, component_type: @component_type_totals, grid_subtotal: "stot_1", default: @default_fixed, grid_operand: '*', grid_scope: 'I')
     component12 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'H')
     component13 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'S')
-    component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2") # default grid_operand should be %, grid_scope should be C
+    component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2")
     component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'S')
     component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '*', grid_scope: 'A')
     component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '%', grid_scope: 'A')
     component_deact = FactoryGirl.create(:component_create, component_type: @component_types[0], deactivated: true)
+    component14_extra_hourly = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'H')
     @components = [component0, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10, component11, component12, component13, component14, component15, component16, component17, component_deact]
     @component = component1
+    @component14_extra_hourly = component14_extra_hourly
     @component_deact = component_deact
     Rails.logger.debug("T UserTestHelper.helper_load_components - done")
   end
@@ -244,7 +246,7 @@ module UserIntegrationHelper
     @assembly_deact = assembly_deact
     Rails.logger.debug("T UserTestHelper.helper_load_assemblies - done")
   end
-  def helper_load_assembly_components
+  def helper_load_assembly_components(load_extra_hourly_conversion = false)
     helper_load_assemblies if !defined?(@assemblies)
     helper_load_components if !defined?(@components)
     assembly_component0 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[0], component: @components[0])
@@ -261,7 +263,11 @@ module UserIntegrationHelper
     assembly_component11 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[11]) # not editable
     assembly_component12 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[12])
     assembly_component13 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[13])
-    assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[14])
+    if load_extra_hourly_conversion
+      assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @component14_extra_hourly)
+    else
+      assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[14])
+    end
     assembly_component15 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[15], required: true)
     assembly_component16 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[16], deactivated: true)
     assembly_component17 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[17])
