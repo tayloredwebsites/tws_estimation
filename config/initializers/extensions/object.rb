@@ -27,7 +27,7 @@ class Object
   end
   
   # convert nil to big decimal zero
-  def bd_to_s(places)
+  def bd_to_s(places = 0)
     sprintf("%.#{places.nil_to_default('0')}f", (self.nil? ? BIG_DECIMAL_ZERO : self) )
   end
 

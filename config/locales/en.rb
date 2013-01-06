@@ -140,7 +140,8 @@
       :sure? => 'Are you sure?',
       :sure_action? => 'Are you sure you want to %{action}?',
       :sure_action_name? => 'Are you sure you want to %{action} %{name}?',
-      :sure_action_id? => 'Are you sure you want to %{action} item with ID: %{id}?'
+      :sure_action_id? => 'Are you sure you want to %{action} item with ID: %{id}?',
+      :hrs_unconverted => ' ( * %{hrs} Unconverted Hours)'
     },
     :errors => {
       :cannot_find_obj => "Cannot find %{obj}",
@@ -187,7 +188,9 @@
       :missing_required_field => 'Required field is missing.',
       :missing_component_scope_operand => 'Component is missing Scope and Operand.',
       :missing_component_operand => 'Component is missing Operand.',
-      :missing_component_scope => 'Component is missing Scope.'
+      :missing_component_scope => 'Component is missing Scope.',
+      :unconverted_hours => 'Some hours are not converted.',
+      :invalid_hourly_conversion => 'Extra hourly conversion'
     },
     :view_field_value => {
       :true => 'truly',
@@ -195,6 +198,9 @@
       :deactivated => 'Deactivated',
       :reactivated => 'Active',
       :active => 'Active'
+    },
+    :view_field_labels => {
+      :in_hours => ' hrs.'
     },
     :view_labels => {
       :phone => 'Phone:',

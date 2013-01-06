@@ -70,6 +70,9 @@ module TwsAuth
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    # must run rake assets:precompile before going to production
+    config.assets.initialize_on_precompile = false
+
     # Custom config settings # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # start of additional custom configurations # #
     # set up cache store to memory
