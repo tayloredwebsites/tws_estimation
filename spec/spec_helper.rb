@@ -222,7 +222,7 @@ module UserIntegrationHelper
     component12 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'H')
     component13 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'S')
     component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2")
-    component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'S')
+    component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'C')
     component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '*', grid_scope: 'A')
     component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '%', grid_scope: 'A')
     component_deact = FactoryGirl.create(:component_create, component_type: @component_types[0], deactivated: true)
@@ -268,9 +268,9 @@ module UserIntegrationHelper
     else
       assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[14])
     end
-    assembly_component15 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[15], required: true)
+    assembly_component15 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[15])
     assembly_component16 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[16], deactivated: true)
-    assembly_component17 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[17])
+    assembly_component17 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[17], required: true)
     @assembly_components = [assembly_component0, assembly_component1, assembly_component2, assembly_component3, assembly_component4, assembly_component5, assembly_component6, assembly_component7, assembly_component8, assembly_component9, assembly_component10, assembly_component11, assembly_component12, assembly_component13, assembly_component14, assembly_component15, assembly_component16, assembly_component17]
     @assembly_component = assembly_component1
     @assembly_component_deact1 = assembly_component1

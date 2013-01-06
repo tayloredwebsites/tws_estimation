@@ -13,11 +13,15 @@ warn_hours = defined?(warn_unconverted_hours) ?  warn_unconverted_hours : false
     # Show it if component type is flagged to show in the component grid
     #    or (!in_totals_grid (generate general subtotals) && !ct.has_totals (not a grid component type) )
 	if ct.in_totals_grid || (!in_totals_grid && !ct.has_totals)
-	    ct_value = total_values[ct.id].nil? ? BIG_DECIMAL_ZERO : total_values[ct.id]
+	    ct_value = BIG_DECIMAL_ZERO
 	    if is_in_dollars[ct.id] == true
-	        row_total += ct_value
-    	elsif warn_hours && ct.has_hours && ct_value != BIG_DECIMAL_ZERO   # and is_in_dollars is false
-    	    err_str = I18n.translate('warning.hrs_unconverted', :hrs => ct_value.bd_to_s(2)) # " ( * #{ct_value.bd_to_s(2)} Unconverted Hours)"
+    	    ct_value = total_values[ct.id].nil? ? BIG_DECIMAL_ZERO : total_values[ct.id]
+    	    row_total += ct_value
+    	else
+    	    ct_value = total_hours[ct.id].nil? ? BIG_DECIMAL_ZERO : total_hours[ct.id]
+    	end
+    	if !is_in_dollars[ct.id] && warn_hours && ct.has_hours && ct_value != BIG_DECIMAL_ZERO
+    	    err_str = I18n.translate('warning.hrs_unconverted', :hrs => ct_value.bd_to_s(2))
     	    err_style = " warning"
     	end
 %>
