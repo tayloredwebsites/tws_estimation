@@ -22,17 +22,9 @@ elsif !ass_comp.component.is_valid_grid_scope?
 	row_class = "field_with_errors"
 	est_comp_errors += ' - ' + I18n.translate('error_messages.missing_component_scope')
 end
-if ass_comp.component.grid_scope == 'H'
-    found_hours_error = false
-    @component_types_list.each do |ct|
-        if is_in_dollars[ct.id] and ct.has_hours
-            found_hours_error = true
-        end
-    end
-	if found_hours_error
-	    est_comp_errors += ' - ' + I18n.translate('error_messages.invalid_hourly_conversion')
-	    row_class = "field_with_errors"
-	end
+if extra_hourly_conversion
+    est_comp_errors += ' - ' + I18n.translate('error_messages.invalid_hourly_conversion')
+    row_class = "field_with_errors"
 end
 %>
 				<tr class="grid_row<%= row_class %>">
