@@ -1,0 +1,26 @@
+    <%= tag :tr, options = {:id => "state_component_type_tax_#{item.id}", :class => "#{cycle('odd', 'even')}"}, open = true %>
+        
+        <td id="<%= "state_component_type_tax_#{item.id}_id" %>"><%= item.id %></td>
+        
+            <td id="<%= "state_component_type_tax_#{item.id}_state" %>"><%= item.state.nil_to_s %></td>
+        
+            <td id="<%= "state_component_type_tax_#{item.id}_job_type" %>"><%= item.job_type.nil_to_s %></td>
+        
+            <td id="<%= "state_component_type_tax_#{item.id}_component_type" %>"><%= item.component_type.nil_to_s %></td>
+        
+        <td id="<%= "state_component_type_tax_#{item.id}_tax_percent" %>"><%= item.tax_percent %></td>
+                <% if @deactivated_module && show_deactivated? %>
+           <td id="<%= "state_component_type_tax_#{item.id}_deactivated" %>"><%= I18n.is_deactivated_or_not(item.deactivated?) %></td>
+        <% end %>
+       <td><%= link_to I18n.translate('view_action.view'), state_component_type_tax_path(item.id) %></td>
+       <td><%= link_to I18n.translate('view_action.edit'), edit_state_component_type_tax_path(item.id) %></td>
+        <% if @deactivated_module && can?(:deactivate, item) %>
+            <% if item.deactivated? %>
+                <td><%= link_to I18n.translate('view_action.reactivate'), reactivate_state_component_type_tax_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.reactivate'), :id => item.id) %></td>
+                 <td><%= link_to I18n.translate('view_action.delete'), item, :method => :delete, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.delete'), :id => item.id)  %></td>
+            <% else %>
+                 <td><%= link_to I18n.translate('view_action.deactivate'), deactivate_state_component_type_tax_path(item.id), :method => :put, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.deactivate'), :id => item.id) %></td>
+            <% end # end if item.deactivated? %>
+		<% else %>
+				<td><%= link_to I18n.translate('view_action.delete'), item, :method => :delete, :confirm => I18n.translate('warning.sure_action_id?', :action => I18n.translate('view_action.delete'), :id => item.id)  %></td>
+        <% end # end if @deactivated_module %>

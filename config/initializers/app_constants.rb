@@ -14,6 +14,7 @@ DB_FALSE = false
 DB_FALSE_VALUES = [false, 'f', 'F', 'false', 'False', 'FALSE', '0', ActiveRecord::Base.connection.quoted_false]
 VIEWS_SCRIPTING = true
 BIG_DECIMAL_ZERO = BigDecimal.new('0.00',2)
+BIG_DECIMAL_PERCENT = BigDecimal.new('0.01',2)  # 0.01000001 to ensure .5 rounds up ?
 
 DB_VALUES = {
   :T => true,
@@ -31,7 +32,10 @@ DB_VALUES = {
 # Roles used for cancan implementation (to do) (see app/models/roles.rb, app/models/ability.rb)
 # each role has layout: (application_name/all)_(role_name/guest)
 # each resource is the available resources(model/controller) under that system with authorization by cancan - app/models/ability.rb
-# i18n translations of each menu_item is en.systems.{APPLICATION_NAV(key)}.menu_items.{menu_items(key)}
+# i18n translations of each menu_item is
+# - en.menu_items.{menu_items(key)}.menu_items.{menu_items(key)}
+# - en.menu_items.{:app_id}.menu_items.{the menu_item}
+# - e.g. en.menu_items.estim.menu_items.state_component_type_taxes
 MENU_ITEMS = {
 #  :all => {:id => 'all', :actual => 'false', :type => 'system', :resources => ['Home', 'User', 'Default']},
 #  :home => {:id => 'home', :actual => 'true', :type => 'shared'},
@@ -75,7 +79,8 @@ MENU_ITEMS = {
     } },
     :sales_reps => {:class_name => "SalesRep", :action => :index, :start_uri => "/sales_reps"},
     :job_types => {:class_name => "JobType", :action => :index, :start_uri => "/job_types"},
-    :states => {:class_name => "State", :action => :index, :start_uri => "/states"}
+    :states => {:class_name => "State", :action => :index, :start_uri => "/states"},
+    :state_component_type_taxes => {:class_name => 'StateComponentTypeTax', :action => :index, :start_uri => '/state_component_type_taxes'}
   } },
   :prevail => {:app_id => 'prevail', :roles => ['prevail_users', 'prevail_admins', 'all_admins'], :menu_items => {
   } }

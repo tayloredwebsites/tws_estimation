@@ -22,5 +22,13 @@ module Models::CommonMethods
     end
   end
 
-    
+  # see if field is required
+  # idea modified from http://www.keenertech.com/articles/2011/06/26/recipe-detecting-required-fields-in-rails
+  def required?(field_name)
+    model_class = self.class.name.constantize
+    Rails.logger.debug("@@@@ Models::CommonMethods model_class = #{model_class} check on field #{field_name}")
+    is_req = model_class.validators_on(field_name).map(&:class).include?(ActiveModel::Validations::PresenceValidator)
+    Rails.logger.debug("@@@@ Models::CommonMethods field #{field_name} required? is #{is_req.to_s}")
+    is_req
+  end
 end

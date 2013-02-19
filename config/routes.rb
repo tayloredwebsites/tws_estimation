@@ -1,19 +1,18 @@
 TwsAuth::Application.routes.draw do
 
+  resources :state_component_type_taxes do
+    member do
+      put 'deactivate'      # route:          deactivate_state PUT    /states/:id/deactivate(.:format)              states#deactivate
+      put 'reactivate'      # route:          reactivate_state PUT    /states/:id/reactivate(.:format)              states#reactivate
+    end
+  end
+  match "state_component_type_taxes/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
+  match "state_component_type_taxes/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
+
+
   # resources :estimate_components
 
-  # resources :estimate_assemblies do
-  #   member do
-  #     put 'deactivate'      # route: deactivate_estimate_assembly PUT    /estimate_assemblies/:id/deactivate(.:format) estimate_assemblies#deactivate
-  #     put 'reactivate'      # route: reactivate_estimate_assembly PUT    /estimate_assemblies/:id/reactivate(.:format) estimate_assemblies#reactivate
-  #   end
-  #   collection do
-  #     get 'list'            # route:     list_estimate_assemblies GET    /estimate_assemblies/list(.:format)           estimate_assemblies#list
-  #   end
-  # end
-  # match "estimate_assemblies/:id/deactivate", :via => :get, :to => 'home#errors', :status => 405
-  # match "estimate_assemblies/:id/reactivate", :via => :get, :to => 'home#errors', :status => 405
-  
+  # resources :estimate_assemblies
 
   get "estimates/menu"      # route:              estimates_menu GET    /estimates/menu(.:format)           estimates#menu
   resources :estimates do

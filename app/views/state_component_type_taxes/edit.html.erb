@@ -1,0 +1,26 @@
+<%
+    @page_scope = 'state_component_type_taxes.edit'
+    @deactivated_module = defined?(StateComponentTypeTax.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= form_for(@state_component_type_tax, :action => 'update') do |f| %>
+
+    <%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @state_component_type_tax, :sys_errors => @errors  } %>
+
+    <div class="fields_20_80">
+        <%= render :partial => 'form', :locals => { :f => f } %>
+    </div>
+
+    <div class="actions">
+        <%= f.submit I18n.translate('view_action.update') %>
+    </div>
+    
+<% end %>
+
+<%= link_to I18n.translate('state_component_type_taxes.show.action'), state_component_type_tax_path(@state_component_type_tax.id) %>
+<% if can? :manage, @state_component_type_tax %>
+    | <%= link_to I18n.translate('state_component_type_taxes.index.action'), state_component_type_taxes_path %>
+    | <%= link_to I18n.translate('state_component_type_taxes.new.action'), new_state_component_type_tax_path %>
+<% end %>

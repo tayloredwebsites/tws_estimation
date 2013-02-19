@@ -1,0 +1,49 @@
+<%
+    @page_scope = 'state_component_type_taxes.index'
+    @deactivated_module = defined?(StateComponentTypeTax.new.deactivated_module)
+%>
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+
+<!--
+    If need a parent association for breaks by parent, try $ rails generate tws_views state_component_type_tax all <parent_association>:parent
+    Note: if child association is not the current table (e.g. join table), add <child_association>:child to the tws_views generate
+-->
+<table cellspacing="0">
+<%
+last_parent_assoc_id = 0
+parent_association = ""
+last_parent_association = ""
+@state_component_type_taxes.each do |item|
+        # only show deactivated item if deactivated module installed, and show deactivated is set.
+        ( @deactivated_module && !show_deactivated? && item.deactivated? ) ? show_row = false : show_row = true
+    if show_row
+        parent_association = item.send('state')
+        # Rails.logger.debug("G index.html.erb parent_association = #{parent_association.inspect.to_s}")
+        if last_parent_assoc_id != parent_association.id
+%>
+            </table>
+            <!-- use this first link if has many association -->
+            <!-- use this second link if has many association and this class is a join table -->
+            <%= link_to "New #{last_parent_association.nil_to_s} ComponentType", new_state_component_type_tax_path(:state_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
+            <br>
+            <h3><%= link_to parent_association.nil_to_s, state_path(parent_association.id) %> (State)</h3>
+            <table cellspacing="0">
+            <%= render :partial => 'state_component_type_taxes/index_head' %>
+<%
+            last_parent_assoc_id = parent_association.id
+            last_parent_association = parent_association
+        end # break in parent_assoc_id
+%>
+    <%= render :partial => 'state_component_type_taxes/index_row', :locals => { :item => item } %>
+<% end # if show_row
+end # if table.each %>
+
+</table>
+
+<% if last_parent_assoc_id != 0 %>
+    <%= link_to "New #{last_parent_association.nil_to_s} ComponentType", new_state_component_type_tax_path(:state_id => last_parent_assoc_id.to_s) if last_parent_assoc_id != 0 %><br>
+<% end # if last_parent_assoc_id %>
+
+
+<%= link_to I18n.translate('state_component_type_taxes.new.action'), new_state_component_type_tax_path %>

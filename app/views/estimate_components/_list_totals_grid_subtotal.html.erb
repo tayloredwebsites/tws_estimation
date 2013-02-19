@@ -3,7 +3,8 @@
 						<%= label_tag total_id, total_label, :class => 'label' %>
 					</td>
 <%
-row_total = BIG_DECIMAL_ZERO
+tax = total_values[:tax].nil? ? BIG_DECIMAL_ZERO : total_values[:tax]
+row_total = tax
 warn_hours = defined?(warn_unconverted_hours) ?  warn_unconverted_hours : false
 @component_types_list.each do |ct|
     err_str = ''
@@ -30,5 +31,6 @@ warn_hours = defined?(warn_unconverted_hours) ?  warn_unconverted_hours : false
 	end
 end
 %>
+					<td class="grid_row_calc grid_row_sub_total" id="<%= total_id %>_tax_total"><%= tax.bd_to_s(2) %></td>
 					<td class="grid_row_calc grid_row_sub_total" id="<%= total_id %>_total"><%= row_total.bd_to_s(2) %></td>
 				</tr>
