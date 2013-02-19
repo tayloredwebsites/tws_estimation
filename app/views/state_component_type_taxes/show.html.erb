@@ -1,0 +1,62 @@
+<%
+    @page_scope = 'state_component_type_taxes.show'
+    @deactivated_module = defined?(StateComponentTypeTax.new.deactivated_module)
+%>
+
+<h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
+
+<%= render :partial => 'layouts/errors_form', :locals => { :active_obj => @state_component_type_tax, :sys_errors => @errors  } %>
+
+<div class="fields_20_80">
+
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('state_component_type_taxes.field_name.id') %></span>
+      <span class="value" id="state_component_type_tax_id"><%= @state_component_type_tax.id %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('state_component_type_taxes.field_name.state') %></span>
+      <span class="value" id="state_component_type_tax_state"><%= @state_component_type_tax.state.nil_to_s %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('state_component_type_taxes.field_name.job_type') %></span>
+      <span class="value" id="state_component_type_tax_job_type"><%= @state_component_type_tax.job_type.nil_to_s %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('state_component_type_taxes.field_name.component_type') %></span>
+      <span class="value" id="state_component_type_tax_component_type"><%= @state_component_type_tax.component_type.nil_to_s %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('state_component_type_taxes.field_name.tax_percent') %></span>
+      <span class="value" id="state_component_type_tax_tax_percent"><%= @state_component_type_tax.tax_percent %></span>
+    </div>
+
+<% if (@deactivated_module) %>
+     <div class="field">
+       <span class="label"><%= I18n.translate('state_component_type_taxes.field_name.deactivated') %></span>
+       <span class="value" id="state_component_type_tax_deactivated"><%= I18n.is_deactivated_or_not(@state_component_type_tax.deactivated?) %></span>
+     </div>
+<% end %>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('state_component_type_taxes.field_name.created_at') %></span>
+      <span class="value" id="state_component_type_tax_created_at"><%= @state_component_type_tax.created_at %></span>
+    </div>
+
+    <div class="field">
+      <span class="label"><%= I18n.translate('state_component_type_taxes.field_name.updated_at') %></span>
+      <span class="value" id="state_component_type_tax_updated_at"><%= @state_component_type_tax.updated_at %></span>
+    </div>
+
+</div>
+
+
+<% if can? :manage, @state_component_type_tax %>
+    <%= link_to I18n.translate('state_component_type_taxes.edit.action'), edit_state_component_type_tax_path(@state_component_type_tax.id) %>
+    | <%= link_to I18n.translate('state_component_type_taxes.index.action'), state_component_type_taxes_path %>
+    | <%= link_to I18n.translate('state_component_type_taxes.new.action'), new_state_component_type_tax_path %>
+<% end %>

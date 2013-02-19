@@ -6,6 +6,7 @@ class ComponentType < ActiveRecord::Base
   attr_accessible :description, :sort_order, :has_costs, :has_hours, :has_vendor, :has_totals, :in_totals_grid, :deactivated
 
   has_many :components, :inverse_of=>:component_type, :dependent => :restrict
+  has_many :state_component_type_taxes, :inverse_of=>:component_type, :dependent => :restrict
     
   validates :description,
       :presence => true

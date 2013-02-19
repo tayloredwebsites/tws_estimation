@@ -272,12 +272,14 @@ describe 'Users Layouts Links Tests - ' do
           # page.should have_selector(:xpath, "//li[@id=\"lnav_#{system[:id].to_s}\"]")
           app[:menu_items].each do | menu_key, menu_val |
             ability = Ability.new(@me)
-            # Rails.logger.debug("T layout_integration_spec check if guest with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
+            # Rails.logger.debug("T layout_integration_spec check if Admin with roles: #{@me.roles}, can? #{menu_val[:action].to_sym} resource #{menu_val[:class_name].to_s}\"]")
             if ability.can?(menu_val[:action].to_sym, menu_val[:class_name].to_s.constantize)
-              # Rails.logger.debug("T layout_integration_spec guest should see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              # Rails.logger.debug("T layout_integration_spec Admin should see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
               page.should have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]")
+              # Rails.logger.debug("T layout_integration_spec Admin should not have translation missing #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              find(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s}\"]/a/span").text.should_not =~ /.*translation missing:.*/
             else
-              # Rails.logger.debug("T layout_integration_spec guest should not see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
+              # Rails.logger.debug("T layout_integration_spec Admin should not see resource #{I18n.translate("systems.#{app[:app_id].to_s}.menu_items.#{menu_key.to_s}")}\"]")
               page.should_not have_selector(:xpath, "//li[@id=\"lnav_#{app[:app_id].to_s}_#{menu_val[:class_name].to_s}_#{menu_val[:action].to_s} %>\"]")
             end
           end

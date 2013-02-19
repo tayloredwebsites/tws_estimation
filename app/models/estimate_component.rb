@@ -79,11 +79,30 @@ class EstimateComponent < ActiveRecord::Base
 
   def value_or_zero
     if !value.nil?
-      Rails.logger.debug("***** EstimateComponent - value_or_default - value = #{self.value.bd_to_s(2)}")
       BigDecimal.new(self.value.bd_to_s(2),2)
     else
-      Rails.logger.debug("***** EstimateComponent - value_or_default - zero")
       BIG_DECIMAL_ZERO
+    end
+  end
+
+  def tax_percent_for(saved_estimate=nil, this_component=nil)
+    # load default tax percent value if tax rate is not set yet, by looking in the StateComponentTypeTax table
+    if !self[:tax_percent].nil?
+      return self[:tax_percent]
+    elsif !saved_estimate.nil? && !saved_estimate.state.nil? && !saved_estimate.job_type.nil?  && !this_component.nil? && !this_component.component_type.nil?
+      tax_rate_model = StateComponentTypeTax.default_tax_rate_for(saved_estimate.job_type_id, this_component.component_type_id, saved_estimate.state_id)
+      if tax_rate_model.nil?
+        # Rails.logger.debug("*TaxRate* tax_percent_for - return value of #{self[:tax_percent].bd_to_s(3)}")
+        return self[:tax_percent]
+      else
+        # update the tax rate in model
+        tax_percent = tax_rate_model.tax_percent
+        # Rails.logger.debug("*TaxRate* tax_percent_for - lookup rate found =  #{tax_rate_model.tax_percent.bd_to_s(3)}")
+        return tax_rate_model.tax_percent
+      end
+    else
+      # Rails.logger.debug("*TaxRate* tax_percent_for - nil estimate or component in")
+      return self[:tax_percent]
     end
   end
   

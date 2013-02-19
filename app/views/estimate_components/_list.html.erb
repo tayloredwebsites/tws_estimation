@@ -56,18 +56,24 @@ end
 		# Sort Order: 'component_types.sort_order, assembly_components.required DESC, components.description' (see AssemblyComponent.for_assembly)
 		AssemblyComponent.for_assembly(ass.id).each do |ass_comp|
 			comp = ass_comp.component
-			est_comp = EstimateComponent.for_estimate_assembly_component(@estimate.id, ass.id, ass_comp.component.id )
+			est_comp_was = EstimateComponent.for_estimate_assembly_component(@estimate.id, ass.id, ass_comp.component.id )
+			est_comp = EstimateComponent.new()
 			Rails.logger.debug("VVVV Estimate Component = #{est_comp.inspect.to_s}")
 			# calculations
+			# todo - replace est_comp_value, est_comp_value_str, est_comp_value_was_str
+			# =>    with    est_comp.value, est_comp.value.bd_to_s(2), est_comp_was.value.bd_to_s(2)
 			est_comp_value_was_str = ''
-			if !est_comp.nil?
-				# comp = est_comp.component
-				est_comp_value = est_comp.value_or_zero
-				est_comp_value_was_str = est_comp.value_or_zero.bd_to_s(2)
+			if !est_comp_was.nil?
+				# we have an estimate component to update, load up values
+				est_comp = est_comp_was.clone()
+				est_comp.value = est_comp_value = est_comp_was.value_or_zero
+				est_comp_value_was_str = est_comp_was.value_or_zero.bd_to_s(2)
 			elsif !ass_comp.component.default.nil?
-				est_comp_value = ass_comp.component.default.value
+			    # else we load up the default value for the component
+				est_comp.value = est_comp_value = ass_comp.component.default.value
 			else
-				est_comp_value = BIG_DECIMAL_ZERO
+			    # else we default it to zero
+				est_comp.value = est_comp_value = BIG_DECIMAL_ZERO
 			end
 			est_comp_value_str = est_comp_value.bd_to_s(2)
             est_comp_total = est_comp_value # component total is component value if no calculations (not show_totals_grid)
@@ -206,10 +212,17 @@ end
                     ea_ct_total += est_comp_total
                     ea_total += est_comp_total
                     e_total += est_comp_total
+                    if !est_comp.tax_amount.nil?
+                        e_totals[:tax] = (e_totals[:tax].nil?) ? est_comp.tax_amount : e_totals[:tax] + est_comp.tax_amount
+                        ea_totals[:tax] = (ea_totals[:tax].nil?) ? est_comp.tax_amount : ea_totals[:tax] + est_comp.tax_amount
+                        ea_ct_total += est_comp.tax_amount
+                        ea_total += est_comp.tax_amount
+                        e_total += est_comp.tax_amount
+                    end
 					# Rails.logger.debug("VIEWDEBUG comp = #{comp.inspect.to_s}")
 					# Rails.logger.debug("VIEWDEBUG est_comp_value_str = #{est_comp_value_str}")
 					concat render :partial => 'estimate_components/list_grid_component',
-					:locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :editable => comp.editable, :comp_calculations => e_current, :view_mode => view_mode, :debug_inputs => work_totals, :is_in_dollars => is_in_dollars, :debug_formula => ' '+comp.get_grid_operand_or_warn+' '+est_comp_value_str, :extra_hourly_conversion => extra_hourly_conversion }
+					:locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :editable => comp.editable, :comp_calculations => e_current, :view_mode => view_mode, :debug_inputs => work_totals, :is_in_dollars => is_in_dollars, :debug_formula => ' '+comp.get_grid_operand_or_warn+' '+est_comp_value_str, :extra_hourly_conversion => extra_hourly_conversion, :est => @estimate, :est_comp => est_comp, :est_comp_was => est_comp_was }
 				
 				else
                     ct_id = ea_last_ct_id = ass_comp.component.component_type.id
@@ -226,10 +239,17 @@ end
                         ea_hr_total += est_comp_total
                         e_hr_total += est_comp_total
                     end
+                    if !est_comp.tax_amount.nil?
+                        e_totals[:tax] = (e_totals[:tax].nil?) ? est_comp.tax_amount : e_totals[:tax] + est_comp.tax_amount
+                        ea_totals[:tax] = (ea_totals[:tax].nil?) ? est_comp.tax_amount : ea_totals[:tax] + est_comp.tax_amount
+                        ea_ct_total += est_comp.tax_amount
+                        ea_total += est_comp.tax_amount
+                        e_total += est_comp.tax_amount
+                    end
 					est_comp_note = (est_comp.nil?) ? '' : est_comp.note
 					# Rails.logger.debug("VIEWDEBUG comp = #{comp.inspect.to_s}")
 					# Rails.logger.debug("VIEWDEBUG est_comp_value_str = #{est_comp_value_str}")
-					concat render :partial => 'estimate_components/list_component', :locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :est_comp_note => est_comp_note, :view_mode => view_mode }
+					concat render :partial => 'estimate_components/list_component', :locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :est_comp_note => est_comp_note, :view_mode => view_mode, :est => @estimate, :est_comp => est_comp, :est_comp_was => est_comp_was }
 				
 				end # end if show_totals_grid
                 # ea_last_ct_id = ass_comp.component.component_type.id

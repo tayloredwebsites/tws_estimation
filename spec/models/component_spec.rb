@@ -14,12 +14,12 @@ describe Component do
     end
     it 'should have tests accessible attributes match the accessible attributes for the model' do
       attribs = FactoryGirl.build(:component_create)._accessible_attributes
-      # Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
-      # Rails.logger.debug("T attribs[:default]: #{ attribs[:default].inspect.to_s}")
+      Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
+      Rails.logger.debug("T attribs[:default]: #{ attribs[:default].inspect.to_s}")
       attribs_whitelist = attribs[:default]
-      # Rails.logger.debug("T attribs_whitelist: #{attribs_whitelist.inspect.to_s}")
-      acc_attribs = generate_component_accessible_attributes()
-      # Rails.logger.debug("T generate_component_accessible_attributes: #{acc_attribs.inspect.to_s}")
+      Rails.logger.debug("T attribs_whitelist: #{attribs_whitelist.inspect.to_s}")
+      acc_attribs = HashWithIndifferentAccess.new generate_component_accessible_attributes()
+      Rails.logger.debug("T generate_component_accessible_attributes: #{acc_attribs.inspect.to_s}")
       attribs_whitelist.size.should >= acc_attribs.size # accounting for blank entry in whitelist
       attribs_whitelist.each do |key|
         Rails.logger.debug ("T Accessible attribute #{key.to_s} = #{acc_attribs[key.to_sym].inspect.to_s}")

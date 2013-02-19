@@ -1,0 +1,2 @@
+module StateComponentTypeTaxesHelper
+end

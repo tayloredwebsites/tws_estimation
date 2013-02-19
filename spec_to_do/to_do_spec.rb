@@ -1,22 +1,16 @@
 require 'spec_helper'
 
-describe 'Multiple assemblies with same assembly_id in an estimate (awaiting quote)' do
-  it 'should have an add assembly button in the estimate assemblies section'
-  it 'should have a remove assembly button in the estimate assemblies section'
-  it 'should allow duplicate assemblies in an estimate, and allow the user to name it'
-  it 'should have estimate components reference an estimate assembly, to ensure updates to estimate component go to correct estimate assembly'
-  it 'should make sure that updates to an estimate assembly component does not update the duplicate'
-  it 'should make sure that updates to an estimate assembly component updates itself'
+describe "Allowing different Labor Rates" do
+ it "should have a new default labor rate (labor_rate_default_id) field in the components table."
+ it "should continue to store labor rates in the defaults table, as Anthony has currently started doing."
+ it "should ensure that a component entry has a default labor rate (labor_rate_default_id) chosen if the component type is in hours."
+ it "should allow any default value to be used for the default labor rate? (otherwise additional coding and possibly a flag in the defaults table, and/or a default 'store' match field in the component type table will be needed.)"
+ it "should show the labor rate and computed dollars in all hourly component rows in the estimate."
+ it "should accumulate computed dollars for all hourly component now instead of accumulating hours in the estimate totals."
+ it "should not need to accumulate hours in the estimate totals?"
+ it "should not allow the user to override the default hourly rate in the estimate ever?  If we want users to be able to edit the hourly rate in the estimate, another flag would be needed in the component record (the component editable flag controls the component amount entry in the estimate input)."
 end
 
-describe "Taxability flag by Job Type and Component Type" do
-  it 'should have a new taxability table (foreign key pointers to job type and component type)'
-  it 'should allow the user to specify which component types are taxable for each job type (yes or no flag)'
-  it 'should specify the tax rate for a component by the taxable table flag and the state tax rate'
-  it 'should allow the user to override the state tax rate by the value in the taxability table'
-  it 'should allow the user to override the tax rate for each estimate component (on same line in estimate as amount and note)'
-  it 'should accumulate tax totals at component type, assemby and grand totals'
-end
 
 describe 'Miscellaneous items to do - ' do
   context 'important changes' do
@@ -26,12 +20,13 @@ describe 'Miscellaneous items to do - ' do
     it 'should let users specify system minimum and maximum markup percent (10 max now)'
     it 'should not update, show or accumulate unchecked assemblies'
     it 'should not allow assembly components to be required if the component is not editable.'
+    it 'should document that the note field of an estimate component does not show up in grid rows'
   end
   context 'important documentation' do
     it 'should have grid calculations documented'
   end
   context 'Misc. estimates - ' do
-    it '-should find the title with exactly correct content - test reinstated into layout_integration test'
+    it 'should find the title with exactly correct content - test reinstated into layout_integration test'
     it 'should prevent entering values outside of minimum and maximum values (general solution for markup % checks)'
     it 'should have no translations missing'
     it 'should have proper email validations'

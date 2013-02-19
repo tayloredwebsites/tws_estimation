@@ -69,6 +69,7 @@
           :sales_reps => 'Sales Reps',
           :job_types => 'Job Taxability Types',
           :states => 'States',
+          :state_component_type_taxes => 'Tax Rates',
           :estimates => {
             :abbreviation => 'Estimates',
             :full_name => 'Estimates',
@@ -1037,6 +1038,76 @@
       },
       :messages => {
       }
-    } # end EstimateAssemblies Resource
+    }, # end EstimateComponents Resource
+    :state_component_type_taxes => {
+      :title => 'Tax Rates',
+      :system => 'estimmaint',
+      :menu => {
+        :action => "Tax Rate Actions Menu",
+        :title => "Estimation Tax Rates Action Menu",
+        :header => "Estimation Tax Rates Action Menu"
+      },
+      :index => {
+        :action => "List Tax Rates",
+        :title => "List Tax Rates",
+        :header => "List of all Tax Rate"
+      },
+      :edit => {
+        :action => "Edit Tax Rate",
+        :title => "Edit Tax Rate",
+        :header => "Edit an Tax Rate"
+      },
+      :new => {
+        :action => "New Tax Rate",
+        :title => "New Tax Rate",
+        :header => "Create an Tax Rate"
+      },
+      :show => {
+        :action => "View Tax Rate",
+        :title => "View Tax Rate",
+        :header => "View an Tax Rate"
+      },
+      :field_name => {
+        :id => 'ID',
+        :state_id => 'State ID',
+        :state => 'State',
+        :job_type_id => 'Job Type ID',
+        :job_type => 'Job Type',
+        :component_type_id => 'Component Type ID',
+        :component_type => 'Component Type',
+        :tax_percent => 'Tax Percent',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_short => {
+        :id => 'ID',
+        :state_id => 'State ID',
+        :state => 'State',
+        :job_type_id => 'Job Type ID',
+        :job_type => 'Job Type',
+        :component_type_id => 'Component Type ID',
+        :component_type => 'Component Type',
+        :tax_percent => 'Tax Percent',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created',
+        :updated_at => 'Updated'
+      },
+      :field_name_tip => {
+        :id => 'ID (identifier used by database to uniquely idenfify item in table).',
+        :state_id => 'The ID of the State for this Tax Rate',
+        :state => 'The State for this Tax Rate',
+        :job_type_id => 'The ID of the Job Type ID for this Tax Rate',
+        :job_type => 'The Job Type for this Tax Rate',
+        :component_type_id => 'The ID of the Component Type for this Tax Rate',
+        :component_type => 'The Component Type for this Tax Rate',
+        :tax_percent => 'Default Tax Percent for this State and Component Type',
+        :deactivated => 'Deactivated?',
+        :created_at => 'Created at this Date and Time.',
+        :updated_at => 'Last Updated at this date and time.'
+      },
+      :messages => {
+      }
+    } # end Tax Rates Resource
   } # end en
 } #end localizations
