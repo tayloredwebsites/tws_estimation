@@ -1,6 +1,7 @@
 # spec/integration/estimates_integration_spec.rb
 
 require 'spec_helper'
+include SpecHelper
 include UserIntegrationHelper
 include ApplicationHelper
 
@@ -16,6 +17,7 @@ describe 'Estimates Integration Tests', :js => false do
   end
   context 'it should have crud actions available and working' do
     before(:each) do
+      @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
       helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
@@ -220,6 +222,7 @@ describe 'Estimates Integration Tests', :js => false do
   end
   context 'component layouts - ' do
     before(:each) do
+      @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
       helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
@@ -335,6 +338,7 @@ describe 'Estimates Integration Tests', :js => false do
   end
   context 'it should have deactivated actions available and working' do
     before(:each) do
+      @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
       helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
@@ -572,6 +576,7 @@ describe 'Estimates Integration Tests', :js => false do
   end
   context 'translations missing - ' do
     before(:each) do
+      # @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
     end
     it 'should not be found on menu page' do
       visit estimates_menu_path()
@@ -620,6 +625,7 @@ describe 'Estimates Integration Tests', :js => false do
 
   context 'it should list estimate assemblies checkboxes - ' do
     before(:each) do
+      @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
       helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
@@ -707,6 +713,7 @@ describe 'Estimates Integration Tests', :js => false do
 
   context 'it should list estimate components - ' do
     before(:each) do
+      @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
       helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
@@ -817,6 +824,7 @@ describe 'Estimates Integration Tests', :js => false do
   
   context 'Regular non-grid Components - ' do
     before(:each) do
+      @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
       helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
@@ -1010,6 +1018,7 @@ describe 'Estimates Integration Tests', :js => false do
   
   context 'Totals Grid - ' do
     before(:each) do
+      @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
       helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
@@ -1458,4 +1467,90 @@ describe 'Estimates Integration Tests', :js => false do
     end
   end
   
+  context "Component level Tax override" do
+    before(:each) do
+      helper_signin(:admin_user_full_create_attr, @me.full_name)
+      visit home_index_path
+      Rails.logger.debug("T estimates_integration_spec Admin item logged in")
+      helper_load_tax_test
+
+      @tax_type = StateComponentTypeTax.create!(UserIntegrationHelper.build_attributes(:state_component_type_tax, state: @tax_state, job_type: @tax_job_type, component_type: @tax_component_type))
+      @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @tax_job_type.id, :state_id => @tax_state.id )
+      Rails.logger.debug("*TaxRates* create estimate - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+    end
+    it 'should allow the user to enter a tax override rate on same line in estimate as amount and note.' do
+      all_attribs = @estimate_attributes
+      estimate = Estimate.create!(@estimate_attributes)
+      Estimate.count.should == 1
+      estimate.deactivated?.should be_false
+      visit edit_estimate_path (estimate.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+      # following tests dependent upon helper_load_assemblies, spec_helper.rb helper_load_component_types and helper_load_components
+      page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
+      within(".edit_estimate") do
+        # enter first components value and tax percent
+        page.fill_in "estimate_components_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}", :with => '2500.00'
+        # it should allow the user to enter the tax override rate on a regular component
+        page.fill_in "estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}", :with => '6.25'
+        # it should allow the user to use the default tax rate on a defaulted component
+        # leave second component value and tax percent to default values filled in.
+        # page.fill_in "estimate_components_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}", :with => '2.78'
+        # page.fill_in "estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}", :with => '0.875'
+        # it should allow the user to enter the tax override rate on a grid component
+        # enter third components (in grid) value and tax percent
+        # should not show tax calculations in grid area
+        page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
+        # page.fill_in "estimate_components_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}", :with => '750.00'
+        # page.fill_in "estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}", :with => '4.75'
+        # save_and_open_page
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      #
+      # it should show the user the entered tax percent and the calculated tax dollar amount
+      find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^6\.250$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/.*\$ 156\.25$/
+      # it should show the user to use the default tax percent and the calculated tax dollar amount
+      find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").text.should =~/^0\.875$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").text.should =~/.*\$ 0\.02$/
+      # should not show tax calculations in grid area
+      page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
+      page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
+      # # it should show the user the entered tax percent and the calculated tax dollar amount on a grid component
+      # find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]").text.should =~/^4\.750$/
+      # find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]").text.should =~/.*\$ 35\.63$/
+
+      visit edit_estimate_path (estimate.id)
+      # save_and_open_page
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+      # following tests dependent upon helper_load_assemblies, spec_helper.rb helper_load_component_types and helper_load_components
+      page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
+      # it should let the user edit the updated tax percent
+      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").value.should =~/^6\.250$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/.*\$ 156\.25$/
+      # it should let the user edit the updated tax percent
+      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").value.should =~/^0\.875$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").text.should =~/.*\$ 0\.02$/
+      # should not show tax calculations in grid area
+      page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
+      page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
+      # # it should  let the user edit the updated tax percent
+      # find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]").value.should =~/^4\.750$/
+      # find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]").text.should =~/.*\$ 35\.63$/
+
+      # it 'should accumulate and show tax totals at component type totals.'
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~ /^2659\.05$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}__tax_total\"]").text.should =~ /^156\.27$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}__total\"]").text.should =~ /^2659\.05$/
+      find(:xpath, "//td[@id=\"grand_totals_type_#{@tax_assembly.id.to_s}\"]").text.should =~ /^2502\.78$/
+      find(:xpath, "//td[@id=\"grand_totals_type_tax_total\"]").text.should =~ /^156\.27$/
+      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^2659\.05$/
+
+    end
+  end
 end

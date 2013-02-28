@@ -107,6 +107,21 @@ RSpec.configure do |config|
 
 end
 
+module SpecHelper
+  # common steps in any tests
+
+  # list of fields that are to be required (to confirm Presence Validator)
+  REQUIRED_STATE_COMPONENT_TYPE_TAX_FIELDS = [:state, :state_id, :job_type, :job_type_id, :component_type, :component_type_id, :tax_percent]
+  # REQUIRED_STATE_COMPONENT_TYPE_TAX_FIELDS = [:state, :job_type, :component_type, :tax_percent]
+
+  # method to include associations into Factory Girl Builds
+  def build_attributes(*args)
+    FactoryGirl.build(*args).attributes.delete_if do |k, v|
+      ["id", "created_at", "updated_at"].member?(k)
+    end
+  end
+end
+
 module UserTestHelper
   # signin capability for controller tests
   def session_signin(username, password)
@@ -150,11 +165,12 @@ module UserTestHelper
     rescue
     end
   end
-    
-  
+
+
 end
 module UserIntegrationHelper
   # common steps in integration tests
+
   def helper_signin(factory_arg, user_full_name)
     visit signin_path
     helper_signin_form_submit(factory_arg)
@@ -279,5 +295,36 @@ module UserIntegrationHelper
     Rails.logger.debug("TTTTTT @assembly_component_deact3 = #{@assembly_component_deact3.inspect.to_s}")
     Rails.logger.debug("T UserTestHelper.helper_load_assembly_components - done")
   end
-  
+
+  def helper_load_tax_test
+    @tax_default = Default.create!(FactoryGirl.attributes_for(:default, :value => 2.78))
+    @tax_defaults = [@tax_default]
+
+    @tax_component_type = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge(:description => 'Test Comp Type'))
+    @tax_component_type_totals = ComponentType.create!(FactoryGirl.attributes_for(:component_type_totals).merge(:description => 'Test Totals Grid'))
+    @tax_component_types = [@tax_component_type, @tax_component_type_totals]
+
+    @tax_component = FactoryGirl.create(:component_min_create, component_type: @tax_component_type)
+    @tax_def_component = FactoryGirl.create(:component_create, component_type: @tax_component_type, default: @tax_default)
+    @tax_grid_editable_component = FactoryGirl.create(:component_totals_editable_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", grid_operand: '*', grid_scope: 'S')
+    @tax_grid_non_editable_component = FactoryGirl.create(:component_totals_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", default: @tax_default, grid_operand: '*', grid_scope: 'S')
+    @tax_components = [@tax_component, @tax_def_component,  @tax_grid_editable_component, @tax_grid_not_editable_component]
+
+    @tax_assembly = FactoryGirl.create(:assembly_required_create)
+    @tax_assemblies = [@tax_assembly]
+
+    @tax_assembly_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_component)
+   @tax_assembly_def_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_def_component)
+    @tax_assembly_grid_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_editable_component)
+    @tax_assembly_grid_non_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_non_editable_component)
+    @tax_assembly_components = [@tax_assembly_component, @tax_assembly_def_component, @tax_assembly_grid_editable_component, @tax_assembly_grid_non_editable_component]
+
+    @tax_state = State.create!(FactoryGirl.attributes_for(:state))
+
+    @tax_job_type = JobType.create!(FactoryGirl.attributes_for(:job_type))
+
+    # @tax_type = StateComponentTypeTax.create!(UserIntegrationHelper.build_attributes(:state_component_type_tax, state: @tax_state, job_type: @tax_job_type, component_type: @tax_component_type))
+
+    Rails.logger.debug("T UserTestHelper.helper_load_test_tax - done")
+  end
 end

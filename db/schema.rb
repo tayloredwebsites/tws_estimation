@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121203231356) do
+ActiveRecord::Schema.define(:version => 20130130210108) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -94,6 +94,8 @@ ActiveRecord::Schema.define(:version => 20121203231356) do
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
     t.string   "note",                                         :default => "",    :null => false
+    t.decimal  "tax_percent",   :precision => 19, :scale => 4
+    t.decimal  "tax_amount",    :precision => 19, :scale => 2
   end
 
   add_index "estimate_components", ["assembly_id"], :name => "index_estimate_components_on_assembly_id"
@@ -137,6 +139,20 @@ ActiveRecord::Schema.define(:version => 20121203231356) do
     t.datetime "updated_at",                                                       :null => false
   end
 
+  create_table "state_component_type_taxes", :force => true do |t|
+    t.integer  "state_id",                                                            :null => false
+    t.integer  "job_type_id",                                                         :null => false
+    t.integer  "component_type_id",                                                   :null => false
+    t.decimal  "tax_percent",       :precision => 19, :scale => 4
+    t.boolean  "deactivated",                                      :default => false, :null => false
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
+  end
+
+  add_index "state_component_type_taxes", ["component_type_id"], :name => "index_state_component_type_taxes_on_component_type_id"
+  add_index "state_component_type_taxes", ["job_type_id"], :name => "index_state_component_type_taxes_on_job_type_id"
+  add_index "state_component_type_taxes", ["state_id"], :name => "index_state_component_type_taxes_on_state_id"
+
   create_table "states", :force => true do |t|
     t.string   "code",       :default => "", :null => false
     t.string   "name",       :default => "", :null => false
@@ -175,5 +191,9 @@ ActiveRecord::Schema.define(:version => 20121203231356) do
   add_foreign_key "estimates", "states", :name => "estimates_state_id_fk"
 
   add_foreign_key "sales_reps", "users", :name => "sales_reps_user_id_fk"
+
+  add_foreign_key "state_component_type_taxes", "component_types", :name => "state_component_type_taxes_component_type_id_fk"
+  add_foreign_key "state_component_type_taxes", "job_types", :name => "state_component_type_taxes_job_type_id_fk"
+  add_foreign_key "state_component_type_taxes", "states", :name => "state_component_type_taxes_state_id_fk"
 
 end

@@ -10,9 +10,11 @@ else
 	ass_comp_req = 'component_value not_required'
 end
 
+hourly_calculations = "@ est_comp.hourly_rate = $ est_comp.hourly_dollars"
+
 # estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}] != 
 %>
-		<div class="field">
+		<div class="field row_with_calculations">
 <%
 if !est_comp_errors.blank?
 	concat content_tag(:span, label_tag("estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label' ), :class => "field_with_errors")
@@ -20,7 +22,7 @@ else
 	concat (label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s, :class => 'label')
 end
 %>
-			<span class="value">
+			<div class="value">
 <%
 if !est_comp_errors.blank?
 %>
@@ -29,27 +31,41 @@ if !est_comp_errors.blank?
 end
 if view_mode == 'edit'
 	concat content_tag(:span, text_field_tag("estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str), :class => ass_comp_req)
+	# if component type is hourly
+	#     concat content_tag(:span, hourly_calculations, :class="estimate_hourly_calculations")
+	# end
+%> <%= content_tag :span, :class => 'estimate_tax_calculations' do %>
+<%
+	    # note concat on the nested content tags does not work - must use the expression tag
+        concat content_tag(:span, label_tag("estimate_components_tax_pct[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", 'tax %' ))
+        concat content_tag(:span, text_field_tag("estimate_components_tax_pct[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.tax_percent_for(@estimate, ass_comp.component).bd_to_s(3)))
+        concat content_tag(:span, ' => $ '+ "#{est_comp.tax_amount.bd_to_s(2)}", :id => "estimate_components_tax_amt_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
+    end
 	concat content_tag(:span, text_field_tag("estimate_components_note[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_note), :class => 'component_note')
+%> <%= content_tag :span, :class => 'component_hidden_fields' do %>
+<%
+	    # note concat on the nested content tags does not work - must use the expression tag
+    	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
+        concat hidden_field_tag("estimate_components_tax_pct_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.tax_percent_for(@estimate, ass_comp.component).bd_to_s(3))
+	    concat hidden_field_tag("estimate_components_note_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_note)
+	end
 else
-%>
-				<span class='<%= ass_comp_req %>' id="estimate_components_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
+    concat content_tag(:span, est_comp_value_str, :class => "#{ass_comp_req}",  :id => "estimate_components_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
+%> <%= content_tag :span, :class => 'estimate_tax_calculations' do %>
 <%
-	concat est_comp_value_str
-%>
-				</span>
-				<span class='component_note' id="estimate_components_note_<%= ass.id.to_s %>_<%= ass_comp.component.id.to_s %>">
-<%
-	concat est_comp_note
+	    # note concat on the nested content tags does not work - must use the expression tag
+        concat content_tag(:span, label_tag("estimate_components_tax_pct[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", 'tax %' ))
+        concat content_tag(:span, est_comp.tax_percent.bd_to_s(3), :id => "estimate_components_tax_pct_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
+        concat content_tag(:span, ' => $ '+ "#{est_comp.tax_amount.bd_to_s(2)}", :id => "estimate_components_tax_amt_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
+    end
+    concat content_tag(:span, est_comp_note, :id => "estimate_components_note_#{ass.id.to_s}_#{ass_comp.component.id.to_s}", :class => 'component_note')
 end
 if !est_comp_errors.blank?
 %>
 					<span class="field_error"><%= est_comp_errors %></span>
-				</span class="field_with_errors">
+				</span>
 <%
 end
-concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
-concat hidden_field_tag("estimate_components_note_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_note)
 %>
-				</span>
-			</span>
+			</div>
 		</div>

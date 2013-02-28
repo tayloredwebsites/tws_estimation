@@ -35,9 +35,28 @@ if editable && view_mode == 'edit'
 	concat label_tag "estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' ', :class => 'label'
 	concat content_tag(:span, text_field_tag("estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str), :class => ass_comp_req)
 	concat ')'
-	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
+    # content_tag :span, :class => 'estimate_tax_calculations' do
+    #       # dont do tax on grid, as taxes are already taken out at the individual components already.
+    #       # note concat on the nested content tags does not work - must use the expression tag to contain them
+    #     concat content_tag(:span, label_tag("estimate_components_tax_pct[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", 'tax %' ))
+    #     concat content_tag(:span, text_field_tag("estimate_components_tax_pct[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.tax_percent_for(@estimate, ass_comp.component).bd_to_s(3)))
+    #     concat content_tag(:span, ' => $ '+ "#{est_comp.tax_amount.bd_to_s(2)}", :id => "estimate_components_tax_amt_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
+    # end
+    # note no note in grid layout - no room for it and grid
+%> <%= content_tag :span, :class => 'component_hidden_fields' do %>
+<%
+	    # note concat on the nested content tags does not work - must use the expression tag
+    	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
+        concat hidden_field_tag("estimate_components_tax_pct_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.tax_percent_for(@estimate, ass_comp.component).bd_to_s(3))
+	end
 else
 	concat content_tag(:span, ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' '+est_comp_value_str+')', :class => ass_comp_req)
+    # content_tag :span, :class => 'estimate_tax_calculations' do
+#       # dont do tax on grid, as taxes are already taken out at the individual components already.
+#         concat content_tag(:span, label_tag("estimate_components_tax_pct[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", 'tax %' ))
+#         concat content_tag(:span, est_comp.tax_percent.bd_to_s(3), :id => "estimate_components_tax_pct_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
+#         concat content_tag(:span, ' => $ '+ "#{est_comp.tax_amount.bd_to_s(2)}", :id => "estimate_components_tax_amt_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
+#     end
 end
 if !est_comp_errors.blank?
 	concat content_tag(:span, est_comp_errors, :class => 'field_error')
@@ -46,6 +65,7 @@ end
 					</td>
 <%
 row_total = BIG_DECIMAL_ZERO
+tax = est_comp.tax_amount.nil? ? BIG_DECIMAL_ZERO : est_comp.tax_amount
 @component_types_list.each do |ct|
     hours_label = is_in_dollars[ct.id] ? '' : I18n.translate('view_field_labels.in_hours')
 	if ct.in_totals_grid
@@ -63,5 +83,6 @@ row_total = BIG_DECIMAL_ZERO
 	end
 end
 %>
+					<td class="grid_row_calc grid_row_sub_total" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_tax"><%= tax.bd_to_s(2) %></td>
 					<td class="grid_row_calc grid_row_sub_total" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_total"><%= row_total.bd_to_s(2) %></td>
 				</tr>

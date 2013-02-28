@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.10'
+gem 'rails', '3.2.11'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -19,7 +19,7 @@ gem 'cancan'
 
 gem 'foreigner' # foreign key handling
 
-gem 'rdiscount'	# markdown files display in view
+# gem 'rdiscount'	# markdown files display in view # removed for win/xp? issues
 
 gem 'jquery-rails'
 
@@ -66,13 +66,14 @@ group :test do
   gem 'capybara', '~> 2.0' 
   # gem 'capybara-screenshot'
   gem 'launchy'
+  gem 'shoulda-matchers'
     
   # autotest config
-  gem 'autotest'
-  gem 'ZenTest'
-  gem 'autotest-rails'
-  gem 'autotest-growl'
-  gem 'autotest-fsevent'
+  # gem 'autotest'
+  # gem 'ZenTest'
+  # gem 'autotest-rails'
+  # gem 'autotest-growl'
+  # gem 'autotest-fsevent'
 
   # # guard config
   # gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
