@@ -1,16 +1,5 @@
 require 'spec_helper'
 
-describe "Allowing different Labor Rates" do
- it "should have a new default labor rate (labor_rate_default_id) field in the components table."
- it "should continue to store labor rates in the defaults table, as Anthony has currently started doing."
- it "should ensure that a component entry has a default labor rate (labor_rate_default_id) chosen if the component type is in hours."
- it "should allow any default value to be used for the default labor rate? (otherwise additional coding and possibly a flag in the defaults table, and/or a default 'store' match field in the component type table will be needed.)"
- it "should show the labor rate and computed dollars in all hourly component rows in the estimate."
- it "should accumulate computed dollars for all hourly component now instead of accumulating hours in the estimate totals."
- it "should not need to accumulate hours in the estimate totals?"
- it "should not allow the user to override the default hourly rate in the estimate ever?  If we want users to be able to edit the hourly rate in the estimate, another flag would be needed in the component record (the component editable flag controls the component amount entry in the estimate input)."
-end
-
 
 describe 'Miscellaneous items to do - ' do
   context 'important changes' do

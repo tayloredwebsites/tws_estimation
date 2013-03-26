@@ -14,9 +14,10 @@ describe AssemblyComponentsController do
       @my_session.current_user.has_role?('all_admins').should be_true
       @parent = FactoryGirl.create(:assembly_create)
       @component_type = FactoryGirl.create(:component_type)
-      @child = FactoryGirl.create(:component_min_create, :component_type => @component_type)
-      @child2 = FactoryGirl.create(:component_min_create, :component_type => @component_type)
-      @child3 = FactoryGirl.create(:component_min_create, :component_type => @component_type)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      @child = FactoryGirl.create(:component_min_create, :component_type => @component_type, labor_rate_default: default_hourly)
+      @child2 = FactoryGirl.create(:component_min_create, :component_type => @component_type, labor_rate_default: default_hourly)
+      @child3 = FactoryGirl.create(:component_min_create, :component_type => @component_type, labor_rate_default: default_hourly)
     end
     it 'should be able to GET the index page and see all items' do
       # user = FactoryGirl.create(:user_min_create_attr)
@@ -103,8 +104,9 @@ describe AssemblyComponentsController do
       @my_session.current_user.has_role?('all_admins').should be_true
       @parent = FactoryGirl.create(:assembly_create)
       @component_type = FactoryGirl.create(:component_type)
-      @child = FactoryGirl.create(:component_min_create, :component_type => @component_type)
-      @child2 = FactoryGirl.create(:component_min_create, :component_type => @component_type)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      @child = FactoryGirl.create(:component_min_create, :component_type => @component_type, labor_rate_default: default_hourly)
+      @child2 = FactoryGirl.create(:component_min_create, :component_type => @component_type, labor_rate_default: default_hourly)
     end
     
     it 'should be able to PUT deactivate an active item' do

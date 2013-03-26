@@ -202,9 +202,11 @@ module UserIntegrationHelper
     default1 = Default.create!(FactoryGirl.attributes_for(:default))
     default2 = Default.create!(FactoryGirl.attributes_for(:default))
     default_fixed = Default.create!(FactoryGirl.attributes_for(:default, :value => 2.78))
-    @defaults = [default1, default2, default_fixed]
+    default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+    @defaults = [default1, default2, default_fixed, default_hourly]
     @default = default2
     @default_fixed = default_fixed
+    @default_hourly = default_hourly
     Rails.logger.debug("T UserTestHelper.helper_load_defaults - done")
   end
   def helper_load_component_types
@@ -216,6 +218,8 @@ module UserIntegrationHelper
     component_type_totals = ComponentType.create!(FactoryGirl.attributes_for(:component_type_totals).merge(:description => 'Test Totals Grid'))
     @component_types = [component_type0, component_type_hours, component_type_deact, component_type_not_in_grid, component_type_x, component_type_totals]
     @component_type = component_type0
+    @component_type_hours = component_type_hours
+    Rails.logger.debug("*TestHourlyRates* @component_type_hours.id = #{@component_type_hours.id.inspect.to_s}")
     @component_type_totals = component_type_totals
     Rails.logger.debug("T UserTestHelper.helper_load_component_types - done")
   end
@@ -223,10 +227,10 @@ module UserIntegrationHelper
     helper_load_defaults if !defined?(@defaults)
     helper_load_component_types if !defined?(@component_types)
     component0 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
-    component1 = FactoryGirl.create(:component_create, component_type: @component_types[1], default: @defaults[1])
-    component2 = FactoryGirl.create(:component_create, component_type: @component_types[1])
+    component1 = FactoryGirl.create(:component_hourly_create, component_type: @component_type_hours, default: @defaults[1], labor_rate_default: @default_hourly)
+    component2 = FactoryGirl.create(:component_hourly_create, component_type: @component_type_hours, labor_rate_default: @default_hourly)
     component3 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
-    component4 = FactoryGirl.create(:component_create, component_type: @component_types[1], default: @defaults[1])
+    component4 = FactoryGirl.create(:component_hourly_create, component_type: @component_type_hours, default: @defaults[1], labor_rate_default: @default_hourly)
     component5 = FactoryGirl.create(:component_create, component_type: @component_types[2]) # note that @component_types[2] is deactivated in helper_load_component_types
     component6 = FactoryGirl.create(:component_create, component_type: @component_types[3], default: @defaults[0])
     component7 = FactoryGirl.create(:component_create, component_type: @component_types[3], default: @defaults[1])
@@ -235,17 +239,17 @@ module UserIntegrationHelper
     component9 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
     component10 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_1", default: @defaults[0], grid_operand: '*', grid_scope: 'A')
     component11 = FactoryGirl.create(:component_totals_create, component_type: @component_type_totals, grid_subtotal: "stot_1", default: @default_fixed, grid_operand: '*', grid_scope: 'I')
-    component12 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'H')
+    component12 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'A')
     component13 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'S')
     component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2")
     component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'C')
-    component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '*', grid_scope: 'A')
+    component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '*', grid_scope: 'I')
     component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '%', grid_scope: 'A')
     component_deact = FactoryGirl.create(:component_create, component_type: @component_types[0], deactivated: true)
-    component14_extra_hourly = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'H')
+    # component14_extra_hourly = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'H')
     @components = [component0, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10, component11, component12, component13, component14, component15, component16, component17, component_deact]
     @component = component1
-    @component14_extra_hourly = component14_extra_hourly
+    # @component14_extra_hourly = component14_extra_hourly
     @component_deact = component_deact
     Rails.logger.debug("T UserTestHelper.helper_load_components - done")
   end
@@ -262,7 +266,7 @@ module UserIntegrationHelper
     @assembly_deact = assembly_deact
     Rails.logger.debug("T UserTestHelper.helper_load_assemblies - done")
   end
-  def helper_load_assembly_components(load_extra_hourly_conversion = false)
+  def helper_load_assembly_components()
     helper_load_assemblies if !defined?(@assemblies)
     helper_load_components if !defined?(@components)
     assembly_component0 = FactoryGirl.create(:assembly_component_create, assembly: @assemblies[0], component: @components[0])
@@ -279,11 +283,11 @@ module UserIntegrationHelper
     assembly_component11 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[11]) # not editable
     assembly_component12 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[12])
     assembly_component13 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[13])
-    if load_extra_hourly_conversion
-      assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @component14_extra_hourly)
-    else
+    # if load_extra_hourly_conversion
+    #   assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @component14_extra_hourly)
+    # else
       assembly_component14 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[14])
-    end
+    # end
     assembly_component15 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[15])
     assembly_component16 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[16], deactivated: true)
     assembly_component17 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[17], required: true)
@@ -298,13 +302,14 @@ module UserIntegrationHelper
 
   def helper_load_tax_test
     @tax_default = Default.create!(FactoryGirl.attributes_for(:default, :value => 2.78))
-    @tax_defaults = [@tax_default]
+    @tax_default2 = Default.create!(FactoryGirl.attributes_for(:default, :value => 3.25))
+    @tax_defaults = [@tax_default, @tax_default2]
 
     @tax_component_type = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge(:description => 'Test Comp Type'))
     @tax_component_type_totals = ComponentType.create!(FactoryGirl.attributes_for(:component_type_totals).merge(:description => 'Test Totals Grid'))
     @tax_component_types = [@tax_component_type, @tax_component_type_totals]
 
-    @tax_component = FactoryGirl.create(:component_min_create, component_type: @tax_component_type)
+    @tax_component = FactoryGirl.create(:component_create, component_type: @tax_component_type, default: @tax_default)
     @tax_def_component = FactoryGirl.create(:component_create, component_type: @tax_component_type, default: @tax_default)
     @tax_grid_editable_component = FactoryGirl.create(:component_totals_editable_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", grid_operand: '*', grid_scope: 'S')
     @tax_grid_non_editable_component = FactoryGirl.create(:component_totals_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", default: @tax_default, grid_operand: '*', grid_scope: 'S')
@@ -314,10 +319,50 @@ module UserIntegrationHelper
     @tax_assemblies = [@tax_assembly]
 
     @tax_assembly_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_component)
-   @tax_assembly_def_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_def_component)
+    @tax_assembly_def_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_def_component)
     @tax_assembly_grid_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_editable_component)
     @tax_assembly_grid_non_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_non_editable_component)
     @tax_assembly_components = [@tax_assembly_component, @tax_assembly_def_component, @tax_assembly_grid_editable_component, @tax_assembly_grid_non_editable_component]
+
+    @tax_state = State.create!(FactoryGirl.attributes_for(:state))
+
+    @tax_job_type = JobType.create!(FactoryGirl.attributes_for(:job_type))
+
+    # @tax_type = StateComponentTypeTax.create!(UserIntegrationHelper.build_attributes(:state_component_type_tax, state: @tax_state, job_type: @tax_job_type, component_type: @tax_component_type))
+
+    Rails.logger.debug("T UserTestHelper.helper_load_test_tax - done")
+  end
+  def helper_load_hourly_tax_test
+    # helper_load_tax_test if !defined?(@tax_assemblies)
+    @tax_default = Default.create!(FactoryGirl.attributes_for(:default, :value => 2.78))
+    @tax_default2 = Default.create!(FactoryGirl.attributes_for(:default, :value => 3.25))
+    @tax_default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :name => 'Hourly Rate', :value => 22.75))
+    @tax_default_tax_rate = Default.create!(FactoryGirl.attributes_for(:default, :name => 'Tax Rate', :value => 6.25))
+    @tax_defaults = [@tax_default, @tax_default2, @tax_default_hourly, @tax_default_tax_rate, @tax_default_hourly]
+
+    @tax_component_type = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge(:description => 'Test Comp Type'))
+    @tax_hourly_component_type = ComponentType.create!(FactoryGirl.attributes_for(:component_type_hours).merge(:description => 'Test Hourly Comp Type'))
+    @tax_component_type_totals = ComponentType.create!(FactoryGirl.attributes_for(:component_type_totals).merge(:description => 'Test Totals Grid'))
+    @tax_component_types = [@tax_component_type, @tax_hourly_component_type, @tax_component_type_totals]
+
+    @tax_component = FactoryGirl.create(:component_create, component_type: @tax_component_type, default: @tax_default)
+    @tax_hourly_def_component = FactoryGirl.create(:component_hourly_create, component_type: @tax_hourly_component_type, default: @tax_default2, labor_rate_default: @tax_default_hourly)
+    @tax_hourly_component = FactoryGirl.create(:component_hourly_create, component_type: @tax_hourly_component_type, default: @tax_default2, labor_rate_default: @tax_default_hourly)
+    @tax_def_component = FactoryGirl.create(:component_create, component_type: @tax_component_type, default: @tax_default2)
+    @tax_grid_editable_component = FactoryGirl.create(:component_totals_editable_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", grid_operand: '*', grid_scope: 'S')
+    @tax_grid_non_editable_component = FactoryGirl.create(:component_totals_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", default: @tax_default, grid_operand: '*', grid_scope: 'S')
+    @tax_components = [@tax_component, @tax_hourly_def_component, @tax_hourly_component, @tax_def_component,  @tax_grid_editable_component, @tax_grid_not_editable_component]
+
+    @tax_assembly = FactoryGirl.create(:assembly_required_create)
+    @tax_assemblies = [@tax_assembly]
+
+    @tax_assembly_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_component)
+    @tax_assembly_hourly_def_component = FactoryGirl.create(:assembly_component_hourly_create, description: 'Hourly Assembly Component 1', assembly: @tax_assembly, component: @tax_hourly_def_component)
+    @tax_assembly_hourly_component = FactoryGirl.create(:assembly_component_hourly_create, description: 'Hourly Assembly Component 2', assembly: @tax_assembly, component: @tax_hourly_component)
+    @tax_assembly_def_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_def_component)
+    @tax_assembly_grid_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_editable_component)
+    @tax_assembly_grid_non_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_non_editable_component)
+    @tax_assembly_components = [@tax_assembly_component, @tax_hourly_def_component, @tax_hourly_component, @tax_assembly_def_component, @tax_assembly_grid_editable_component, @tax_assembly_grid_non_editable_component]
 
     @tax_state = State.create!(FactoryGirl.attributes_for(:state))
 

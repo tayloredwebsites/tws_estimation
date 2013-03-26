@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130130210108) do
+ActiveRecord::Schema.define(:version => 20130304012136) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -50,19 +50,21 @@ ActiveRecord::Schema.define(:version => 20130130210108) do
   add_index "component_types", ["description"], :name => "index_component_types_on_description", :unique => true
 
   create_table "components", :force => true do |t|
-    t.integer  "component_type_id",                    :null => false
-    t.string   "description",       :default => "",    :null => false
+    t.integer  "component_type_id",                        :null => false
+    t.string   "description",           :default => "",    :null => false
     t.integer  "default_id"
-    t.boolean  "editable",          :default => false, :null => false
-    t.boolean  "deactivated",       :default => false, :null => false
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.boolean  "editable",              :default => false, :null => false
+    t.boolean  "deactivated",           :default => false, :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
     t.string   "grid_operand"
     t.string   "grid_scope"
     t.string   "grid_subtotal"
+    t.integer  "labor_rate_default_id"
   end
 
   add_index "components", ["component_type_id", "description"], :name => "index_components_on_component_type_id_and_description", :unique => true
+  add_index "components", ["labor_rate_default_id"], :name => "index_components_on_labor_rate_default_id"
 
   create_table "defaults", :force => true do |t|
     t.string   "store",                                      :default => "",    :null => false
@@ -85,17 +87,19 @@ ActiveRecord::Schema.define(:version => 20130130210108) do
   add_index "estimate_assemblies", ["estimate_id"], :name => "index_estimate_assemblies_on_estimate_id"
 
   create_table "estimate_components", :force => true do |t|
-    t.integer  "estimate_id",                                                     :null => false
-    t.integer  "assembly_id",                                                     :null => false
-    t.integer  "component_id",                                                    :null => false
-    t.string   "write_in_name",                                :default => "",    :null => false
-    t.decimal  "value",         :precision => 19, :scale => 4, :default => 0.0,   :null => false
-    t.boolean  "deactivated",                                  :default => false, :null => false
-    t.datetime "created_at",                                                      :null => false
-    t.datetime "updated_at",                                                      :null => false
-    t.string   "note",                                         :default => "",    :null => false
-    t.decimal  "tax_percent",   :precision => 19, :scale => 4
-    t.decimal  "tax_amount",    :precision => 19, :scale => 2
+    t.integer  "estimate_id",                                                        :null => false
+    t.integer  "assembly_id",                                                        :null => false
+    t.integer  "component_id",                                                       :null => false
+    t.string   "write_in_name",                                   :default => "",    :null => false
+    t.decimal  "value",            :precision => 19, :scale => 4, :default => 0.0,   :null => false
+    t.boolean  "deactivated",                                     :default => false, :null => false
+    t.datetime "created_at",                                                         :null => false
+    t.datetime "updated_at",                                                         :null => false
+    t.string   "note",                                            :default => "",    :null => false
+    t.decimal  "tax_percent",      :precision => 19, :scale => 4
+    t.decimal  "tax_amount",       :precision => 19, :scale => 2
+    t.decimal  "labor_rate_value", :precision => 19, :scale => 2
+    t.decimal  "labor_value",      :precision => 19, :scale => 2
   end
 
   add_index "estimate_components", ["assembly_id"], :name => "index_estimate_components_on_assembly_id"
@@ -178,6 +182,7 @@ ActiveRecord::Schema.define(:version => 20130130210108) do
 
   add_foreign_key "components", "component_types", :name => "components_component_type_id_fk"
   add_foreign_key "components", "defaults", :name => "components_default_id_fk"
+  add_foreign_key "components", "defaults", :name => "components_labor_rate_default_id_fk", :column => "labor_rate_default_id"
 
   add_foreign_key "estimate_assemblies", "assemblies", :name => "estimate_assemblies_assembly_id_fk"
   add_foreign_key "estimate_assemblies", "estimates", :name => "estimate_assemblies_estimate_id_fk"

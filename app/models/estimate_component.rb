@@ -70,7 +70,8 @@ class EstimateComponent < ActiveRecord::Base
 
   def desc
     # ''+super.nil_to_s+self.write_in_name.nil_to_s
-    ''+super.nil_to_s+description
+    # ''+super.nil_to_s+description
+    ''+(self.write_in_name.nil_to_s == '' ? (self.component.nil? ? '' : self.component.description) : self.write_in_name)
   end
 
   def value_or_default
@@ -87,13 +88,13 @@ class EstimateComponent < ActiveRecord::Base
 
   def tax_percent_for(saved_estimate=nil, this_component=nil)
     # load default tax percent value if tax rate is not set yet, by looking in the StateComponentTypeTax table
-    if !self[:tax_percent].nil?
-      return self[:tax_percent]
+    if !tax_percent.nil?
+      return tax_percent
     elsif !saved_estimate.nil? && !saved_estimate.state.nil? && !saved_estimate.job_type.nil?  && !this_component.nil? && !this_component.component_type.nil?
       tax_rate_model = StateComponentTypeTax.default_tax_rate_for(saved_estimate.job_type_id, this_component.component_type_id, saved_estimate.state_id)
       if tax_rate_model.nil?
         # Rails.logger.debug("*TaxRate* tax_percent_for - return value of #{self[:tax_percent].bd_to_s(3)}")
-        return self[:tax_percent]
+        return tax_percent
       else
         # update the tax rate in model
         tax_percent = tax_rate_model.tax_percent
@@ -102,10 +103,71 @@ class EstimateComponent < ActiveRecord::Base
       end
     else
       # Rails.logger.debug("*TaxRate* tax_percent_for - nil estimate or component in")
-      return self[:tax_percent]
+      return tax_percent
     end
   end
-  
+
+
+  def is_hourly? (this_component=nil)
+    my_component = self.component.nil? ? this_component : self.component
+    if my_component.nil?
+      Rails.logger.debug("*TestHourly* EstimateComponent.is_hourly? - component is nil")
+      return false
+    elsif my_component.component_type.nil?
+      Rails.logger.debug("*TestHourly* EstimateComponent.is_hourly? - component.component_type is nil")
+      return false
+    else
+      return my_component.component_type.has_hours
+    end
+  end
+
+  def has_value?
+    (self.value == nil || self.value.bd_to_s(1) == '0.0') ? false : true
+  end
+
+  def labor_rate_for(this_component=nil)
+    # update the labor fields before returning value
+    calculate_labor_fields(this_component)
+    if !labor_rate_value.nil?
+      return labor_rate_value
+    else
+      return BIG_DECIMAL_ZERO
+    end
+  end
+
+  def calculate_labor_fields(this_component=nil)
+    Rails.logger.debug("*TestHourly* EstimateComponent.update_labor_fields - self = #{self.inspect.to_s}")
+    Rails.logger.debug("*TestHourly* EstimateComponent.update_labor_fields - this_component = #{this_component.inspect.to_s}")
+    # if !this_component.nil? && !this_component.component_type.nil? && this_component.component_type.has_hours
+    if is_hourly?(this_component)
+      Rails.logger.debug("*TestHourly* EstimateComponent.update_labor_fields - update rates for Hourly")
+      # update the estimate component's labor fields, since this is an hourly component
+      # will update the model labor_rate_value if not set yet, and component rate is found (should be)
+      my_component = self.component.nil? ? this_component : self.component
+      if labor_rate_value.nil? && !my_component.nil?
+        self.labor_rate_value = my_component.labor_rate_default.nil? ? BIG_DECIMAL_ZERO : my_component.labor_rate_default.value
+        Rails.logger.debug("*TestHourly* EstimateComponent.update_labor_fields - labor_rate_value = #{labor_rate_value.bd_to_s(2)}")
+      end
+      # will update the model labor_value if there us a labor rate value and a component value
+      if !labor_rate_value.nil? && !value.nil?
+        self.labor_value = labor_rate_value * value
+        Rails.logger.debug("*TestHourly* EstimateComponent.update_labor_fields - labor_value = #{labor_value.bd_to_s(2)}")
+      end
+    else
+      Rails.logger.debug("*TestHourly* EstimateComponent.update_labor_fields - NO Labor UPDATE - this_component.component_type = #{this_component.component_type.inspect.to_s}")
+    end
+    Rails.logger.debug("*TestHourly* EstimateComponent.update_labor_fields - UPDATED self = #{self.inspect.to_s}")
+  end
+
+  def calculate_fields(this_component=nil)
+    Rails.logger.debug("*TestHourly* EstimateComponent.calculate_fields - START self = #{self.inspect.to_s}")
+    calculate_labor_fields(this_component)
+    Rails.logger.debug("*TestHourly* EstimateComponent.calculate_fields - UPDATED self = #{self.inspect.to_s}")
+    self.tax_percent = BIG_DECIMAL_ZERO if tax_percent.nil?
+    self.tax_amount = tax_percent * BIG_DECIMAL_PERCENT * (is_hourly?(this_component) ? labor_value : value)
+    Rails.logger.debug("*TestHourly* EstimateComponent.calculate_fields - FINAL UPDATE s self = #{self.inspect.to_s}")
+  end
+
   # # is deactivated if component or component type is deactivated
   # def deactivated?
   #   

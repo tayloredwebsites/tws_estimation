@@ -15,22 +15,23 @@ warn_hours = defined?(warn_unconverted_hours) ?  warn_unconverted_hours : false
     #    or (!in_totals_grid (generate general subtotals) && !ct.has_totals (not a grid component type) )
 	if ct.in_totals_grid || (!in_totals_grid && !ct.has_totals)
 	    ct_value = BIG_DECIMAL_ZERO
-	    if is_in_dollars[ct.id] == true
+	    if is_in_dollars[ct.id] == true  || !show_hours
     	    ct_value = total_values[ct.id].nil? ? BIG_DECIMAL_ZERO : total_values[ct.id]
     	    row_total += ct_value
+    	    concat content_tag(:td, '$'+ct_value.bd_to_s(2) + err_str, :id => "#{total_id}_#{ct.id.to_s}", :class => "grid_row_calc grid_row_sub_total#{err_style}")
     	else
-    	    ct_value = total_hours[ct.id].nil? ? BIG_DECIMAL_ZERO : total_hours[ct.id]
+    	    ct_hours = total_hours[ct.id].nil? ? BIG_DECIMAL_ZERO : total_hours[ct.id]
+    	    ct_value = total_values[ct.id].nil? ? BIG_DECIMAL_ZERO : total_values[ct.id]
+    	    row_total += ct_value
+    	    concat content_tag(:td, ct_hours.bd_to_s(3) + ' hr. => $' + ct_value.bd_to_s(2) + err_str, :id => "#{total_id}_#{ct.id.to_s}", :class => "grid_row_calc grid_row_sub_total#{err_style}")
     	end
-    	if !is_in_dollars[ct.id] && warn_hours && ct.has_hours && ct_value != BIG_DECIMAL_ZERO
-    	    err_str = I18n.translate('warning.hrs_unconverted', :hrs => ct_value.bd_to_s(2))
-    	    err_style = " warning"
-    	end
-%>
-					<td class="grid_row_calc grid_row_sub_total<%= err_style %>" id="<%= total_id %>_<%= ct.id.to_s %>"><%= ct_value.bd_to_s(2) %><%= hours_label %><%= err_str %></td>
-<%
+        # if !is_in_dollars[ct.id] && warn_hours && ct.has_hours && ct_value != BIG_DECIMAL_ZERO
+        #     err_str = I18n.translate('warning.hrs_unconverted', :hrs => ct_value.bd_to_s(2))
+        #     err_style = " warning"
+        # end
 	end
 end
 %>
-					<td class="grid_row_calc grid_row_sub_total" id="<%= total_id %>_tax_total"><%= tax.bd_to_s(2) %></td>
-					<td class="grid_row_calc grid_row_sub_total" id="<%= total_id %>_total"><%= row_total.bd_to_s(2) %></td>
+					<td class="grid_row_calc grid_row_sub_total" id="<%= total_id %>_tax_total">$<%= tax.bd_to_s(2) %></td>
+					<td class="grid_row_calc grid_row_sub_total" id="<%= total_id %>_total">$<%= row_total.bd_to_s(2) %></td>
 				</tr>

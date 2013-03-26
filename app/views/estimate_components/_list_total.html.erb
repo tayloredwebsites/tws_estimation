@@ -1,4 +1,17 @@
 			<div class="field component_type_total">
 				<%= label_tag total_id, total_label, :class => 'label' %>
-				<span class="value" id="<%= total_id %>"><%= total_value.bd_to_s(2) %></span>
+				<span class='value'>
+<%
+     if !is_this_in_dollars
+        concat content_tag(:span, total_hr_value.bd_to_s(3), :class => '', :id => total_id+'_hr')
+        concat ' hr. => '
+    end
+    concat '$'
+    concat content_tag(:span, total_dollar_value.bd_to_s(2), :class => '', :id => total_id+'_dollar')
+    concat ' + $'
+    concat content_tag(:span, total_tax_value.bd_to_s(2), :class => '', :id => total_id+'_tax')
+    concat ' tax. = $'
+    concat content_tag(:span, total_value.bd_to_s(2), :class => '', :id => total_id+'_total')
+%>
+                </span>
 			</div>

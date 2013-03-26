@@ -1,6 +1,7 @@
 # spec/integration/components_integration_spec.rb
 
 require 'spec_helper'
+include SpecHelper
 include UserIntegrationHelper
 include ApplicationHelper
 
@@ -16,7 +17,7 @@ describe 'Components Integration Tests' do
     Rails.logger.debug("T components_integration_spec Admin item logged in before - done")
   end
   context 'it should have crud actions available and working' do
-    it "should create a new item with parent association specified" do
+    it "should create a new item with Component Type association specified" do
       num_items = Component.count
       num_items.should == 0
       visit new_component_path()
@@ -38,7 +39,7 @@ describe 'Components Integration Tests' do
       find(:xpath, '//*[@id="component_description"]').text.should =~ /^#{attribs[:description]}/  # be new value
       num_items.should == Component.count - 1
     end
-    it "should not create a new item without parent association specified" do
+    it "should not create a new item without Component Type association specified" do
       num_items = Component.count
       num_items.should == 0
       visit new_component_path()
@@ -50,6 +51,52 @@ describe 'Components Integration Tests' do
       within(".new_component") do
         # page.select @component_type.description, :from => 'component_component_type_id'
         page.fill_in 'component_description', :with => attribs[:description]
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
+      page.should have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      # find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should_not =~ /\A\s*\Z$/  # be whitespace
+      find(:xpath, '//input[@id="component_description"]').value.should =~ /#{attribs[:description]}/  # be new value
+      num_items.should == Component.count
+    end
+    it "should not give an error when creating a new hourly with Labor Rate specified" do
+      num_items = Component.count
+      num_items.should == 0
+      visit new_component_path()
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      # save_and_open_page
+      attribs = FactoryGirl.attributes_for(:component_hourly_create, component_type: @hourly_component_type, default: @default, labor_rate_default: @default_fixed)
+      Rails.logger.debug("T components_integration_spec - attribs = #{attribs.inspect.to_s}")
+      within(".new_component") do
+        page.select @component_type.description, :from => 'component_component_type_id'
+        page.fill_in 'component_description', :with => attribs[:description]
+        page.select @default_fixed.desc, :from => 'component_labor_rate_default_id'
+        find(:xpath, '//input[@type="submit"]').click
+      end
+      # save_and_open_page
+      page.driver.status_code.should be 200
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.show.header')}$/
+      page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
+      # find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ /\A\s*\Z/  # be whitespace
+      find(:xpath, '//*[@id="component_description"]').text.should =~ /^#{attribs[:description]}/  # be new value
+      num_items.should == Component.count - 1
+    end
+    it "should give an error when creating a new hourly without Labor Rate specified" do
+      num_items = Component.count
+      num_items.should == 0
+      visit new_component_path()
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      # save_and_open_page
+      attribs = UserIntegrationHelper.build_attributes(:component_hourly_create, component_type: @component_type_hours, default: @default, labor_rate_default: nil)
+      Rails.logger.debug("*TestHourlyRates* components_integration_spec - attribs = #{attribs.inspect.to_s}")
+      within(".new_component") do
+        page.select @component_type.description, :from => 'component_component_type_id'
+        page.fill_in 'component_description', :with => attribs[:description]
+        # page.select @default_fixed.desc, :from => 'component_labor_rate_default_id'
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -293,6 +340,8 @@ describe 'Components Integration Tests' do
     context 'should have new/create links working' do
       before(:each) do
         visit new_component_path()
+      end
+      it 'should have new/create links' do
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.new.header')}$/
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text => I18n.translate('components.index.action') )
@@ -305,6 +354,8 @@ describe 'Components Integration Tests' do
     context 'should have edit/update links working' do
       before(:each) do
         visit edit_component_path(@item1.id)
+      end
+      it 'should have edit/update links' do
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.edit.header')}$/
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('components.show.action') )
@@ -332,6 +383,8 @@ describe 'Components Integration Tests' do
     context 'should have show links working' do
       before(:each) do
         visit component_path(@item1.id)
+      end
+      it 'should have show links' do
         # save_and_open_page
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('components.show.header')}$/
         page.should have_selector(:xpath, "//div[@id='content_body']/div[@id='content_body_content']/a", :text =>  I18n.translate('components.edit.action') )
