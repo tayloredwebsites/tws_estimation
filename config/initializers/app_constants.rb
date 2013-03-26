@@ -103,6 +103,6 @@ VALID_SESSION_INFO = %w{ sign_in_time time_last_accessed current_user_id session
 DONT_REDIRECT_BACK_URI = %w{ /signout }
 
 VALID_GRID_OPERANDS = {'+' => "Add", '-' => "Subtract", '*' => "Multiply", '/' => "Divide", '%' => "Percent"}
-VALID_GRID_SCOPES = {'A' => "Assembly break", 'I' => "Component Type break", 'S' => "Subtotal break", 'C' => "Cumulative", 'H' => "Hours (cumulative)"}
+VALID_GRID_SCOPES = {'A' => "Assembly break", 'I' => "Component Type break", 'S' => "Subtotal break", 'C' => "Cumulative"} #, 'H' => "Hours (cumulative)"}
 
 

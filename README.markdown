@@ -3,6 +3,14 @@
 This is an application by [Taylored Web Sites](http://www.tayloredwebsites.com).
 This software is distributed under the [MIT license](MIT-LICENSE)
 
+## General Project Note ##
+
+* This is a very complex database driven application.  Focus has been on creating a stable and error free environment.  This project is a reasonably good representation of the quality of my database skills.
+* Client has not asked/paid for a better user interface (they got this for a song).  This site uses minimal javascript or ajax, and will has graceful degredation without javascript.  Entering data will not have properly reflected calculations and totals till the update is done.  There was no Usability study or Designer input.  Please do not think this reflects the quality of my Web User Interface skills.
+* There are a number of areas that I would improve (if the client pays, or I end up forking this into another project).  Mostly I would enhance the audit trail features.  I am not happy with the existing auditing gems (which is why I am currently using my deactivated module and custom scaffolding), and hope to create one of my own.
+* There is minimal documentation on this project, and have created custom user docs for the client. I have not shared the current user docs until I spend the time to develop and document the dummy data on Heroku.  I will not be sharing the specialized Assemblies, components or component types that I am protecting for my client.
+* If you are interested in this project, or wish to ask me any questions, I will be glad to help.
+
 ## Estimation System: ##
 
 __It is assumed that what is being estimated can be broken down into a number of Assemblies, each of which is made up of components:__

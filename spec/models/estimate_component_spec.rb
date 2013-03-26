@@ -1,4 +1,5 @@
 require 'spec_helper'
+include SpecHelper
 
 describe EstimateComponent do
   context 'it should have crud actions available and working' do
@@ -18,6 +19,12 @@ describe EstimateComponent do
       # Rails.logger.debug("T attribs[:default]: #{ attribs[:default].inspect.to_s}")
       attribs_whitelist = attribs[:default]
       Rails.logger.debug("T attribs_whitelist: #{attribs_whitelist.inspect.to_s}")
+      # attribs = generate_component_min_attributes()
+      # Rails.logger.debug("TTTTT Component attribs = #{attribs.inspect.to_s}")
+      default_fixed = Default.create!(FactoryGirl.attributes_for(:default, :value => 2.78))
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      component_type_hours = ComponentType.create!(FactoryGirl.attributes_for(:component_type_hours).merge(:description => 'Test Hours'))
+      attribs = UserIntegrationHelper.build_attributes(:component_hourly_create, component_type: component_type_hours, default: default_fixed, labor_rate_default: default_hourly)
       acc_attribs = generate_estimate_component_accessible_attributes()
       Rails.logger.debug("T generate_estimate_component_accessible_attributes: #{acc_attribs.inspect.to_s}")
       attribs_whitelist.size.should >= acc_attribs.size # accounting for blank entry in whitelist

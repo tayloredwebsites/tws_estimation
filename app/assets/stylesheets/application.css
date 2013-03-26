@@ -123,11 +123,13 @@
   .grid_row_label input {margin-left:5px;}
   .component_value input {width:70px;}
   .component_note:before {margin-left:20px;content:'Note: '}
-  .component_note input {width:400px;}
-  .required:after {content:'\0000a0 *'}
+  .component_note input {width:200px;}
+  .required:after {content:'\0000a0 !!\0000a0 '}
   .not_required:after {content:'\0000a0\0000a0'} /* &nbsp; in unicode */
   .estimate_tax_calculations {padding:2px 4px; border:1px solid black;line-height:22px;}
   .estimate_tax_calculations input {width:40px;}
+  .hourly_rate_calculations {padding:2px 4px; border:1px solid black;line-height:22px;}
+  .hourly_rate_calculations input {width:40px;}
   .row_with_calculations {line-height:22px;}
 
 /* error styling */
@@ -203,8 +205,14 @@
 /* label and value percentage width layouts for form fields
 	right_label for items such as radio buttons and checkboxes where label is to the right
  */
-  .fields, .fields_20_80
+  .fields, .fields_10_90, .fields_20_80, .fields_25_75, .fields_50_50, .fields_30_70, .fields_40_60, .fields_80_20
     {overflow:auto;}
+  .field_title_grouping
+   {border:1px solid black;margin:5px 0;}
+  .field_title_grouping .field_title
+   {font-weight:bold; padding-left:20px;}
+  .field_title_grouping .field_title_note
+   {font-weight:normal; padding-left:40px;}
   .field {padding:2px 0;overflow:auto;}
   /* .field label, .field .label, .field .left_value */
   .field .label, .field .left_value, .field .label_spacer

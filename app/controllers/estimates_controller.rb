@@ -224,73 +224,72 @@ class EstimatesController < SecureApplicationController
               is_now_note = params[:estimate_components_note]
               was_before_tax = params[:estimate_components_tax_pct_was].nil? ? Hash.new() : params[:estimate_components_tax_pct_was]
               is_now_tax = params[:estimate_components_tax_pct].nil? ? Hash.new() : params[:estimate_components_tax_pct]
-              # Rails.logger.debug("* Estimate.update - estimate_components was_before:#{was_before.inspect.to_s}")
-              # Rails.logger.debug("* Estimate.update - estimate_components is_now:#{is_now.inspect.to_s}")
-              # Rails.logger.debug("* Estimate.update - estimate_components was_before_note:#{was_before_note.inspect.to_s}")
-              # Rails.logger.debug("* Estimate.update - estimate_components is_now_note:#{is_now_note.inspect.to_s}")
+
+              # loop through all parameters returned from form
               is_now.each do |is_id, is_value|
                 # handle null notes from grid components
                 is_note = (is_now_note.nil? ? '' : (is_now_note[is_id].nil? ? '' : is_now_note[is_id]))
                 was_note = (was_before_note.nil? ? '' : was_before_note[is_id])
-                # Rails.logger.debug("*VIVALADIFFERENCE Estimate.update - estimate_component - was_before[is_id]:#{was_before[is_id]} ==? is_value:#{is_value} ==? is_now[is_id] #{is_now[is_id]}")
-                # Rails.logger.debug("*VIVALADIFFERENCE Estimate.update - estimate_component_note - was_note:#{was_note} ==? is_note:#{is_note}")
-                # Rails.logger.debug("*UPDATE* Estimate.update - estimate_component - was_before_tax[#{is_id}]:#{was_before_tax[is_id]} ==? is_now_tax[#{is_id}]:#{is_now_tax[is_id]}")
-                is_changed = was_before[is_id] != is_value || (was_before[is_id] == '' && is_value != '0.00')
+
+                # pull out update parameters
+                est_comp_ids = is_id.split("_") #
+                if est_comp_ids.size != 2
+                  @estimate.errors.add("invalid size of ids - #{est_comp_ids}")
+                end
+
+                # get the corresponding assembly component (has required flag)
+                assy_comp = AssemblyComponent.where(:assembly_id => est_comp_ids[0], :component_id => est_comp_ids[1]).first
+
+                # update if record changed
+                is_changed = was_before[is_id] != is_value # || (was_before[is_id] == '' && is_value != '0.00' && is_value != '0.000' && is_value != '')
                 is_changed ||= was_note != is_note
                 is_changed ||= was_before_tax[is_id] != is_now_tax[is_id]
-                if is_changed
-                  # Rails.logger.debug("*UPDATE* Estimate.update - Is Changed!!!")
-                  # Rails.logger.debug("* Estimate.update - estimate_component - update estimate_component ( estimate_component_id:#{is_id} ) to #{is_value}")
-                  est_comp_ids = is_id.split("_") # 
-                  if est_comp_ids.size != 2
-                    # Rails.logger.error("E Estimate.update_estimate_component_attributes - invalid ids size")
-                    @estimate.errors.add("invalid size of ids - #{est_comp_ids}")
-                  elsif was_before[is_id] == 'nil' && is_value == '0.00' && is_note == '' && is_now_tax[is_id] == '0.00'
-                    # Rails.logger.debug("* EstimatesController.update dont add record if empty")
+                is_new_empty_record = was_before[is_id] == 'nil' && (is_value == '0.00' || is_value == '0.000' || is_value == '') && is_note == '' && (is_now_tax[is_id] == '0.00' || is_now_tax[is_id] == '')
+                do_update = (is_changed && !is_new_empty_record) || assy_comp.required # dont add record if empty, must add if required
+                if do_update
+                  # Rails.logger.debug("* Estimate.update - try to find - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
+                  tax_pct_in = is_now_tax[is_id].nil? ? BIG_DECIMAL_ZERO : BigDecimal(is_now_tax[is_id])
+                  est_comp = EstimateComponent.for_estimate_assembly_component(@estimate.id, est_comp_ids[0].to_i, est_comp_ids[1].to_i )
+                  # Rails.logger.debug("*TestHourlyUpdate* est_comp = #{est_comp.inspect.to_s}")
+                  if !est_comp
+                    # Rails.logger.debug("*WARNUSER_MISSING* Estimate.update - NEW Estimate Component")
+                    # create new estimate component
+                    est_comp = EstimateComponent.new()
+                    est_comp.estimate_id = @estimate.id
+                    est_comp.assembly_id = est_comp_ids[0]
+                    est_comp.component_id = est_comp_ids[1]
+                    est_comp.value = BigDecimal(is_value,2)
+                    # est_comp.calculate_labor_fields(est_comp.component)
+                    est_comp.tax_percent = tax_pct_in
+                    Rails.logger.debug("TAX PERCENT UPDATE Estimate.update -  est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(3)}")
+                    # est_comp.tax_amount = BigDecimal(is_value,2) * tax_pct_in * BIG_DECIMAL_PERCENT
+                    est_comp.calculate_fields(est_comp.component)
+                    est_comp.note = is_note
+                    # Rails.logger.debug("*UPDATE* Estimate.update - estimate_component - est_comp.value:#{est_comp.value.bd_to_s(2)} - est_comp.labor_rate_value:#{est_comp.labor_rate_value.bd_to_s(2)} - est_comp.labor_value:#{est_comp.labor_value.bd_to_s(2)} - est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(3)} - est_comp.tax_amount:#{est_comp.tax_amount.bd_to_s(2)}")
+                    # Rails.logger.debug("SAVESTARTED Estimate.update - create estimate_component - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
+                    est_comp.save
+                    # Rails.logger.debug("*UPDATE* Estimate.update - estimate_component - est_comp.value:#{est_comp.value.bd_to_s(2)} - est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(2)} - est_comp.tax_amount:#{est_comp.tax_amount.bd_to_s(2)}")
                   else
-                    # [#{ass.id}_#{component.id}]
-                    Rails.logger.debug("* Estimate.update - try to find - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
-                    tax_pct_in = is_now_tax[is_id].nil? ? BIG_DECIMAL_ZERO : BigDecimal(is_now_tax[is_id])
-                    est_comp = EstimateComponent.for_estimate_assembly_component(@estimate.id, est_comp_ids[0].to_i, est_comp_ids[1].to_i )
-                    if !est_comp
-                      # create new estimate component
-                      est_comp = EstimateComponent.new()
-                      est_comp.estimate_id = @estimate.id
-                      est_comp.assembly_id = est_comp_ids[0]
-                      est_comp.component_id = est_comp_ids[1]
-                      est_comp.value = BigDecimal(is_value,2)
-                      est_comp.tax_percent = tax_pct_in
-                      est_comp.tax_amount = BigDecimal(is_value,2) * tax_pct_in * BIG_DECIMAL_PERCENT
-                      est_comp.note = is_note
-                      Rails.logger.debug("*UPDATE* Estimate.update - estimate_component - est_comp.value:#{est_comp.value.bd_to_s(2)} - est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(2)} - est_comp.tax_amount:#{est_comp.tax_amount.bd_to_s(2)}")
-                      Rails.logger.debug("SAVESTARTED Estimate.update - create estimate_component - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
-                      est_comp.save
-                      Rails.logger.debug("*UPDATE* Estimate.update - estimate_component - est_comp.value:#{est_comp.value.bd_to_s(2)} - est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(2)} - est_comp.tax_amount:#{est_comp.tax_amount.bd_to_s(2)}")
-                    else
-                      est_comp.value = BigDecimal(is_value)
-                      est_comp.tax_percent = tax_pct_in
-                      est_comp.tax_amount = BigDecimal(is_value,2) * tax_pct_in * BIG_DECIMAL_PERCENT
-                      est_comp.note = is_note
-                      Rails.logger.debug("SAVESTARTED Estimate.update - found estimate_component - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
-                      est_comp.save
-                      # Warn user if required field has been updated with a zero value.
-                      assy_comp = AssemblyComponent.where(:assembly_id => est_comp_ids[0], :component_id => est_comp_ids[1]).first
-                      est_comp_value_str = est_comp.value.bd_to_s(2)
-                      Rails.logger.debug("WARNUSER Estimate.update - est_comp_value_str:#{est_comp_value_str}")
-                      if !assy_comp.nil? && assy_comp.required && est_comp_value_str == '0.00'
-                    		# estimate component existed already, and has a zero value now
-                    		warn_if_missing_required_fields = true
-                      end
-                    end
-                   Rails.logger.debug("UPDATEDEFAULT EstimatesController.update - put id:#{is_id} has estimate_component.id = #{est_comp.id.to_s}, with value = #{est_comp.value.bd_to_s(2)}")
-                    Rails.logger.debug("SAVEDONE Estimate.update")
-                  end #  est_comp_ids.size ...
-                  #                 else #  was_before[is_id] != is_value
-                  # c_attribs = EstimateComponent.params_from_key_string(is_id).merge(:value => is_value, :estimate_id=>@estimate.id)
-                  # # Rails.logger.debug("* EstimatesController.update estimate_components c_attribs = #{c_attribs.inspect.to_s}")
-                  # @estimate.estimate_components.build(c_attribs)
-                  # # @estimate.estimate_components.save
-                  # Rails.logger.debug("* Estimate.update_estimate_component_attributes - no change ( estimate_component_id:#{is_id} ) == #{is_value}")
+                    # Rails.logger.debug("*WARNUSER_MISSING* Estimate.update - NEW Estimate Component")
+                    est_comp.value = BigDecimal(is_value)
+                    # est_comp.calculate_labor_fields(est_comp.component)
+                    est_comp.tax_percent = tax_pct_in
+                    # Rails.logger.debug("TAX PERCENT UPDATE Estimate.update -  est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(3)}")
+                    # est_comp.tax_amount = BigDecimal(is_value,2) * tax_pct_in * BIG_DECIMAL_PERCENT
+                    est_comp.calculate_fields(est_comp.component)
+                    est_comp.note = is_note
+                    # Rails.logger.debug("*UPDATE* Estimate.update - estimate_component - est_comp.value:#{est_comp.value.bd_to_s(2)} - est_comp.labor_rate_value:#{est_comp.labor_rate_value.bd_to_s(2)} - est_comp.labor_value:#{est_comp.labor_value.bd_to_s(2)} - est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(3)} - est_comp.tax_amount:#{est_comp.tax_amount.bd_to_s(2)}")
+                    # Rails.logger.debug("SAVESTARTED Estimate.update - found estimate_component - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
+                    est_comp.save
+                  end
+                  # check for missing required fields
+                  if !assy_comp.nil? && assy_comp.required && !est_comp.has_value?
+                    # Rails.logger.debug("*WARNUSER_MISSING* Estimate.update - SET warn_if_missing_required_fields - is_value = #{is_value}")
+                    warn_if_missing_required_fields = true
+                  end
+                  # Rails.logger.debug("*TestHourlyUpdate* updated est_comp = #{est_comp.inspect.to_s}")
+                  # Rails.logger.debug("UPDATEDEFAULT EstimatesController.update - put id:#{is_id} has estimate_component.id = #{est_comp.id.to_s}, with value = #{est_comp.value.bd_to_s(2)}")
+                  # Rails.logger.debug("SAVEDONE Estimate.update")
                 end #  was_before[is_id] != is_value
               end # is_now.each do
               # @estimate.save
@@ -307,9 +306,9 @@ class EstimatesController < SecureApplicationController
           :msg => ex.to_s )
         )
         render :action => "edit"
-      else
+      else # begin rescue ActiveRecordError else
         if @estimate.errors.empty?
-          if warn_if_missing_required_fields
+          if !warn_if_missing_required_fields
             notify_msg = I18n.translate('errors.success_method_obj_name',
               :method => params[:action],
               :obj => 'Estimate',

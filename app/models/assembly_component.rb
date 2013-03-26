@@ -30,6 +30,11 @@ class AssemblyComponent < ActiveRecord::Base
     joins(:component => :component_type).where("assembly_components.deactivated = ? AND assembly_components.assembly_id = ?", DB_FALSE, id).order('component_types.sort_order, components.grid_subtotal, assembly_components.required DESC, components.description')
   end
   
+  # get the assembly component for an assembly and component (useful for getting assembly component from an estimate component)
+  def self.for_assembly_component(assembly_id, component_id)
+    joins(:component).where("assembly_components.deactivated = ? AND assembly_components.assembly_id = ? AND assembly_components.component_id = ?", DB_FALSE, assembly_id, component_id).first()
+  end
+  
   # methods
   def nil_to_s
     # call to super here brings in deactivated feature

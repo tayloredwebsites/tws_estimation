@@ -1,3 +1,8 @@
+<%
+    @component_type = @component.component_type.nil? ? ComponentType.new() : @component.component_type
+    @has_totals_grid =  @component_type.has_totals.nil? ? false : @component_type.has_totals
+    @has_hours =  @component_type.has_hours.nil? ? false : @component_type.has_hours
+%>
 
 
 <div class="field">
@@ -29,39 +34,56 @@
     </span>
 </div>
 
-
-<div class="field">
-      <%= f.label :editable, I18n.translate('components.field_name.editable'), :class => 'label' %>
-    <span class="value">
-        <%= f.radio_button :editable, true %>
-        <%= f.label "editable_true", "true", :class => 'span_after_label' %>
-        <%= f.radio_button :editable, false %>
-        <%= f.label "editable_false", "false", :class => 'span_after_label' %>
-    </span>
+<div class="field_title_grouping">
+    <div class="field_title"><%= I18n.translate('components.field_group.has_totals_features') %></div>
+    <div class="field">
+          <%= f.label :editable, I18n.translate('components.field_name.editable'), :class => 'label' %>
+        <span class="value">
+            <%= f.radio_button :editable, true %>
+            <%= f.label "editable_true", "true", :class => 'span_after_label' %>
+            <%= f.radio_button :editable, false %>
+            <%= f.label "editable_false", "false", :class => 'span_after_label' %>
+        </span>
+    </div>
+    <div class="field">
+        <%= f.label :grid_operand, I18n.translate('components.field_name.grid_operand'), :class => 'label' %>
+        <span class="value">
+            <%= select( :component, :grid_operand, VALID_GRID_OPERANDS.collect { |key,val| [key+' - '+val,key]}, { :include_blank => true }) %>
+        </span>
+    </div>
+    <div class="field">
+        <%= f.label :grid_scope, I18n.translate('components.field_name.grid_scope'), :class => 'label' %>
+        <span class="value">
+            <%= select( :component, :grid_scope, VALID_GRID_SCOPES.collect { |key,val| [key+' - '+val,key]}, { :include_blank => true }) %>
+        </span>
+    </div>
+    <div class="field">
+        <%= f.label :grid_subtotal, I18n.translate('components.field_name.grid_subtotal'), :class => 'label' %>
+        <span class="value"><%= f.text_field :grid_subtotal %></span>
+    </div>
+    <div class="field_title"><%= I18n.translate('components.field_group.end_has_totals_features') %></div>
+    <% if @has_totals_grid %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.has_totals', :type => @component_type.nil_to_s) %></div>
+    <% else %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.not_has_totals', :type => @component_type.nil_to_s) %></div>
+    <% end %>
 </div>
 
-
-<div class="field">
-    <%= f.label :grid_operand, I18n.translate('components.field_name.grid_operand'), :class => 'label' %>
-    <span class="value">
-        <%= select( :component, :grid_operand, VALID_GRID_OPERANDS.collect { |key,val| [key+' - '+val,key]}, { :include_blank => true }) %>
-    </span>
+<div class="field_title_grouping">
+    <div class="field_title"><%= I18n.translate('components.field_group.has_hours_features') %></div>
+    <div class="field">
+        <%= f.label :default, I18n.translate('components.field_name.labor_rate_default'), :class => 'label' %>
+        <span class="value">
+            <%= collection_select( :component, :labor_rate_default_id, DefaultsController.list, :id, :desc, { :include_blank => true }) %>
+        </span>
+    </div>
+    <div class="field_title"><%= I18n.translate('components.field_group.end_has_hours_features') %></div>
+    <% if @has_hours %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.has_hours', :type => @component_type.nil_to_s) %></div>
+    <% else %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.not_has_hours', :type => @component_type.nil_to_s) %></div>
+    <% end %>
 </div>
-
-
-<div class="field">
-    <%= f.label :grid_scope, I18n.translate('components.field_name.grid_scope'), :class => 'label' %>
-    <span class="value">
-        <%= select( :component, :grid_scope, VALID_GRID_SCOPES.collect { |key,val| [key+' - '+val,key]}, { :include_blank => true }) %>
-    </span>
-</div>
-
-
-<div class="field">
-    <%= f.label :grid_subtotal, I18n.translate('components.field_name.grid_subtotal'), :class => 'label' %>
-    <span class="value"><%= f.text_field :grid_subtotal %></span>
-</div>
-
 
 <div class="field">
       <%= f.label :deactivated, I18n.translate('components.field_name.deactivated'), :class => 'label' %>

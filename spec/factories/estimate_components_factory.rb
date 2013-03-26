@@ -4,7 +4,7 @@
 def generate_estimate_component_accessible_attributes(attribs = {})
   estimate_id = attribs[:estimate_id].nil? ? (Estimate.create!(generate_estimate_min_attributes())).id : attribs[:estimate_id]
   assembly_id = attribs[:assembly_id].nil? ? (Assembly.create!(FactoryGirl.attributes_for(:assembly_create))).id : attribs[:assembly_id]
-  component_type_id = attribs[:component_type_id].nil? ? (FactoryGirl.create(:component_type_accessible)).id : attribs[:component_type_id]
+  component_type_id = attribs[:component_type_id].nil? ? (FactoryGirl.create(:component_type)).id : attribs[:component_type_id]
   component_id = attribs[:component_id].nil? ? (FactoryGirl.create(:component_min_create, :component_type_id => component_type_id)).id : attribs[:component_id]
   deactivated = attribs[:deactivated].nil? ? false : attribs[:deactivated]
   return {
@@ -29,7 +29,7 @@ def generate_estimate_component_min_attributes(attribs = {})
   # component_id = attribs[:component_id].nil? ? FactoryGirl.create(:component_min_create, :component_type => component_type) : attribs[:component_id]
   estimate_id = attribs[:estimate_id].nil? ? (Estimate.create!(generate_estimate_min_attributes())).id : attribs[:estimate_id]
   assembly_id = attribs[:assembly_id].nil? ? (Assembly.create!(FactoryGirl.attributes_for(:assembly_create))).id : attribs[:assembly_id]
-  component_type_id = attribs[:component_type_id].nil? ? (FactoryGirl.create(:component_type_accessible)).id : attribs[:component_type_id]
+  component_type_id = attribs[:component_type_id].nil? ? (FactoryGirl.create(:component_type)).id : attribs[:component_type_id]
   component_id = attribs[:component_id].nil? ? (FactoryGirl.create(:component_min_create, :component_type_id => component_type_id)).id : attribs[:component_id]
   return {
     :estimate_id => estimate_id,
