@@ -2,15 +2,19 @@
 est_comp_errors = ''
 if ass_comp.required
 	ass_comp_req = 'component_value required'
-	if est_comp_value_was_str != '' &&  est_comp_value_str == '0.00'
-		# estimate component existed already, and has a zero value now
-		est_comp_errors = ' * ' + I18n.translate('error_messages.missing_required_field')
-	end
+    if !est_comp.has_value?
+      est_comp_errors += ' - ' + I18n.translate('error_messages.missing_required_field')
+      row_class = " field_with_errors"
+    end
+    # if est_comp_value_was_str != '' && ( est_comp_value_str == '0.00' || est_comp_value_str == '0.000' || est_comp_value_str == '' )
+    #   # estimate component existed already, and has a zero value now
+    #   est_comp_errors = ' * ' + I18n.translate('error_messages.missing_required_field')
+    # end
 else
 	ass_comp_req = 'component_value not_required'
 end
 
-hourly_calculations = "@ est_comp.hourly_rate = $ est_comp.hourly_dollars"
+is_hourly = (ass_comp.component.nil? ? false : (ass_comp.component.component_type.nil? ? false : ass_comp.component.component_type.has_hours))
 
 # estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}] != 
 %>
@@ -31,33 +35,21 @@ if !est_comp_errors.blank?
 end
 if view_mode == 'edit'
 	concat content_tag(:span, text_field_tag("estimate_components[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_value_str), :class => ass_comp_req)
-	# if component type is hourly
-	#     concat content_tag(:span, hourly_calculations, :class="estimate_hourly_calculations")
-	# end
-%> <%= content_tag :span, :class => 'estimate_tax_calculations' do %>
-<%
-	    # note concat on the nested content tags does not work - must use the expression tag
-        concat content_tag(:span, label_tag("estimate_components_tax_pct[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", 'tax %' ))
-        concat content_tag(:span, text_field_tag("estimate_components_tax_pct[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.tax_percent_for(@estimate, ass_comp.component).bd_to_s(3)))
-        concat content_tag(:span, ' => $ '+ "#{est_comp.tax_amount.bd_to_s(2)}", :id => "estimate_components_tax_amt_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
+	if is_hourly
+        # concat edit_hourly_rate_tags(@estimate, ass, ass_comp, est_comp)  #.html_safe
+        concat show_hourly_rate_tags(@estimate, ass, ass_comp, est_comp)
+        concat raw("&nbsp;")
     end
+    concat edit_tax_calculation_tags(@estimate, ass, ass_comp, est_comp)    #.html_safe
 	concat content_tag(:span, text_field_tag("estimate_components_note[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_note), :class => 'component_note')
-%> <%= content_tag :span, :class => 'component_hidden_fields' do %>
-<%
-	    # note concat on the nested content tags does not work - must use the expression tag
-    	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
-        concat hidden_field_tag("estimate_components_tax_pct_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.tax_percent_for(@estimate, ass_comp.component).bd_to_s(3))
-	    concat hidden_field_tag("estimate_components_note_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp_note)
-	end
+	concat show_hidden_fields(@estimate, ass, ass_comp, est_comp, est_comp_was) #.html_safe
 else
     concat content_tag(:span, est_comp_value_str, :class => "#{ass_comp_req}",  :id => "estimate_components_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
-%> <%= content_tag :span, :class => 'estimate_tax_calculations' do %>
-<%
-	    # note concat on the nested content tags does not work - must use the expression tag
-        concat content_tag(:span, label_tag("estimate_components_tax_pct[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", 'tax %' ))
-        concat content_tag(:span, est_comp.tax_percent.bd_to_s(3), :id => "estimate_components_tax_pct_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
-        concat content_tag(:span, ' => $ '+ "#{est_comp.tax_amount.bd_to_s(2)}", :id => "estimate_components_tax_amt_#{ass.id.to_s}_#{ass_comp.component.id.to_s}")
+	if is_hourly
+        concat show_hourly_rate_tags(@estimate, ass, ass_comp, est_comp)
+        concat raw("&nbsp;")
     end
+    concat show_tax_calculations_tags(@estimate, ass, ass_comp, est_comp)
     concat content_tag(:span, est_comp_note, :id => "estimate_components_note_#{ass.id.to_s}_#{ass_comp.component.id.to_s}", :class => 'component_note')
 end
 if !est_comp_errors.blank?

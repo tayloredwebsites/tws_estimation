@@ -1,6 +1,9 @@
 <%
     @page_scope = 'components.show'
     @deactivated_module = defined?(Component.new.deactivated_module)
+    @component_type = @component.component_type.nil? ? ComponentType.new() : @component.component_type
+    @has_totals_grid =  @component_type.has_totals.nil? ? false : @component_type.has_totals
+    @has_hours =  @component_type.has_hours.nil? ? false : @component_type.has_hours
 %>
 
 <h4><%= I18n.translate('header', :scope => @page_scope) %></h4>
@@ -17,7 +20,7 @@
 
     <div class="field">
       <span class="label"><%= I18n.translate('components.field_name.component_type') %></span>
-      <span class="value" id="component_component_type"><%= @component.component_type.nil_to_s %></span>
+      <span class="value" id="component_component_type"><%= @component_type.nil_to_s %></span>
     </div>
 
     <div class="field">
@@ -30,25 +33,45 @@
       <span class="value" id="component_default"><%= @component.default.nil_to_s %></span>
     </div>
 
+<div class="field_title_grouping">
+    <div class="field_title"><%= I18n.translate('components.field_group.has_totals_features') %></div>
     <div class="field">
       <span class="label"><%= I18n.translate('components.field_name.editable') %></span>
       <span class="value" id="component_editable"><%= @component.editable %></span>
     </div>
-
     <div class="field">
       <span class="label"><%= I18n.translate('components.field_name.grid_operand') %></span>
       <span class="value" id="component_grid_operand"><% concat @component.grid_operand_key_value %></span>
     </div>
-
     <div class="field">
       <span class="label"><%= I18n.translate('components.field_name.grid_scope') %></span>
       <span class="value" id="component_grid_scope"><% concat @component.grid_scope_key_value %></span>
     </div>
-
     <div class="field">
       <span class="label"><%= I18n.translate('components.field_name.grid_subtotal') %></span>
       <span class="value" id="component_grid_subtotal"><%= @component.grid_subtotal %></span>
     </div>
+    <div class="field_title"><%= I18n.translate('components.field_group.end_has_totals_features') %></div>
+    <% if @has_totals_grid %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.has_totals', :type => @component_type.nil_to_s) %></div>
+    <% else %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.not_has_totals', :type => @component_type.nil_to_s) %></div>
+    <% end %>
+</div>
+
+<div class="field_title_grouping">
+    <div class="field_title"><%= I18n.translate('components.field_group.has_hours_features') %></div>
+    <div class="field">
+      <span class="label"><%= I18n.translate('components.field_name.labor_rate_default') %></span>
+      <span class="value" id="component_labor_rate_default"><%= @component.labor_rate_default.nil_to_s %></span>
+    </div>
+    <div class="field_title"><%= I18n.translate('components.field_group.end_has_hours_features') %></div>
+    <% if @has_hours %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.has_hours', :type => @component_type.nil_to_s) %></div>
+    <% else %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.not_has_hours', :type => @component_type.nil_to_s) %></div>
+    <% end %>
+</div>
 
 <% if (@deactivated_module) %>
      <div class="field">
@@ -66,6 +89,7 @@
       <span class="label"><%= I18n.translate('components.field_name.updated_at') %></span>
       <span class="value" id="component_updated_at"><%= @component.updated_at %></span>
     </div>
+
 
 </div>
 

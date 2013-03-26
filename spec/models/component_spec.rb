@@ -1,4 +1,5 @@
 require 'spec_helper'
+include SpecHelper
 
 describe Component do
   context 'it should have crud actions available and working' do
@@ -13,7 +14,7 @@ describe Component do
       Component.count.should == num_items
     end
     it 'should have tests accessible attributes match the accessible attributes for the model' do
-      attribs = FactoryGirl.build(:component_create)._accessible_attributes
+      attribs = FactoryGirl.build(:component_hourly_create)._accessible_attributes
       Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
       Rails.logger.debug("T attribs[:default]: #{ attribs[:default].inspect.to_s}")
       attribs_whitelist = attribs[:default]
@@ -63,7 +64,12 @@ describe Component do
     end
     it 'should only allow updates of valid operation operands and scopes' do
       Component.count.should == 0
-      attribs = generate_component_min_attributes()
+      # attribs = generate_component_min_attributes()
+      # Rails.logger.debug("TTTTT Component attribs = #{attribs.inspect.to_s}")
+      default_fixed = Default.create!(FactoryGirl.attributes_for(:default, :value => 2.78))
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      component_type_hours = ComponentType.create!(FactoryGirl.attributes_for(:component_type_hours).merge(:description => 'Test Hours'))
+      attribs = UserIntegrationHelper.build_attributes(:component_hourly_create, component_type: component_type_hours, default: default_fixed, labor_rate_default: default_hourly)
       Rails.logger.debug("TTTTT Component attribs = #{attribs.inspect.to_s}")
       item1 = Component.create!(attribs)  # create component with no additional attributes
       item1.id.should_not be_nil
@@ -204,6 +210,59 @@ describe Component do
       @parent.destroy()
       @parent.errors.count.should == 0
       ComponentType.count.should == num_parent - 1
+    end
+  end
+  context 'it should have valid labor rates for hourly component types - ' do
+    before (:each) do
+      @component_type = FactoryGirl.create(:component_type)
+      @hourly_component_type = FactoryGirl.create(:component_type_hourly)
+      @default = FactoryGirl.create(:default)
+      @labor_rate = FactoryGirl.create(:default)
+    end
+    it 'should create component if hourly component has hourly rate' do
+      attribs = UserIntegrationHelper.build_attributes(:component_hourly_create, component_type: @hourly_component_type, default: @default, labor_rate_default: @labor_rate)
+      Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
+      num_items = Component.count
+      item1 = Component.create(attribs)
+      item1.should be_instance_of(Component)
+      # loop through all of the attributes used to create this item to see if in created item
+      attribs.each do | key, val |
+        Rails.logger.debug("T component_type_spec component_types_min item1.send(#{key}):#{item1.send(key)}")
+        item1.send(key).should == val
+      end
+      item1.id.should_not be_nil
+      item1.errors.count.should == 0
+      Component.count.should == num_items + 1
+    end
+    it 'should not create component if hourly component missing hourly rate' do
+      attribs = UserIntegrationHelper.build_attributes(:component_hourly_create, component_type: @hourly_component_type, default: @default, labor_rate_default: nil)
+      Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
+      num_items = Component.count
+      item1 = Component.create(attribs)
+      item1.should be_instance_of(Component)
+      # loop through all of the attributes used to create this item to see if in created item
+      attribs.each do | key, val |
+        Rails.logger.debug("T component_type_spec component_types_min item1.send(#{key}):#{item1.send(key)}")
+        item1.send(key).should == val
+      end
+      item1.id.should be_nil
+      item1.errors.count.should > 0
+      Component.count.should == num_items
+    end
+    it 'should create component if non-hourly component does not have hourly rate' do
+      attribs = UserIntegrationHelper.build_attributes(:component_create, component_type: @component_type, default: @default)
+      Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
+      num_items = Component.count
+      item1 = Component.create(attribs)
+      item1.should be_instance_of(Component)
+      # loop through all of the attributes used to create this item to see if in created item
+      attribs.each do | key, val |
+        Rails.logger.debug("T component_type_spec component_types_min item1.send(#{key}):#{item1.send(key)}")
+        item1.send(key).should == val
+      end
+      item1.id.should_not be_nil
+      item1.errors.count.should == 0
+      Component.count.should == num_items + 1
     end
   end
 end

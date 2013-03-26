@@ -43,7 +43,7 @@
           },
           :estim_list => 'Estimates Listing by Title',
           :estim_new => 'New Estimate',
-          :defaults => 'Defaults',
+          :defaults => 'Lookup Values / Defaults',
           :component_types => 'Component Types',
           :components => {
             :abbreviation => 'Components',
@@ -432,10 +432,10 @@
         :id => 'ID',
         :description => 'Description',
         :sort_order => 'Sort Order',
-        :has_costs => 'Has Costs',
-        :has_hours => 'Has Hours',
+        :has_costs => 'Has Costs?',
+        :has_hours => 'In Hours?',
         :has_vendor => 'Has Vendor',
-        :has_totals => 'Has Totals',
+        :has_totals => 'Has Totals Grid',
         :in_totals_grid => 'In Totals Grid',
         :deactivated => 'Deactivated'
       },
@@ -443,8 +443,8 @@
         :id => 'ID',
         :description => 'Description',
         :sort_order => 'Sort',
-        :has_costs => 'Costs?',
-        :has_hours => 'Hours?',
+        :has_costs => 'Has Costs?',
+        :has_hours => 'In Hours?',
         :has_vendor => 'Vendor?',
         :has_totals => 'Has Totals Grid',
         :in_totals_grid => 'In Totals Grid',
@@ -454,11 +454,11 @@
         :id => 'ID (identifier used by database to uniquely idenfify item in table)',
         :description => 'Description',
         :sort_order => 'Sort Order',
-        :has_costs => 'Has Costs',
-        :has_hours => 'Has Hours',
+        :has_costs => 'Has Costs?',
+        :has_hours => 'In Hours?',
         :has_vendor => 'Has Vendor (Keep track of vendor. Unused.)',
-        :has_totals => 'Has Totals Grid, and perform calculations to add to totals.',
-        :in_totals_grid => 'Display in Totals Grid for calculations.',
+        :has_totals => 'Has Totals Grid to perform calculations to add to totals.',
+        :in_totals_grid => 'Display Components of this type in Totals Grid for calculations.',
         :deactivated => 'Deactivated'
       },
       :messages => {
@@ -498,6 +498,16 @@
         :title => "View Component",
         :header => "View a Component"
       },
+      :field_group => {
+        :not_has_totals => "note '%{type}' is not 'Has Totals Grid' type.",
+        :has_totals => "note '%{type}' is 'Has Totals Grid' type.",
+        :has_totals_features => 'Has Totals Grid features:',
+        :end_has_totals_features => 'End of Has Totals Grid Features.',
+        :not_has_hours => "note '%{type}' is not 'Has Hours' type.",
+        :has_hours => "note '%{type}' is 'Has Hours' type.",
+        :has_hours_features => 'Has Hours features:',
+        :end_has_hours_features => 'End of Has Hours features.'
+      },
       :field_name => {
         :id => 'ID',
         :component_type_id => 'Component Type ID',
@@ -509,6 +519,8 @@
         :grid_operand => 'Grid Operand',
         :grid_scope => 'Grid Operand Scope',
         :grid_subtotal => 'Grid Subtotal Group',
+        :labor_rate_default_id => 'Labor Rate Lookup ID',
+        :labor_rate_default => 'Labor Rate Lookup',
         :deactivated => 'Deactivated',
         :created_at => 'Created',
         :updated_at => 'Updated'
@@ -524,6 +536,8 @@
         :grid_operand => 'Operand',
         :grid_scope => 'Scope',
         :grid_subtotal => 'Subtotal',
+        :labor_rate_default_id => 'Labor Rate Lookup ID',
+        :labor_rate_default => 'Labor Rate Lookup',
         :deactivated => 'Deactivated',
         :created_at => 'Created',
         :updated_at => 'Updated'
@@ -539,6 +553,8 @@
         :grid_operand => 'The calculation to be performed on the value',
         :grid_scope => 'The Scope the operand is to work on',
         :grid_subtotal => 'Name of Grid Subtotal Group',
+        :labor_rate_default_id => 'Labor Rate Lookup ID',
+        :labor_rate_default => 'Labor Rate Lookup',
         :deactivated => 'Is this field deactivated?',
         :created_at => 'Created at this Date and Time.',
         :updated_at => 'Last Updated at this date and time.'

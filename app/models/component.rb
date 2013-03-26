@@ -3,11 +3,12 @@ class Component < ActiveRecord::Base
   include Models::Deactivated
   include Models::CommonMethods
   
-  attr_accessible :description, :editable, :deactivated, :component_type_id, :default_id, :grid_operand, :grid_scope, :grid_subtotal
+  attr_accessible :description, :editable, :deactivated, :component_type_id, :default_id, :grid_operand, :grid_scope, :grid_subtotal, :labor_rate_default_id
   # todo ? remove these as accessible? -> attr_accessible :component_type_id, :default_id
 
   belongs_to :component_type
   belongs_to :default
+  belongs_to :labor_rate_default, :class_name => 'Default'
   has_many :assembly_components, :inverse_of => :component, :dependent => :restrict
   validates_associated :assembly_components
   has_many :estimate_components, :inverse_of => :component, :dependent => :restrict
@@ -31,6 +32,8 @@ class Component < ActiveRecord::Base
     :allow_nil => true,
     :allow_blank => true,
     :inclusion => { :in => VALID_GRID_SCOPES, :message => "scope must be 'A' - Assembly break, 'I' - Grid initial, 'S' - latest subtotal, 'C' - cumulative, 'H' - hours (cumulative)"}
+
+  validates_presence_of :labor_rate_default_id, :if => :is_hourly_type?, :message => "Hourly components require a rate!"
     
   before_save :nil_grid_values
 
@@ -103,6 +106,10 @@ class Component < ActiveRecord::Base
     grid_operand = nil if grid_scope == ''
     grid_scope = nil if grid_scope == ''
     grid_subtotal = nil if grid_scope == ''
+  end
+  
+  def is_hourly_type?
+    self.component_type.nil? ? false : self.component_type.has_hours
   end
 
 end

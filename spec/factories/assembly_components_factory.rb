@@ -4,7 +4,8 @@
 def generate_assembly_component_accessible_attributes
   assembly = FactoryGirl.create(:assembly_create)
   component_type = FactoryGirl.create(:component_type_accessible)
-  component = FactoryGirl.create(:component_min_create, :component_type => component_type)
+  default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+  component = FactoryGirl.create(:component_min_create, :component_type => component_type, labor_rate_default: default_hourly)
   return {
     :assembly_id => assembly.id,
     :description => FactoryGirl.generate(:assembly_component_description),
@@ -18,7 +19,8 @@ end
 def generate_assembly_component_min_attributes
   assembly = FactoryGirl.create(:assembly_create)
   component_type = FactoryGirl.create(:component_type_accessible)
-  component = FactoryGirl.create(:component_min_create, :component_type => component_type)
+  default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+  component = FactoryGirl.create(:component_min_create, :component_type => component_type, labor_rate_default: default_hourly)
   return {
     :assembly_id => assembly.id,
     # :description => FactoryGirl.generate(:assembly_component_description),
@@ -36,6 +38,13 @@ FactoryGirl.define do
   factory :assembly_component_create, :class => AssemblyComponent do
     association :assembly,  :factory => :assembly,  :strategy => :build
     association :component, :factory => :component, :strategy => :build
+    description {FactoryGirl.generate(:assembly_component_description)}
+    required false
+    deactivated false
+  end
+  factory :assembly_component_hourly_create, :class => AssemblyComponent do
+    association :assembly,  :factory => :assembly,  :strategy => :build
+    association :component, :factory => :component_hourly_create, :strategy => :build
     description {FactoryGirl.generate(:assembly_component_description)}
     required false
     deactivated false

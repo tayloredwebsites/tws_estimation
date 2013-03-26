@@ -17,9 +17,10 @@ describe ComponentsController do
     end
     it 'should be able to GET the index page and see all items' do
       # user = FactoryGirl.create(:user_min_create_attr)
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
-      item2 = FactoryGirl.create(:component_min_create, component_type: @parent)
-      item3 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
+      item2 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
+      item3 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       get :index
       response.should be_success
       response.should render_template('/index')
@@ -47,7 +48,8 @@ describe ComponentsController do
       Component.count.should == @num_items
     end
     it 'should be able to GET edit an item' do
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       get :edit, :id => item1.id
       response.should be_success
       response.should render_template('/edit')
@@ -57,7 +59,8 @@ describe ComponentsController do
       assigns(:component).should eq(item1)
     end
     it 'should be able to PUT update an item' do
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       new_attribs = FactoryGirl.attributes_for(:component_accessible)
       put :update, :id => item1.id, :component => new_attribs
       # assigns(:component).should_not be_nil
@@ -74,7 +77,8 @@ describe ComponentsController do
       response.should redirect_to(:controller => 'components', :action => 'show')
     end
     it 'should be able to GET show an item' do
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       get :show, :id => item1.id
       response.should be_success
       response.should render_template('/show')
@@ -100,7 +104,8 @@ describe ComponentsController do
     end
     
     it 'should be able to PUT deactivate an active item' do
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       item1.deactivated?.should be_false
       put :deactivate, :id => item1.id
       response.should be_success
@@ -112,7 +117,8 @@ describe ComponentsController do
     end
     it 'should give an error when PUT deactivating a deactivated user' do
       get :index, :show_deactivated => "true" # set show deactivated session flag so we can see the item we deactivate
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       item1.deactivated?.should be_false
       item1.deactivate
       item1.errors.count.should be == 0
@@ -132,7 +138,8 @@ describe ComponentsController do
     end
     it 'should be able to PUT reactivate a deactivated user' do
       get :index, :show_deactivated => "true" # set show deactivated session flag so we can see the item we deactivate
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       item1.deactivated?.should be_false
       item1.deactivate
       item1.errors.count.should be == 0
@@ -153,7 +160,8 @@ describe ComponentsController do
     end
     it 'should give an error when reactivating a active user' do
       get :index, :show_deactivated => "true" # set show deactivated session flag so we can see the item we deactivate
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       item1.deactivated?.should be_false
       put :reactivate, :id => item1.id
       response.should be_success
@@ -168,7 +176,8 @@ describe ComponentsController do
     end
     it 'should not be able to DELETE destroy an active user' do
       item_count = Component.count
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       Component.count.should == item_count + 1
       item1.deactivated?.should be_false
       delete :destroy, :id => item1.id
@@ -180,7 +189,8 @@ describe ComponentsController do
     end
     it 'should not be able to DELETE destroy a deactivated user if show_deactivated is false' do
       get :index, :show_deactivated => "false" # set show deactivated session flag so we cannot see deactivated items
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       item_count = Component.count
       Component.count.should == 1
       item1.deactivate
@@ -192,7 +202,8 @@ describe ComponentsController do
     end
     it 'should be able to DELETE destroy a deactivated user if show_deactivated is true' do
       get :index, :show_deactivated => "true" # set show deactivated session flag so we can see deactivated items
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       item_count = Component.count
       Component.count.should == 1
       item1.deactivate
@@ -203,9 +214,10 @@ describe ComponentsController do
       item_count.should == Component.count+1
     end
     it 'should be able to set and clear the show_deactivated flag (item count should be reflected)' do
-      item1 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :value => 22.75))
+      item1 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       item1.errors.count.should == 0
-      item2 = FactoryGirl.create(:component_min_create, component_type: @parent)
+      item2 = FactoryGirl.create(:component_min_create, component_type: @parent, labor_rate_default: default_hourly)
       item2.errors.count.should == 0
       item1.deactivate
       item1.errors.count.should == 0

@@ -24,6 +24,11 @@ FactoryGirl.define do
     in_totals_grid    false
     deactivated       true
   end    
+  factory :component_type_hourly, :class => ComponentType do
+    description       {FactoryGirl.generate(:component_type_description)}
+    sort_order        {FactoryGirl.generate(:sort_order)}
+    has_hours        true
+  end    
   factory :component_type_totals, :class => ComponentType do
     description       {FactoryGirl.generate(:component_type_description)}
     sort_order        {FactoryGirl.generate(:sort_order)}

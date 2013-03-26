@@ -5,6 +5,7 @@
 def generate_component_accessible_attributes
   component_type = FactoryGirl.create(:component_type_accessible)
   default = FactoryGirl.create(:default_accessible)
+  default_hourly_rate = FactoryGirl.create(:default_accessible)
   return {
     :component_type_id => component_type.id,
     :description => FactoryGirl.generate(:component_description),
@@ -13,7 +14,8 @@ def generate_component_accessible_attributes
     :deactivated => false,
     :grid_operand => '%',
     :grid_scope => 'A',
-    :grid_subtotal => 'First'
+    :grid_subtotal => 'First',
+    :labor_rate_default_id => default_hourly_rate.id
   }
 end
   
@@ -41,10 +43,17 @@ FactoryGirl.define do
     description             {FactoryGirl.generate(:component_description)}
     association             :default, :factory => :default, :strategy => :build
   end
+  factory :component_hourly_create, :class => Component do
+    association             :component_type, :factory => :component_type_hourly, :strategy => :build
+    description             {FactoryGirl.generate(:component_description)}
+    association             :default, :factory => :default, :strategy => :build
+    association             :labor_rate_default, :factory => :default, :strategy => :build
+  end
   factory :component_min_create, :class => Component do
     association             :component_type, :factory => :component_type, :strategy => :build
     description             {FactoryGirl.generate(:component_description)}
     default_id              nil
+    association             :labor_rate_default, :factory => :default, :strategy => :build
   end    
   factory :component_totals_create, :class => Component do
     association             :component_type, :factory => :component_type_totals, :strategy => :build
