@@ -30,4 +30,5 @@ pickle-email-*.html
 *.swp
 *~
 console
-**/*/database.yml
+/config/database.yml
+/config/database_ca.yml
