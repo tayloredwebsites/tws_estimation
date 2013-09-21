@@ -70,10 +70,7 @@ module TwsAuth
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-<<<<<<< HEAD
     # for heroku production
-=======
->>>>>>> bd140f524e8b881a85e996478e72bc57737ab8d9
     # must run rake assets:precompile before going to production
     config.assets.initialize_on_precompile = false
 
@@ -98,15 +95,9 @@ module TwsAuth
     # - better to use validates_associated in child association
     # config.active_record.identity_map = true  
 
-<<<<<<< HEAD
     # # Foreigner hack to add SQL Server
     # # see also config/initializers/extensions/sqlserver_adapter.rb
     # Foreigner::Adapter.register 'sqlserver', 'foreigner/connection_adapters/sqlserver_adapter'
-=======
-    # Foreigner hack to add SQL Server
-    # see also config/initializers/extensions/sqlserver_adapter.rb
-    Foreigner::Adapter.register 'sqlserver', 'foreigner/connection_adapters/sqlserver_adapter'
->>>>>>> bd140f524e8b881a85e996478e72bc57737ab8d9
 
   end
 end
