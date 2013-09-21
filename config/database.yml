@@ -3,9 +3,9 @@ development:
     adapter: postgresql
     database: tws_estim_dev
     username: RoR
-    password: change_me
+    password: C0n+r0ll3d
     host: localhost
-    port: 5432
+    port: 5433
     #  adapter: sqlite3
     #  database: db/development.sqlite3
     #  pool: 5
@@ -27,9 +27,9 @@ test:
     adapter: postgresql
     database: tws_estim_test
     username: RoR
-    password: change_me
+    password: C0n+r0ll3d
     host: localhost
-    port: 5432
+    port: 5433
     #  adapter: sqlite3
     #  database: db/test.sqlite3
     #  pool: 5
@@ -52,9 +52,9 @@ production:
     adapter: postgresql
     database: tws_estim_prod
     username: RoR
-    password: change_me
+    password: C0n+r0ll3d
     host: localhost
-    port: 5432
+    port: 5433
     #  adapter: sqlite3
     #  database: db/production.sqlite3
     #  pool: 5
@@ -73,9 +73,9 @@ legacy:
     adapter: postgresql
     database: Estimation
     username: RoR
-    password: change_me
+    password: C0n+r0ll3d
     host: localhost
-    port: 5432
+    port: 5433
     # adapter: sqlserver
     # mode: odbc
     # dsn: ca_estim_old
