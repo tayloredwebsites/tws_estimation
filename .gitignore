@@ -32,4 +32,5 @@ pickle-email-*.html
 console
 /config/database.yml
 /config/database_ca.yml
-
+**/*/database.yml
+config/database.yml
