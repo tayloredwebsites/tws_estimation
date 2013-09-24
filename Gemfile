@@ -9,17 +9,17 @@ gem 'rails', '3.2.13'
 
 # for Postgres
 gem 'pg'
-#
-# for SQL Server
+
+# # for SQL Server
 # gem 'tiny_tds'
 # gem "activerecord-sqlserver-adapter", "~> 3.2.0"
-# gem "ruby-odbc", "~> 0.99994"
+# gem "ruby-odbc"   #, "~> 0.99994"
 
 gem 'cancan'
 
 gem 'foreigner' # foreign key handling
 
-gem 'rdiscount'	# markdown files display in view
+# gem 'rdiscount'	# markdown files display in view # removed for win/xp? issues
 
 gem 'jquery-rails'
 
@@ -40,6 +40,7 @@ gem 'thin'  # makes thin the default web server
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'aws-s3', :require => 'aws/s3'
 
+# added for heroku
 group :assets do
   gem 'uglifier'
 end

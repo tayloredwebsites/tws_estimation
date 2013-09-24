@@ -70,11 +70,11 @@ module TwsAuth
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    # Custom config settings # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    
     # for heroku production
+    # must run rake assets:precompile before going to production
     config.assets.initialize_on_precompile = false
-    
+
+    # Custom config settings # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # start of additional custom configurations # #
     # set up cache store to memory
     # config.cache_store = :memory_store  #, :size => 64.megabytes
@@ -94,6 +94,10 @@ module TwsAuth
     # - identity maps are slower
     # - better to use validates_associated in child association
     # config.active_record.identity_map = true  
+
+    # # Foreigner hack to add SQL Server
+    # # see also config/initializers/extensions/sqlserver_adapter.rb
+    # Foreigner::Adapter.register 'sqlserver', 'foreigner/connection_adapters/sqlserver_adapter'
 
   end
 end
