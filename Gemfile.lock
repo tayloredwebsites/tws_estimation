@@ -40,8 +40,15 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    columnize (0.3.6)
     daemons (1.1.9)
     database_cleaner (1.1.1)
+    debugger (1.6.1)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.3)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.3)
     diff-lcs (1.2.4)
     erubis (2.7.0)
     eventmachine (1.0.3)
@@ -147,6 +154,7 @@ DEPENDENCIES
   cancan
   capybara (~> 2.0)
   database_cleaner
+  debugger (~> 1.6.1)
   factory_girl_rails
   foreigner
   jquery-rails

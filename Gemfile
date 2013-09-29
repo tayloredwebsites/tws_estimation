@@ -52,22 +52,20 @@ end
 
 group :development do
 
-  # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-  # gem 'ruby-debug'
-  # gem 'ruby-debug19'  #removed for windows install
-  
+  gem 'debugger', '~> 1.6.1'
+
   gem 'annotate'
 
 end
 
 group :test do
 
-  # gem 'capybara', '~> 1.1' 
-  gem 'capybara', '~> 2.0' 
+  # gem 'capybara', '~> 1.1'
+  gem 'capybara', '~> 2.0'
   # gem 'capybara-screenshot'
   gem 'launchy'
   gem 'shoulda-matchers'
-    
+
   # autotest config
   # gem 'autotest'
   # gem 'ZenTest'
@@ -83,17 +81,17 @@ group :test do
 
   # spork performance improvement to tests
   gem 'spork'
-  
+
   # gem 'sqlite3-ruby', :require => 'sqlite3'  - no good for inmemory testing - can't turn on foreign key validations
-  
+
   # factory for testing
   gem 'factory_girl_rails'
 
   # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
   # gem 'ruby-debug'
   # gem 'ruby-debug19' # removed for windows install
-  
+
   # see spec/spec_helper.rb - for fix of test records not removed after capybara fill_in and click
   gem 'database_cleaner'
-  
+
 end

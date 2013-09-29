@@ -25,7 +25,7 @@ describe 'Estimates Integration Tests', :js => false do
     it "should create a new item" do
       num_items = Estimate.count
       visit new_estimate_path()
-      # save_and_open_page      
+      # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
@@ -46,7 +46,7 @@ describe 'Estimates Integration Tests', :js => false do
         page.select @state.name.to_s, :from => 'estimate_state_id'
         # page.should have('Testing for Estimate Assemblies here')
         # page.fill_in 'estimate_description', :with => attribs[:description]
-        # save_and_open_page      
+        # save_and_open_page
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -85,7 +85,7 @@ describe 'Estimates Integration Tests', :js => false do
       @estimate_attributes.each do | at_key, at_val |
         if at_key.to_s == 'deactivated'
           Rails.logger.debug("T estimates_integration_spec updated attribs - deactivated")
-          find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(at_val)}\z/ 
+          find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(at_val)}\z/
         elsif at_val.is_a?(TrueClass)
           Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s} - TrueClass")
           find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /^true$/
@@ -96,7 +96,7 @@ describe 'Estimates Integration Tests', :js => false do
           # do association selects manually (capybara select method only selects by value, not ID)
         else
           Rails.logger.debug("T estimates_integration_spec updated attribs - #{at_key.to_s}")
-          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/ 
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/
         end
       end
       find(:xpath, '//*[@id="estimate_sales_rep"]').text.should =~ /\A#{@sales_rep.nil_to_s}\z/
@@ -113,7 +113,7 @@ describe 'Estimates Integration Tests', :js => false do
         num_items = Estimate.count
         visit new_estimate_path()
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
-        # save_and_open_page      
+        # save_and_open_page
         within(".new_estimate") do
           find(:xpath, '//input[@type="submit"]').click
         end
@@ -164,12 +164,12 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
       page.should_not have_selector(:xpath, '//*', :text => 'translation missing:')
       # error_to_fix
-      # find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~ 
+      # find(:xpath, '//div[@id="header_status"]/p[@class="notice"]').text.should =~
       #   /^#{I18n.translate('errors.warn_method_obj_name_warn', :method => 'update', :obj => 'Estimate', :name => item1.desc, :warn => I18n.translate('error_messages.missing_required_field') )}$/
       all_attribs.each do | at_key, at_val |
         if at_key.to_s == 'deactivated'
           Rails.logger.debug("T estimates_integration_spec edit updated show - deactivated")
-          find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(at_val)}\z/ 
+          find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(at_val)}\z/
         elsif at_val.is_a?(TrueClass)
           Rails.logger.debug("T estimates_integration_spec edit updated show #{at_key.to_s} - TrueClass")
           find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /^true$/
@@ -179,7 +179,7 @@ describe 'Estimates Integration Tests', :js => false do
         elsif at_key =~ /_id$/
           # do association selects manually (capybara select method only selects by value, not ID)
         else
-          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/ 
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/
         end
       end
       find(:xpath, '//*[@id="estimate_sales_rep"]').text.should =~ /\A#{@sales_rep.nil_to_s}\z/
@@ -202,7 +202,7 @@ describe 'Estimates Integration Tests', :js => false do
       all_attribs.each do | at_key, at_val |
         if at_key.to_s == 'deactivated'
           Rails.logger.debug("T estimates_integration_spec edit updated show - deactivated")
-          find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(at_val)}\z/ 
+          find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(at_val)}\z/
         elsif at_val.is_a?(TrueClass)
           Rails.logger.debug("T estimates_integration_spec edit updated show #{at_key.to_s} - TrueClass")
           find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /^true$/
@@ -212,7 +212,7 @@ describe 'Estimates Integration Tests', :js => false do
         elsif at_key =~ /_id$/
           # do association selects manually (capybara select method only selects by value, not ID)
         else
-          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/ 
+          find(:xpath, "//*[@id=\"estimate_#{at_key.to_s}\"]").text.should =~ /\A#{at_val.to_s}\z/
         end
       end
       find(:xpath, '//*[@id="estimate_sales_rep"]').text.should =~ /\A#{@sales_rep.nil_to_s}\z/
@@ -437,7 +437,7 @@ describe 'Estimates Integration Tests', :js => false do
       visit new_estimate_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
-      # save_and_open_page      
+      # save_and_open_page
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
       page.should have_selector(:xpath, "//select[@id=\"estimate_sales_rep_id\"]/option", :text => @user1.username)
       page.should have_selector(:xpath, "//select[@id=\"estimate_sales_rep_id\"]/option", :text => @user2.username)
@@ -559,7 +559,7 @@ describe 'Estimates Integration Tests', :js => false do
         /^#{I18n.translate('errors.success_method_obj_id', :method => 'reactivate', :obj => 'Estimate', :id => @updated_item.id )}$/
       Estimate.count.should == num_items + 2
       find(:xpath, "//*[@id=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
-    end    
+    end
     it 'should not list deactivated items by estimate' do
       item1 = Estimate.create!(@estimate_attributes)
       item1.deactivated?.should be_false
@@ -575,7 +575,7 @@ describe 'Estimates Integration Tests', :js => false do
       # find(:xpath, "//tr[@id=\"estimate_#{item1.id}\"]/td[@class=\"estimate_deactivated\"]").text.should =~ /\A#{I18n.is_deactivated_or_not(false)}\z/
       find(:xpath, "(//tr[@id=\"estimate_#{item1.id}\"]//a)[3]").text.should =~ /\A#{I18n.translate('view_action.deactivate')}\z/
       page.should_not have_selector(:xpath, "//tr[@id=\"estimate_#{item_deact.id}\"]/td[@class=\"estimate_deactivated\"]", :text => I18n.is_deactivated_or_not(true) )
-    end   
+    end
   end
   context 'translations missing - ' do
     before(:each) do
@@ -731,7 +731,7 @@ describe 'Estimates Integration Tests', :js => false do
       visit new_estimate_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
-      # save_and_open_page      
+      # save_and_open_page
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
       # fill in estimate form with estimate attributes for create
       within(".new_estimate") do
@@ -752,7 +752,7 @@ describe 'Estimates Integration Tests', :js => false do
         # these are not necessary because these assemblies are set at required.
         # page.check("estimate_assemblies_#{@assemblies[2].id.to_s}")
         # page.check("estimate_assemblies_#{@assemblies[3].id.to_s}")
-        # save_and_open_page      
+        # save_and_open_page
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -795,7 +795,7 @@ describe 'Estimates Integration Tests', :js => false do
       page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[2].id.to_s}\"]")
       page.should have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[3].id.to_s}\"]")
       page.should_not have_selector(:xpath, "//*[@id=\"assembly_#{@assemblies[4].id.to_s}\"]")
-      # find(:xpath, "//*[@id=\"estimate_components_#{@assemblies[2].id.to_s}_#{@components[3].id.to_s}\"]").text.should_not =~ /\s*876.12\s*/ 
+      # find(:xpath, "//*[@id=\"estimate_components_#{@assemblies[2].id.to_s}_#{@components[3].id.to_s}\"]").text.should_not =~ /\s*876.12\s*/
       # find(:xpath, '//*[@id="estimate_description"]').text.should =~ /\AMy Description\z/  # be new value
       num_items.should == Estimate.count - 1
     end
@@ -824,7 +824,7 @@ describe 'Estimates Integration Tests', :js => false do
     end
   end
 
-  
+
   context 'Regular non-grid Components - ' do
     before(:each) do
       @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
@@ -886,7 +886,7 @@ describe 'Estimates Integration Tests', :js => false do
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34' # 3_8
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}", :with => '2.45' # 4_10
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 2.5 # 4_11
-        # save_and_open_page      
+        # save_and_open_page
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -915,7 +915,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[4].id.to_s}\"]").text.should =~ /^7.890$/ # 3_5
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[1].id.to_s}_hr\"]").text.should =~ /^7.890$/
       page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]") # 3_6
-      page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")        
+      page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}\"]").text.should =~ /^9.01$/ # 3_7
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}\"]").text.should =~ /^1.34$/ # 3_8
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[3].id.to_s}_total\"]").text.should =~ /^10.35$/
@@ -963,7 +963,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^\$1540\.55$/
 
       # working #
-      
+
       # should have grand totals grid
       find(:xpath, "//td[@id=\"grand_totals_type_#{@component_types[0].id.to_s}\"]").text.should =~ /^\$51\.84$/
       find(:xpath, "//td[@id=\"grand_totals_type_#{@component_types[1].id.to_s}\"]").text.should =~ /^.*\$1778\.73$/
@@ -974,7 +974,7 @@ describe 'Estimates Integration Tests', :js => false do
       num_items.should == Estimate.count
     end
   end
-  
+
   context 'it should only let non-admin sales rep see, create or modify own estimates' do
     before(:each) do
       helper_signin(:reg_user_full_create_attr, @user1.full_name)
@@ -1010,7 +1010,7 @@ describe 'Estimates Integration Tests', :js => false do
       visit new_estimate_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
-      # save_and_open_page      
+      # save_and_open_page
       # Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
       page.should have_selector(:xpath, "//select[@id=\"estimate_sales_rep_id\"]/option", :text => @user1.username)
       page.should_not have_selector(:xpath, "//select[@id=\"estimate_sales_rep_id\"]/option", :text => @user2.username)
@@ -1019,7 +1019,7 @@ describe 'Estimates Integration Tests', :js => false do
       visit new_estimate_path()
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
-      # save_and_open_page      
+      # save_and_open_page
       # Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
       page.should have_selector(:xpath, "//li[@id=\"lnav_estim_Estimate_list\"]")
       page.should_not have_selector(:xpath, "//li[@id=\"lnav_estim_Estimate_menu_Estimate_index\"]")
@@ -1058,7 +1058,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('home.errors.header')}$/
     end
   end
-  
+
   context 'Totals Grid - ' do
     before(:each) do
       @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @job_type.id, :state_id => @state.id )
@@ -1317,7 +1317,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
       @updated_item = Estimate.find(estimate.id)
       find(:xpath, '//*[@id="header_status"]/p[@class="notice"]').text.should =~ /^#{I18n.translate('errors.warn_method_obj_name_warn', :method => 'update', :obj => 'Estimate', :name => estimate.desc, :warn => I18n.translate('error_messages.missing_required_field') )}$/
-      find(:xpath, "//td[@id=\"grid_label_#{@assembly_components[10].assembly_id.to_s}_#{@component_type_totals.id.to_s}_#{@assembly_components[10].component_id.to_s}\"]").text.should =~ /#{@assembly_components[10].description}.*(987.65)/  # note wildcard to handle space ???      
+      find(:xpath, "//td[@id=\"grid_label_#{@assembly_components[10].assembly_id.to_s}_#{@component_type_totals.id.to_s}_#{@assembly_components[10].component_id.to_s}\"]").text.should =~ /#{@assembly_components[10].description}.*(987.65)/  # note wildcard to handle space ???
     end
     it 'should accumulate component totals to component types and assemblies' do #, :js => true do # see VIEWS_SCRIPTING = false in spec_helper.rb
       # load up valid assembly components
@@ -1333,7 +1333,7 @@ describe 'Estimates Integration Tests', :js => false do
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
       # following tests dependent upon helper_load_assemblies, spec_helper.rb helper_load_component_types and helper_load_components
       within(".edit_estimate") do
-        # save_and_open_page      
+        # save_and_open_page
         page.check("estimate_assemblies_#{@assemblies[1].id.to_s}")
         # find("#assembly_#{@assemblies[1].id.to_s}/h3").click
         page.fill_in "estimate_components_#{@assemblies[0].id.to_s}_#{@components[0].id.to_s}", :with => '2.34'
@@ -1348,14 +1348,14 @@ describe 'Estimates Integration Tests', :js => false do
         # it 'should not list components with deactivated component types'
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]")
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_component_deact2.assembly_id.to_s}_#{@assembly_component_deact2.component_id.to_s}\"]")
-        page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")        
+        page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}", :with => '9.01'
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34'
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}", :with => '2.45'
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 2.5
         # it 'should not list deactivated assembly_components'
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_component_deact3.assembly_id.to_s}_#{@assembly_component_deact3.component_id.to_s}\"]")
-        # save_and_open_page      
+        # save_and_open_page
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
@@ -1380,7 +1380,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[1].id.to_s}_total\"]").text.should =~ /^179\.50/
       # it 'should not list components with deactivated component types'
       page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]")
-      page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")        
+      page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}\"]").text.should =~ /9\.01/
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}\"]").text.should =~ /1\.34/
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[3].id.to_s}_total\"]").text.should =~ /10\.35/
@@ -1422,7 +1422,7 @@ describe 'Estimates Integration Tests', :js => false do
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[4].id.to_s}", :with => '7.89'
         # it 'should not list components with deactivated component types'
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]")
-        page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")        
+        page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}", :with => '9.01'
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34'
         # last assembly with totals grid
@@ -1526,17 +1526,16 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~/^\$64187.79$/
     end
   end
-  
+
   context "Component level Tax override" do
     before(:each) do
       helper_signin(:admin_user_full_create_attr, @me.full_name)
       visit home_index_path
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
       helper_load_tax_test
-
-      @tax_type = StateComponentTypeTax.create!(UserIntegrationHelper.build_attributes(:state_component_type_tax, state: @tax_state, job_type: @tax_job_type, component_type: @tax_component_type), :tax_percent => 0.875)
+      @tax_type = StateComponentTypeTax.create!(UserIntegrationHelper.build_attributes(:state_component_type_tax, state: @tax_state, job_type: @tax_job_type, component_type: @tax_component_type), :tax_percent => @tax_default_tax_rate)
+      @tax_type2 = StateComponentTypeTax.create!(UserIntegrationHelper.build_attributes(:state_component_type_tax, state: @tax_state, job_type: @tax_job_type, component_type: @tax_component_type_totals), :tax_percent => @tax_default_tax_rate)
       @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @tax_job_type.id, :state_id => @tax_state.id )
-      Rails.logger.debug("*TaxRates* create estimate - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
     end
     it 'should allow the user to enter a tax override rate on same line in estimate as amount and note.' do
       all_attribs = @estimate_attributes
@@ -1544,10 +1543,8 @@ describe 'Estimates Integration Tests', :js => false do
       Estimate.count.should == 1
       estimate.deactivated?.should be_false
       visit edit_estimate_path (estimate.id)
-      # save_and_open_page
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
-      Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
       # following tests dependent upon helper_load_assemblies, spec_helper.rb helper_load_component_types and helper_load_components
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
       within(".edit_estimate") do
@@ -1568,9 +1565,9 @@ describe 'Estimates Integration Tests', :js => false do
         # save_and_open_page
         find(:xpath, '//input[@type="submit"]').click
       end
-      # save_and_open_page
       #
       # it should show the user the entered tax percent and the calculated tax dollar amount
+      page.should have_selector(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]")
       find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^6\.250$/
       find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/.*\$ 156\.25$/
       # it should show the user to use the default tax percent and the calculated tax dollar amount
@@ -1620,6 +1617,8 @@ describe 'Estimates Integration Tests', :js => false do
       Rails.logger.debug("T estimates_integration_spec Admin item logged in")
       helper_load_hourly_tax_test
       @tax_type = StateComponentTypeTax.create!(UserIntegrationHelper.build_attributes(:state_component_type_tax, state: @tax_state, job_type: @tax_job_type, component_type: @tax_component_type), :tax_percent => @tax_default_tax_rate)
+      @tax_type2 = StateComponentTypeTax.create!(UserIntegrationHelper.build_attributes(:state_component_type_tax, state: @tax_state, job_type: @tax_job_type, component_type: @tax_hourly_component_type), :tax_percent => @tax_default_tax_rate)
+      @tax_type3 = StateComponentTypeTax.create!(UserIntegrationHelper.build_attributes(:state_component_type_tax, state: @tax_state, job_type: @tax_job_type, component_type: @tax_component_type_totals), :tax_percent => @tax_default_tax_rate)
       @estimate_attributes = generate_estimate_accessible_attributes(:sales_rep_id => @sales_rep.id, :job_type_id => @tax_job_type.id, :state_id => @tax_state.id )
       Rails.logger.debug("*TaxRates* create estimate - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
     end
@@ -1652,14 +1651,14 @@ describe 'Estimates Integration Tests', :js => false do
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
         # page.fill_in "estimate_components_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}", :with => '750.00'
         # page.fill_in "estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}", :with => '4.75'
-        
+
         # it "should not allow the user to override the default hourly rate in the estimate."
-        
+
         # save_and_open_page
         find(:xpath, '//input[@type="submit"]').click
       end
       # save_and_open_page
-      
+
       # Dollars Component Type
       # it should show the user to use the default tax percent and the calculated tax dollar amount
       find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^2\.78$/
@@ -1673,7 +1672,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_dollar\"]").text.should =~ /^6\.03$/
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_tax\"]").text.should =~ /^0\.00$/
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_total\"]").text.should =~ /^6\.03$/
-      
+
       # Hourly Component Type
       # it should have component type totals showing calculated hours at specific rate, and the entered tax percent and the tax dollar amount using computed hourly dollar amount
       find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").text.should =~/^3\.250$/
@@ -1698,49 +1697,49 @@ describe 'Estimates Integration Tests', :js => false do
 
       # should have Totals Grid Initial Values table
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_total\"]")
-      
+
       # it should have totals grid correct initial assembly Values
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___tax_total\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___total\"]").text.should =~/^\$0\.00$/
-      
+
       # it should have totals grid correct initial Component Type Values
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^6\.030 hr. => \$137\.18$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__tax_total\"]").text.should =~/^\$2\.45$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__total\"]").text.should =~/^\$145\.66$/
-      
+
       # should have Totals Grid table
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
-      
-      
+
+
       # it should have grid detail/component values Values
-      
+
       # AssemblyComponentDescription2
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 0\.00 = \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 0\.00 = \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_tax\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-      
+
       # AssemblyComponentDescription3
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_tax\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-      
+
       # it should have totals grid Subtotal 1 at zeros
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_tax_total\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_total\"]").text.should =~/^\$0\.00$/
-      
+
       # it should have totals grid Grid Totals as zeros
       find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
       find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_tax_total\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-      
+
       # should have assembly totals grid
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$6\.03$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$137\.18$/
@@ -1774,7 +1773,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_dollar\"]").text.should =~ /^6\.03$/
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_tax\"]").text.should =~ /^0\.00$/
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_total\"]").text.should =~ /^6\.03$/
-      
+
       # Hourly Component Type
       # it should have component type totals showing calculated hours at specific rate, and the entered tax percent and the tax dollar amount using computed hourly dollar amount
       find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").value.should =~/^3\.250$/
@@ -1799,25 +1798,25 @@ describe 'Estimates Integration Tests', :js => false do
 
       # should have Totals Grid Initial Values table
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_total\"]")
-      
+
       # it should have totals grid correct initial assembly Values
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___tax_total\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___total\"]").text.should =~/^\$0\.00$/
-      
+
       # it should have totals grid correct initial Component Type Values
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^6\.030 hr. => \$137\.18$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__tax_total\"]").text.should =~/^\$2\.45$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__total\"]").text.should =~/^\$145\.66$/
-      
+
       # should have Totals Grid table
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
-      
-      
+
+
       # it should have grid detail/component values Values
-      
+
       # AssemblyComponentDescription2
       find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}\"]").value.should =~/^0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 0\.00 = \$0\.00$/
@@ -1825,25 +1824,25 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 0\.00 = \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_tax\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-      
+
       # AssemblyComponentDescription3
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_tax\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-      
+
       # it should have totals grid Subtotal 1 at zeros
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_tax_total\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_total\"]").text.should =~/^\$0\.00$/
-      
+
       # it should have totals grid Grid Totals as zeros
       find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
       find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_tax_total\"]").text.should =~/^\$0\.00$/
       find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-      
+
       # should have assembly totals grid
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$6\.03$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$137\.18$/

@@ -2,7 +2,7 @@ class EstimatesController < SecureApplicationController
 
   # allow records to be deactivated using extras/controllers/deactivated_controller.rb
   include Controllers::DeactivatedController
-  
+
   def initialize
     # this is within the estimation maintenance sub-application
     @systemc = 'estimmaint'
@@ -42,7 +42,7 @@ class EstimatesController < SecureApplicationController
       Rails.logger.debug("* EstimatesController.before_filter @component_types[#{comp_type.id}] = #{comp_type.description}")
     end
   end
-  
+
   def self.list(scope = nil)
     list_scope = (scope.nil?) ? self.new.get_scope() : scope
   end
@@ -101,42 +101,6 @@ class EstimatesController < SecureApplicationController
         authorize! :create, @estimate   # authorize from CanCan::ControllerAdditions
         @estimate = Estimate.create(params[:estimate])
         @estimate.save
-        # if !@estimate.errors.empty?
-        #   # will this code ever be touched?
-        #   @estimate.errors.each do |attr, msg|
-        #     Rails.logger.error("E EstimatesController.create - Estimate.new - got error = #{attr} - #{msg}")
-        #   end
-        #   raise ActiveRecord::Rollback, "Estimate Create error on new()"
-        # else
-        #   if !params[:estimate_assemblies].nil?
-        #     params[:estimate_assemblies].each do |ec_key, ec_value|
-        #       if !ec_value.blank?
-        #         c_attribs = {:estimate_id=>@estimate.id, :assembly_id=> ec_key, :selected => true}
-        #         # Rails.logger.debug("* EstimatesController.create estimate_assemblies c_attribs = #{c_attribs.inspect.to_s}")
-        #         @estimate.estimate_assemblies.build(c_attribs)
-        #       end
-        #     end
-        #   end
-        #   if !params[:estimate_components].nil?
-        #     is_now = params[:estimate_components]
-        #     is_now_note = params[:estimate_components_note]
-        #     # Rails.logger.debug("*VIVALADIFFERENCE Estimate.create - is_now:#{is_now.inspect.to_s}")
-        #     is_now.each do |ec_key, ec_value|
-        #       ec_note = (is_now_note.nil? ? '' :( is_now_note[ec_key].nil? ? '' : is_now_note[ec_key]))
-        #       # Rails.logger.debug("*VIVALADIFFERENCE Estimate.create - estimate_component - ec_key:#{ec_key} - ec_value:#{ec_value} - ec_note:#{ec_note}")
-        #       if ec_value == '0.00' && ec_note == ''
-        #         # Rails.logger.debug("DONTADDRECORD EstimatesController.update dont add record if empty")
-        #       else
-        #         c_attribs = EstimateComponent.params_from_key_string(ec_key).merge(:value => ec_value, :note => ec_note, :estimate_id=>@estimate.id)
-        #         # Rails.logger.debug("ADDTHISRECORD EstimatesController.create estimate_components c_attribs = #{c_attribs.inspect.to_s}")
-        #         @estimate.estimate_components.build(c_attribs)
-        #       end
-        #     end
-        #   end
-        #   Rails.logger.debug("* EstimatesController.create save")
-        #   @estimate.save
-        # end
-      rescue ActiveRecord::ActiveRecordError => ex
         # capture the exceptions
         Rails.logger.error("E EstimateController.create - Active Record Error ex = $! - #{ex.to_s}")
         notify_error( I18n.translate('errors.error_msg',
@@ -195,20 +159,16 @@ class EstimatesController < SecureApplicationController
                 if was_value == 'false'
                   # if is now, change
                   if !is_now[was_id].nil?
-                    # Rails.logger.debug("* Estimate.update_estimate_assemblies - change estimate_assembly ( estimate_id:#{@estimate.id},assembly_id:#{was_id} ) to true:#{is_now[was_id]}")
                     ea = EstimateAssembly.where(:estimate_id => @estimate.id, :assembly_id => was_id).first
                     if ea.nil?
                       ea = EstimateAssembly.new(:estimate_id => @estimate.id, :assembly_id => was_id)
                     end
-                    # Rails.logger.debug("* Estimate.update_estimate_assemblies - create estimate_assembly = #{ea.inspect.to_s}")
                     ea.selected = true
                     ea.save!
                   end # !is_now[was_id].nil?
                 else #  was_value == 'false'
                   # if isn't now, change
                   if is_now[was_id].nil?
-                    # Rails.logger.debug("* Estimate.update_estimate_assemblies - change estimate_assembly ( estimate_id:#{@estimate.id},assembly_id:#{was_id} ) to false:#{is_now[was_id]}")
-                    # Rails.logger.debug("* Estimate.update_estimate_assemblies - change to false:#{is_now[was_id]}")
                     ea = EstimateAssembly.where(:estimate_id => @estimate.id, :assembly_id => was_id).first
                     ea.selected = false
                     ea.save!
@@ -250,7 +210,6 @@ class EstimatesController < SecureApplicationController
                   # Rails.logger.debug("* Estimate.update - try to find - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
                   tax_pct_in = is_now_tax[is_id].nil? ? BIG_DECIMAL_ZERO : BigDecimal(is_now_tax[is_id])
                   est_comp = EstimateComponent.for_estimate_assembly_component(@estimate.id, est_comp_ids[0].to_i, est_comp_ids[1].to_i )
-                  # Rails.logger.debug("*TestHourlyUpdate* est_comp = #{est_comp.inspect.to_s}")
                   if !est_comp
                     # Rails.logger.debug("*WARNUSER_MISSING* Estimate.update - NEW Estimate Component")
                     # create new estimate component
@@ -262,37 +221,22 @@ class EstimatesController < SecureApplicationController
                     # est_comp.calculate_labor_fields(est_comp.component)
                     est_comp.tax_percent = tax_pct_in
                     Rails.logger.debug("TAX PERCENT UPDATE Estimate.update -  est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(3)}")
-                    # est_comp.tax_amount = BigDecimal(is_value,2) * tax_pct_in * BIG_DECIMAL_PERCENT
-                    est_comp.calculate_fields(est_comp.component)
+                    est_comp.calculate_fields(self, est_comp.component)
                     est_comp.note = is_note
-                    # Rails.logger.debug("*UPDATE* Estimate.update - estimate_component - est_comp.value:#{est_comp.value.bd_to_s(2)} - est_comp.labor_rate_value:#{est_comp.labor_rate_value.bd_to_s(2)} - est_comp.labor_value:#{est_comp.labor_value.bd_to_s(2)} - est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(3)} - est_comp.tax_amount:#{est_comp.tax_amount.bd_to_s(2)}")
-                    # Rails.logger.debug("SAVESTARTED Estimate.update - create estimate_component - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
                     est_comp.save
-                    # Rails.logger.debug("*UPDATE* Estimate.update - estimate_component - est_comp.value:#{est_comp.value.bd_to_s(2)} - est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(2)} - est_comp.tax_amount:#{est_comp.tax_amount.bd_to_s(2)}")
                   else
-                    # Rails.logger.debug("*WARNUSER_MISSING* Estimate.update - NEW Estimate Component")
                     est_comp.value = BigDecimal(is_value)
-                    # est_comp.calculate_labor_fields(est_comp.component)
                     est_comp.tax_percent = tax_pct_in
-                    # Rails.logger.debug("TAX PERCENT UPDATE Estimate.update -  est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(3)}")
-                    # est_comp.tax_amount = BigDecimal(is_value,2) * tax_pct_in * BIG_DECIMAL_PERCENT
-                    est_comp.calculate_fields(est_comp.component)
+                    est_comp.calculate_fields(self, est_comp.component)
                     est_comp.note = is_note
-                    # Rails.logger.debug("*UPDATE* Estimate.update - estimate_component - est_comp.value:#{est_comp.value.bd_to_s(2)} - est_comp.labor_rate_value:#{est_comp.labor_rate_value.bd_to_s(2)} - est_comp.labor_value:#{est_comp.labor_value.bd_to_s(2)} - est_comp.tax_percent:#{est_comp.tax_percent.bd_to_s(3)} - est_comp.tax_amount:#{est_comp.tax_amount.bd_to_s(2)}")
-                    # Rails.logger.debug("SAVESTARTED Estimate.update - found estimate_component - @estimate.id:#{@estimate.id}, is_id:#{is_id}")
                     est_comp.save
                   end
                   # check for missing required fields
                   if !assy_comp.nil? && assy_comp.required && !est_comp.has_value?
-                    # Rails.logger.debug("*WARNUSER_MISSING* Estimate.update - SET warn_if_missing_required_fields - is_value = #{is_value}")
                     warn_if_missing_required_fields = true
                   end
-                  # Rails.logger.debug("*TestHourlyUpdate* updated est_comp = #{est_comp.inspect.to_s}")
-                  # Rails.logger.debug("UPDATEDEFAULT EstimatesController.update - put id:#{is_id} has estimate_component.id = #{est_comp.id.to_s}, with value = #{est_comp.value.bd_to_s(2)}")
-                  # Rails.logger.debug("SAVEDONE Estimate.update")
                 end #  was_before[is_id] != is_value
               end # is_now.each do
-              # @estimate.save
             end
           end # !@estimate.errors.empty?
         else
@@ -335,7 +279,7 @@ class EstimatesController < SecureApplicationController
         end
       # ensure
       end
-        
+
     end # ActiveRecord::Base.transaction do
   end
 
@@ -344,5 +288,5 @@ class EstimatesController < SecureApplicationController
     # destroys are passed to the deactivated controller, as it knows how to handle deactivated records
     super # call to parent (e.g. Controllers::DeactivatedController)
   end
-  
+
 end

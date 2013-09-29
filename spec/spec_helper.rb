@@ -2,20 +2,20 @@ require 'rubygems'
 require 'spork'
 
 Spork.prefork do
-  # Loading more in this block will cause your tests to run faster. However, 
+  # Loading more in this block will cause your tests to run faster. However,
   # if you change any configuration or code from libraries loaded here, you'll
   # need to restart spork for it take effect.
-  
+
 end
 
 Spork.each_run do
   # This code will be run each time you run your specs.
-  
+
 end
 
 # --- Instructions ---
-# - Sort through your spec_helper file. Place as much environment loading 
-#   code that you don't normally modify during development in the 
+# - Sort through your spec_helper file. Place as much environment loading
+#   code that you don't normally modify during development in the
 #   Spork.prefork block.
 # - Place the rest under Spork.each_run block
 # - Any code that is left outside of the blocks will be ran during preforking
@@ -32,7 +32,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 # require 'rspec/autorun'
- 
+
 # Add this to load Capybara integration:
 require 'capybara/rspec'
 require 'capybara/rails'
@@ -43,7 +43,7 @@ require 'capybara/rails'
 #     load "#{::Rails.root}/db/schema.rb" # use db agnostic schema by default
 #     # ActiveRecord::Migrator.up('db/migrate') # use migrations
 #   }
-#   silence_stream(STDOUT, &load_schema) 
+#   silence_stream(STDOUT, &load_schema)
 if in_memory_database?
   in_memory_load_db_schema(false)
 end
@@ -337,7 +337,7 @@ module UserIntegrationHelper
     @tax_default = Default.create!(FactoryGirl.attributes_for(:default, :value => 2.78))
     @tax_default2 = Default.create!(FactoryGirl.attributes_for(:default, :value => 3.25))
     @tax_default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :name => 'Hourly Rate', :value => 22.75))
-    @tax_default_tax_rate = Default.create!(FactoryGirl.attributes_for(:default, :name => 'Tax Rate', :value => 6.25))
+    @tax_default_tax_rate = Default.create!(FactoryGirl.attributes_for(:default, :name => 'Tax Rate', :value => 8.25))
     @tax_defaults = [@tax_default, @tax_default2, @tax_default_hourly, @tax_default_tax_rate, @tax_default_hourly]
 
     @tax_component_type = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge(:description => 'Test Comp Type'))
