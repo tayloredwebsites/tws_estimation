@@ -102,6 +102,7 @@ class EstimatesController < SecureApplicationController
         @estimate = Estimate.create(params[:estimate])
         @estimate.save
         # capture the exceptions
+      rescue ActiveRecord::ActiveRecordError => ex
         Rails.logger.error("E EstimateController.create - Active Record Error ex = $! - #{ex.to_s}")
         notify_error( I18n.translate('errors.error_msg',
           :msg => ex.to_s )
