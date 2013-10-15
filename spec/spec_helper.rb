@@ -349,9 +349,10 @@ module UserIntegrationHelper
     @tax_hourly_def_component = FactoryGirl.create(:component_hourly_create, component_type: @tax_hourly_component_type, default: @tax_default2, labor_rate_default: @tax_default_hourly)
     @tax_hourly_component = FactoryGirl.create(:component_hourly_create, component_type: @tax_hourly_component_type, default: @tax_default2, labor_rate_default: @tax_default_hourly)
     @tax_def_component = FactoryGirl.create(:component_create, component_type: @tax_component_type, default: @tax_default2)
-    @tax_grid_editable_component = FactoryGirl.create(:component_totals_editable_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", grid_operand: '*', grid_scope: 'S')
-    @tax_grid_non_editable_component = FactoryGirl.create(:component_totals_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", default: @tax_default, grid_operand: '*', grid_scope: 'S')
-    @tax_components = [@tax_component, @tax_hourly_def_component, @tax_hourly_component, @tax_def_component,  @tax_grid_editable_component, @tax_grid_not_editable_component]
+    @tax_grid_editable_component = FactoryGirl.create(:component_totals_editable_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", grid_operand: '*', grid_scope: 'I')
+    @tax_grid_non_editable_component = FactoryGirl.create(:component_totals_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", default: @tax_default, grid_operand: '*', grid_scope: 'I')
+    @tax_grid_calc_subtotal_component = FactoryGirl.create(:component_totals_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_2", default: @tax_default, grid_operand: '%', grid_scope: 'S')
+    @tax_components = [@tax_component, @tax_hourly_def_component, @tax_hourly_component, @tax_def_component,  @tax_grid_editable_component, @tax_grid_not_editable_component, @tax_grid_calc_subtotal_component]
 
     @tax_assembly = FactoryGirl.create(:assembly_required_create)
     @tax_assemblies = [@tax_assembly]
@@ -362,7 +363,8 @@ module UserIntegrationHelper
     @tax_assembly_def_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_def_component)
     @tax_assembly_grid_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_editable_component)
     @tax_assembly_grid_non_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_non_editable_component)
-    @tax_assembly_components = [@tax_assembly_component, @tax_hourly_def_component, @tax_hourly_component, @tax_assembly_def_component, @tax_assembly_grid_editable_component, @tax_assembly_grid_non_editable_component]
+    @tax_assembly_grid_calc_subtotal_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_calc_subtotal_component)
+    @tax_assembly_components = [@tax_assembly_component, @tax_hourly_def_component, @tax_hourly_component, @tax_assembly_def_component, @tax_assembly_grid_editable_component, @tax_assembly_grid_non_editable_component, @tax_assembly_grid_calc_subtotal_component]
 
     @tax_state = State.create!(FactoryGirl.attributes_for(:state))
 

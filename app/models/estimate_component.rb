@@ -89,8 +89,10 @@ class EstimateComponent < ActiveRecord::Base
   def tax_percent_for(saved_estimate=nil, this_component=nil)
     # load default tax percent value if tax rate is not set yet, by looking in the StateComponentTypeTax table
     if !tax_percent.nil?
+      Rails.logger.debug("**** tax_percent_for !tax_percent.nil? - return tax_percent: #{tax_percent}")
       return tax_percent
     elsif !saved_estimate.nil? && !saved_estimate.state.nil? && !saved_estimate.job_type.nil?  && !this_component.nil? && !this_component.component_type.nil?
+      Rails.logger.debug("**** tax_percent_for lookup tax percent")
       tax_rate_model = StateComponentTypeTax.default_tax_rate_for(saved_estimate.job_type_id, this_component.component_type_id, saved_estimate.state_id)
       if tax_rate_model.nil?
         return tax_percent
@@ -149,7 +151,10 @@ class EstimateComponent < ActiveRecord::Base
     calculate_labor_fields(this_estimate, this_component)
     self.tax_percent = tax_percent_for(this_estimate, this_component)
     self.tax_percent = BIG_DECIMAL_ZERO if tax_percent.nil?
-    self.tax_amount = tax_percent * BIG_DECIMAL_PERCENT * (is_hourly?(this_component) ? labor_value : value)
+    # only compute tax amount here, if not in totals grid, which uses this value to compute with.
+    self.tax_amount = tax_percent * BIG_DECIMAL_PERCENT * (is_hourly?(this_component) ? labor_value : value) if this_component.component_type.in_totals_grid
+    Rails.logger.debug("****** self(estimate_component) - id: #{self.id}, value: #{self.value.bd_to_s(2)}, tax_percent: #{self.tax_percent.bd_to_s(3)}, tax_amount: #{self.tax_amount.bd_to_s(2)}, labor_rate_value: #{self.labor_rate_value.bd_to_s(3)}, labor_value: #{self.labor_value.bd_to_s(2)}")
+    Rails.logger.debug("****** this_component: #{this_component.id} - #{this_component.description}, tax_percent: #{tax_percent.bd_to_s(2)}, value: #{(is_hourly?(this_component) ? labor_value : value).bd_to_s(3)}")
   end
 
   def initialize_from_assembly_component(ass_comp)

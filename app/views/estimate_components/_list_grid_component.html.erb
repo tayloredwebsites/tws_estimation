@@ -59,7 +59,9 @@ tax = est_comp.tax_amount.nil? ? BIG_DECIMAL_ZERO : est_comp.tax_amount
 <%
 	end
 end
+comp_calculations[:tax] = BIG_DECIMAL_ZERO if comp_calculations[:tax].blank?
+row_total += comp_calculations[:tax]
 %>
-					<td class="grid_row_calc grid_row_sub_total" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_tax">$<%= tax.bd_to_s(2) %></td>
+					<td class="grid_row_calc grid_row_sub_total" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_tax">$<%= comp_calculations[:tax].bd_to_s(2) %></td>
 					<td class="grid_row_calc grid_row_sub_total" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_total">$<%= row_total.bd_to_s(2) %></td>
 				</tr>

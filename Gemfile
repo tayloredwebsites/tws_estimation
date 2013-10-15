@@ -31,6 +31,8 @@ gem 'thin'  # makes thin the default web server
 # Use unicorn as the web server - *nix only?
 # gem 'unicorn'
 
+gem 'newrelic_rpm'
+
 # Deploy with Capistrano
 # gem 'capistrano'
 

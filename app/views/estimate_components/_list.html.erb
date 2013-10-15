@@ -77,6 +77,8 @@ end
 			    # else we default it to zero
 				est_comp.value = est_comp_value = BIG_DECIMAL_ZERO
 			end
+      # set tax percent to nil to force tax table lookup
+      est_comp.tax_percent = nil
 			est_comp.calculate_fields(@estimate, comp)
 			if is_in_dollars[ass_comp.component.component_type.id]
 			    est_comp_value_str = est_comp_value.bd_to_s(2)
@@ -114,7 +116,7 @@ end
 						# print initial values
 						concat render :partial => 'estimate_components/list_totals_grid_head', :locals => { :grid_table_id =>  'totals_grid_'+ass.id.to_s+'_total', :assembly_component_title =>  "Grid Initial Values", :in_totals_grid => show_totals_grid }
 						concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Initial Assembly Values ( A )' , :total_values =>  ea_break , :total_hours =>  ea_hr_break, :total_id => "subtotal_#{ass.id.to_s}__#{last_grid_subtotal}", :in_totals_grid => show_totals_grid, :show_hours => true, :is_in_dollars => is_in_dollars }
-						concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Initial Component Type Values ( I / S)' , :total_values =>  e_totals , :total_hours =>  e_hr_totals, :total_id => "subtotal_#{ass.id.to_s}_#{ass_comp.component.component_type.id.to_s}_#{last_grid_subtotal}", :in_totals_grid => show_totals_grid, :show_hours => true, :is_in_dollars => is_in_dollars }
+						concat render :partial => 'estimate_components/list_totals_grid_subtotal', :locals => { :total_label => 'Initial Component Type Values (I)' , :total_values =>  e_totals , :total_hours =>  e_hr_totals, :total_id => "subtotal_#{ass.id.to_s}_#{ass_comp.component.component_type.id.to_s}_#{last_grid_subtotal}", :in_totals_grid => show_totals_grid, :show_hours => true, :is_in_dollars => is_in_dollars }
 						concat raw "</table>" # end estimate_components/list_totals_grid_head
 						# print grid header
 						concat render :partial => 'estimate_components/list_totals_grid_head', :locals => { :grid_table_id =>  'totals_grid_'+ass.id.to_s+'_'+ass_comp.component.component_type.id.to_s, :assembly_component_title =>  ass_comp.component.nil_to_s, :in_totals_grid => show_totals_grid  }
@@ -140,6 +142,9 @@ end
 					Rails.logger.debug("VVVV table - test show_totals_grid = #{show_totals_grid.to_s}")
 
 				end # end break by t- if ea_ct_last_id != ass_comp.component.component_type_id
+        #
+        # end of sub-total breaks
+        #
 				# reset subtotals if break on subtotal or on component type
 				if (ea_ct_last_id != ass_comp.component.component_type_id || last_grid_subtotal != ass_comp.component.grid_subtotal)
 					ea_ct_subtotal_holds = ea_ct_subtotals.dup
@@ -185,28 +190,35 @@ end
 							end
   						ct_id = ct.id
   						ct_val = (work_totals[ct_id].nil?) ? BIG_DECIMAL_ZERO : work_totals[ct_id]
-  						if ct.in_totals_grid
-                new_val = (e_current[ct_id].nil?) ? BIG_DECIMAL_ZERO : e_current[ct_id]
-                # accum_val = BIG_DECIMAL_ZERO
-                accum_val = new_val
-                est_comp_total += accum_val
-                ea_ct_subtotals[ct_id] = (ea_ct_subtotals[ct_id].nil?) ? accum_val : ea_ct_subtotals[ct_id] + accum_val
-                ea_ct_totals[ct_id] = (ea_ct_totals[ct_id].nil?) ? accum_val : ea_ct_totals[ct_id] + accum_val
-                ea_totals[ct_id] = (ea_totals[ct_id].nil?) ? accum_val : ea_totals[ct_id] + accum_val
-                e_totals[ct_id] = (e_totals[ct_id].nil?) ? accum_val : e_totals[ct_id] + accum_val
-                Rails.logger.debug("*HourlyGridAccumToETotal* Accum type in_totals_grid - type: #{ct.description}, amount: #{accum_val.bd_to_s(2)}, total: #{e_totals[ct_id].bd_to_s(2)}")
-  						end # if ct.in_totals_grid
+              accum_val = new_val = (e_current[ct_id].nil?) ? BIG_DECIMAL_ZERO : e_current[ct_id]
+              est_comp_total += accum_val
+              ea_ct_subtotals[ct_id] = (ea_ct_subtotals[ct_id].nil?) ? accum_val : ea_ct_subtotals[ct_id] + accum_val
+              ea_ct_totals[ct_id] = (ea_ct_totals[ct_id].nil?) ? accum_val : ea_ct_totals[ct_id] + accum_val
+              ea_totals[ct_id] = (ea_totals[ct_id].nil?) ? accum_val : ea_totals[ct_id] + accum_val
+              e_totals[ct_id] = (e_totals[ct_id].nil?) ? accum_val : e_totals[ct_id] + accum_val
+              Rails.logger.debug("*HourlyGridAccumToETotal* Accum type in_totals_grid - type: #{ct.description}, amount: #{accum_val.bd_to_s(2)}, total: #{e_totals[ct_id].bd_to_s(2)}")
 						end # if ct.in_totals_grid
 					end # @component_types_list.each do |ct|
           ea_ct_total += est_comp_total
           ea_ct_dollar_total += est_comp_total
           ea_total += est_comp_total
           e_total += est_comp_total
-          # don't add taxes in grid, done in estimate component rows.
+          if !est_comp.tax_percent.nil?
+            # temporarily store tax amount into estimate component record for calculations
+            est_comp.tax_amount = est_comp_total * est_comp.tax_percent * BIG_DECIMAL_PERCENT
+            e_current[:tax] = est_comp.tax_amount
+            ea_ct_subtotals[:tax] = (ea_ct_subtotals[:tax].nil?) ?  est_comp.tax_amount : ea_ct_subtotals[:tax] +  est_comp.tax_amount
+            ea_ct_totals[:tax] = (ea_ct_totals[:tax].nil?) ?  est_comp.tax_amount : ea_ct_totals[:tax] +  est_comp.tax_amount
+            e_totals[:tax] = (e_totals[:tax].nil?) ? est_comp.tax_amount : e_totals[:tax] + est_comp.tax_amount
+            ea_totals[:tax] = (ea_totals[:tax].nil?) ? est_comp.tax_amount : ea_totals[:tax] + est_comp.tax_amount
+            ea_ct_tax_total += est_comp.tax_amount
+            ea_ct_total += est_comp.tax_amount
+          end
 					concat render :partial => 'estimate_components/list_grid_component',
 					:locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :editable => comp.editable, :comp_calculations => e_current, :view_mode => view_mode, :work_totals => work_totals, :is_in_dollars => is_in_dollars, :grid_operand => ' '+comp.get_grid_operand_or_warn+' '+est_comp_value_str, :extra_hourly_conversion => extra_hourly_conversion, :est => @estimate, :est_comp => est_comp, :est_comp_was => est_comp_was }
 
 				else
+          # not show_totals_grid (don't show the calculation grid)
           ct_id = ea_last_ct_id = ass_comp.component.component_type.id
           Rails.logger.debug("*AccumDollars* #{est_comp_value} of #{est_comp.nil_to_s} to #{ass_comp.component.component_type.nil_to_s}")
           if is_in_dollars[ct_id]
@@ -246,8 +258,6 @@ end
 					concat render :partial => 'estimate_components/list_component', :locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :est_comp_note => est_comp_note, :view_mode => view_mode, :est => @estimate, :est_comp => est_comp, :est_comp_was => est_comp_was }
 
 				end # end if show_totals_grid
-                # ea_last_ct_id = ass_comp.component.component_type.id
-				# accumulate totals
 			end # if est_comp_active
 	  end # AssemblyComponent.for_assembly(ass.id).each
 	  # Done with processing all of the Assembly Components for the current Assembly.  Display totals if appropriate
