@@ -31,6 +31,8 @@ gem 'thin'  # makes thin the default web server
 # Use unicorn as the web server - *nix only?
 # gem 'unicorn'
 
+gem 'newrelic_rpm'
+
 # Deploy with Capistrano
 # gem 'capistrano'
 
@@ -52,9 +54,7 @@ end
 
 group :development do
 
-  # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-  # gem 'ruby-debug'
-  # gem 'ruby-debug19'  #removed for windows install
+  gem 'debugger', '~> 1.6.1'
 
   gem 'annotate'
 

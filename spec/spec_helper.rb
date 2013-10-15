@@ -2,20 +2,20 @@ require 'rubygems'
 require 'spork'
 
 Spork.prefork do
-  # Loading more in this block will cause your tests to run faster. However, 
+  # Loading more in this block will cause your tests to run faster. However,
   # if you change any configuration or code from libraries loaded here, you'll
   # need to restart spork for it take effect.
-  
+
 end
 
 Spork.each_run do
   # This code will be run each time you run your specs.
-  
+
 end
 
 # --- Instructions ---
-# - Sort through your spec_helper file. Place as much environment loading 
-#   code that you don't normally modify during development in the 
+# - Sort through your spec_helper file. Place as much environment loading
+#   code that you don't normally modify during development in the
 #   Spork.prefork block.
 # - Place the rest under Spork.each_run block
 # - Any code that is left outside of the blocks will be ran during preforking
@@ -32,7 +32,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 # require 'rspec/autorun'
- 
+
 # Add this to load Capybara integration:
 require 'capybara/rspec'
 require 'capybara/rails'
@@ -43,7 +43,7 @@ require 'capybara/rails'
 #     load "#{::Rails.root}/db/schema.rb" # use db agnostic schema by default
 #     # ActiveRecord::Migrator.up('db/migrate') # use migrations
 #   }
-#   silence_stream(STDOUT, &load_schema) 
+#   silence_stream(STDOUT, &load_schema)
 if in_memory_database?
   in_memory_load_db_schema(false)
 end
@@ -337,7 +337,7 @@ module UserIntegrationHelper
     @tax_default = Default.create!(FactoryGirl.attributes_for(:default, :value => 2.78))
     @tax_default2 = Default.create!(FactoryGirl.attributes_for(:default, :value => 3.25))
     @tax_default_hourly = Default.create!(FactoryGirl.attributes_for(:default, :name => 'Hourly Rate', :value => 22.75))
-    @tax_default_tax_rate = Default.create!(FactoryGirl.attributes_for(:default, :name => 'Tax Rate', :value => 6.25))
+    @tax_default_tax_rate = Default.create!(FactoryGirl.attributes_for(:default, :name => 'Tax Rate', :value => 8.25))
     @tax_defaults = [@tax_default, @tax_default2, @tax_default_hourly, @tax_default_tax_rate, @tax_default_hourly]
 
     @tax_component_type = ComponentType.create!(FactoryGirl.attributes_for(:component_type).merge(:description => 'Test Comp Type'))
@@ -349,9 +349,10 @@ module UserIntegrationHelper
     @tax_hourly_def_component = FactoryGirl.create(:component_hourly_create, component_type: @tax_hourly_component_type, default: @tax_default2, labor_rate_default: @tax_default_hourly)
     @tax_hourly_component = FactoryGirl.create(:component_hourly_create, component_type: @tax_hourly_component_type, default: @tax_default2, labor_rate_default: @tax_default_hourly)
     @tax_def_component = FactoryGirl.create(:component_create, component_type: @tax_component_type, default: @tax_default2)
-    @tax_grid_editable_component = FactoryGirl.create(:component_totals_editable_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", grid_operand: '*', grid_scope: 'S')
-    @tax_grid_non_editable_component = FactoryGirl.create(:component_totals_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", default: @tax_default, grid_operand: '*', grid_scope: 'S')
-    @tax_components = [@tax_component, @tax_hourly_def_component, @tax_hourly_component, @tax_def_component,  @tax_grid_editable_component, @tax_grid_not_editable_component]
+    @tax_grid_editable_component = FactoryGirl.create(:component_totals_editable_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", grid_operand: '*', grid_scope: 'I')
+    @tax_grid_non_editable_component = FactoryGirl.create(:component_totals_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_1", default: @tax_default, grid_operand: '*', grid_scope: 'I')
+    @tax_grid_calc_subtotal_component = FactoryGirl.create(:component_totals_create, component_type: @tax_component_type_totals, grid_subtotal: "stot_2", default: @tax_default, grid_operand: '%', grid_scope: 'S')
+    @tax_components = [@tax_component, @tax_hourly_def_component, @tax_hourly_component, @tax_def_component,  @tax_grid_editable_component, @tax_grid_not_editable_component, @tax_grid_calc_subtotal_component]
 
     @tax_assembly = FactoryGirl.create(:assembly_required_create)
     @tax_assemblies = [@tax_assembly]
@@ -362,7 +363,8 @@ module UserIntegrationHelper
     @tax_assembly_def_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_def_component)
     @tax_assembly_grid_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_editable_component)
     @tax_assembly_grid_non_editable_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_non_editable_component)
-    @tax_assembly_components = [@tax_assembly_component, @tax_hourly_def_component, @tax_hourly_component, @tax_assembly_def_component, @tax_assembly_grid_editable_component, @tax_assembly_grid_non_editable_component]
+    @tax_assembly_grid_calc_subtotal_component = FactoryGirl.create(:assembly_component_create, assembly: @tax_assembly, component: @tax_grid_calc_subtotal_component)
+    @tax_assembly_components = [@tax_assembly_component, @tax_hourly_def_component, @tax_hourly_component, @tax_assembly_def_component, @tax_assembly_grid_editable_component, @tax_assembly_grid_non_editable_component, @tax_assembly_grid_calc_subtotal_component]
 
     @tax_state = State.create!(FactoryGirl.attributes_for(:state))
 

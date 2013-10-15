@@ -8,11 +8,6 @@ if ass_comp.required
       est_comp_errors += ' - ' + I18n.translate('error_messages.missing_required_field')
       row_class = " field_with_errors"
     end
-    # if est_comp_value_was_str != '' &&  ( est_comp_value_str == '0.00' || est_comp_value_str == '0.000' || est_comp_value_str == '' )
-    #   # estimate component existed already, and has a zero value now
-    #   est_comp_errors += ' - ' + I18n.translate('error_messages.missing_required_field')
-    #   row_class = "field_with_errors"
-    # end
 else
 	ass_comp_req += ' not_required'
 end
@@ -26,10 +21,6 @@ elsif !ass_comp.component.is_valid_grid_scope?
 	row_class = " field_with_errors"
 	est_comp_errors += ' - ' + I18n.translate('error_messages.missing_component_scope')
 end
-# if extra_hourly_conversion
-#     est_comp_errors += ' - ' + I18n.translate('error_messages.invalid_hourly_conversion')
-#     row_class = " field_with_errors"
-# end
 %>
 				<tr class="grid_row<%= row_class %>">
 					<td class="grid_row_label" id="grid_label_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>">
@@ -43,7 +34,7 @@ if editable && view_mode == 'edit'
 <%
 	    # note concat on the nested content tags does not work - must use the expression tag
     	concat hidden_field_tag("estimate_components_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]",  est_comp_value_was_str)
-        concat hidden_field_tag("estimate_components_tax_pct_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.tax_percent_for(@estimate, ass_comp.component).bd_to_s(3))
+      concat hidden_field_tag("estimate_components_tax_pct_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.tax_percent_for(@estimate, ass_comp.component).bd_to_s(3))
 	end
 else
 	concat content_tag(:span, ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' '+est_comp_value_str+')', :class => ass_comp_req)
@@ -68,7 +59,9 @@ tax = est_comp.tax_amount.nil? ? BIG_DECIMAL_ZERO : est_comp.tax_amount
 <%
 	end
 end
+comp_calculations[:tax] = BIG_DECIMAL_ZERO if comp_calculations[:tax].blank?
+row_total += comp_calculations[:tax]
 %>
-					<td class="grid_row_calc grid_row_sub_total" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_tax">$<%= tax.bd_to_s(2) %></td>
+					<td class="grid_row_calc grid_row_sub_total" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_tax">$<%= comp_calculations[:tax].bd_to_s(2) %></td>
 					<td class="grid_row_calc grid_row_sub_total" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_total">$<%= row_total.bd_to_s(2) %></td>
 				</tr>
