@@ -88,6 +88,7 @@ class EstimateComponent < ActiveRecord::Base
 
   def tax_percent_for(saved_estimate=nil, this_component=nil)
     # load default tax percent value if tax rate is not set yet, by looking in the StateComponentTypeTax table
+    Rails.logger.debug("@@@@ tax_percent_for self: #{self.inspect.to_s}")
     if !tax_percent.nil?
       Rails.logger.debug("**** tax_percent_for !tax_percent.nil? - return tax_percent: #{tax_percent}")
       return tax_percent
@@ -150,11 +151,16 @@ class EstimateComponent < ActiveRecord::Base
   def calculate_fields(this_estimate = nil, this_component=nil)
     calculate_labor_fields(this_estimate, this_component)
     self.tax_percent = tax_percent_for(this_estimate, this_component)
-    self.tax_percent = BIG_DECIMAL_ZERO if tax_percent.nil?
     # only compute tax amount here, if not in totals grid, which uses this value to compute with.
-    self.tax_amount = tax_percent * BIG_DECIMAL_PERCENT * (is_hourly?(this_component) ? labor_value : value) if this_component.component_type.in_totals_grid
+    # note totals grid computes the tax amount on the computed value not the value to compute with.
+    if !this_component.component_type.has_totals
+      self.tax_percent = BIG_DECIMAL_ZERO if self.tax_percent.nil?
+      self.tax_amount = self.tax_percent * BIG_DECIMAL_PERCENT * (self.is_hourly?(this_component) ? labor_value : value)
+    end
     Rails.logger.debug("****** self(estimate_component) - id: #{self.id}, value: #{self.value.bd_to_s(2)}, tax_percent: #{self.tax_percent.bd_to_s(3)}, tax_amount: #{self.tax_amount.bd_to_s(2)}, labor_rate_value: #{self.labor_rate_value.bd_to_s(3)}, labor_value: #{self.labor_value.bd_to_s(2)}")
     Rails.logger.debug("****** this_component: #{this_component.id} - #{this_component.description}, tax_percent: #{tax_percent.bd_to_s(2)}, value: #{(is_hourly?(this_component) ? labor_value : value).bd_to_s(3)}")
+    Rails.logger.debug("****** this_component: #{this_component.id} - #{this_component.inspect.to_s}")
+    Rails.logger.debug("****** this_component.component_type: #{this_component.component_type.id} - #{this_component.component_type.inspect.to_s}")
   end
 
   def initialize_from_assembly_component(ass_comp)

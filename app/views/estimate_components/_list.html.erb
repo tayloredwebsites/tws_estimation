@@ -60,7 +60,6 @@ end
 			comp = ass_comp.component
 			est_comp_was = EstimateComponent.for_estimate_assembly_component(@estimate.id, ass.id, ass_comp.component.id )
 			est_comp = EstimateComponent.new()
-			Rails.logger.debug("VVVV Estimate Component = #{est_comp.inspect.to_s}")
 			# calculations
 			# todo - replace est_comp_value, est_comp_value_str, est_comp_value_was_str
 			# =>    with    est_comp.value, est_comp.value.bd_to_s(2), est_comp_was.value.bd_to_s(2)
@@ -77,16 +76,20 @@ end
 			    # else we default it to zero
 				est_comp.value = est_comp_value = BIG_DECIMAL_ZERO
 			end
-      # set tax percent to nil to force tax table lookup
-      est_comp.tax_percent = nil
+      Rails.logger.debug("@@@@ESTIMATECOMPONENT@@@@ Estimate Component = #{est_comp.inspect.to_s}")
+      # # set tax percent to nil to force tax table lookup when in grid
+      if ass_comp.component.component_type.has_totals
+        est_comp.tax_percent = nil
+        Rails.logger.debug("@@@@ESTIMATECOMPONENT_NIL%@@@@ Estimate Component = #{est_comp.inspect.to_s}")
+      end
 			est_comp.calculate_fields(@estimate, comp)
-			if is_in_dollars[ass_comp.component.component_type.id]
-			    est_comp_value_str = est_comp_value.bd_to_s(2)
-			else
-			    # show three decimal places if hourly
-			    est_comp_value_str = est_comp_value.bd_to_s(3)
-			end
-            est_comp_total = est_comp_value # component total is component value if no calculations (not show_totals_grid)
+      Rails.logger.debug("@@@@ESTIMATECOMPONENT_CALC@@@@ Estimate Component = #{est_comp.inspect.to_s}")
+      if !is_in_dollars[ass_comp.component.component_type.id] # three digits in grid? || ass_comp.component.component_type.has_totals
+        est_comp_value_str = est_comp_value.bd_to_s(3 )
+      else
+        est_comp_value_str = est_comp_value.bd_to_s(2)
+      end
+      est_comp_total = est_comp_value # component total is component value if no calculations (not show_totals_grid)
 			# don't show deactivated component
 			comp_active = (comp.nil? || comp.deactivated || comp.component_type.nil? || comp.component_type.deactivated) ? false : true
 			if comp_active
@@ -157,7 +160,8 @@ end
 			    # is this component type set to be shown in the totals grid -> thus display component_type as a grid
 				show_totals_grid = ass_comp.component.component_type.has_totals
 				if show_totals_grid
-				    # note - no hourly components are allowed in totals grid, this is reasonable since hours are converted to dollars immediately, so no hourly calculations are needed any longer.
+			    # note - no hourly components are allowed in totals grid, this is reasonable since hours are converted to dollars immediately, so no hourly calculations are needed any longer.
+          est_comp_total = BIG_DECIMAL_ZERO
 					e_current = Hash.new
 					# get scope totals for the calculation
 					#	- ('A' - use Assembly break, 'I' - Grid initial totals, 'S' - use latest subtotal, 'C' - use cumulative value, 'H' - use cumulative hours)
@@ -173,7 +177,8 @@ end
                     # else work_totals =    e_totals = Hash.new # dont use accumulations if undefined calculation to use cumulative totals
 					else work_totals = Hash.new # dont use accumulations if undefined calculation to use cumulative totals
 					end
-				    extra_hourly_conversion = false
+				  extra_hourly_conversion = false
+          Rails.logger.debug("@@@@VIEW_PRE_COMPUTE@@@@ est_comp_total: #{est_comp_total.bd_to_s(3)}")
 					@component_types_list.each do |ct|
 						if ct.in_totals_grid
 							ct_id = ct.id
@@ -203,6 +208,7 @@ end
           ea_ct_dollar_total += est_comp_total
           ea_total += est_comp_total
           e_total += est_comp_total
+          Rails.logger.debug("@@@@VIEW_PRE_TAX_CALC@@@@ est_comp_total: #{est_comp_total.bd_to_s(3)}")
           if !est_comp.tax_percent.nil?
             # temporarily store tax amount into estimate component record for calculations
             est_comp.tax_amount = est_comp_total * est_comp.tax_percent * BIG_DECIMAL_PERCENT
@@ -214,6 +220,7 @@ end
             ea_ct_tax_total += est_comp.tax_amount
             ea_ct_total += est_comp.tax_amount
           end
+          Rails.logger.debug("@@@@VIEW_AFTER_TAX_CALC@@@@ ct.id: :tax, value: #{e_current[:tax].bd_to_s(3)}")
 					concat render :partial => 'estimate_components/list_grid_component',
 					:locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :editable => comp.editable, :comp_calculations => e_current, :view_mode => view_mode, :work_totals => work_totals, :is_in_dollars => is_in_dollars, :grid_operand => ' '+comp.get_grid_operand_or_warn+' '+est_comp_value_str, :extra_hourly_conversion => extra_hourly_conversion, :est => @estimate, :est_comp => est_comp, :est_comp_was => est_comp_was }
 

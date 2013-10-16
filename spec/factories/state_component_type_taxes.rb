@@ -4,8 +4,9 @@
 
 FactoryGirl.define do
   sequence :tax_percent do |n|
-    BigDecimal.new("#{n.modulo(9) * 0.875}",4)
-  end 
+    # BigDecimal.new("#{n.modulo(9) * 0.875}",4)
+    BigDecimal.new(0.875, 4)
+  end
   factory :state_component_type_tax, :class => 'StateComponentTypeTax' do
     association             :state, :factory => :state, :strategy => :build
     association             :job_type, :factory => :job_type, :strategy => :build

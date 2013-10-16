@@ -1,4 +1,5 @@
 <%
+Rails.logger.debug("@@@@VIEW@@@@ ct.id: :tax , value: #{comp_calculations[:tax].bd_to_s(3)}")
 est_comp_errors = ''
 row_class = ''
 ass_comp_req = 'component_value'
@@ -37,7 +38,7 @@ if editable && view_mode == 'edit'
       concat hidden_field_tag("estimate_components_tax_pct_was[#{ass.id.to_s}_#{ass_comp.component.id.to_s}]", est_comp.tax_percent_for(@estimate, ass_comp.component).bd_to_s(3))
 	end
 else
-	concat content_tag(:span, ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' '+est_comp_value_str+')', :class => ass_comp_req)
+	concat content_tag(:span, ass_comp.nil_to_s+' ( '+ass_comp.component.get_grid_scope_or_warn+' '+ass_comp.component.get_grid_operand_or_warn+' '+est_comp_value_str+') tax @ '+est_comp.tax_percent.bd_to_s(3), :class => ass_comp_req)
 end
 if !est_comp_errors.blank?
 	concat content_tag(:span, est_comp_errors, :class => 'field_error')
@@ -51,14 +52,16 @@ tax = est_comp.tax_amount.nil? ? BIG_DECIMAL_ZERO : est_comp.tax_amount
     # hours_label = is_in_dollars[ct.id] ? '' : I18n.translate('view_field_labels.in_hours')
 	if ct.in_totals_grid
 		row_total += comp_calculations[ct.id] if !comp_calculations[ct.id].nil?
-        show_debug = true
-		Rails.logger.debug("VVVVShowDebug ass_comp.component.grid_scope = #{ass_comp.component.grid_scope.inspect.to_s}, is_in_dollars[ct.id] = #{is_in_dollars[ct.id].inspect.to_s}, work_totals = #{work_totals.inspect.to_s}, comp_calculations = #{comp_calculations.inspect.to_s}")
+    show_debug = true
+    Rails.logger.debug("@@@@VIEW@@@@ ct.id: #{ct.id.to_s}, value: #{comp_calculations[ct.id].bd_to_s(3)}")
+		# Rails.logger.debug("VVVVShowDebug ass_comp.component.grid_scope = #{ass_comp.component.grid_scope.inspect.to_s}, is_in_dollars[ct.id] = #{is_in_dollars[ct.id].inspect.to_s}, work_totals = #{work_totals.inspect.to_s}, comp_calculations = #{comp_calculations.inspect.to_s}")
 		working_calculations = defined?(work_totals) ? ( '$'+work_totals[ct.id].bd_to_s(2) )+grid_operand+' = ' : ''
 %>
 					<td class="grid_row_calc<%= row_class %>" id="grid_calc_<%= ass.id.to_s %>_<%= ass_comp.component.component_type.id.to_s %>_<%= ass_comp.component.id.to_s %>_<%= ct.id.to_s %>"><%= working_calculations+'$'+comp_calculations[ct.id].bd_to_s(2) %></td>
 <%
 	end
 end
+Rails.logger.debug("@@@@VIEW@@@@ ct.id: :tax , value: #{comp_calculations[:tax].bd_to_s(3)}")
 comp_calculations[:tax] = BIG_DECIMAL_ZERO if comp_calculations[:tax].blank?
 row_total += comp_calculations[:tax]
 %>

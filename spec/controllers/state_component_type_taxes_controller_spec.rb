@@ -44,7 +44,7 @@ describe StateComponentTypeTaxesController do
       response.should render_template('/new')
       assigns(:state_component_type_tax).should_not be_nil
       assigns(:state_component_type_tax).should be_a(StateComponentTypeTax)
-      assigns(:state_component_type_tax).should be_instance_of(StateComponentTypeTax) 
+      assigns(:state_component_type_tax).should be_instance_of(StateComponentTypeTax)
       assigns(:state_component_type_tax).should_not be_persisted
     end
     it "should create an item with the minimum valid parameters" do
@@ -54,7 +54,7 @@ describe StateComponentTypeTaxesController do
       post :create, :state_component_type_tax => min_attr
       assigns(:state_component_type_tax).should_not be_nil
       assigns(:state_component_type_tax).should be_a(StateComponentTypeTax)
-      assigns(:state_component_type_tax).should be_instance_of(StateComponentTypeTax) 
+      assigns(:state_component_type_tax).should be_instance_of(StateComponentTypeTax)
       assigns(:state_component_type_tax).should be_persisted
       response.should render_template("show")
       StateComponentTypeTax.count.should == @num_items + 1
@@ -65,7 +65,7 @@ describe StateComponentTypeTaxesController do
       response.should render_template('/edit')
       assigns(:state_component_type_tax).should_not be_nil
       assigns(:state_component_type_tax).should be_a(StateComponentTypeTax)
-      assigns(:state_component_type_tax).should be_instance_of(StateComponentTypeTax) 
+      assigns(:state_component_type_tax).should be_instance_of(StateComponentTypeTax)
       assigns(:state_component_type_tax).should eq(@tax_type_reg)
     end
     it 'should be able to PUT update an item' do
@@ -88,7 +88,7 @@ describe StateComponentTypeTaxesController do
       response.should render_template('/show')
       assigns(:state_component_type_tax).should_not be_nil
       assigns(:state_component_type_tax).should be_a(StateComponentTypeTax)
-      assigns(:state_component_type_tax).should be_instance_of(StateComponentTypeTax) 
+      assigns(:state_component_type_tax).should be_instance_of(StateComponentTypeTax)
       assigns(:state_component_type_tax).should eq(@tax_type_reg)
     end
     it 'should see the errors page on an ActiveRecord error' do
@@ -96,7 +96,7 @@ describe StateComponentTypeTaxesController do
       response.should redirect_to(:controller => 'home', :action => 'errors')
     end
   end
-  
+
   context 'it should have deactivated actions available and working' do
     it 'should be able to PUT deactivate an active item' do
       @tax_type_reg.deactivated?.should be_false
@@ -212,5 +212,5 @@ describe StateComponentTypeTaxesController do
       StateComponentTypeTax.count.should == item_count
     end
   end
-  
+
 end
