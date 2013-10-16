@@ -1564,11 +1564,13 @@ describe 'Estimates Integration Tests', :js => false do
         # page.fill_in "estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}", :with => '4.75'
         find(:xpath, '//input[@type="submit"]').click
       end
+
       #
       # it should show the user the entered tax percent and the calculated tax dollar amount
       page.should have_selector(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]")
-      find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^6\.250$/
-      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/.*\$ 156\.25$/
+      find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^2500\.00$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^0\.875/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/.*\$ 21\.88$/
       # it should show the second component to user with the default amount, tax percent and the calculated tax dollar amount
       find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").text.should =~/^2\.78$/
       find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").text.should =~/^0\.875$/
@@ -1587,7 +1589,7 @@ describe 'Estimates Integration Tests', :js => false do
       # following tests dependent upon helper_load_assemblies, spec_helper.rb helper_load_component_types and helper_load_components
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
       # it should let the user edit the updated tax percent
-      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").value.should =~/^6\.250$/
+      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").value.should =~/^0\.875$/
       find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/.*\$ 156\.25$/
       # it should let the user edit the updated tax percent
       find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").value.should =~/^2\.78$/
@@ -1652,10 +1654,8 @@ describe 'Estimates Integration Tests', :js => false do
 
         # it "should not allow the user to override the default hourly rate in the estimate."
 
-        save_and_open_page
         find(:xpath, '//input[@type="submit"]').click
       end
-      save_and_open_page
       # Dollars Component Type
       # it should show the user to use the default tax percent and the calculated tax dollar amount
       find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^2\.78$/
@@ -1681,130 +1681,16 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/^2\.780$/
       find(:xpath, "//span[@id=\"estimate_components_labor_rate_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/^22\.75$/
       find(:xpath, "//span[@id=\"estimate_components_labor_value_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/.*\$ 63\.24$/
-      find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/^3\.875$/
-      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/.*\$ 2\.45$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/^1\.750$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/.*\$ 1\.11$/
       # should not show tax calculations in grid area
       page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
       page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
       # it "it should have component type totals showing accumulated hours, computed dollars, tax amount and total for hourly component types."
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_hr\"]").text.should =~ /^6\.030$/
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_dollar\"]").text.should =~ /^137\.18$/
-      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_tax\"]").text.should =~ /^3\.74$/
-      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_total\"]").text.should =~ /^140\.93$/
-
-      # should have Totals Grid Initial Values table
-      page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_total\"]")
-
-      # it should have totals grid correct initial assembly Values
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___total\"]").text.should =~/^\$0\.00$/
-
-      # it should have totals grid correct initial Component Type Values
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^6\.030 hr. => \$137\.18$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__tax_total\"]").text.should =~/^\$3\.80$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__total\"]").text.should =~/^\$147\.01$/
-
-      # should have Totals Grid table
-      page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
-
-
-      # it should have grid detail/component values Values
-
-      # AssemblyComponentDescription2
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 0\.00 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 0\.00 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-
-      # AssemblyComponentDescription3
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-
-      # it should have totals grid Subtotal 1 at zeros
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_total\"]").text.should =~/^\$0\.00$/
-
-
-      # AssemblyComponentDescription4
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-
-      # it should have totals grid Subtotal 2 at zeros
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_total\"]").text.should =~/^\$0\.00$/
-
-      # it should have totals grid Grid Totals as zeros
-      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
-      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
-
-      # should have assembly totals grid
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$6\.03$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$137\.18$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_tax_total\"]").text.should =~ /^\$2\.45$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_total\"]").text.should =~ /^\$145\.66$/
-
-      # should have grand totals grid
-      find(:xpath, "//td[@id=\"grand_totals_type_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$6\.03$/
-      find(:xpath, "//td[@id=\"grand_totals_type_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$137\.18$/
-      find(:xpath, "//td[@id=\"grand_totals_type_tax_total\"]").text.should =~ /^\$2\.45$/
-      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^\$145\.66$/
-
-
-      # edit the existing component should give same values as view after update.
-      visit edit_estimate_path (estimate.id)
-      # save_and_open_page
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
-      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
-      Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
-
-      # Dollars Component Type
-      # it should show the user to use the default tax percent and the calculated tax dollar amount
-      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").value.should =~/^2\.78$/
-      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").value.should =~/^0\.000$/
-      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/.*\$ 0\.00$/
-      # it should show the user to use the default tax percent and the calculated tax dollar amount
-      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").value.should =~/^3\.25$/
-      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").value.should =~/^0\.000$/
-      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").text.should =~/.*\$ 0\.00$/
-      # it "should accumulate computed dollars, tax amount and total."
-      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_dollar\"]").text.should =~ /^6\.03$/
-      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_tax\"]").text.should =~ /^0\.00$/
-      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_total\"]").text.should =~ /^6\.03$/
-
-      # Hourly Component Type
-      # it should have component type totals showing calculated hours at specific rate, and the entered tax percent and the tax dollar amount using computed hourly dollar amount
-      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").value.should =~/^3\.250$/
-      find(:xpath, "//span[@id=\"estimate_components_labor_rate_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").text.should =~/^22\.75$/
-      find(:xpath, "//span[@id=\"estimate_components_labor_value_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").text.should =~/.*\$ 73\.94$/
-      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").value.should =~/^0\.000$/
-      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").text.should =~/.*\$ 0\.00$/
-      # it should show calculated hours at specific rate, and the default zero tax percent and the zero tax dollar amount
-      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").value.should =~/^2\.780$/
-      find(:xpath, "//span[@id=\"estimate_components_labor_rate_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/^22\.75$/
-      find(:xpath, "//span[@id=\"estimate_components_labor_value_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/.*\$ 63\.24$/
-      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").value.should =~/^3\.875$/
-      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/.*\$ 2\.45$/
-      # should not show tax calculations in grid area
-      page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
-      page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
-      # it "it should have component type totals showing accumulated hours, computed dollars, tax amount and total for hourly component types."
-      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_hr\"]").text.should =~ /^6\.030$/
-      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_dollar\"]").text.should =~ /^137\.18$/
-      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_tax\"]").text.should =~ /^2\.45$/
-      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_total\"]").text.should =~ /^139\.63$/
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_tax\"]").text.should =~ /^2\.40$/
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_total\"]").text.should =~ /^139\.58$/
 
       # should have Totals Grid Initial Values table
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_total\"]")
@@ -1819,7 +1705,7 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^6\.030 hr. => \$137\.18$/
       find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__tax_total\"]").text.should =~/^\$2\.45$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__total\"]").text.should =~/^\$145\.66$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__total\"]").text.should =~/^\$145\.67$/
 
       # should have Totals Grid table
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
@@ -1828,42 +1714,170 @@ describe 'Estimates Integration Tests', :js => false do
       # it should have grid detail/component values Values
 
       # AssemblyComponentDescription2
-      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}\"]").value.should =~/^0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 0\.00 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 0\.00 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 0\.00 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03 \* 7\.50 = \$45\.23$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$137\.18 \* 7\.50 = \$1028\.87$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_tax\"]").text.should =~/^\$28\.39$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_total\"]").text.should =~/^\$1102\.49$/
 
       # AssemblyComponentDescription3
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$0\.00 \* 2\.78 = \$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03 \* 2\.78 = \$16\.76$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$137\.18 \* 2\.78 = \$381\.37$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_tax\"]").text.should =~/^\$10\.52$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_total\"]").text.should =~/^\$408\.65$/
 
-      # it should have totals grid Subtotal 1 at zeros
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_total\"]").text.should =~/^\$0\.00$/
+      # it should have totals grid Subtotal 1
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$61\.99$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$1410\.24$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_tax_total\"]").text.should =~/^\$38\.92$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_total\"]").text.should =~/^\$1511\.14$/
+
+
+      # AssemblyComponentDescription4
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$61\.99 \% 2\.78 = \$1\.72$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$1410\.24 \% 2\.78 = \$39\.20$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_tax\"]").text.should =~/^\$1\.15$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_total\"]").text.should =~/^\$42\.08$/
+
+      # it should have totals grid Subtotal 2
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$1\.72$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$39\.20$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_tax_total\"]").text.should =~/^\$1\.15$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_total\"]").text.should =~/^\$42\.08$/
 
       # it should have totals grid Grid Totals as zeros
-      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
-      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_total\"]").text.should =~/^\$0\.00$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$63\.71$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$1449\.44$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_tax_total\"]").text.should =~/^\$40\.06$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_total\"]").text.should =~/^\$1553\.22$/
 
       # should have assembly totals grid
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$6\.03$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$137\.18$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_tax_total\"]").text.should =~ /^\$2\.45$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_total\"]").text.should =~ /^\$145\.66$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$69\.74$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$1586\.62$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_tax_total\"]").text.should =~ /^\$42\.52$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_total\"]").text.should =~ /^\$1698\.88$/
 
       # should have grand totals grid
-      find(:xpath, "//td[@id=\"grand_totals_type_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$6\.03$/
-      find(:xpath, "//td[@id=\"grand_totals_type_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$137\.18$/
-      find(:xpath, "//td[@id=\"grand_totals_type_tax_total\"]").text.should =~ /^\$2\.45$/
-      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^\$145\.66$/
+      find(:xpath, "//td[@id=\"grand_totals_type_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$69\.74$/
+      find(:xpath, "//td[@id=\"grand_totals_type_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$1586\.62$/
+      find(:xpath, "//td[@id=\"grand_totals_type_tax_total\"]").text.should =~ /^\$42\.52$/
+      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^\$1698\.88$/
+
+
+      # edit the existing component should give same values as view after update.
+      visit edit_estimate_path (estimate.id)
+
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
+      find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
+      Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
+
+      # Dollars Component Type
+      # it should show the user to use the default tax percent and the calculated tax dollar amount
+      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").value.should =~/^2\.78$/
+      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").value.should =~/^0\.875$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/.*\$ 0\.02$/
+      # it should show the user to use the default tax percent and the calculated tax dollar amount
+      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").value.should =~/^3\.25$/
+      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").value.should =~/^0\.875$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").text.should =~/.*\$ 0\.03$/
+      # it "should accumulate computed dollars, tax amount and total."
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_dollar\"]").text.should =~ /^6\.03$/
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_tax\"]").text.should =~ /^0\.05$/
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}_total\"]").text.should =~ /^6\.08$/
+
+      # Hourly Component Type
+      # it should have component type totals showing calculated hours at specific rate, and the entered tax percent and the tax dollar amount using computed hourly dollar amount
+      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").value.should =~/^3\.250$/
+      find(:xpath, "//span[@id=\"estimate_components_labor_rate_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").text.should =~/^22\.75$/
+      find(:xpath, "//span[@id=\"estimate_components_labor_value_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").text.should =~/.*\$ 73\.94$/
+      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").value.should =~/^1\.750$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_def_component.id.to_s}\"]").text.should =~/.*\$ 1\.29$/
+      # it should show calculated hours at specific rate, and the default zero tax percent and the zero tax dollar amount
+      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").value.should =~/^2\.780$/
+      find(:xpath, "//span[@id=\"estimate_components_labor_rate_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/^22\.75$/
+      find(:xpath, "//span[@id=\"estimate_components_labor_value_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/.*\$ 63\.24$/
+      find(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").value.should =~/^1\.750$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}\"]").text.should =~/.*\$ 1\.11$/
+      # should not show tax calculations in grid area
+      page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
+      page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]")
+      # it "it should have component type totals showing accumulated hours, computed dollars, tax amount and total for hourly component types."
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_hr\"]").text.should =~ /^6\.030$/
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_dollar\"]").text.should =~ /^137\.18$/
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_tax\"]").text.should =~ /^2\.40$/
+      find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_total\"]").text.should =~ /^139\.58$/
+
+      # should have Totals Grid Initial Values table
+      page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_total\"]")
+
+      # it should have totals grid correct initial assembly Values
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___#{@tax_component_type.id.to_s}\"]").text.should =~/^\$0\.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$0\.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___tax_total\"]").text.should =~/^\$0\.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}___total\"]").text.should =~/^\$0\.00$/
+
+      # it should have totals grid correct initial Component Type Values
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^6\.030 hr. => \$137\.18$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__tax_total\"]").text.should =~/^\$2\.45$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}__total\"]").text.should =~/^\$145\.67$/
+
+      # should have Totals Grid table
+      page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
+
+
+      # it should have grid detail/component values Values
+
+      # AssemblyComponentDescription2
+      find(:xpath, "//input[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}\"]").value.should =~/^7\.50$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03 \* 7\.50 = \$45\.23$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$137\.18 \* 7\.50 = \$1028\.87$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_tax\"]").text.should =~/^\$28\.39$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_total\"]").text.should =~/^\$1102\.49$/
+
+      # AssemblyComponentDescription3
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03 \* 2\.78 = \$16\.76$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$137\.18 \* 2\.78 = \$381\.37$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_tax\"]").text.should =~/^\$10\.52$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_non_editable_component.id.to_s}_total\"]").text.should =~/^\$408\.65$/
+
+
+      # it should have totals grid Subtotal 1
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$61\.99$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$1410\.24$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_tax_total\"]").text.should =~/^\$38\.92$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_1_total\"]").text.should =~/^\$1511\.14$/
+
+
+      # AssemblyComponentDescription4
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$61\.99 \% 2\.78 = \$1\.72$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$1410\.24 \% 2\.78 = \$39\.20$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_tax\"]").text.should =~/^\$1\.15$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_calc_subtotal_component.id.to_s}_total\"]").text.should =~/^\$42\.08$/
+
+      # it should have totals grid Subtotal 2
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$1\.72$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$39\.20$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_tax_total\"]").text.should =~/^\$1\.15$/
+      find(:xpath, "//td[@id=\"subtotal_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_stot_2_total\"]").text.should =~/^\$42\.08$/
+
+      # it should have totals grid Grid Totals as zeros
+      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$63\.71$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^0\.000 hr. => \$1449\.44$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_tax_total\"]").text.should =~/^\$40\.06$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_total\"]").text.should =~/^\$1553\.22$/
+
+      # should have assembly totals grid
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$69\.74$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$1586\.62$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_tax_total\"]").text.should =~ /^\$42\.52$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@tax_assembly.id.to_s}_total\"]").text.should =~ /^\$1698\.88$/
+
+      # should have grand totals grid
+      find(:xpath, "//td[@id=\"grand_totals_type_#{@tax_component_type.id.to_s}\"]").text.should =~ /^\$69\.74$/
+      find(:xpath, "//td[@id=\"grand_totals_type_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~ /6\.030 hr. => \$1586\.62$/
+      find(:xpath, "//td[@id=\"grand_totals_type_tax_total\"]").text.should =~ /^\$42\.52$/
+      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^\$1698\.88$/
+
     end
   end
 end
