@@ -92,27 +92,27 @@ describe 'Users layouts Tests - ' do
     it 'should go to the About page when the footer about link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.about.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.about.header')}$/
-    end        
+    end
     it 'should go to the License page when the footer License link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.license.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.license.header')}$/
-    end        
+    end
     it 'should go to the Contact page when the footer contact link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.contact.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.contact.header')}$/
-    end    
+    end
     it 'should go to the News page when the footer news link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.news.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.news.header')}$/
-    end            
+    end
     it 'should go to the Status page when the footer status link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.status.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.status.header')}$/
-    end    
+    end
     it 'should go to the Help page when the footer help link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.help.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.help.header')}$/
-    end    
+    end
 
   end
 
@@ -133,7 +133,7 @@ describe 'Users layouts Tests - ' do
     it 'should not see site map on the page' do
       #save_and_open_page
       page.should have_no_selector('div#footer_nav_bar//a', :text => I18n.translate('home.site_map.title'))
-    end    
+    end
   end
 
   context ' - Layout (Logged in Regular User) - ' do
@@ -202,7 +202,7 @@ describe 'Users Layouts Links Tests - ' do
     end
   end
 
-  context ' - Layout Links (Logged in Regular User) - ' do    
+  context ' - Layout Links (Logged in Regular User) - ' do
     before(:each) do
       @me = User.create!(FactoryGirl.attributes_for(:reg_user_full_create_attr))
       helper_signin(:reg_user_full_create_attr, @me.full_name)
@@ -216,7 +216,7 @@ describe 'Users Layouts Links Tests - ' do
     it 'should go to the Site map page when the footer site map link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
-    end            
+    end
     it 'should list all of the resources per system that the item can see and can? see' do
       # save_and_open_page
       MENU_ITEMS.each do | app_id, app |
@@ -251,7 +251,7 @@ describe 'Users Layouts Links Tests - ' do
     it 'should go to the Site map page when the footer site map link is clicked' do
       find('div#footer_nav_bar').find('a', :text => I18n.translate('home.site_map.title')).click
       find('#header_tagline_page_header').text.should =~ /^#{I18n.translate('home.site_map.header')}$/
-    end            
+    end
     it 'should list all the systems the item can see in the left nav' do
       # save_and_open_page
       MENU_ITEMS.each do | app_id, app |

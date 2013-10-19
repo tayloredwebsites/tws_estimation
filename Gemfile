@@ -19,7 +19,7 @@ gem 'cancan'
 
 gem 'foreigner' # foreign key handling
 
-# gem 'rdiscount'	# markdown files display in view # removed for win/xp? issues
+gem 'rdiscount'	# markdown files display in view # removed for win/xp? issues
 
 gem 'jquery-rails'
 
