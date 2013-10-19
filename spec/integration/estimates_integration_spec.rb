@@ -1410,7 +1410,7 @@ describe 'Estimates Integration Tests', :js => false do
       # it should show the user the entered tax percent and the calculated tax dollar amount
       page.should have_selector(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]")
       find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^2500\.00$/
-      find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^6\.250$/
+      find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^6\.250/
       find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/.*\$ 156\.25$/
       # it should show the second component to user with the default amount, tax percent and the calculated tax dollar amount
       find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_def_component.id.to_s}\"]").text.should =~/^2\.78$/
@@ -1422,6 +1422,7 @@ describe 'Estimates Integration Tests', :js => false do
       # # it should show the user the entered tax percent and the calculated tax dollar amount on a grid component
       # find(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]").text.should =~/^4\.750$/
       # find(:xpath, "//span[@id=\"estimate_components_tax_amt_#{@tax_assembly.id.to_s}_#{@tax_grid_editable_component.id.to_s}\"]").text.should =~/.*\$ 35\.63$/
+
       visit edit_estimate_path (estimate.id)
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
@@ -1604,7 +1605,6 @@ describe 'Estimates Integration Tests', :js => false do
 
       # edit the existing component should give same values as view after update.
       visit edit_estimate_path (estimate.id)
-
 
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
