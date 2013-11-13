@@ -265,4 +265,60 @@ describe Component do
       Component.count.should == num_items + 1
     end
   end
+  context 'it should allow grid components to select component types to calculate upon - ' do
+    before (:each) do
+      @component_type_totals = FactoryGirl.create(:component_type_totals)
+      @component_type1 = FactoryGirl.create(:component_type) # default is: in_totals_grid
+      @component_type2 = FactoryGirl.create(:component_type) # default is: in_totals_grid
+      @default = FactoryGirl.create(:default)
+    end
+    it 'should create component if no types_in_calc (use all)' do
+      attribs = UserIntegrationHelper.build_attributes(:component_totals_create, component_type: @component_type_totals, default: @default)
+      attribs = attribs.merge({"types_in_calc" => ''})
+      Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
+      num_items = Component.count
+      item1 = Component.create(attribs)
+      item1.should be_instance_of(Component)
+      # loop through all of the attributes used to create this item to see if in created item
+      attribs.each do | key, val |
+        Rails.logger.debug("T component_type_spec component_types_min item1.send(#{key}):#{item1.send(key)}")
+        item1.send(key).should == val
+      end
+      item1.errors.count.should == 0
+      item1.id.should_not be_nil
+      Component.count.should == num_items + 1
+    end
+    it 'should create component with valid types_in_calc' do
+      attribs = UserIntegrationHelper.build_attributes(:component_totals_create, component_type: @component_type_totals, default: @default)
+      attribs = attribs.merge({"types_in_calc" => "#{@component_type1.id} #{@component_type2.id}"})
+      Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
+      num_items = Component.count
+      item1 = Component.create(attribs)
+      item1.should be_instance_of(Component)
+      # loop through all of the attributes used to create this item to see if in created item
+      attribs.each do | key, val |
+        Rails.logger.debug("T component_type_spec component_types_min item1.send(#{key}):#{item1.send(key)}")
+        item1.send(key).should == val
+      end
+      item1.id.should_not be_nil
+      item1.errors.count.should == 0
+      Component.count.should == num_items + 1
+    end
+    it 'should not create component with invalid types_in_calc' do
+      attribs = UserIntegrationHelper.build_attributes(:component_totals_create, component_type: @component_type_totals, default: @default)
+      attribs = attribs.merge({"types_in_calc" => '999999'})
+      Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
+      num_items = Component.count
+      item1 = Component.create(attribs)
+      item1.should be_instance_of(Component)
+      # loop through all of the attributes used to create this item to see if in created item
+      attribs.each do | key, val |
+        Rails.logger.debug("T component_type_spec component_types_min key: #{key}, val: #{val}, item1.send(#{key}):#{item1.send(key)}")
+        item1.send(key).should == val
+      end
+      item1.id.should be_nil
+      item1.errors.count.should > 0
+      Component.count.should == num_items
+    end
+  end
 end

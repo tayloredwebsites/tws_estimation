@@ -3,7 +3,7 @@ class Component < ActiveRecord::Base
   include Models::Deactivated
   include Models::CommonMethods
   
-  attr_accessible :description, :editable, :deactivated, :component_type_id, :default_id, :grid_operand, :grid_scope, :grid_subtotal, :labor_rate_default_id
+  attr_accessible :description, :editable, :deactivated, :component_type_id, :default_id, :grid_operand, :grid_scope, :grid_subtotal, :labor_rate_default_id, :types_in_calc
   # todo ? remove these as accessible? -> attr_accessible :component_type_id, :default_id
 
   belongs_to :component_type
@@ -35,7 +35,7 @@ class Component < ActiveRecord::Base
 
   validates_presence_of :labor_rate_default_id, :if => :is_hourly_type?, :message => "Hourly components require a rate!"
     
-  before_save :nil_grid_values
+  before_save :validate_save
 
   # class methods
 
@@ -107,6 +107,17 @@ class Component < ActiveRecord::Base
     grid_scope = nil if grid_scope == ''
     grid_subtotal = nil if grid_scope == ''
   end
+
+  # validation before save
+  def validate_save
+    nil_grid_values
+    types_in_calc.split(' ').each do |type|
+      #look up each component type id here and return false if invalid
+    end
+    return true
+  end
+
+
   
   def is_hourly_type?
     self.component_type.nil? ? false : self.component_type.has_hours

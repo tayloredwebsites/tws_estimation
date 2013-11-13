@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130304012136) do
+ActiveRecord::Schema.define(:version => 20131113024256) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(:version => 20130304012136) do
     t.datetime "updated_at",                     :null => false
   end
 
-  add_index "assemblies", ["description"], :name => "index_assemblies_on_description", :unique => true
+  add_index "assemblies", ["description"], :name => "assemblies_description", :unique => true
 
   create_table "assembly_components", :force => true do |t|
     t.integer  "assembly_id",                     :null => false
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(:version => 20130304012136) do
     t.datetime "updated_at",                        :null => false
   end
 
-  add_index "component_types", ["description"], :name => "index_component_types_on_description", :unique => true
+  add_index "component_types", ["description"], :name => "component_types_description", :unique => true
 
   create_table "components", :force => true do |t|
     t.integer  "component_type_id",                        :null => false
@@ -61,10 +61,11 @@ ActiveRecord::Schema.define(:version => 20130304012136) do
     t.string   "grid_scope"
     t.string   "grid_subtotal"
     t.integer  "labor_rate_default_id"
+    t.string   "types_in_calc",         :default => "",    :null => false
   end
 
-  add_index "components", ["component_type_id", "description"], :name => "index_components_on_component_type_id_and_description", :unique => true
-  add_index "components", ["labor_rate_default_id"], :name => "index_components_on_labor_rate_default_id"
+  add_index "components", ["component_type_id", "description"], :name => "components_component_type_iddescription", :unique => true
+  add_index "components", ["labor_rate_default_id"], :name => "components_labor_rate_default_id"
 
   create_table "defaults", :force => true do |t|
     t.string   "store",                                      :default => "",    :null => false
@@ -83,8 +84,8 @@ ActiveRecord::Schema.define(:version => 20130304012136) do
     t.datetime "updated_at",                     :null => false
   end
 
-  add_index "estimate_assemblies", ["assembly_id"], :name => "index_estimate_assemblies_on_assembly_id"
-  add_index "estimate_assemblies", ["estimate_id"], :name => "index_estimate_assemblies_on_estimate_id"
+  add_index "estimate_assemblies", ["assembly_id"], :name => "estimate_assemblies_assembly_id"
+  add_index "estimate_assemblies", ["estimate_id"], :name => "estimate_assemblies_estimate_id"
 
   create_table "estimate_components", :force => true do |t|
     t.integer  "estimate_id",                                                        :null => false
@@ -102,10 +103,10 @@ ActiveRecord::Schema.define(:version => 20130304012136) do
     t.decimal  "labor_value",      :precision => 19, :scale => 2
   end
 
-  add_index "estimate_components", ["assembly_id"], :name => "index_estimate_components_on_assembly_id"
-  add_index "estimate_components", ["component_id"], :name => "index_estimate_components_on_component_id"
-  add_index "estimate_components", ["estimate_id", "assembly_id", "component_id"], :name => "unique_estimate_component", :unique => true
-  add_index "estimate_components", ["estimate_id"], :name => "index_estimate_components_on_estimate_id"
+  add_index "estimate_components", ["assembly_id"], :name => "estimate_components_assembly_id"
+  add_index "estimate_components", ["component_id"], :name => "estimate_components_component_id"
+  add_index "estimate_components", ["estimate_id", "assembly_id", "component_id"], :name => "estimate_components_estimate_idassembly_idcomponent_id", :unique => true
+  add_index "estimate_components", ["estimate_id"], :name => "estimate_components_estimate_id"
 
   create_table "estimates", :force => true do |t|
     t.string   "title",                              :null => false
@@ -121,9 +122,9 @@ ActiveRecord::Schema.define(:version => 20130304012136) do
     t.datetime "updated_at",                         :null => false
   end
 
-  add_index "estimates", ["job_type_id"], :name => "index_estimates_on_job_type_id"
-  add_index "estimates", ["sales_rep_id"], :name => "index_estimates_on_sales_rep_id"
-  add_index "estimates", ["state_id"], :name => "index_estimates_on_state_id"
+  add_index "estimates", ["job_type_id"], :name => "estimates_job_type_id"
+  add_index "estimates", ["sales_rep_id"], :name => "estimates_sales_rep_id"
+  add_index "estimates", ["state_id"], :name => "estimates_state_id"
 
   create_table "job_types", :force => true do |t|
     t.string   "name",        :default => "",    :null => false
@@ -153,9 +154,9 @@ ActiveRecord::Schema.define(:version => 20130304012136) do
     t.datetime "updated_at",                                                          :null => false
   end
 
-  add_index "state_component_type_taxes", ["component_type_id"], :name => "index_state_component_type_taxes_on_component_type_id"
-  add_index "state_component_type_taxes", ["job_type_id"], :name => "index_state_component_type_taxes_on_job_type_id"
-  add_index "state_component_type_taxes", ["state_id"], :name => "index_state_component_type_taxes_on_state_id"
+  add_index "state_component_type_taxes", ["component_type_id"], :name => "state_component_type_taxes_component_type_id"
+  add_index "state_component_type_taxes", ["job_type_id"], :name => "state_component_type_taxes_job_type_id"
+  add_index "state_component_type_taxes", ["state_id"], :name => "state_component_type_taxes_state_id"
 
   create_table "states", :force => true do |t|
     t.string   "code",       :default => "", :null => false
@@ -177,28 +178,28 @@ ActiveRecord::Schema.define(:version => 20130304012136) do
     t.boolean  "deactivated"
   end
 
-  add_foreign_key "assembly_components", "assemblies", :name => "assembly_components_assembly_id_fk"
-  add_foreign_key "assembly_components", "components", :name => "assembly_components_component_id_fk"
+  add_foreign_key "assembly_components", "assemblies", name: "assembly_components_assembly_id_fk"
+  add_foreign_key "assembly_components", "components", name: "assembly_components_component_id_fk"
 
-  add_foreign_key "components", "component_types", :name => "components_component_type_id_fk"
-  add_foreign_key "components", "defaults", :name => "components_default_id_fk"
-  add_foreign_key "components", "defaults", :name => "components_labor_rate_default_id_fk", :column => "labor_rate_default_id"
+  add_foreign_key "components", "component_types", name: "components_component_type_id_fk"
+  add_foreign_key "components", "defaults", name: "components_default_id_fk"
+  add_foreign_key "components", "defaults", name: "components_labor_rate_default_id_fk", column: "labor_rate_default_id"
 
-  add_foreign_key "estimate_assemblies", "assemblies", :name => "estimate_assemblies_assembly_id_fk"
-  add_foreign_key "estimate_assemblies", "estimates", :name => "estimate_assemblies_estimate_id_fk"
+  add_foreign_key "estimate_assemblies", "assemblies", name: "estimate_assemblies_assembly_id_fk"
+  add_foreign_key "estimate_assemblies", "estimates", name: "estimate_assemblies_estimate_id_fk"
 
-  add_foreign_key "estimate_components", "assemblies", :name => "estimate_components_assembly_id_fk"
-  add_foreign_key "estimate_components", "components", :name => "estimate_components_component_id_fk"
-  add_foreign_key "estimate_components", "estimates", :name => "estimate_components_estimate_id_fk"
+  add_foreign_key "estimate_components", "assemblies", name: "estimate_components_assembly_id_fk"
+  add_foreign_key "estimate_components", "components", name: "estimate_components_component_id_fk"
+  add_foreign_key "estimate_components", "estimates", name: "estimate_components_estimate_id_fk"
 
-  add_foreign_key "estimates", "job_types", :name => "estimates_job_type_id_fk"
-  add_foreign_key "estimates", "sales_reps", :name => "estimates_sales_rep_id_fk"
-  add_foreign_key "estimates", "states", :name => "estimates_state_id_fk"
+  add_foreign_key "estimates", "job_types", name: "estimates_job_type_id_fk"
+  add_foreign_key "estimates", "sales_reps", name: "estimates_sales_rep_id_fk"
+  add_foreign_key "estimates", "states", name: "estimates_state_id_fk"
 
-  add_foreign_key "sales_reps", "users", :name => "sales_reps_user_id_fk"
+  add_foreign_key "sales_reps", "users", name: "sales_reps_user_id_fk"
 
-  add_foreign_key "state_component_type_taxes", "component_types", :name => "state_component_type_taxes_component_type_id_fk"
-  add_foreign_key "state_component_type_taxes", "job_types", :name => "state_component_type_taxes_job_type_id_fk"
-  add_foreign_key "state_component_type_taxes", "states", :name => "state_component_type_taxes_state_id_fk"
+  add_foreign_key "state_component_type_taxes", "component_types", name: "state_component_type_taxes_component_type_id_fk"
+  add_foreign_key "state_component_type_taxes", "job_types", name: "state_component_type_taxes_job_type_id_fk"
+  add_foreign_key "state_component_type_taxes", "states", name: "state_component_type_taxes_state_id_fk"
 
 end
