@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131113024256) do
+ActiveRecord::Schema.define(:version => 20131119003016) do
 
   create_table "assemblies", :force => true do |t|
     t.string   "description", :default => "",    :null => false
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(:version => 20131113024256) do
     t.decimal  "tax_amount",       :precision => 19, :scale => 2
     t.decimal  "labor_rate_value", :precision => 19, :scale => 2
     t.decimal  "labor_value",      :precision => 19, :scale => 2
+    t.string   "types_in_calc",                                   :default => "",    :null => false
   end
 
   add_index "estimate_components", ["assembly_id"], :name => "estimate_components_assembly_id"
