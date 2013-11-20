@@ -68,6 +68,39 @@ describe EstimateComponent do
         EstimateComponent.count.should == num_items
       end
     end   
+    it 'should not create EstimateComponent with invalid types_in_calc' do
+      num_items = EstimateComponent.count
+      attribs = generate_estimate_component_min_attributes()
+      attribs = attribs.merge({:types_in_calc => '999999'})
+      Rails.logger.debug("T component_create.attributes: #{attribs.inspect.to_s}")
+      item1 = EstimateComponent.create(attribs)
+      item1.should be_instance_of(EstimateComponent)
+      # loop through all of the attributes used to create this item to see if in created item
+      attribs.each do | key, val |
+        Rails.logger.debug("T estimate_type_spec estimate_types_min item1.send(#{key}):#{item1.send(key)}")
+        item1.send(key).should == val
+      end
+      item1.id.should be_nil
+      item1.errors.count.should > 0
+      EstimateComponent.count.should == num_items
+    end
+    it 'should create EstimateComponent with valid types_in_calc' do
+      @component_type1 = FactoryGirl.create(:component_type)
+      @component_type2 = FactoryGirl.create(:component_type)
+      num_items = EstimateComponent.count
+      attribs = generate_estimate_component_min_attributes()
+      attribs = attribs.merge({"types_in_calc" => "#{@component_type1.id} #{@component_type2.id}"})
+      item1 = EstimateComponent.create(attribs)
+      item1.should be_instance_of(EstimateComponent)
+      # loop through all of the attributes used to create this item to see if in created item
+      attribs.each do | key, val |
+        Rails.logger.debug("T estimate_type_spec estimate_types_min item1.send(#{key}):#{item1.send(key)}")
+        item1.send(key).should == val
+      end
+      item1.id.should_not be_nil
+      item1.errors.count.should == 0
+      EstimateComponent.count.should == num_items + 1
+    end
   end
   context 'it should be associated with estimates and components' do
     before (:each) do
@@ -122,5 +155,6 @@ describe EstimateComponent do
       Component.count.should == num_parent - 1
     end
   end
+
 
 end

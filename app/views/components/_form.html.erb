@@ -36,6 +36,11 @@
 
 <div class="field_title_grouping">
     <div class="field_title"><%= I18n.translate('components.field_group.has_totals_features') %></div>
+    <% if @has_totals_grid %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.has_totals', :type => @component_type.nil_to_s) %></div>
+    <% else %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.not_has_totals', :type => @component_type.nil_to_s) %></div>
+    <% end %>
     <div class="field">
           <%= f.label :editable, I18n.translate('components.field_name.editable'), :class => 'label' %>
         <span class="value">
@@ -61,16 +66,20 @@
         <%= f.label :grid_subtotal, I18n.translate('components.field_name.grid_subtotal'), :class => 'label' %>
         <span class="value"><%= f.text_field :grid_subtotal %></span>
     </div>
+    <div class="field">
+        <%= f.label :types_in_calc, I18n.translate('components.field_name.types_in_calc'), :class => 'label' %>
+        <span class="value"><%= f.text_field :types_in_calc %></span>
+    </div>
     <div class="field_title"><%= I18n.translate('components.field_group.end_has_totals_features') %></div>
-    <% if @has_totals_grid %>
-        <div class="field_title_note"><%= I18n.translate('components.field_group.has_totals', :type => @component_type.nil_to_s) %></div>
-    <% else %>
-        <div class="field_title_note"><%= I18n.translate('components.field_group.not_has_totals', :type => @component_type.nil_to_s) %></div>
-    <% end %>
 </div>
 
 <div class="field_title_grouping">
     <div class="field_title"><%= I18n.translate('components.field_group.has_hours_features') %></div>
+    <% if @has_hours %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.has_hours', :type => @component_type.nil_to_s) %></div>
+    <% else %>
+        <div class="field_title_note"><%= I18n.translate('components.field_group.not_has_hours', :type => @component_type.nil_to_s) %></div>
+    <% end %>
     <div class="field">
         <%= f.label :default, I18n.translate('components.field_name.labor_rate_default'), :class => 'label' %>
         <span class="value">
@@ -78,11 +87,6 @@
         </span>
     </div>
     <div class="field_title"><%= I18n.translate('components.field_group.end_has_hours_features') %></div>
-    <% if @has_hours %>
-        <div class="field_title_note"><%= I18n.translate('components.field_group.has_hours', :type => @component_type.nil_to_s) %></div>
-    <% else %>
-        <div class="field_title_note"><%= I18n.translate('components.field_group.not_has_hours', :type => @component_type.nil_to_s) %></div>
-    <% end %>
 </div>
 
 <div class="field">

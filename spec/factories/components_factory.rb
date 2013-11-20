@@ -16,7 +16,7 @@ def generate_component_accessible_attributes
     :grid_scope => 'A',
     :grid_subtotal => 'First',
     :labor_rate_default_id => default_hourly_rate.id,
-    :types_in_calc => '98765'
+    :types_in_calc => ''
   }
 end
 
@@ -81,6 +81,7 @@ FactoryGirl.define do
     grid_operand              '%'
     grid_scope                'A'
     grid_subtotal          'First'
+    types_in_calc           ''
   end
   factory :component_accessible_create, :class => Component do
     association             :component_type, :factory => :component_type, :strategy => :build

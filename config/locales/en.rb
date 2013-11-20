@@ -523,7 +523,8 @@
         :labor_rate_default => 'Labor Rate Lookup',
         :deactivated => 'Deactivated',
         :created_at => 'Created',
-        :updated_at => 'Updated'
+        :updated_at => 'Updated',
+        :types_in_calc => 'Component Types for Calculation'
       },
       :field_name_short => {
         :id => 'ID',

@@ -32,7 +32,6 @@ describe Component do
       attribs = generate_component_accessible_attributes()
       Rails.logger.debug("T generate_component_accessible_attributes: #{attribs.inspect.to_s}")
       item1 = Component.create(attribs)
-      item1.should be_instance_of(Component)
       # loop through all of the attributes used to create this item to see if in created item
       attribs.each do | key, val |
         Rails.logger.debug("T component_type_spec component_types_min item1.send(#{key}):#{item1.send(key)}")

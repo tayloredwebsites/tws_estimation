@@ -35,7 +35,7 @@ class Component < ActiveRecord::Base
 
   validates_presence_of :labor_rate_default_id, :if => :is_hourly_type?, :message => "Hourly components require a rate!"
 
-  before_save :validate_save
+  validate :validate_misc
 
   # class methods
 
@@ -108,8 +108,8 @@ class Component < ActiveRecord::Base
     grid_subtotal = nil if grid_scope == ''
   end
 
-  # validation before save
-  def validate_save
+  # misc. validations
+  def validate_misc
     nil_grid_values
     types_in_calc.split(' ').each do |type|
       #look up each component type id here and return false if invalid

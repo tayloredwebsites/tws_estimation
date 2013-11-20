@@ -2,7 +2,7 @@ class EstimateComponent < ActiveRecord::Base
 
   include Models::CommonMethods
 
-  attr_accessible :value, :write_in_name, :component_id, :assembly_id, :estimate_id, :deactivated, :note #, :component, :assembly, :estimate
+  attr_accessible :value, :write_in_name, :component_id, :assembly_id, :estimate_id, :deactivated, :note, :types_in_calc #, :component, :assembly, :estimate
   # todo ? remove these as accessible? -> attr_accessible :assembly_component, :estimate_assembly, :assembly_component_id, :estimate_assembly_id
 
   belongs_to :estimate
@@ -18,6 +18,8 @@ class EstimateComponent < ActiveRecord::Base
     :presence => true
   validates_uniqueness_of :component_id,
     :scope => [:estimate_id, :assembly_id]
+
+  validate :validate_misc
 
   # after_validation :check_required_has_value
 
@@ -166,6 +168,25 @@ class EstimateComponent < ActiveRecord::Base
   def initialize_from_assembly_component(ass_comp)
     self.assembly_id = ass_comp.assembly_id
     self.component_id = ass_comp.component_id
+  end
+
+  # misc. validations
+  def validate_misc
+    types_in_calc.split(' ').each do |type|
+      #look up each component type id here and return false if invalid
+      Rails.logger.debug("*** EstimateComponent.validate_save lookup component_type_id: #{type}")
+      begin
+        comp_type = ComponentType.find(type)
+      rescue Exception=>ex
+        errors.add(:types_in_calc, I18n.translate('errors.error_msg', :msg => ex.to_s ) )
+        return false
+      end
+      if comp_type.blank?
+        errors.add(:types_in_calc, I18n.translate('errors.cannot_find_obj_id', :obj => 'Component Type', :id => type ) )
+        return false
+      end
+    end
+    return true
   end
 
 end

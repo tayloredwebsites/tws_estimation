@@ -17,6 +17,7 @@ def generate_estimate_component_accessible_attributes(attribs = {})
     :write_in_name => FactoryGirl.generate(:estimate_component_write_in_name),
     :value => FactoryGirl.generate(:estimate_component_value),
     :note => 'a component note',
+    :types_in_calc => '',
     :deactivated => deactivated
   }
 end
@@ -56,6 +57,7 @@ FactoryGirl.define do
     write_in_name {FactoryGirl.generate(:estimate_component_write_in_name)}
     value {FactoryGirl.generate(:estimate_component_value)}
     note ''
+    types_in_calc ''
     deactivated false
   end
   # factory :estimate_component_min_create, :class => EstimateComponent do
