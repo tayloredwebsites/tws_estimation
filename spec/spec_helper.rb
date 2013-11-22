@@ -219,7 +219,6 @@ module UserIntegrationHelper
     @component_types = [component_type0, component_type_hours, component_type_deact, component_type_not_in_grid, component_type_x, component_type_totals]
     @component_type = component_type0
     @component_type_hours = component_type_hours
-    Rails.logger.debug("*TestHourlyRates* @component_type_hours.id = #{@component_type_hours.id.inspect.to_s}")
     @component_type_totals = component_type_totals
     Rails.logger.debug("T UserTestHelper.helper_load_component_types - done")
   end
@@ -234,7 +233,7 @@ module UserIntegrationHelper
     component5 = FactoryGirl.create(:component_create, component_type: @component_types[2]) # note that @component_types[2] is deactivated in helper_load_component_types
     component6 = FactoryGirl.create(:component_create, component_type: @component_types[3], default: @defaults[0])
     component7 = FactoryGirl.create(:component_create, component_type: @component_types[3], default: @defaults[1])
-    component8 = FactoryGirl.create(:component_create, component_type: @component_types[3])
+    component8 = FactoryGirl.create(:component_create, component_type: @component_types[4], default: @defaults[0])
     # items in required (totals section), including a non-calculation entry (component9)
     component9 = FactoryGirl.create(:component_create, component_type: @component_types[0], default: @defaults[0])
     component10 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_1", default: @defaults[0], grid_operand: '*', grid_scope: 'A')
@@ -244,7 +243,8 @@ module UserIntegrationHelper
     component14 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2")
     component15 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'C')
     component16 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '*', grid_scope: 'I')
-    component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '%', grid_scope: 'A')
+    # this component (17) only calculates on Component Type 0 and Component Type 1
+    component17 = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_3", grid_operand: '*', grid_scope: 'A', types_in_calc: "#{@component_types[0].id} #{@component_types[1].id}")
     component_deact = FactoryGirl.create(:component_create, component_type: @component_types[0], deactivated: true)
     # component14_extra_hourly = FactoryGirl.create(:component_totals_editable_create, component_type: @component_type_totals, grid_subtotal: "stot_2", grid_operand: '*', grid_scope: 'H')
     @components = [component0, component1, component2, component3, component4, component5, component6, component7, component8, component9, component10, component11, component12, component13, component14, component15, component16, component17, component_deact]
@@ -277,7 +277,7 @@ module UserIntegrationHelper
     assembly_component5 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[4])
     assembly_component6 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[5]) # note @components[5] has a component type that is deactivated -> @assembly_components[6] should not be listed in the new form
     assembly_component7 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[6], required: true)
-    assembly_component8 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[7])
+    assembly_component8 = FactoryGirl.create(:assembly_component_create, assembly: @assembly_all, component: @components[8])
     assembly_component9 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[9])
     assembly_component10 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[10])
     assembly_component11 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[11]) # not editable
@@ -290,6 +290,7 @@ module UserIntegrationHelper
     # end
     assembly_component15 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[15])
     assembly_component16 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[16], deactivated: true)
+    # this assembly_component (17) only calculates on Component Type 0 and Component Type 1
     assembly_component17 = FactoryGirl.create(:assembly_component_totals_create, assembly: @assembly_total, component: @components[17], required: true)
     @assembly_components = [assembly_component0, assembly_component1, assembly_component2, assembly_component3, assembly_component4, assembly_component5, assembly_component6, assembly_component7, assembly_component8, assembly_component9, assembly_component10, assembly_component11, assembly_component12, assembly_component13, assembly_component14, assembly_component15, assembly_component16, assembly_component17]
     @assembly_component = assembly_component1

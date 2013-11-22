@@ -179,8 +179,10 @@ end
 					end
 				  extra_hourly_conversion = false
           Rails.logger.debug("@@@@VIEW_PRE_COMPUTE@@@@ est_comp_total: #{est_comp_total.bd_to_s(3)}")
+          # determine which component types are used in calculations
+          ct_to_calc = comp.types_in_calc.split(' ')
 					@component_types_list.each do |ct|
-						if ct.in_totals_grid
+						if ct.in_totals_grid && (comp.types_in_calc.blank? || ct_to_calc.include?(ct.id.to_s))
 							ct_id = ct.id
 							ct_val = (work_totals[ct_id].nil?) ? BIG_DECIMAL_ZERO : work_totals[ct_id]
 							case comp.grid_operand

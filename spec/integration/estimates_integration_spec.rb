@@ -47,6 +47,8 @@ describe 'Estimates Integration Tests', :js => false do
         # page.fill_in 'estimate_description', :with => attribs[:description]
         find(:xpath, '//input[@type="submit"]').click
       end
+      #
+      # New Estimate Page
       page.driver.status_code.should be 200
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
@@ -73,6 +75,8 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, '//*[@id="estimate_job_type_id"]').value.should =~ /\A#{@job_type.id.to_s}\z/
       find(:xpath, '//*[@id="estimate_state_id"]').value.should =~ /\A#{@state.id.to_s}\z/
       find(:xpath, '//input[@type="submit"]').click
+      #
+      # Updated Estimate Page
       page.driver.status_code.should be 200
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
@@ -112,6 +116,8 @@ describe 'Estimates Integration Tests', :js => false do
         within(".new_estimate") do
           find(:xpath, '//input[@type="submit"]').click
         end
+        #
+        # Edit Estimate Page
         page.driver.status_code.should be 200
         # it 'should prevent user from losing estimate numbers - create only does estimate, then opens up edit for numbers'
         find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.new.header')}$/
@@ -826,11 +832,14 @@ describe 'Estimates Integration Tests', :js => false do
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]") # 3_6
         page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}", :with => '9.01' # 3_7
-        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34' # 3_8
+        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[8].id.to_s}", :with => '1.34' # 3_8
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}", :with => '2.45' # 4_10
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 2.5 # 4_11
         find(:xpath, '//input[@type="submit"]').click
       end
+      #
+      # Updated Estimate Page
+      #######################
       # page.driver.status_code.should be 200
       # response.status.should be(200)  # status is not available with :js => true (selenium driver)
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
@@ -858,8 +867,8 @@ describe 'Estimates Integration Tests', :js => false do
       page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]") # 3_6
       page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}\"]").text.should =~ /^9.01$/ # 3_7
-      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}\"]").text.should =~ /^1.34$/ # 3_8
-      find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[3].id.to_s}_total\"]").text.should =~ /^10.35$/
+      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[8].id.to_s}\"]").text.should =~ /^1.34$/ # 3_8
+      find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[3].id.to_s}_total\"]").text.should =~ /^9.01$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_all.id.to_s}_total\"]").text.should =~/^\$196.63$/
       # it should have the filled in third assembly
       # 3rd assembly component type 1
@@ -871,47 +880,47 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[1].id.to_s}\"]").text.should =~/^.*\$283\.24$/
       page.should_not have_selector(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[2].id.to_s}\"]")
       page.should_not have_selector(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[3].id.to_s}\"]")
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[4].id.to_s}\"]").text.should =~/^.*\$0\.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[4].id.to_s}\"]").text.should =~/^.*\$1\.34$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___total\"]").text.should =~/^\$290\.02$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___total\"]").text.should =~/^\$291\.36$/
       # 3rd assembly Totals Grid - Grid Detail Table @[10]
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[10].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~/^\$6\.78 \* 2.50 = \$16\.95$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[10].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~/^\$283\.24 \* 2.50 = \$708\.09$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[10].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0\.00 \* 2.50 = \$0\.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[10].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$1\.34 \* 2.50 = \$3\.35$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[10].id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[10].id.to_s}_total\"]").text.should =~/^\$725\.04$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[10].id.to_s}_total\"]").text.should =~/^\$728\.39$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[11].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~/^\$9\.23 \* 2.78 = \$25\.66$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[11].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~/^\$283\.24 \* 2.78 = \$787\.40$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[11].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0\.00 \* 2.78 = \$0\.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[11].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$1\.34 \* 2.78 = \$3\.73$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[11].id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[11].id.to_s}_total\"]").text.should =~/^\$813\.06$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@assembly_components[11].id.to_s}_total\"]").text.should =~/^\$816\.78$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_stot_1_#{@component_types[0].id.to_s}\"]").text.should =~/^\$42\.61$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_stot_1_#{@component_types[1].id.to_s}\"]").text.should =~/^.*\$1495\.49$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_stot_1_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0\.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_stot_1_#{@component_types[4].id.to_s}\"]").text.should =~/^\$7\.08$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_stot_1_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_stot_1_total\"]").text.should =~/^\$1538\.10$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_stot_1_total\"]").text.should =~/^\$1545\.18$/
       find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~/^\$42\.61$/
       find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~/^.*\$1495\.49$/
-      find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0\.00$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$7\.08$/
       find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_total\"]").text.should =~/^\$1538\.10$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@components[5].id.to_s}_total\"]").text.should =~/^\$1545\.18$/
       # 3rd assembly totals Grid - Totals
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~/^\$45\.06$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~/^.*\$1495\.49$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[3].id.to_s}\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0\.00$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$7\.08$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^\$1540\.55$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^\$1547\.63$/
 
       # working #
 
       # should have grand totals grid
       find(:xpath, "//td[@id=\"grand_totals_type_#{@component_types[0].id.to_s}\"]").text.should =~ /^\$51\.84$/
       find(:xpath, "//td[@id=\"grand_totals_type_#{@component_types[1].id.to_s}\"]").text.should =~ /^.*\$1778\.73$/
-      find(:xpath, "//td[@id=\"grand_totals_type_#{@component_types[3].id.to_s}\"]").text.should =~ /^\$10\.35$/
-      find(:xpath, "//td[@id=\"grand_totals_type_#{@component_types[4].id.to_s}\"]").text.should =~ /^\$0\.00$/
+      find(:xpath, "//td[@id=\"grand_totals_type_#{@component_types[3].id.to_s}\"]").text.should =~ /^\$9\.01$/
+      find(:xpath, "//td[@id=\"grand_totals_type_#{@component_types[4].id.to_s}\"]").text.should =~ /^\$8\.42$/
       find(:xpath, "//td[@id=\"grand_totals_type_tax_total\"]").text.should =~ /^\$0\.00$/
-      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^\$1840\.92$/
+      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^\$1848\.00$/
       num_items.should == Estimate.count
     end
   end
@@ -1162,6 +1171,8 @@ describe 'Estimates Integration Tests', :js => false do
         page.fill_in "estimate_components_#{@assembly_components[10].assembly_id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 987.65
         find(:xpath, '//input[@type="submit"]').click
       end
+      #
+      # Updated Estimate Page
       page.driver.status_code.should be 200
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
       @updated_item = Estimate.find(estimate.id)
@@ -1197,13 +1208,16 @@ describe 'Estimates Integration Tests', :js => false do
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_component_deact2.assembly_id.to_s}_#{@assembly_component_deact2.component_id.to_s}\"]")
         page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}", :with => '9.01'
-        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34'
+        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[8].id.to_s}", :with => '1.34'
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}", :with => '2.45'
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 2.5
         # it 'should not list deactivated assembly_components'
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_component_deact3.assembly_id.to_s}_#{@assembly_component_deact3.component_id.to_s}\"]")
         find(:xpath, '//input[@type="submit"]').click
       end
+      #
+      # Updated Estimate Page
+      #######################
       page.should_not have_selector(:xpath, '//div[@id="error_explanation"]', :text => I18n.translate('errors.fix_following_errors'))
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.show.header')}$/
       page.should_not have_selector(:xpath, '//*', :text => 'translation missing:')
@@ -1227,17 +1241,17 @@ describe 'Estimates Integration Tests', :js => false do
       page.should_not have_selector(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]")
       page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}\"]").text.should =~ /9\.01/
-      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}\"]").text.should =~ /1\.34/
-      find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[3].id.to_s}_total\"]").text.should =~ /10\.35/
+      find(:xpath, "//span[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[8].id.to_s}\"]").text.should =~ /1\.34/
+      find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[3].id.to_s}_total\"]").text.should =~ /9\.01/
+      find(:xpath, "//span[@id=\"component_type_total_#{@assembly_all.id.to_s}_#{@component_types[4].id.to_s}_total\"]").text.should =~ /1\.34/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_all.id.to_s}_total\"]").text.should =~/\$196\.63$/
       find(:xpath, "//span[@id=\"estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}\"]").text.should =~ /2\.45/
       find(:xpath, "//span[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_types[0].id.to_s}_total\"]").text.should =~ /2\.45/
-      # find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /^.*\$2176\.57/
-      find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_total\"]").text.should =~ /^\$2219\.18/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^\$2221\.63$/
+      find(:xpath, "//td[@id=\"component_type_total_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_total\"]").text.should =~ /^\$2226\.26/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^\$2228\.71$/
       # grand totals
       # find(:xpath, "//span[@id=\"grand_total\"]").text.should =~ /80.31/
-      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^\$2650\.99$/  # note unconverted hours difference
+      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^\$2658\.07$/  # note unconverted hours difference
     end
     it 'should perform the component operation for each column' do #, :js => true do # see VIEWS_SCRIPTING = false in spec_helper.rb
       helper_load_assembly_components()
@@ -1246,16 +1260,16 @@ describe 'Estimates Integration Tests', :js => false do
       Estimate.count.should == 1
       estimate.deactivated?.should be_false
       visit edit_estimate_path (estimate.id)
+      #
+      # Edit Estimate Page
+      #######################
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
       # following tests dependent upon helper_load_assemblies, spec_helper.rb helper_load_component_types and helper_load_components
       within(".edit_estimate") do
         # check assemblies so they are seen in show after update
-        # page.check("estimate_assemblies_#{@assemblies[0].id.to_s}")
         page.check("estimate_assemblies_#{@assemblies[1].id.to_s}")
-        # page.check("estimate_assemblies_#{@assemblies[2].id.to_s}")
-        # find("#assembly_#{@assemblies[1].id.to_s}/h3").click
         page.fill_in "estimate_components_#{@assemblies[0].id.to_s}_#{@components[0].id.to_s}", :with => '2.34'
         # it 'should not list deactivate components'
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assemblies[1].id.to_s}_#{@components[0].id.to_s}\"]")
@@ -1268,7 +1282,7 @@ describe 'Estimates Integration Tests', :js => false do
         page.should_not have_selector(:xpath, "//input[@id=\"estimate_components_#{@assembly_all.id.to_s}_#{@components[5].id.to_s}\"]")
         page.should_not have_selector(:xpath, "//span[@id=\"component_type_#{@assembly_all.id.to_s}_#{@component_types[2].id.to_s}\"]")
         page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[6].id.to_s}", :with => '9.01'
-        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[7].id.to_s}", :with => '1.34'
+        page.fill_in "estimate_components_#{@assembly_all.id.to_s}_#{@components[8].id.to_s}", :with => '1.34'
         # last assembly with totals grid
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@components[9].id.to_s}", :with => '2.45'
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[10].component_id.to_s}", :with => 2.5
@@ -1280,48 +1294,52 @@ describe 'Estimates Integration Tests', :js => false do
         page.fill_in "estimate_components_#{@assembly_total.id.to_s}_#{@assembly_components[17].component_id.to_s}", :with => 5.0
         find(:xpath, '//input[@type="submit"]').click
       end
+      save_and_open_page
+      #
+      # Updated Estimate Page
+      #######################
       # confirm that calculations work
       # check to confirm initial cumulative Totals for grid are correct
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[0].id.to_s}\"]").text.should =~/^\$6\.78$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[1].id.to_s}\"]").text.should =~/^18\.120 hr\. => \$412.23$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[4].id.to_s}\"]").text.should =~/^\$0.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___#{@component_types[4].id.to_s}\"]").text.should =~/^\$1.34$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___tax_total\"]").text.should =~/^\$0.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___total\"]").text.should =~/^\$419\.01$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}___total\"]").text.should =~/^\$420\.35$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__#{@component_types[0].id.to_s}\"]").text.should =~/^\$9.23$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__#{@component_types[1].id.to_s}\"]").text.should =~/^18.120 hr\. => \$412\.23$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__#{@component_types[4].id.to_s}\"]").text.should =~/^\$0.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__#{@component_types[4].id.to_s}\"]").text.should =~/^\$1.34$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__tax_total\"]").text.should =~/^\$0.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__total\"]").text.should =~/^\$421\.46$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}__total\"]").text.should =~/^\$422\.80$/
       # "One" Sub-totals Group - item 10 (A)
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[10].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /.*= \$16.95$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[10].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /.*= \$1030\.58$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[10].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$0\.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[10].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$3\.35$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[10].id.to_s}_tax\"]").text.should =~ /^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[10].id.to_s}_total\"]").text.should =~ /^\$1047\.53$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[10].id.to_s}_total\"]").text.should =~ /^\$1050\.88$/
       # "One" Sub-totals Group - item 11 (I)
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /.*= \$25\.66$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /.*= \$1146\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$0\.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$3\.73$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}_tax\"]").text.should =~ /^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}_total\"]").text.should =~ /^\$1171\.66$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[11].id.to_s}_total\"]").text.should =~ /^\$1175\.38$/
       # "One" Sub-totals Group - Sub Totals - it 'should show "subtotal one" at break in grid_subtotal in components'
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_1_#{@component_types[0].id.to_s}\"]").text.should =~/^\$42.61$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_1_#{@component_types[1].id.to_s}\"]").text.should =~/.*\$2176\.57$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_1_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_1_#{@component_types[4].id.to_s}\"]").text.should =~/^\$7.08$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_1_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_1_total\"]").text.should =~/^\$2219\.18$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_1_total\"]").text.should =~/^\$2226\.26$/
       # "two" subtotals group - item 12 (A)
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[12].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /.*= \$20\.34$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[12].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /.*= \$1236.69$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[12].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$0.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[12].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$4.02$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[12].id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[12].id.to_s}_total\"]").text.should =~ /^\$1257\.03$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[12].id.to_s}_total\"]").text.should =~ /^\$1261\.05$/
       # "two" subtotals group - item 13 (S)
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[13].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /.*= \$149\.13$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[13].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /.*= \$7618.01$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[13].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$0.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[13].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$24.76$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[13].id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[13].id.to_s}_total\"]").text.should =~ /^\$7767\.14$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[13].id.to_s}_total\"]").text.should =~ /^\$7791\.91$/
       # "two" subtotals group - item 14 (S) - should be all zeros because of missing scope and operand on grid calculation
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[14].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /.*= \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[14].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /.*= \$0.00$/
@@ -1331,41 +1349,42 @@ describe 'Estimates Integration Tests', :js => false do
       # "two" subtotals group - item 15 (C)
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[15].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /.*= \$995\.91$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[15].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /.*= \$51495\.77$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[15].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$0.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[15].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$167.39$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[15].id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[15].id.to_s}_total\"]").text.should =~ /^\$52491\.68$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[15].id.to_s}_total\"]").text.should =~ /^\$52659\.07$/
       # "Two" Sub-totals Group - Sub Totals - it 'should show "subtotal two" at break in grid_subtotal in components'
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_2_#{@component_types[0].id.to_s}\"]").text.should =~/^\$1165.38$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_2_#{@component_types[1].id.to_s}\"]").text.should =~/.*\$60350\.47$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_2_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_2_#{@component_types[4].id.to_s}\"]").text.should =~/^\$196.18$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_2_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_2_total\"]").text.should =~/^\$61515\.85$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_2_total\"]").text.should =~/^\$61712\.03$/
       # "three" subtotals group - item 17 (A)
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /.*= \$0\.34$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /.*= \$20\.61$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$0.00$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~ /.*= \$33.90$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /.*= \$2061\.15$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_total\"]").text.should =~ /^\$20\.95$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_total\"]").text.should =~ /^\$2101\.75$/
       # "three" Sub-totals Group - Sub Totals - it 'should show "subtotal three" at break in grid_subtotal in components'
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[0].id.to_s}\"]").text.should =~/^\$0.34$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[1].id.to_s}\"]").text.should =~/.*\$20\.61$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0.00$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[0].id.to_s}\"]").text.should =~/^\$33.90$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[1].id.to_s}\"]").text.should =~/.*\$2061\.15$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[4].id.to_s}\"]").text.should =~/^\$6.70$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_total\"]").text.should =~/^\$20\.95$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_total\"]").text.should =~/^\$2101\.75$/
+      # note: missing Test Totals Grid Grid Totals here
       # show assembly totals (including component types not in_totals_grid)
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~/^\$1210\.78$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~/.*\$62547.66$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~/^\$1244\.34$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~/.*\$64588.20$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[3].id.to_s}\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0\.00$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$209\.95$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^\$63758\.43$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^\$66042\.49$/
       # show grand totals (including component types not in_totals_grid)
-      find(:xpath, "//td[@id=\"grand_totals_type_1\"]").text.should =~/^\$1217\.56$/
-      find(:xpath, "//td[@id=\"grand_totals_type_2\"]").text.should =~/.*\$62959\.89$/
-      find(:xpath, "//td[@id=\"grand_totals_type_4\"]").text.should =~/^\$10.35$/
-      find(:xpath, "//td[@id=\"grand_totals_type_5\"]").text.should =~/^\$0.00$/
+      find(:xpath, "//td[@id=\"grand_totals_type_1\"]").text.should =~/^\$1251\.12$/
+      find(:xpath, "//td[@id=\"grand_totals_type_2\"]").text.should =~/.*\$65000\.43$/
+      find(:xpath, "//td[@id=\"grand_totals_type_4\"]").text.should =~/^\$9.01$/
+      find(:xpath, "//td[@id=\"grand_totals_type_5\"]").text.should =~/^\$211.29$/
       find(:xpath, "//td[@id=\"grand_totals_type_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~/^\$64187.79$/
+      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~/^\$66471.85$/
     end
   end
 
@@ -1407,6 +1426,7 @@ describe 'Estimates Integration Tests', :js => false do
         find(:xpath, '//input[@type="submit"]').click
       end
       #
+      # Updated Estimate Page
       # it should show the user the entered tax percent and the calculated tax dollar amount
       page.should have_selector(:xpath, "//span[@id=\"estimate_components_tax_pct_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]")
       find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^2500\.00$/
@@ -1470,7 +1490,11 @@ describe 'Estimates Integration Tests', :js => false do
       estimate = Estimate.create!(@estimate_attributes)
       Estimate.count.should == 1
       estimate.deactivated?.should be_false
+
       visit edit_estimate_path (estimate.id)
+      #
+      # Edit Estimate Page
+      #######################
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
@@ -1496,6 +1520,9 @@ describe 'Estimates Integration Tests', :js => false do
 
         find(:xpath, '//input[@type="submit"]').click
       end
+      #
+      # Updated Estimate Page
+      #######################
       # Dollars Component Type
       # it should show the user to use the default tax percent and the calculated tax dollar amount
       find(:xpath, "//span[@id=\"estimate_components_#{@tax_assembly.id.to_s}_#{@tax_component.id.to_s}\"]").text.should =~/^2\.78$/
@@ -1550,7 +1577,6 @@ describe 'Estimates Integration Tests', :js => false do
       # should have Totals Grid table
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
 
-
       # it should have grid detail/component values
 
       # AssemblyComponentDescription2
@@ -1602,10 +1628,11 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"grand_totals_type_tax_total\"]").text.should =~ /^\$14\.49$/
       find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~ /^\$1670\.86$/
 
-
       # edit the existing component should give same values as view after update.
       visit edit_estimate_path (estimate.id)
-
+      #
+      # Edit Estimate Page
+      #######################
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should =~ /^#{I18n.translate('estimates.edit.header')}$/
       find(:xpath, '//*[@id="header_tagline_page_header"]').text.should_not =~ /^#{I18n.translate('home.errors.header')}$/
       Rails.logger.debug("T estimates_integration_spec - @estimate_attributes = #{@estimate_attributes.inspect.to_s}")
@@ -1646,7 +1673,6 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_tax\"]").text.should =~ /^1\.20$/
       find(:xpath, "//span[@id=\"component_type_total_#{@tax_assembly.id.to_s}_#{@tax_hourly_component_type.id.to_s}_total\"]").text.should =~ /^138\.38$/
 
-
       # should have Totals Grid Initial Values table
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_total\"]")
 
@@ -1665,9 +1691,7 @@ describe 'Estimates Integration Tests', :js => false do
       # should have Totals Grid table
       page.should have_selector(:xpath, "//table[@id=\"totals_grid_#{@tax_assembly.id.to_s}_#{@tax_component_type_totals.id.to_s}\"]")
 
-
       # it should have grid detail/component values
-
       # AssemblyComponentDescription2
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_component_type.id.to_s}\"]").text.should =~/^\$6\.03 \* 7\.50 = \$45\.23$/
       find(:xpath, "//td[@id=\"grid_calc_#{@tax_assembly.id.to_s}_#{@tax_assembly_hourly_component.id.to_s}_#{@tax_assembly_grid_editable_component.id.to_s}_#{@tax_hourly_component_type.id.to_s}\"]").text.should =~/^\$137\.18 \* 7\.50 = \$1028\.87$/
