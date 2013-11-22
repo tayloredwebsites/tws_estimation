@@ -76,14 +76,11 @@ end
 			    # else we default it to zero
 				est_comp.value = est_comp_value = BIG_DECIMAL_ZERO
 			end
-      Rails.logger.debug("@@@@ESTIMATECOMPONENT@@@@ Estimate Component = #{est_comp.inspect.to_s}")
       # # set tax percent to nil to force tax table lookup when in grid
       if ass_comp.component.component_type.has_totals
         est_comp.tax_percent = nil
-        Rails.logger.debug("@@@@ESTIMATECOMPONENT_NIL%@@@@ Estimate Component = #{est_comp.inspect.to_s}")
       end
 			est_comp.calculate_fields(@estimate, comp)
-      Rails.logger.debug("@@@@ESTIMATECOMPONENT_CALC@@@@ Estimate Component = #{est_comp.inspect.to_s}")
       if !is_in_dollars[ass_comp.component.component_type.id] # three digits in grid? || ass_comp.component.component_type.has_totals
         est_comp_value_str = est_comp_value.bd_to_s(3 )
       else
@@ -224,7 +221,7 @@ end
           end
           Rails.logger.debug("@@@@VIEW_AFTER_TAX_CALC@@@@ ct.id: :tax, value: #{e_current[:tax].bd_to_s(3)}")
 					concat render :partial => 'estimate_components/list_grid_component',
-					:locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :editable => comp.editable, :comp_calculations => e_current, :view_mode => view_mode, :work_totals => work_totals, :is_in_dollars => is_in_dollars, :grid_operand => ' '+comp.get_grid_operand_or_warn+' '+est_comp_value_str, :extra_hourly_conversion => extra_hourly_conversion, :est => @estimate, :est_comp => est_comp, :est_comp_was => est_comp_was }
+					:locals => {:ass_comp => ass_comp, :ass => ass, :est_comp_value_str => est_comp_value_str, :est_comp_value_was_str => est_comp_value_was_str, :comp_calculations => e_current, :view_mode => view_mode, :work_totals => work_totals, :grid_operand => ' '+comp.get_grid_operand_or_warn+' '+est_comp_value_str, :est_comp => est_comp }
 
 				else
           # not show_totals_grid (don't show the calculation grid)

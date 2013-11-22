@@ -25,10 +25,6 @@ warn_hours = defined?(warn_unconverted_hours) ?  warn_unconverted_hours : false
     	    row_total += ct_value
     	    concat content_tag(:td, ct_hours.bd_to_s(3) + ' hr. => $' + ct_value.bd_to_s(2) + err_str, :id => "#{total_id}_#{ct.id.to_s}", :class => "grid_row_calc grid_row_sub_total#{err_style}")
     	end
-        # if !is_in_dollars[ct.id] && warn_hours && ct.has_hours && ct_value != BIG_DECIMAL_ZERO
-        #     err_str = I18n.translate('warning.hrs_unconverted', :hrs => ct_value.bd_to_s(2))
-        #     err_style = " warning"
-        # end
 	end
 end
 %>

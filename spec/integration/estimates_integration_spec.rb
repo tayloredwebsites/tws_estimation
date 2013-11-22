@@ -1363,28 +1363,28 @@ describe 'Estimates Integration Tests', :js => false do
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~ /.*= \$2061\.15$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~ /.*= \$0\.00$/
       find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_tax\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_total\"]").text.should =~ /^\$2101\.75$/
+      find(:xpath, "//td[@id=\"grid_calc_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_#{@components[17].id.to_s}_total\"]").text.should =~ /^\$2095\.05$/
       # "three" Sub-totals Group - Sub Totals - it 'should show "subtotal three" at break in grid_subtotal in components'
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[0].id.to_s}\"]").text.should =~/^\$33.90$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[1].id.to_s}\"]").text.should =~/.*\$2061\.15$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[4].id.to_s}\"]").text.should =~/^\$6.70$/
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_#{@component_types[4].id.to_s}\"]").text.should =~/^\$0.00$/
       find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_total\"]").text.should =~/^\$2101\.75$/
-      # note: missing Test Totals Grid Grid Totals here
+      find(:xpath, "//td[@id=\"subtotal_#{@assembly_total.id.to_s}_#{@component_type_totals.id.to_s}_stot_3_total\"]").text.should =~/^\$2095\.05$/
+      # note: missing tests for 'Test Totals Grid Grid Totals' here
       # show assembly totals (including component types not in_totals_grid)
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[0].id.to_s}\"]").text.should =~/^\$1244\.34$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[1].id.to_s}\"]").text.should =~/.*\$64588.20$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[3].id.to_s}\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$209\.95$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_#{@component_types[4].id.to_s}\"]").text.should =~/^\$203\.25$/
       find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^\$66042\.49$/
+      find(:xpath, "//td[@id=\"assembly_component_type_totals_#{@assembly_total.id.to_s}_total\"]").text.should =~/^\$66035\.79$/
       # show grand totals (including component types not in_totals_grid)
       find(:xpath, "//td[@id=\"grand_totals_type_1\"]").text.should =~/^\$1251\.12$/
       find(:xpath, "//td[@id=\"grand_totals_type_2\"]").text.should =~/.*\$65000\.43$/
-      find(:xpath, "//td[@id=\"grand_totals_type_4\"]").text.should =~/^\$9.01$/
-      find(:xpath, "//td[@id=\"grand_totals_type_5\"]").text.should =~/^\$211.29$/
+      find(:xpath, "//td[@id=\"grand_totals_type_4\"]").text.should =~/^\$9\.01$/
+      find(:xpath, "//td[@id=\"grand_totals_type_5\"]").text.should =~/^\$204\.59$/
       find(:xpath, "//td[@id=\"grand_totals_type_tax_total\"]").text.should =~/^\$0\.00$/
-      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~/^\$66471.85$/
+      find(:xpath, "//td[@id=\"grand_totals_type_total\"]").text.should =~/^\$66465\.15$/
     end
   end
 
